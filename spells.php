@@ -85,7 +85,7 @@ if(!$spells = load_cache(15, $cache_str))
 	}
 	elseif($s1 == -3)
 	{
-		$title = $smarty->get_config_vars('Pet_talents');
+		$title = $smarty->get_config_vars('Pet_spells');
 		// Петы
 		$spells['sort'] = "'name'";
 		$pets = isset($s2) ? array($s2) : $pet_skill_categories;
@@ -155,7 +155,7 @@ if(!$spells = load_cache(15, $cache_str))
 	elseif ($s1 == -7)
 	{
 		// Pet Talents
-		$title = $smarty->get_config_vars('Pet_Talents');
+		$title = $smarty->get_config_vars('Pet_talents');
 		$spells['sort'] = "'name'";
 		// for speed
 		$spellids = $DB->selectCol('

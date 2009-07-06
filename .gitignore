@@ -1,0 +1,8 @@
+# cache files
+cache/*
+
+# custom patch files
+*.patch
+
+# commit files
+comm*
