@@ -1,0 +1,24 @@
+<?php
+global $AoWoWconf;
+
+// -- MaNGOS Database --
+$AoWoWconf['mangos']['host']	= '127.0.0.1';
+$AoWoWconf['mangos']['user']	= 'mangos';
+$AoWoWconf['mangos']['pass']	= '';
+$AoWoWconf['mangos']['db']		= 'mangos';
+$AoWoWconf['mangos']['aowow']	= 'aowow_';
+// -- Realmd Database --
+$AoWoWconf['realmd']['host']	= '127.0.0.1';
+$AoWoWconf['realmd']['user']	= 'mangos';
+$AoWoWconf['realmd']['pass']	= '';
+$AoWoWconf['realmd']['db']		= 'realmd';
+// Site Configuration
+$AoWoWconf['aowow']['name'] = 'AoWoW';
+$AoWoWconf['aowow']['template'] = 'wowhead';
+$AoWoWconf['aowow']['cache_time'] = (60*60*24*7); // Time to keep cache in seconds (Default: 1 week)
+$AoWoWconf['locale'] = 8;
+$AoWoWconf['register'] = false;
+$AoWoWconf['expansion'] = 2; // Used with register
+$AoWoWconf['limit'] = 300;
+$AoWoWconf['debug'] = false;
+?>
