@@ -33,7 +33,7 @@
 				<h1>{$object.name}</h1>
 
 {if $zonedata}
-				{#This_Object_can_be_found_in#}
+				<div>{#This_Object_can_be_found_in#}
 {strip}
 				<span id="locations">
 					{foreach from=$zonedata item=zone_c name=zone_f}
@@ -63,16 +63,15 @@
 							g_setSelectedLink(this, 'mapper'); return false" onmousedown="return false">
 							{$zone_c.name}</a>{if $zone_c.count>1}&nbsp;({$zone_c.count}){/if}{if $smarty.foreach.zone_f.last}.{else}, {/if}
 					{/foreach}
-				</span>
+				</span></div>
 {/strip}
 				<div id="mapper-generic"></div>
 				<div class="clear"></div>
-{literal}
+
 				<script type="text/javascript">
-					var myMapper = new Mapper({parent: 'mapper-generic', zone: '{$zonedata[0].zone}'});
+					var myMapper = new Mapper({ldelim}parent: 'mapper-generic', zone: '{$zonedata[0].zone}'{rdelim});
 					gE(ge('locations'), 'a')[0].onclick();
 				</script>
-{/literal}
 
 {else}
 				{#This_Object_cant_be_found#}

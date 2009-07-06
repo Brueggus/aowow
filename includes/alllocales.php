@@ -212,6 +212,7 @@ switch($_SESSION['locale'])
 		d('LOCALE_VALUE_DELIM',			' - ');
 		d('LOCALE_REAGENTS',			'Реагенты: ');
 		d('LOCALE_TOOLS',				'Инструменты: ');
+		d('LOCALE_HEROIC',				' (героич.)');
 
 		break;
 	// --- ENGLISH default LOCALE ---
@@ -402,5 +403,6 @@ switch($_SESSION['locale'])
 		d('LOCALE_VALUE_DELIM',			' to ');
 		d('LOCALE_REAGENTS',			'Reagents: ');
 		d('LOCALE_TOOLS',				'Tools: ');
+		d('LOCALE_HEROIC',				' (Heroic)');
 }
 ?>

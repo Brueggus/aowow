@@ -358,14 +358,18 @@ function loot_table($table, $lootid, $max_percent=100)
 					$group_idx[$row['groupid']]['num-equal'] ++;
 				else
 					$group_idx[$row['groupid']]['percent'] += abs($row['ChanceOrQuestChance']);
-			} else {
+			}
+			else
+			{
 				// Старый добрый обычный лут :)
-				$loot[] = array_merge(array(
-					'percent'  => ($max_percent!=100)? $max_percent : $row['ChanceOrQuestChance'],
-					'mincount' => $row['mincountOrRef'],
-					'maxcount' => $row['d-max'],
-					'group'    => 0
-				), iteminfo2($row, 0));
+				$lootitem = iteminfo2($row, 0);
+				if($lootitem)
+					$loot[] = array_merge(array(
+						'percent'  => ($max_percent!=100)? $max_percent : $row['ChanceOrQuestChance'],
+						'mincount' => $row['mincountOrRef'],
+						'maxcount' => $row['d-max'],
+						'group'    => 0
+					), $lootitem);
 			}
 		} else {
 			// Ссылка!
@@ -444,11 +448,21 @@ function drop($table, $item)
 }
 
 // позиция
-function position($id, $type)
+function position($id, $type, $spawnMask = 0)
 {
 	global $smarty, $exdata, $zonedata, $DB;
 
-	$data = $DB->select('SELECT guid, map AS m, position_x AS x, position_y AS y, spawntimesecs, {MovementType AS ?#, }"0" AS `type` FROM '.$type.' WHERE id = ?d GROUP BY ROUND(x,-2), ROUND(y,-2) ORDER BY x,y', ($type == 'gameobject' ? DBSIMPLE_SKIP : 'mt'), $id);
+	$data = $DB->select('
+			SELECT guid, map AS m, position_x AS x, position_y AS y, spawntimesecs, {MovementType AS ?#, }"0" AS `type`
+			FROM '.$type.'
+			WHERE id = ?d {AND spawnMask & ?d}
+			GROUP BY ROUND(x,-2), ROUND(y,-2)
+			ORDER BY x,y
+		',
+		($type == 'gameobject' ? DBSIMPLE_SKIP : 'mt'),
+		$id,
+		$spawnMask ? $spawnMask : DBSIMPLE_SKIP
+	);
 	if($type <> 'gameobject')
 	{
 		$wpWalkingCreaturesGuids = array();

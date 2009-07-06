@@ -3,7 +3,7 @@
 // Необходима функция creatureinfo
 require('includes/allnpcs.php');
 
-$smarty->config_load($conf_file, 'npcs');
+$smarty->config_load($conf_file, 'npc');
 
 global $npc_cols;
 

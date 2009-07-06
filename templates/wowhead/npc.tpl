@@ -45,9 +45,14 @@
 			<div class="text">
 				<a href="http://www.wowhead.com/?{$query}" target="_blank" class="button-red"><div><blockquote><i>Wowhead</i></blockquote><span>Wowhead</span></div></a>
 				<h1>{$npc.name}{if $npc.subname} &lt;{$npc.subname}&gt;{/if}</h1>
-				
+
+{if $npc.heroic}
+				<div>{if $npc.heroic.type == 1}{#This_is_heroic_NPC#}{else}{#This_is_normal_NPC#}{/if} <a href="?npc={$npc.heroic.entry}">{$npc.heroic.name}</a>.</div>
+				<div class="pad"></div>
+{/if}
+
 {if $zonedata}
-				{#This_NPC_can_be_found_in#}
+				<div>{#This_NPC_can_be_found_in#}
 {strip}
 				<span id="locations">
 					{foreach from=$zonedata item=zone_c name=zone_f}
@@ -82,10 +87,11 @@
 							g_setSelectedLink(this, 'mapper'); return false" onmousedown="return false">
 							{$zone_c.name}</a>{if $zone_c.count>1}&nbsp;({$zone_c.count}){/if}{if $smarty.foreach.zone_f.last}.{else}, {/if}
 					{/foreach}
-				</span>
+				</span></div>
 {/strip}
 				<div id="mapper-generic"></div>
 				<div class="clear"></div>
+
 				<script type="text/javascript">
 					var myMapper = new Mapper({ldelim}parent: 'mapper-generic', zone: '{$zonedata[0].zone}'{rdelim});
 					gE(ge('locations'), 'a')[0].onclick();
@@ -93,7 +99,6 @@
 {else}
 				{#This_NPC_cant_be_found#}
 {/if}
-				{$npc.article}
 
 				<h2>{#Related#}</h2>
 

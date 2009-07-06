@@ -55,8 +55,8 @@ if(!$npc = load_cache(1, intval($id)))
 			$npc['minlevel'] = '??';
 			$npc['maxlevel'] = '??';
 		}
-		$npc['mindmg'] = ($row['mindmg'] + $row['attackpower']) * $row['dmg_multiplier'];
-		$npc['maxdmg'] = ($row['maxdmg'] + $row['attackpower']) * $row['dmg_multiplier'];
+		$npc['mindmg'] = round(($row['mindmg'] + $row['attackpower']) * $row['dmg_multiplier']);
+		$npc['maxdmg'] = round(($row['maxdmg'] + $row['attackpower']) * $row['dmg_multiplier']);
 		
 		$toDiv = array('minhealth', 'maxmana', 'minmana', 'maxhealth', 'armor', 'mindmg', 'maxdmg');
 		// Разделяем на тысячи (ххххххххх => ххх,ххх,ххх)
@@ -86,6 +86,55 @@ if(!$npc = load_cache(1, intval($id)))
 		$npc['moneygold'] = floor($money/10000);
 		$npc['moneysilver'] = floor(($money - ($npc['moneygold']*10000))/100);
 		$npc['moneycopper'] = floor($money - ($npc['moneygold']*10000) - ($npc['moneysilver']*100));
+		// Героик/нормал копия НПС
+		if($npc['heroic_entry'])
+		{
+			// это нормал НПС, ищем героика
+			if($tmp = creatureinfo($npc['heroic_entry']))
+			{
+				$npc['heroic'] = array(
+					'type'	=> 0,
+					'entry'	=> $tmp['entry'],
+					'name'	=> str_replace(LOCALE_HEROIC, '', $tmp['name'])
+				);
+				
+				unset($tmp);
+			}
+		}
+		else
+		{
+			// А может быть героик НПС одним для нескольких нормалов?
+			// считаем что нет
+			$tmp = $DB->selectRow('
+					SELECT c.entry, c.name
+					{
+						, l.name_loc?d as `name_loc`
+					}
+					FROM creature_template c
+					{
+						LEFT JOIN (locales_creature l)
+						ON l.entry = c.entry AND ?
+					}
+					WHERE
+						c.heroic_entry = ?d
+					LIMIT 1
+				',
+				($_SESSION['locale']>0)? $_SESSION['locale']: DBSIMPLE_SKIP,
+				($_SESSION['locale']>0)? 1: DBSIMPLE_SKIP,
+				$npc['entry']
+			);
+			if($tmp)
+			{
+				$npc['heroic'] = array(
+					'type'	=> 1,
+					'entry'	=> $tmp['entry'],
+					'name'	=> localizedName($tmp)
+				);
+				$npc['name'] = str_replace(' (1)', '', $npc['name']);
+				$normal_entry = $tmp['entry'];
+				unset($tmp);
+			}
+		}
 		// Дроп
 		$lootid=$row['lootid'];
 		// Используемые спеллы
@@ -313,14 +362,18 @@ if(!$npc = load_cache(1, intval($id)))
 	if ($rows_qo)
 	{
 		$npc['objectiveof'] = array();
-		foreach ($rows_qo as $numRow=>$row) {
+		foreach ($rows_qo as $numRow=>$row)
 			$npc['objectiveof'][] = GetQuestInfo($row, 0xFFFFFF);
-		}
 	}
 	unset ($rows_qo);
 
-	// Положения созданий божих:
-	position($npc['entry'], 'creature');
+	// Положения созданий божих (для героик НПС не задана карта, юзаем из нормала):
+	if($normal_entry)
+		// мы - героик НПС, определяем позицию по нормалу
+		position($normal_entry, 'creature', 2);
+	else
+		// мы - нормал НПС или НПС без сложности
+		position($npc['entry'], 'creature', 1);
 
 	save_cache(1, $npc['entry'], $npc);
 }
