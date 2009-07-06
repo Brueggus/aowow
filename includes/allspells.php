@@ -176,7 +176,7 @@ $spell_effect_names = array(
 	14 => 'Ritual Specialize',
 	15 => 'Ritual Activate Portal',
 	16 => 'Quest Complete',
-	17 => 'Weapon Damage + (noschool)',
+	17 => 'Weapon Damage + noschool',
 	18 => 'Resurrect',
 	19 => 'Extra Attacks',
 	20 => 'Dodge',
@@ -218,7 +218,7 @@ $spell_effect_names = array(
 	56 => 'Summon Pet',
 	57 => 'Learn Pet Spell',
 	58 => 'Weapon Damage +',
-	59 => 'Open Lock (Item)',
+	59 => 'Open Lock Item',
 	60 => 'Proficiency',
 	61 => 'Send Event',
 	62 => 'Power Burn',
@@ -235,7 +235,7 @@ $spell_effect_names = array(
 	73 => 'Summon Possessed',
 	74 => 'Summon Totem',
 	75 => 'Heal Mechanical',
-	76 => 'Summon Object (Wild)',
+	76 => 'Summon Object Wild',
 	77 => 'Script Effect',
 	78 => 'Attack',
 	79 => 'Sanctuary',
@@ -246,11 +246,11 @@ $spell_effect_names = array(
 	84 => 'Stuck',
 	85 => 'Summon Player',
 	86 => 'Activate Object',
-	87 => 'Summon Totem (slot 1)',
-	88 => 'Summon Totem (slot 2)',
-	89 => 'Summon Totem (slot 3)',
-	90 => 'Summon Totem (slot 4)',
-	91 => 'Threat (All)',
+	87 => 'Summon Totem slot 1',
+	88 => 'Summon Totem slot 2',
+	89 => 'Summon Totem slot 3',
+	90 => 'Summon Totem slot 4',
+	91 => 'Threat All',
 	92 => 'Enchant Held Item',
 	93 => 'Summon Phantasm',
 	94 => 'Self Resurrect',
@@ -263,16 +263,16 @@ $spell_effect_names = array(
 	101 => 'Feed Pet',
 	102 => 'Dismiss Pet',
 	103 => 'Reputation',
-	104 => 'Summon Object (slot 1)',
-	105 => 'Summon Object (slot 2)',
-	106 => 'Summon Object (slot 3)',
-	107 => 'Summon Object (slot 4)',
+	104 => 'Summon Object slot 1',
+	105 => 'Summon Object slot 2',
+	106 => 'Summon Object slot 3',
+	107 => 'Summon Object slot 4',
 	108 => 'Dispel Mechanic',
 	109 => 'Summon Dead Pet',
 	110 => 'Destroy All Totems',
 	111 => 'Durability Damage',
 	112 => 'Summon Demon',
-	113 => 'Resurrect (Flat)',
+	113 => 'Resurrect Flat',
 	114 => 'Taunt',
 	115 => 'Durability Damage',
 	116 => 'Remove Insignia',
@@ -284,31 +284,21 @@ $spell_effect_names = array(
 
 	123 => 'Scripted Event',
 	124 => 'Player Pull',
-	125 => 'Reduce Threat (%)',
-	126 => 'Steal Beneficial Buff (Magic)',
+	125 => 'Reduce Threat %',
+	126 => 'Steal Beneficial Buff Magic',
 	127 => 'Require Ore',
 	128 => 'Apply Stat Aura',
-	129 => 'Apply Stat Aura (%)',
-	130 => 'Unknown130',
-	131 => 'Unknown131',
+	129 => 'Apply Stat Aura %',
 
 	133 => 'Unlearn Profession Specialization',
-	134 => 'Unknown134',
-	135 => 'Unknown135',
-	136 => 'Unknown136',
-	137 => 'Unknown137',
-	138 => 'Unknown138',
+);
 
-	140 => 'Unknown140',
-	141 => 'Unknown141',
-	142 => 'Unknown142',
-	143 => 'Unknown143',
-
-	149 => 'Unknown149',
+$pet_skill_categories = array(
+270, 653, 210, 211, 213, 209, 214, 212, 763, 215, 654, 764, 655, 217, 767, 236, 768, 203, 218, 251, 766, 656, 208, 761, 189, 188, 205, 204, 782
 );
 
 $spell_cols[0] = array('spellID', 'iconname', 'effect1itemtype', 'effect1Aura');
-$spell_cols[1] = array('spellID', 'iconname', 'durationID', 'tooltip_loc'.$_SESSION['locale'], 'spellname_loc'.$_SESSION['locale'], 'rank_loc'.$_SESSION['locale'], 'rangeID', 'manacost', 'manacostpercent', 'spellcasttimesID', 'cooldown', 'tool1', 'tool2', 'reagent1', 'reagent2', 'reagent3', 'reagent4', 'reagent5', 'reagent6', 'reagent7', 'reagent8', 'effect1BasePoints', 'effect2BasePoints', 'effect3BasePoints', 'effect1Amplitude', 'effect2Amplitude', 'effect3Amplitude', 'effect1DieSides', 'effect2DieSides', 'effect3DieSides', 'effect1ChainTarget', 'effect2ChainTarget', 'effect3ChainTarget', 'reagentcount1', 'reagentcount2', 'reagentcount3', 'reagentcount4', 'reagentcount5', 'reagentcount6', 'reagentcount7', 'reagentcount8', 'effect1radius', 'effect2radius', 'effect3radius', 'effect1MiscValue', 'effect2MiscValue', 'effect3MiscValue', 'ChannelInterruptFlags', 'procChance', 'procCharges', 'effect_1_proc_chance', 'effect_2_proc_chance', 'effect_3_proc_chance', 'effect1itemtype', 'effect1Aura', 'spellTargets', 'dmg_multiplier1');
+$spell_cols[1] = array('spellID', 'iconname', 'tooltip_loc'.$_SESSION['locale'], 'spellname_loc'.$_SESSION['locale'], 'rank_loc'.$_SESSION['locale'], 'rangeID', 'manacost', 'manacostpercent', 'spellcasttimesID', 'cooldown', 'tool1', 'tool2', 'reagent1', 'reagent2', 'reagent3', 'reagent4', 'reagent5', 'reagent6', 'reagent7', 'reagent8', 'effect1BasePoints', 'effect2BasePoints', 'effect3BasePoints', 'effect1Amplitude', 'effect2Amplitude', 'effect3Amplitude', 'effect1DieSides', 'effect2DieSides', 'effect3DieSides', 'effect1ChainTarget', 'effect2ChainTarget', 'effect3ChainTarget', 'reagentcount1', 'reagentcount2', 'reagentcount3', 'reagentcount4', 'reagentcount5', 'reagentcount6', 'reagentcount7', 'reagentcount8', 'effect1radius', 'effect2radius', 'effect3radius', 'effect1MiscValue', 'effect2MiscValue', 'effect3MiscValue', 'ChannelInterruptFlags', 'procChance', 'procCharges', 'effect_1_proc_chance', 'effect_2_proc_chance', 'effect_3_proc_chance', 'effect1itemtype', 'effect1Aura', 'spellTargets', 'dmg_multiplier1', 'durationID');
 $spell_cols[2] = array('spellname_loc'.$_SESSION['locale'], 'rank_loc'.$_SESSION['locale'], 'levelspell', 'resistancesID', 'effect1itemtype', 'effect2itemtype', 'effect3itemtype', 'effect1BasePoints', 'effect2BasePoints', 'effect3BasePoints', 'reagent1', 'reagent2', 'reagent3', 'reagent4', 'reagent5', 'reagent6', 'reagent7', 'reagent8', 'reagentcount1', 'reagentcount2', 'reagentcount3', 'reagentcount4', 'reagentcount5', 'reagentcount6', 'reagentcount7', 'reagentcount8', 'iconname', 'effect1Aura', 'effect2Aura', 'effect3Aura');
 
 function spell_duration($base)
@@ -320,12 +310,13 @@ function spell_desc($spellid, $type='tooltip')
 {
 	global $DB;
 	global $spell_cols;
+	// Не включать spellduration сюда!!! Не у всех спеллов он установлен корректно.
 	$spellRow = $DB->selectRow('
 		SELECT ?#
-		FROM ?_spell, ?_spellicons
+		FROM ?_spell s, ?_spellicons
 		WHERE
-			spellID=?
-			AND id=spellicon
+			spellID = ?
+			AND id = spellicon
 		LIMIT 1
 		',
 		$spell_cols[1],
@@ -338,18 +329,18 @@ function spell_desc2($spellRow, $type='tooltip')
 {
 	global $DB;
 
-//	$spellRow = $DB->selectRow('SELECT s.*, i.iconname FROM ?_spell s, ?_spellicons i WHERE s.spellID=? AND i.id=s.spellicon LIMIT 1', $spellID);
-
 	allspellsinfo2($spellRow);
 
-	if(!IsSet($spellRow['duration_base']))
-		$lastduration = $DB->selectRow('SELECT * FROM ?_spellduration` WHERE durationID=? LIMIT 1', $spellRow['durationID']);
+	if(isset($spellRow['duration_base']))
+		$lastduration = array('duration_base' => $spellRow['duration_base']);
+	else
+		$lastduration = $DB->selectRow('SELECT * FROM ?_spellduration WHERE durationID = ? LIMIT 1', $spellRow['durationID']);
 
 	$signs = array('+', '-', '/', '*', '%', '^');
 
 	$data = $spellRow[$type.'_loc'.$_SESSION['locale']];
 
-	if((!$data) and $type='tooltip')
+	if(!$data && $type == 'tooltip')
 		return '_empty_';
 
 	$pos = 0;
@@ -403,8 +394,8 @@ function spell_desc2($spellRow, $type='tooltip')
 				$str .= '&lt;Home&gt;';
 				break;
 			case 'c':
-				if($lookup > 0)
-					$spell = $DB->selectRow('SELECT * FROM ?_spell WHERE spellID=? LIMIT 1', $lookup);
+				if($lookup > 0 && $exprData[0])
+					$spell = $DB->selectRow('SELECT effect'.$exprData[0].'BasePoints FROM ?_spell WHERE spellID=? LIMIT 1', $lookup);
 				else
 					$spell = $spellRow;
 
@@ -420,8 +411,8 @@ function spell_desc2($spellRow, $type='tooltip')
 				$lastvalue = $base;
 				break;
 			case 's':
-				if($lookup > 0)
-					$spell = $DB->selectRow('SELECT * FROM ?_spell WHERE spellID=? LIMIT 1', $lookup);
+				if($lookup > 0 && $exprData[0])
+					$spell = $DB->selectRow('SELECT effect'.$exprData[0].'BasePoints, effect'.$exprData[0].'DieSides FROM ?_spell WHERE spellID=? LIMIT 1', $lookup);
 				else
 					$spell = $spellRow;
 
@@ -434,13 +425,13 @@ function spell_desc2($spellRow, $type='tooltip')
 					eval('$base = $equation;');
 				}
 
-				@$str .= abs($base).($spell['effect'.$exprData[0].'DieSides'] > 1 ? ' to '.abs(($base+$spell['effect'.$exprData[0].'DieSides'])) : '');
+				@$str .= abs($base).($spell['effect'.$exprData[0].'DieSides'] > 1 ? LOCALE_VALUE_DELIM.abs(($base+$spell['effect'.$exprData[0].'DieSides'])) : '');
 				$lastvalue = $base;
 				break;
 			case 'o':
-				if($lookup > 0)
+				if($lookup > 0 && $exprData[0])
 				{
-					$spell = $DB->selectRow('SELECT * FROM ?_spell WHERE spellID=? LIMIT 1', $lookup);
+					$spell = $DB->selectRow('SELECT effect'.$exprData[0].'BasePoints, effect'.$exprData[0].'Amplitude, effect'.$exprData[0].'DieSides FROM ?_spell WHERE spellID=? LIMIT 1', $lookup);
 					$lastduration = $DB->selectRow('SELECT * FROM ?_spellduration WHERE durationID=? LIMIT 1', $spell['durationID']);
 				}
 				else
@@ -454,7 +445,7 @@ function spell_desc2($spellRow, $type='tooltip')
 				$str .= (($lastduration['durationBase'] / $spell['effect'.$exprData[0].'Amplitude']) * abs($base).($spell['effect'.$exprData[0].'DieSides'] > 1 ? '-'.abs(($base+$spell['effect'.$exprData[0].'DieSides'])) : ''));
 				break;
 			case 't':
-				if($lookup > 0)
+				if($lookup > 0 && $exprData[0])
 					$spell = $DB->selectRow('SELECT * FROM ?_spell WHERE spellID=? LIMIT 1', $lookup);
 				else
 					$spell = $spellRow;
@@ -475,8 +466,8 @@ function spell_desc2($spellRow, $type='tooltip')
 				$lastvalue = $base;
 				break;
 			case 'm':
-				if($lookup > 0)
-					$spell = $DB->selectRow('SELECT * FROM ?_spell WHERE spellID=? LIMIT 1', $lookup);
+				if($lookup > 0 && $exprData[0])
+					$spell = $DB->selectRow('SELECT effect'.$exprData[0].'BasePoints FROM ?_spell WHERE spellID=? LIMIT 1', $lookup);
 				else
 					$spell = $spellRow;
 
@@ -494,8 +485,8 @@ function spell_desc2($spellRow, $type='tooltip')
 				$lastvalue = $base;
 				break;
 			case 'x':
-				if($lookup > 0)
-					$spell = $DB->selectRow('SELECT * FROM ?_spell WHERE spellID=? LIMIT 1', $lookup);
+				if($lookup > 0 && $exprData[0])
+					$spell = $DB->selectRow('SELECT effect'.$exprData[0].'ChainTarget FROM ?_spell WHERE spellID=? LIMIT 1', $lookup);
 				else
 					$spell = $spellRow;
 
@@ -510,8 +501,8 @@ function spell_desc2($spellRow, $type='tooltip')
 				$lastvalue = $base;
 				break;
 			case 'q':
-				if($lookup > 0)
-					$spell = $DB->selectRow('SELECT * FROM ?_spell WHERE spellID=? LIMIT 1',$lookup);
+				if($lookup > 0 && $exprData[0])
+					$spell = $DB->selectRow('SELECT effect'.$exprData[0].'MiscValue FROM ?_spell WHERE spellID=? LIMIT 1',$lookup);
 				else
 					$spell = $spellRow;
 
@@ -528,8 +519,8 @@ function spell_desc2($spellRow, $type='tooltip')
 				$lastvalue = $base;
 				break;
 			case 'a':
-				if($lookup > 0)
-					$spell = $DB->selectRow('SELECT * FROM ?_spell WHERE spellID=? LIMIT 1', $lookup);
+				if($lookup > 0 && $exprData[0])
+					$spell = $DB->selectRow('SELECT effect1radius, effect2radius, effect3radius FROM ?_spell WHERE spellID=? LIMIT 1', $lookup);
 				else
 					$spell = $spellRow;
 
@@ -545,8 +536,8 @@ function spell_desc2($spellRow, $type='tooltip')
 				$str .= abs($base);
 				break;
 			case 'h':
-				if($lookup > 0)
-					$spell = $DB->selectRow('SELECT * FROM ?_spell WHERE spellID=? LIMIT 1', $lookup);
+				if($lookup > 0 && $exprData[0])
+					$spell = $DB->selectRow('SELECT procChance FROM ?_spell WHERE spellID=? LIMIT 1', $lookup);
 				else
 					$spell = $spellRow;
 
@@ -560,8 +551,8 @@ function spell_desc2($spellRow, $type='tooltip')
 				$str .= abs($base);
 				break;
 			case 'f':
-				if($lookup > 0)
-					$spell = $DB->selectRow('SELECT * FROM ?_spell WHERE spellID=? LIMIT 1', $lookup);
+				if($lookup > 0 && $exprData[0])
+					$spell = $DB->selectRow('SELECT dmg_multiplier'.$exprData[0].' FROM ?_spell WHERE spellID=? LIMIT 1', $lookup);
 				else
 					$spell = $spellRow;
 
@@ -576,7 +567,7 @@ function spell_desc2($spellRow, $type='tooltip')
 				break;
 			case 'n':
 				if($lookup > 0)
-					$spell = $DB->selectRow('SELECT * FROM ?_spell WHERE spellID=? LIMIT 1', $lookup);
+					$spell = $DB->selectRow('SELECT procCharges FROM ?_spell WHERE spellID=? LIMIT 1', $lookup);
 				else
 					$spell = $spellRow;
 
@@ -616,8 +607,8 @@ function spell_desc2($spellRow, $type='tooltip')
 				$str .= $base;
 				break;
 			case 'e':
-				if($lookup > 0)
-					$spell = $DB->selectRow('SELECT * FROM ?_spell WHERE spellID=? LIMIT 1', $lookup);
+				if($lookup > 0 && $exprData[0])
+					$spell = $DB->selectRow('SELECT effect_'.$exprData[0].'_proc_value FROM ?_spell WHERE spellID=? LIMIT 1', $lookup);
 				else
 					$spell = $spellRow;
 				
@@ -643,12 +634,12 @@ function spell_desc2($spellRow, $type='tooltip')
 				$str .= $base;
 				break; 
 			case 'u':
-				if($lookup > 0)
-					$spell = $DB->selectRow('SELECT * FROM ?_spell WHERE spellID=?d LIMIT 1', $lookup);
+				if($lookup > 0 && $exprData[0])
+					$spell = $DB->selectRow('SELECT effect'.$exprData[0].'MiscValue FROM ?_spell WHERE spellID=?d LIMIT 1', $lookup);
 				else
 					$spell = $spellRow;
 					
-//				$base = $spell['effect_'.$exprData[0].'_misc_value'];
+				// $base = $spell['effect_'.$exprData[0].'_misc_value'];
 				if(isset($spell['effect'.$exprData[0].'MiscValue']))
 					$base = $spell['effect'.$exprData[0].'MiscValue'];
 
@@ -662,7 +653,7 @@ function spell_desc2($spellRow, $type='tooltip')
 				break;
 			case 'b': // only used at one spell (14179) should be 20, column 110/111/112?)
 				if($lookup > 0)
-					$spell = $DB->selectRow('SELECT * FROM ?_spell WHERE spellID=? LIMIT 1', $lookup);
+					$spell = $DB->selectRow('SELECT effect_'.$exprData[0].'_proc_chance FROM ?_spell WHERE spellID=? LIMIT 1', $lookup);
 				else
 					$spell = $spellRow;
 				
@@ -693,7 +684,7 @@ function spell_desc2($spellRow, $type='tooltip')
 
 	$str = @preg_replace_callback("|\{([^\}]+)\}|", create_function('$matches', 'return eval("return abs(".$matches[1].");");'), $str);
 
-	return($str);
+	return $str;
 }
 
 function render_spell_tooltip(&$row)
@@ -716,7 +707,16 @@ function render_spell_tooltip(&$row)
 		{
 			$reagents[$i] = array();
 			// Имя реагента
-			$reagents[$i]['name'] = $DB->selectCell("SELECT name FROM item_template WHERE entry=? LIMIT 1", $row['reagent'.$j]);
+			$names = $DB->selectRow('
+				SELECT name{, l.name_loc?d as `name_loc`}
+				FROM item_template i
+				{ LEFT JOIN (locales_creature l) ON l.entry = i.entry AND ? }
+				WHERE i.entry = ?d',
+				($_SESSION['locale']>0)? $_SESSION['locale']: DBSIMPLE_SKIP,
+				($_SESSION['locale']>0)? 1: DBSIMPLE_SKIP,
+				$row['reagent'.$j]
+			);
+			$reagents[$i]['name'] = localizedName($names);
 			// Количество реагентов
 			$reagents[$i]['count'] = $row['reagentcount'.$j];
 			$i++;
@@ -732,7 +732,16 @@ function render_spell_tooltip(&$row)
 		{
 			$tools[$i] = array();
 			// Имя инструмента
-			$tools[$i]['name'] = $DB->selectCell("SELECT name FROM item_template WHERE entry=? LIMIT 1", $row['tool'.$j]);
+			$names = $DB->selectRow('
+				SELECT name{, l.name_loc?d as `name_loc`}
+				FROM item_template i
+				{ LEFT JOIN (locales_creature l) ON l.entry = i.entry AND ? }
+				WHERE i.entry = ?d',
+				($_SESSION['locale']>0)? $_SESSION['locale']: DBSIMPLE_SKIP,
+				($_SESSION['locale']>0)? 1: DBSIMPLE_SKIP,
+				$row['tool'.$j]
+			);
+			$tools[$i]['name'] = localizedName($names);
 			$i++;
 		}
 	}
@@ -751,7 +760,7 @@ function render_spell_tooltip(&$row)
 	if($row['rank_loc'.$_SESSION['locale']])
 		$x .= '</td><th><b class="q0">'.$row['rank_loc'.$_SESSION['locale']].'</b></th></tr></table>';
 
-	if(($range) and (($row['manacost'] >0) or ($row['manacostpercent']>0)))
+	if($range && ($row['manacost'] > 0 || $row['manacostpercent'] > 0))
 		$x .= '<table width="100%"><tr><td>';
 
 	if($row['manacost'] >0)
@@ -760,32 +769,32 @@ function render_spell_tooltip(&$row)
 	if($row['manacostpercent']>0)
 		$x .= $row['manacostpercent']."% of base mana<br />";
 
-	if(($range) and (($row['manacost'] >0) or ($row['manacostpercent']>0)))
+	if($range && (($row['manacost'] >0) || ($row['manacostpercent']>0)))
 		$x .= '</td><th>';
 
 	if($range)
 		$x .= $range.' yd range<br />';
 
-	if(($range) and (($row['manacost'] >0) or ($row['manacostpercent']>0)))
+	if($range and ($row['manacost'] > 0 || $row['manacostpercent'] > 0))
 		$x .= '</th></tr></table>';
 
-	if((($row['ChannelInterruptFlags']) or (isset($casttime)) or ($row['spellcasttimesID']==1)) and ($row['cooldown']))
+	if(($row['ChannelInterruptFlags'] && isset($casttime) || $row['spellcasttimesID']==1) && $row['cooldown'])
 		$x .= '<table width="100%"><tr><td>';
 
 	if($row['ChannelInterruptFlags'])
 		$x .= 'Channeled';
 	elseif(isset($casttime))
 		$x .= $casttime.' sec cast';
-	elseif($row['spellcasttimesID']==1)
+	elseif($row['spellcasttimesID'] == 1)
 		$x .= 'Instant';
 
-	if((($row['ChannelInterruptFlags']) or (isset($casttime)) or ($row['spellcasttimesID']==1)) and ($row['cooldown']))
+	if(($row['ChannelInterruptFlags'] || isset($casttime) || $row['spellcasttimesID'] == 1) && $row['cooldown'])
 		$x .= '</td><th>';
 
 	if($row['cooldown'])
 		$x.= ($row['cooldown']/1000).' sec cooldown';
 
-	if((($row['ChannelInterruptFlags']) or (isset($casttime)) or ($row['spellcasttimesID']==1)) and ($row['cooldown']))
+	if(($row['ChannelInterruptFlags'] || isset($casttime) && $row['spellcasttimesID'] == 1) && $row['cooldown'])
 		$x .= '</th></tr></table>';
 
 	$x .= '</td></tr></table>';
@@ -793,7 +802,7 @@ function render_spell_tooltip(&$row)
 	if($reagents)
 	{
 		$x .= '<table><tr><td>';
-		$x .= 'Reagents: ';
+		$x .= LOCALE_REAGENTS;
 		foreach($reagents as $i => $reagent)
 		{
 			$x .= $reagent['name'];
@@ -810,7 +819,7 @@ function render_spell_tooltip(&$row)
 	if($tools)
 	{
 		$x .= '<table><tr><td>';
-		$x .= 'Tools: ';
+		$x .= LOCALE_TOOLS;
 		foreach($tools as $i => $tool)
 		{
 			$x .= $tool['name'];
@@ -822,7 +831,7 @@ function render_spell_tooltip(&$row)
 		$x .= '</td></tr></table>';
 	}
 
-	if(($desc) and ($desc!='_empty_'))
+	if($desc && $desc <> '_empty_')
 		$x .= '<table><tr><td><span class="q">'.$desc.'</span></td></tr></table>';
 
 	return $x;
@@ -844,12 +853,12 @@ function allspellsinfo2(&$row, $level=0)
 	$allspells[$num]['entry'] = $row['spellID'];
 
 	// Имя иконки спелла
-	if(($row['effect1itemtype']) and (!($row['effect1Aura'])))
+	if($row['effect1itemtype'] && !$row['effect1Aura'])
 	{
 		if(IsSet($allitems[$row['effect1itemtype']]['icon']))
 			$allspells[$num]['icon'] = $allitems[$row['effect1itemtype']]['icon'];
 		else
-			$allspells[$num]['icon'] = $DB->selectCell('SELECT iconname FROM ?_icons WHERE id=(SELECT displayid FROM item_template WHERE entry=?d LIMIT 1) LIMIT 1',$row['effect1itemtype']);
+			$allspells[$num]['icon'] = $DB->selectCell('SELECT iconname FROM ?_icons, item_template WHERE id = displayid AND entry = ?d LIMIT 1',$row['effect1itemtype']);
 	} else {
 		$allspells[$num]['icon'] = $row['iconname'];
 	}
@@ -955,7 +964,8 @@ function spellinfo2(&$row)
 		$spell['entry'] = $row['spellID'];
 		$spell['quality'] = '@';
 		$spell['name'] = $row['spellname_loc'.$_SESSION['locale']];
-		$spell['rank'] = $row['rank'];
+		$spell['rank'] = $row['rank_loc'.$_SESSION['locale']];
+		$spell['talent'] = $row['talent'];
 		$spell['level'] = $row['levelspell'];
 		$spell['school'] = $row['resistancesID'];
 		// TODO: Что за cat?
@@ -968,7 +978,7 @@ function spellinfo2(&$row)
 //			if($skillrow['req_skill_value'] != 1)
 //				$spell['learnedat'] = $skillrow['req_skill_value'];
 			// TODO: На каком уровне скилла можно обучиться спеллу (поле learnedat)
-			if($row['min_value'] and $row['max_value'])
+			if($row['min_value'] && $row['max_value'])
 			{
 				$spell['colors'] = array();
 				$spell['colors'][0] = '';
@@ -1008,27 +1018,14 @@ function spellinfo2(&$row)
 				$spell['creates'][$i] = array();
 				$spell['creates'][$i]['entry'] = $row['effect'.$j.'itemtype'];
 				$spell['creates'][$i]['count'] = $row['effect'.$j.'BasePoints'] + 1;
-				if(!(isset($allitems[$spell['creates'][$i]['entry']])))
-				{
-					$createrow = $DB->selectRow('
-						SELECT ?#
-						FROM item_template, ?_icons
-						WHERE
-							entry=?d
-							AND id=displayid
-						LIMIT 1',
-						$item_cols[0],
-						$spell['creates'][$i]['entry']
-					);
-					allitemsinfo2($createrow, 0);
-				}
-				if(!(isset($allitems[$spell['creates'][$i]['entry']])))
-				{
-					// Если так и не существует - нет соответствующей записи в таблице вещей
+
+				if(!isset($allitems[$spell['creates'][$i]['entry']]))
+					allitemsinfo($spell['creates'][$i]['entry'], 0);
+
+				if(!isset($allitems[$spell['creates'][$i]['entry']]))
 					$spell['quality'] = 6;
-				} else {
+				else
 					$spell['quality'] = 6 - $allitems[$spell['creates'][$i]['entry']]['quality'];
-				}
 				$i++;
 			}
 

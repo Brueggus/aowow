@@ -28,7 +28,7 @@ if(!$spell = load_cache(13, intval($id)))
 		SELECT s.*, i.iconname
 		FROM ?_spell s, ?_spellicons i
 		WHERE
-			s.spellID=?
+			s.spellID = ?
 			AND i.id = s.spellicon
 		',
 		$id
@@ -50,14 +50,14 @@ if(!$spell = load_cache(13, intval($id)))
 		// Уровень спелла
 		$spell['level'] = $row['levelspell'];
 		// Дальность
-		$RangeRow = $DB->selectRow('SELECT rangeMin, rangeMax, name_loc'.$_SESSION['locale'].' from ?_spellrange where rangeID=? limit 1', $row['rangeID']);
+		$RangeRow = $DB->selectRow('SELECT rangeMin, rangeMax, name_loc'.$_SESSION['locale'].' FROM ?_spellrange WHERE rangeID = ? LIMIT 1', $row['rangeID']);
 		$spell['range'] = '';
 		if (($RangeRow['rangeMin'] != $RangeRow['rangeMax']) and ($RangeRow['rangeMin'] != 0))
 			$spell['range'] = $RangeRow['rangeMin'].'-';
 		$spell['range'] .= $RangeRow['rangeMax'];
 		$spell['rangename'] = $RangeRow['name_loc'.$_SESSION['locale']];
 		// Время каста
-		$casttime = $DB->selectCell('SELECT base from ?_spellcasttimes where id=? limit 1', $row['spellcasttimesID']);
+		$casttime = $DB->selectCell('SELECT base FROM ?_spellcasttimes WHERE id = ? LIMIT 1', $row['spellcasttimesID']);
 		if ($casttime>0)
 			$spell['casttime'] = ($casttime/1000).' '.$smarty->get_config_vars('seconds');
 		else if($row['ChannelInterruptFlags'])
@@ -68,19 +68,19 @@ if(!$spell = load_cache(13, intval($id)))
 		if ($row['cooldown']>0)
 			$spell['cooldown'] = $row['cooldown'] / 1000;
 		// Время действия спелла
-		$duration = $DB->selectCell('SELECT durationBase FROM ?_spellduration WHERE durationID=?d LIMIT 1', $row['durationID']);
+		$duration = $DB->selectCell('SELECT durationBase FROM ?_spellduration WHERE durationID = ?d LIMIT 1', $row['durationID']);
 		if ($duration > 0)
 			$spell['duration'] = ($duration/1000).' '.$smarty->get_config_vars('seconds');
 		else
 			$spell['duration'] ='<span class="q0">n/a</span>';
 		// Школа спелла
-		$spell['school'] = $DB->selectCell('SELECT name_loc'.$_SESSION['locale'].' FROM ?_resistances WHERE id=?d LIMIT 1', $row['resistancesID']);
+		$spell['school'] = $DB->selectCell('SELECT name_loc'.$_SESSION['locale'].' FROM ?_resistances WHERE id = ?d LIMIT 1', $row['resistancesID']);
 		// Тип диспела
 		if ($row['dispeltypeID'])
-			$spell['dispel'] = $DB->selectCell('SELECT name_loc'.$_SESSION['locale'].' FROM ?_spelldispeltype WHERE id=?d LIMIT 1', $row['dispeltypeID']);
+			$spell['dispel'] = $DB->selectCell('SELECT name_loc'.$_SESSION['locale'].' FROM ?_spelldispeltype WHERE id = ?d LIMIT 1', $row['dispeltypeID']);
 		// Механика спелла
 		if ($row['mechanicID'])
-			$spell['mechanic'] = $DB->selectCell('SELECT name_loc'.$_SESSION['locale'].' FROM ?_spellmechanic WHERE id=?d LIMIT 1', $row['mechanicID']);
+			$spell['mechanic'] = $DB->selectCell('SELECT name_loc'.$_SESSION['locale'].' FROM ?_spellmechanic WHERE id = ?d LIMIT 1', $row['mechanicID']);
 
 		// Информация о спелле
 		$spell['info'] = allspellsinfo2($row, 2);
@@ -88,19 +88,16 @@ if(!$spell = load_cache(13, intval($id)))
 		// Инструменты
 		$spell['tools'] = array();
 		$i=0;
-		for ($j=1;$j<=2;$j++)
+		fOR ($j=1;$j<=2;$j++)
 		{
 			if ($row['tool'.$j])
 			{
-				$spell['tools'][$i] = array();
-				// Имя инструмента
-				$tool_row = $DB->selectRow('SELECT ?#, name_loc'.$_SESSION['locale'].', `quality` FROM item_template, ?_icons WHERE entry=?d AND id=displayid LIMIT 1', $item_cols[0], $row['tool'.$j]);
-				$spell['tools'][$i]['name'] = $tool_row['name_loc'.$_SESSION['locale']];
-				$spell['tools'][$i]['quality'] = $tool_row['quality'];
-				// ID инструмента
-				$spell['tools'][$i]['entry'] = $row['tool'.$j];
-				// Добавляем инструмент в таблицу вещей
-				allitemsinfo2($tool_row, 0);
+				$tool_row = allitemsinfo($row['tool'.$j], 0);
+				$spell['tools'][$i] = array(
+					'name'		=> $tool_row['name'],
+					'quality'	=> $tool_row['quality'],
+					'entry'		=> $row['tool'.$j],
+				);
 				$i++;
 			}
 		}
@@ -108,35 +105,17 @@ if(!$spell = load_cache(13, intval($id)))
 		// Реагенты
 		$spell['reagents'] = array();
 		$i=0;
-		for ($j=1;$j<=8;$j++)
+		fOR ($j=1;$j<=8;$j++)
 		{
 			if ($row['reagent'.$j])
 			{
-				$spell['reagents'][$i] = array();
-				// Имя реагента
-				$reagentrow = $DB->selectRow('
-					SELECT c.?#, name
-					{ ,l.name_loc?d as `name_loc` }
-					FROM ?_icons, item_template c
-					{ LEFT JOIN (locales_item l) ON l.entry=c.entry AND ? }
-					WHERE
-						c.entry=?d
-						AND id=displayid
-					LIMIT 1
-					',
-					$item_cols[0],
-					($_SESSION['locale']>0)? $_SESSION['locale']: DBSIMPLE_SKIP,
-					($_SESSION['locale']>0)? 1: DBSIMPLE_SKIP,
-					$row['reagent'.$j]
+				$tool_row = allitemsinfo($row['reagent'.$j], 0);
+				$spell['reagents'][$i] = array(
+					'name'		=> $tool_row['name'],
+					'quality'	=> $tool_row['quality'],
+					'entry'		=> $row['reagent'.$j],
+					'count'		=> $row['reagentcount'.$j],
 				);
-				$spell['reagents'][$i]['name'] = !empty($reagentrow['name_loc'])?$reagentrow['name_loc']:$reagentrow['name'];
-				$spell['reagents'][$i]['quality'] = $reagentrow['quality'];
-				// ID реагента
-				$spell['reagents'][$i]['entry'] = $row['reagent'.$j];
-				// Количество реагентов
-				$spell['reagents'][$i]['count'] = $row['reagentcount'.$j];
-				// Добавляем реагент в таблицу вещей
-				allitemsinfo2($reagentrow, 0);
 				$i++;
 			}
 		}
@@ -147,12 +126,12 @@ if(!$spell = load_cache(13, intval($id)))
 		// Btt - Buff TollTip
 		if ($row['buff'])
 			$spell['btt'] = spell_buff_render($row);
-		for ($j=1;$j<=3;$j++)
+		fOR ($j=1;$j<=3;$j++)
 		{
 			if($row['effect'.$j.'id'] > 0)
 			{
 				// Название эффекта
-				$spell['effect'][$i]['name'] = $spell_effect_names[$row['effect'.$j.'id']];
+				$spell['effect'][$i]['name'] = '('.$row['effect'.$j.'id'].') '.$spell_effect_names[$row['effect'.$j.'id']];
 				// Доп информация в имени
 				if ($row['effect'.$j.'MiscValue'])
 				{
@@ -169,13 +148,13 @@ if(!$spell = load_cache(13, intval($id)))
 						{
 							$spell['effect'][$i]['object'] = array();
 							$spell['effect'][$i]['object']['entry'] = $row['effect'.$j.'MiscValue'];
-							$spell['effect'][$i]['object']['name'] = $DB->selectCell("SELECT name FROM gameobject_template WHERE entry=? LIMIT 1", $spell['effect'][$i]['object']['entry']).' ('.$spell['effect'][$i]['object']['entry'].')';
+							$spell['effect'][$i]['object']['name'] = $DB->selectCell("SELECT name FROM gameobject_template WHERE entry = ? LIMIT 1", $spell['effect'][$i]['object']['entry']).' ('.$spell['effect'][$i]['object']['entry'].')';
 							break;
 						}
 						// скиллы
 						case 118: // "Require Skill"
 						{
-							$spell['effect'][$i]['name'] .= ' ('.$DB->selectCell('SELECT name FROM ?_skill WHERE skillID=? LIMIT 1', $row['effect'.$j.'MiscValue']).')';
+							$spell['effect'][$i]['name'] .= ' ('.$DB->selectCell('SELECT name FROM ?_skill WHERE skillID = ? LIMIT 1', $row['effect'.$j.'MiscValue']).')';
 							break;
 						}
 						// ауры
@@ -204,7 +183,7 @@ if(!$spell = load_cache(13, intval($id)))
 					$spell['effect'][$i]['name'] .= ' ('.$spell['school'].')';
 				// Радиус действия эффекта
 				if ($row['effect'.$j.'radius'])
-					$spell['effect'][$i]['radius'] = $DB->selectCell("SELECT radiusbase from ?_spellradius where radiusID=? limit 1", $row['effect'.$j.'radius']);
+					$spell['effect'][$i]['radius'] = $DB->selectCell("SELECT radiusbase FROM ?_spellradius WHERE radiusID = ? LIMIT 1", $row['effect'.$j.'radius']);
 				// Значение спелла (урон)
 				if ($row['effect'.$j.'BasePoints'] && !$row['effect'.$j.'itemtype'])
 					$spell['effect'][$i]['value'] = $row['effect'.$j.'BasePoints'] + 1;
@@ -213,10 +192,12 @@ if(!$spell = load_cache(13, intval($id)))
 					$spell['effect'][$i]['interval'] = $row['effect'.$j.'Amplitude'] / 1000;
 				// Название ауры:
 				if ($row['effect'.$j.'Aura'] > 0 && IsSet($spell_aura_names[$row['effect'.$j.'Aura']]))
+				{
+					$spell['effect'][$i]['name'] .= ' #'.$row['effect'.$j.'Aura'];
 					switch ($row['effect'.$j.'Aura'])
 					{
 						case 78: // "Mounted" - приписываем ссылку на нпс
-						case 56: // "Transform"
+						case 56: // "TransfORm"
 						{
 							$spell['effect'][$i]['name'] .= ': '.$spell_aura_names[$row['effect'.$j.'Aura']].' (<a href="?npc='.$row['effect'.$j.'MiscValue'].'">'.$row['effect'.$j.'MiscValue'].'</a>)';
 							break;
@@ -228,42 +209,28 @@ if(!$spell = load_cache(13, intval($id)))
 								$spell['effect'][$i]['name'] .= ' ('.$row['effect'.$j.'MiscValue'].')';
 						}
 					}
+				}
 				elseif ($row['effect'.$j.'Aura'] > 0)
-					$spell['effect'][$i]['name'] .= ': Unknown_Aura('.$row['effect'.$j.'Aura'].')';
+					$spell['effect'][$i]['name'] .= ': Unknown Aura ('.$row['effect'.$j.'Aura'].')';
 				// Создает вещь:
 				if (($row['effect'.$j.'id'] == 24))
 				{
 					$spell['effect'][$i]['item'] = array();
 					$spell['effect'][$i]['item']['entry'] = $row['effect'.$j.'itemtype'];
-					$tmpRow = $DB->selectRow('
-							SELECT c.?#, name
-							{ ,l.name_loc?d as `name_loc` }
-							FROM ?_icons, item_template c
-							{ LEFT JOIN (locales_item l) ON l.entry=c.entry AND ? }
-							WHERE
-								c.entry=?d
-								AND id=displayid
-							LIMIT 1
-						',
-						$item_cols[0],
-						($_SESSION['locale']>0)? $_SESSION['locale']: DBSIMPLE_SKIP,
-						($_SESSION['locale']>0)? 1: DBSIMPLE_SKIP,
-						$spell['effect'][$i]['item']['entry']
-					);
+					$tmpRow = allitemsinfo($spell['effect'][$i]['item']['entry'], 0);
 					$spell['effect'][$i]['item']['name'] = $tmpRow['name'];
 					$spell['effect'][$i]['item']['quality'] = $tmpRow['quality'];
 					$spell['effect'][$i]['item']['count'] = $row['effect'.$j.'BasePoints'] + 1;
 					// Иконка итема, если спелл создает этот итем
 					if(!IsSet($spell['icon']))
 						$spell['icon'] = $tmpRow['iconname'];
-					allitemsinfo2($tmpRow, 0);
 				}
 				// Создает спелл
 				if ($row['effect'.$j.'triggerspell'] > 0)
 				{
 					$spell['effect'][$i]['spell'] = array();
 					$spell['effect'][$i]['spell']['entry'] = $row['effect'.$j.'triggerspell'];
-					$spell['effect'][$i]['spell']['name'] = $DB->selectCell('SELECT spellname_loc'.$_SESSION['locale'].' FROM ?_spell WHERE spellID=?d LIMIT 1', $spell['effect'][$i]['spell']['entry']);
+					$spell['effect'][$i]['spell']['name'] = $DB->selectCell('SELECT spellname_loc'.$_SESSION['locale'].' FROM ?_spell WHERE spellID = ?d LIMIT 1', $spell['effect'][$i]['spell']['entry']);
 					allspellsinfo($spell['effect'][$i]['spell']['entry']);
 				}
 				$i++;
@@ -281,9 +248,9 @@ if(!$spell = load_cache(13, intval($id)))
 				s.spellname_loc'.$_SESSION['locale'].' = ?
 				AND s.spellID <> ?d
 				AND (
-							(s.effect1id=?d AND s.effect1id!=0)
-							OR (s.effect2id=?d AND s.effect2id!=0)
-							OR (s.effect3id=?d AND s.effect3id!=0)
+							(s.effect1id = ?d AND s.effect1id!=0)
+							OR (s.effect2id = ?d AND s.effect2id!=0)
+							OR (s.effect3id = ?d AND s.effect3id!=0)
 						)
 				AND i.id=s.spellicon
 			',
@@ -296,7 +263,7 @@ if(!$spell = load_cache(13, intval($id)))
 		if ($seealso)
 		{
 			$spell['seealso'] = array();
-			foreach($seealso as $i => $row)
+			fOReach($seealso as $i => $row)
 				$spell['seealso'][] = spellinfo2($row);
 			unset ($seealso);
 		}
@@ -310,7 +277,7 @@ if(!$spell = load_cache(13, intval($id)))
 			FROM ?_factiontemplate, creature_template c
 			{ LEFT JOIN (locales_creature l) ON c.entry = l.entry AND ? }
 			WHERE
-				c.entry IN (SELECT entry FROM npc_trainer WHERE spell=?d)
+				c.entry IN (SELECT entry FROM npc_trainer WHERE spell = ?d)
 				AND factiontemplateID=faction_A
 			',
 			$npc_cols[0],
@@ -320,7 +287,7 @@ if(!$spell = load_cache(13, intval($id)))
 		);
 		if ($taughtbytrainers)
 		{
-			foreach($taughtbytrainers as $i=>$npcrow)
+			fOReach($taughtbytrainers as $i=>$npcrow)
 				$spell['taughtbynpc'][] = creatureinfo2($npcrow);
 			unset ($taughtbytrainers);
 		}
@@ -333,7 +300,7 @@ if(!$spell = load_cache(13, intval($id)))
 			FROM ?_icons, item_template c
 			{ LEFT JOIN (locales_item l) ON c.entry = l.entry AND ? }
 			WHERE
-				((spellid_2=?d)
+				((spellid_2 = ?d)
 				AND (spelltrigger_2=6))
 				AND id=displayid
 			',
@@ -344,7 +311,7 @@ if(!$spell = load_cache(13, intval($id)))
 		);
 		if ($taughtbyitem)
 		{
-			foreach($taughtbyitem as $i=>$itemrow)
+			fOReach($taughtbyitem as $i=>$itemrow)
 				$spell['taughtbyitem'][] = iteminfo2($itemrow, 0);
 			unset ($taughtbyitem);
 		}
@@ -354,9 +321,9 @@ if(!$spell = load_cache(13, intval($id)))
 			SELECT spellID
 			FROM ?_spell
 			WHERE
-				(effect1triggerspell=?d AND (effect1id=57 OR effect1id=36))
-				OR (effect2triggerspell=?d AND (effect2id=57 OR effect2id=36))
-				OR (effect3triggerspell=?d AND (effect3id=57 OR effect3id=36))
+				(effect1triggerspell = ?d AND (effect1id=57 OR effect1id=36))
+				OR (effect2triggerspell = ?d AND (effect2id=57 OR effect2id=36))
+				OR (effect3triggerspell = ?d AND (effect3id=57 OR effect3id=36))
 			',
 			$spell['entry'], $spell['entry'], $spell['entry']
 		);
@@ -381,7 +348,7 @@ if(!$spell = load_cache(13, intval($id)))
 			// Перебираем этих петов
 			if ($taughtbypets)
 			{
-				foreach($taughtbypets as $i=>$petrow)
+				fOReach($taughtbypets as $i=>$petrow)
 					$spell['taughtbynpc'][] = creatureinfo2($petrow);
 				unset ($taughtbypets);
 			}
@@ -403,7 +370,7 @@ if(!$spell = load_cache(13, intval($id)))
 			if ($taughtbyquest)
 			{
 				$spell['taughtbyquest'] = array();
-				foreach($taughtbyquest as $i=>$questrow)
+				fOReach($taughtbyquest as $i=>$questrow)
 					$spell['taughtbyquest'][] = GetQuestInfo($questrow, 0xFFFFFF);
 				unset ($taughtbyquest);
 			}
@@ -425,7 +392,7 @@ if(!$spell = load_cache(13, intval($id)))
 			);
 			if ($taughtbytrainers)
 			{
-				foreach($taughtbytrainers as $i=>$npcrow)
+				fOReach($taughtbytrainers as $i=>$npcrow)
 					$spell['taughtbynpc'][] = creatureinfo2($npcrow);
 				unset ($taughtbytrainers);
 			}
@@ -451,7 +418,7 @@ if(!$spell = load_cache(13, intval($id)))
 			);
 			if ($taughtbyitem)
 			{
-				foreach($taughtbyitem as $i=>$itemrow)
+				fOReach($taughtbyitem as $i=>$itemrow)
 					$spell['taughtbyitem'][] = iteminfo2($itemrow, 0);
 				unset ($taughtbyitem);
 			}
@@ -464,10 +431,10 @@ if(!$spell = load_cache(13, intval($id)))
 			FROM ?_factiontemplate, creature_template c
 			{ LEFT JOIN (locales_creature l) ON c.entry = l.entry AND ? }
 			WHERE
-				(spell1=?d
-				OR spell2=?d
-				OR spell3=?d
-				OR spell4=?d)
+				(spell1 = ?d
+				OR spell2 = ?d
+				OR spell3 = ?d
+				OR spell4 = ?d)
 				AND factiontemplateID=faction_A
 			',
 			$npc_cols[0],
@@ -478,7 +445,7 @@ if(!$spell = load_cache(13, intval($id)))
 		if ($usedbynpc)
 		{
 			$spell['usedbynpc'] = array();
-			foreach($usedbynpc as $i=>$row)
+			fOReach($usedbynpc as $i=>$row)
 				$spell['usedbynpc'][] = creatureinfo2($row);
 			unset ($usedbynpc);
 		}
@@ -490,7 +457,7 @@ if(!$spell = load_cache(13, intval($id)))
 			FROM ?_icons, item_template c
 			{ LEFT JOIN (locales_item l) ON c.entry = l.entry AND ? }
 			WHERE
-				(spellid_1=?d OR (spellid_2=?d AND spelltrigger_2!=6) OR spellid_3=?d OR spellid_4=?d OR spellid_5=?d)
+				(spellid_1 = ?d OR (spellid_2 = ?d AND spelltrigger_2!=6) OR spellid_3 = ?d OR spellid_4 = ?d OR spellid_5 = ?d)
 				AND id=displayID
 			',
 			$item_cols[2],
@@ -501,7 +468,7 @@ if(!$spell = load_cache(13, intval($id)))
 		if ($usedbyitem)
 		{
 			$spell['usedbyitem'] = array();
-			foreach($usedbyitem as $i => $row)
+			fOReach($usedbyitem as $i => $row)
 				$spell['usedbyitem'][] = iteminfo2($row, 0);
 			unset ($usedbyitem);
 		}
@@ -510,14 +477,14 @@ if(!$spell = load_cache(13, intval($id)))
 		$usedbyitemset = $DB->select('
 			SELECT *
 			FROM ?_itemset
-			WHERE spell1=?d or spell2=?d or spell3=?d or spell4=?d or spell5=?d or spell6=?d or spell7=?d or spell8=?d
+			WHERE spell1 = ?d OR spell2 = ?d OR spell3 = ?d OR spell4 = ?d OR spell5 = ?d OR spell6 = ?d OR spell7 = ?d OR spell8 = ?d
 			',
 			$spell['entry'], $spell['entry'], $spell['entry'], $spell['entry'], $spell['entry'], $spell['entry'], $spell['entry'], $spell['entry']
 		);
 		if ($usedbyitemset)
 		{
 			$spell['usedbyitemset'] = array();
-			foreach($usedbyitemset as $i => $row)
+			fOReach($usedbyitemset as $i => $row)
 				$spell['usedbyitemset'][] = itemsetinfo2($row);
 			unset ($usedbyitemset);
 		}
@@ -529,8 +496,8 @@ if(!$spell = load_cache(13, intval($id)))
 			FROM quest_template c
 			{ LEFT JOIN (locales_quest l) ON c.entry = l.entry AND ? }
 			WHERE
-				RewSpell=?d
-				OR RewSpellCast=?d
+				RewSpell = ?d
+				OR RewSpellCast = ?d
 			',
 			$quest_cols[2],
 			($_SESSION['locale']>0)? $_SESSION['locale']: DBSIMPLE_SKIP,
@@ -540,7 +507,7 @@ if(!$spell = load_cache(13, intval($id)))
 		if ($questreward)
 		{
 			$spell['questreward'] = array();
-			foreach($questreward as $i => $row)
+			fOReach($questreward as $i => $row)
 				$spell['questreward'][] = GetQuestInfo($row, 0xFFFFFF);
 			unset ($questreward);
 		}

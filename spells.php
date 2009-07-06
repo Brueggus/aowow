@@ -2,7 +2,7 @@
 
 require_once('includes/allspells.php');
 
-$smarty->config_load($conf_file, 'spells');
+$smarty->config_load($conf_file, 'spell');
 
 global $DB;
 global $AoWoWconf;
@@ -19,23 +19,22 @@ if(!$spells = load_cache(15, $cache_str))
 	$spells = array();
 	if($s1 == 7)
 	{
-		$title = $smarty->get_config_vars('Class_spells');
 		// Классовые
+		$title = $smarty->get_config_vars('Class_spells');
 		$rows = $DB->select('
-				SELECT ?#, s.`spellID`, sk.skillID
-				FROM ?_spell s, ?_skill_line_ability sla, ?_spellicons i, ?_skill sk
+				SELECT ?#, s.`spellID`, sla.skillID
+				FROM ?_spell s, ?_skill_line_ability sla, ?_spellicons i
 				WHERE
 					s.spellID = sla.spellID
-					AND s.levelspell >= 1
+					AND s.levelspell > 0
 					AND i.id=s.spellicon
-					{AND sla.classmask = ?d}
+					{AND sla.classmask & ?d}
 					{AND sla.skillID=?d}
-					AND sla.skillID=sk.skillID
 				ORDER BY s.levelspell
 				{LIMIT ?d}
 			',
 			$spell_cols[2],
-			(isset($s2))? pow(2, ($s2-1)): DBSIMPLE_SKIP,
+			(isset($s2))? pow(2,$s2-1): DBSIMPLE_SKIP,
 			(isset($s3))? $s3: DBSIMPLE_SKIP,
 			($AoWoWconf['limit']!=0)? $AoWoWconf['limit']: DBSIMPLE_SKIP
 		);
@@ -45,19 +44,19 @@ if(!$spells = load_cache(15, $cache_str))
 		switch($s1)
 		{
 			case 6:
-				$title = $smarty->get_config_vars('Оружейные навыки');
+				$title = $smarty->get_config_vars('Weapon_spells');
 				break;
 			case 8:
-				$title = $smarty->get_config_vars('Специализации брони');
+				$title = $smarty->get_config_vars('Armor_spells');
 				break;
 			case 10:
-				$title = $smarty->get_config_vars('Языки');
+				$title = $smarty->get_config_vars('Languages');
 				break;
 			case 9:
-				$title = $smarty->get_config_vars('Вспомогательные профессии');
+				$title = $smarty->get_config_vars('Secondary_spells');
 				break;
 			case 11:
-				$title = $smarty->get_config_vars('Профессии');
+				$title = $smarty->get_config_vars('Profession_spells');
 				break;
 			default:
 				$title = '???';
@@ -86,27 +85,23 @@ if(!$spells = load_cache(15, $cache_str))
 	}
 	elseif($s1 == -3)
 	{
-		$title = $smarty->get_config_vars('Pet_spells');
+		$title = $smarty->get_config_vars('Pet_talents');
 		// Петы
 		$spells['sort'] = "'name'";
-		if (!isset($s2))
-			$pets = array(270, 653, 210, 211, 213, 209, 214, 212, 763, 215, 654, 764, 655, 217, 767, 236, 768, 203, 218, 251, 766, 656, 208, 761, 189, 188, 205, 204);
+		$pets = isset($s2) ? array($s2) : $pet_skill_categories;
 		$rows = $DB->select('
 				SELECT
-					?#, `s`.`spellID`, sk.skillID
-				FROM ?_spell s, ?_skill_line_ability sla, ?_spellicons i, ?_skill sk
+					?#, `s`.`spellID`, sla.skillID
+				FROM ?_spell s, ?_skill_line_ability sla, ?_spellicons i
 				WHERE
 					s.spellID = sla.spellID
 					AND s.levelspell > 0
 					AND i.id=s.spellicon
-					{AND sla.skillID=?d}
 					{AND sla.skillID IN (?a)}
-					AND sla.skillID=sk.skillID
 				{LIMIT ?d}
 			',
 			$spell_cols[2],
-			(isset($s2))? $s2: DBSIMPLE_SKIP,
-			(isset($pets))? $pets: DBSIMPLE_SKIP,
+			$pets,
 			($AoWoWconf['limit']!=0)? $AoWoWconf['limit']: DBSIMPLE_SKIP
 		);
 	}
@@ -115,37 +110,90 @@ if(!$spells = load_cache(15, $cache_str))
 		$title = $smarty->get_config_vars('Racial_spells');
 		$spells['sort'] = "'name'";
 		// Racial Traits
+		$spellids = $DB->selectCol('SELECT spellID FROM ?_skill_line_ability WHERE racemask > 0');
 		$rows = $DB->select('
 			SELECT
 				?#, `s`.`spellID`
 			FROM ?_spell s, ?_spellicons i
 			WHERE
-				s.spellID IN (SELECT spellID FROM ?_skill_line_ability WHERE racemask>0)
+				s.spellID IN (?a)
 				AND i.id=s.spellicon
 			{LIMIT ?d}
 			',
 			$spell_cols[2],
+			$spellids,
 			($AoWoWconf['limit']!=0)? $AoWoWconf['limit']: DBSIMPLE_SKIP
 		);
 	}
-	elseif ($s1==-2) {
+	elseif ($s1 == -2)
+	{
 		// Talents
-		// todo
+		$title = $smarty->get_config_vars('Talents');
+		$spells['sort'] = "'name'";
+		$spellids = $DB->selectCol('
+			SELECT rank1
+			FROM ?_talent t, ?_talenttab b
+			WHERE b.id = t.tab {AND classes & ?d}
+			GROUP BY rank1
+			{LIMIT ?d}
+			',
+			(isset($s2))? pow(2,$s2-1) : DBSIMPLE_SKIP,
+			($AoWoWconf['limit']!=0)? $AoWoWconf['limit']: DBSIMPLE_SKIP
+		);
+		$rows = $DB->select('
+			SELECT
+				?#, `s`.`spellID`, 1 AS `talent`
+			FROM ?_spell s, ?_spellicons i
+			WHERE
+				s.spellID IN (?a)
+				AND i.id=s.spellicon
+			',
+			$spell_cols[2],
+			$spellids
+		);
+	}
+	elseif ($s1 == -7)
+	{
+		// Pet Talents
+		$title = $smarty->get_config_vars('Pet_Talents');
+		$spells['sort'] = "'name'";
+		// for speed
+		$spellids = $DB->selectCol('
+			SELECT rank1
+			FROM ?_talent t, ?_talenttab b
+			WHERE b.id = t.tab AND classes = 0
+			GROUP BY rank1
+			{LIMIT ?d}
+			',
+			($AoWoWconf['limit']!=0)? $AoWoWconf['limit']: DBSIMPLE_SKIP
+		);
+		// skill_line_ability тут не поможет
+		$rows = $DB->select('
+			SELECT
+				?#, `s`.`spellID`, 1 AS `talent`
+			FROM ?_spell s, ?_spellicons i
+			WHERE
+				s.spellID IN (?a)
+				AND i.id=s.spellicon
+			',
+			$spell_cols[2],
+			$spellids
+		);
 	}
 	else
 	{
 		$spells['sort'] = "'name'";
 		// просто спеллы
 		$rows = $DB->select('
-			SELECT
-				?#, `s`.`spellID`
-			FROM ?_spell s, ?_spellicons i
-			WHERE
-				i.id=s.spellicon
-			{LIMIT ?d}
-		',
-		$spell_cols[2],
-		($AoWoWconf['limit']!=0)? $AoWoWconf['limit']: DBSIMPLE_SKIP
+				SELECT
+					?#, `s`.`spellID`
+				FROM ?_spell s, ?_spellicons i
+				WHERE
+					i.id=s.spellicon
+				{LIMIT ?d}
+			',
+			$spell_cols[2],
+			($AoWoWconf['limit']!=0)? $AoWoWconf['limit']: DBSIMPLE_SKIP
 		);
 	}
 

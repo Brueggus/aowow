@@ -1,18 +1,18 @@
 <?php
 
-require_once ('includes/allitems.php');
-require_once ('includes/alllocales.php');
+require_once('includes/allitems.php');
+require_once('includes/alllocales.php');
 
 // Классы персонажей (битовые маски)
-define ("CLASS_WARRIOR", 1);
-define ("CLASS_PALADIN", 2);
-define ("CLASS_HUNTER", 4);
-define ("CLASS_ROGUE", 8);
-define ("CLASS_PRIEST", 16);
-define ("CLASS_SHAMAN", 64);
-define ("CLASS_MAGE", 128);
-define ("CLASS_WARLOCK", 256);
-define ("CLASS_DRUID", 1024);
+define('CLASS_WARRIOR', 1);
+define('CLASS_PALADIN', 2);
+define('CLASS_HUNTER', 4);
+define('CLASS_ROGUE', 8);
+define('CLASS_PRIEST', 16);
+define('CLASS_SHAMAN', 64);
+define('CLASS_MAGE', 128);
+define('CLASS_WARLOCK', 256);
+define('CLASS_DRUID', 1024);
 
 // Классы персонажей (архив)
 $classes = array(
@@ -28,16 +28,16 @@ $classes = array(
 	11 => LOCALE_DRUID
 );
 
-define ("RACE_HUMAN", 1);
-define ("RACE_ORC", 2);
-define ("RACE_DWARF", 4);
-define ("RACE_NIGHTELF", 8);
-define ("RACE_UNDEAD", 16);
-define ("RACE_TAUREN", 32);
-define ("RACE_GNOME", 64);
-define ("RACE_TROLL", 128);
-define ("RACE_BLOODELF", 512);
-define ("RACE_DRAENEI", 1024);
+define('RACE_HUMAN', 1);
+define('RACE_ORC', 2);
+define('RACE_DWARF', 4);
+define('RACE_NIGHTELF', 8);
+define('RACE_UNDEAD', 16);
+define('RACE_TAUREN', 32);
+define('RACE_GNOME', 64);
+define('RACE_TROLL', 128);
+define('RACE_BLOODELF', 512);
+define('RACE_DRAENEI', 1024);
 
 // Типы разделов
 global $types;

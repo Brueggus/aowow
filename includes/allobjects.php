@@ -86,7 +86,7 @@ function objectinfo2(&$Row, $level=0)
 	// Номер объекта
 	$object['entry'] = $Row['entry'];
 	// Название объекта
-	$object['name'] = !empty($Row['name_loc'])?$Row['name_loc']:$Row['name'];
+	$object['name'] = localizedName($Row);
 	// Тип объекта
 	$object['type'] = $Row['type'];
 	if($level>0)
@@ -452,7 +452,7 @@ function objectinfo2(&$Row, $level=0)
 				else
 					list($text, $next_page) = $DB->selectRow('SELECT text AS \'0\', next_page AS \'1\' FROM page_text WHERE entry = ?d LIMIT 1', $object['pageid']);
 				*/
-				$row['text'] = QuestReplaceStr(!empty($row['text_loc']) ? $row['text_loc'] : $row['text']);
+				$row['text'] = QuestReplaceStr(localizedName($row, 'text'));
 				if(empty($row['text']))
 					break;
 				$object['pagetext'][] = $row['text'];

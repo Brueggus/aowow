@@ -49,8 +49,7 @@ if(!$quest = load_cache(10, intval($id)))
 		);
 		if($tmp)
 		{
-			if(!empty($tmp['Title_loc']))
-				$tmp['Title'] = $tmp['Title_loc'];
+			$tmp['Title'] = localizedName($tmp, 'Title');
 			array_unshift($quest['series'], $tmp);
 		}
 	}
@@ -72,8 +71,7 @@ if(!$quest = load_cache(10, intval($id)))
 		);
 		if($tmp)
 		{
-			if(!empty($tmp['Title_loc']))
-				$tmp['Title'] = $tmp['Title_loc'];
+			$tmp['Title'] = localizedName($tmp, 'Title');
 			array_push($quest['series'], $tmp);
 		}
 	}
@@ -198,8 +196,7 @@ if(!$quest = load_cache(10, intval($id)))
 	if($questItems)
 		foreach($questItems as $item)
 			foreach($quest[$item] as $i => $x)
-				if(!empty($quest[$item][$i]['Title_loc']))
-					$quest[$item][$i]['Title'] = $quest[$item][$i]['Title_loc'];
+				$quest[$item][$i]['Title'] = localizedName($quest[$item][$i], 'Title');
 
 
 
@@ -375,8 +372,7 @@ if(!$quest = load_cache(10, intval($id)))
 	{
 		foreach($rows as $tmp)
 		{
-			if(!empty($tmp['name_loc']))
-				$tmp['name'] = $tmp['name_loc'];
+			$tmp['name'] = localizedName($tmp);
 			if($tmp['A'] == -1 && $tmp['H'] == 1)
 				$tmp['side'] = 'horde';
 			elseif($tmp['A'] == 1 && $tmp['H'] == -1)
@@ -404,8 +400,7 @@ if(!$quest = load_cache(10, intval($id)))
 	{
 		foreach($rows as $tmp)
 		{
-			if(!empty($tmp['name_loc']))
-				$tmp['name'] = $tmp['name_loc'];
+			$tmp['name'] = localizedName($tmp);
 			$quest['start'][] = array_merge($tmp, array('type' => 'object'));
 		}
 	}
@@ -429,8 +424,7 @@ if(!$quest = load_cache(10, intval($id)))
 	{
 		foreach($rows as $tmp)
 		{
-			if(!empty($tmp['name_loc']))
-				$tmp['name'] = $tmp['name_loc'];
+			$tmp['name'] = localizedName($tmp);
 			$quest['start'][] = array_merge($tmp, array('type' => 'item'));
 		}
 	}
@@ -456,8 +450,7 @@ if(!$quest = load_cache(10, intval($id)))
 	{
 		foreach($rows as $tmp)
 		{
-			if(!empty($tmp['name_loc']))
-				$tmp['name'] = $tmp['name_loc'];
+			$tmp['name'] = localizedName($tmp);
 			if($tmp['A'] == -1 && $tmp['H'] == 1)
 				$tmp['side'] = 'horde';
 			elseif($tmp['A'] == 1 && $tmp['H'] == -1)
@@ -485,8 +478,7 @@ if(!$quest = load_cache(10, intval($id)))
 	{
 		foreach($rows as $tmp)
 		{
-			if(!empty($tmp['name_loc']))
-				$tmp['name'] = $tmp['name_loc'];
+			$tmp['name'] = localizedName($tmp);
 			$quest['end'][] = array_merge($tmp, array('type' => 'object'));
 		}
 	}

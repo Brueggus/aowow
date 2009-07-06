@@ -134,22 +134,22 @@ function GetQuestXpOrMoney($data)
 // ????
 function GetQuestTitle(&$data)
 {
-	$title = QuestReplaceStr( !empty($data['Title_loc']) ? $data['Title_loc'] : $data['Title']);
+	$title = QuestReplaceStr(localizedName($data, 'Title'));
 	$data['Title'] = $title;
 	return $title;
 }
 
 function GetQuestStrings(&$data)
 {
-	$data['Title']				= QuestReplaceStr(				  ( !empty($data['Title_loc'])				? $data['Title_loc']			: $data['Title']			));
-	$data['Objectives']			= QuestReplaceStr(htmlspecialchars( !empty($data['Objectives_loc'])			? $data['Objectives_loc']		: $data['Objectives']		));
-	$data['Details']			= QuestReplaceStr(htmlspecialchars( !empty($data['Details_loc'])			? $data['Details_loc']			: $data['Details']			));
-	$data['RequestItemsText']	= QuestReplaceStr(htmlspecialchars( !empty($data['RequestItemsText_loc'])	? $data['RequestItemsText_loc']	: $data['RequestItemsText']	));
-	$data['OfferRewardText']	= QuestReplaceStr(htmlspecialchars( !empty($data['OfferRewardText_loc'])	? $data['OfferRewardText_loc']	: $data['OfferRewardText']	));
-	$data['EndText']			= QuestReplaceStr(htmlspecialchars( !empty($data['EndText_loc'])			? $data['EndText_loc']			: $data['EndText']			));
+	$data['Title']				= QuestReplaceStr(				  (localizedName($data, 'Title')));
+	$data['Objectives']			= QuestReplaceStr(htmlspecialchars(localizedName($data, 'Objectives')));
+	$data['Details']			= QuestReplaceStr(htmlspecialchars(localizedName($data, 'Details')));
+	$data['RequestItemsText']	= QuestReplaceStr(htmlspecialchars(localizedName($data, 'RequestItemsText')));
+	$data['OfferRewardText']	= QuestReplaceStr(htmlspecialchars(localizedName($data, 'OfferRewardText')));
+	$data['EndText']			= QuestReplaceStr(htmlspecialchars(localizedName($data, 'EndText')));
 
 	for($j=0;$j<=3;++$j)
-		$data['ObjectiveText'][$j] = QuestReplaceStr(htmlspecialchars(!empty($data['ObjectiveText'.$j.'_loc']) ? $data['ObjectiveText'.$j.'_loc'] : $data['ObjectiveText'.$j]));
+		$data['ObjectiveText'][$j] = QuestReplaceStr(htmlspecialchars(localizedName($data, 'ObjectiveText'.$j)));
 }
 
 function GetQuestReq($id, $count, $type)
@@ -171,7 +171,7 @@ function GetQuestReq($id, $count, $type)
 				($_SESSION['locale']>0)? 1: DBSIMPLE_SKIP,
 				$id
 			);
-			$name = !empty($row['name_loc'])?$row['name_loc']:$row['name'];
+			$name = localizedName($row);
 			return $name.(($count>1)? (' x'.$count): '');
 			break;
 		case 2:
@@ -188,7 +188,7 @@ function GetQuestReq($id, $count, $type)
 				($_SESSION['locale']>0)? 1: DBSIMPLE_SKIP,
 				$id
 			);
-			$name = !empty($row['name_loc'])?$row['name_loc']:$row['name'];
+			$name = localizedName($row);
 			return $name.(($count>1)? (' x'.$count): '');
 			break;
 	}

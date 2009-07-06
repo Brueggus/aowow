@@ -761,6 +761,7 @@ var LANG = {
 	standing: "Нахождение",
 	stock: "Запас",
 	subject: "Тема",
+	talent: "Талант",
 	territory: "Территория",
 	tp: "ТП",
 	type: "Тип",

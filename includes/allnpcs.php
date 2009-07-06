@@ -1,4 +1,5 @@
 <?php
+require_once('includes/alllocales.php');
 
 // Для списка creatureinfo()
 $npc_cols[0] = array('name', 'subname', 'minlevel', 'maxlevel', 'type', 'rank', 'A','H');
@@ -10,9 +11,9 @@ function creatureinfo2(&$Row)
 	// Номер создания
 	$creature['entry'] = $Row['entry'];
 	// Имя создания
-	$creature['name'] = !empty($Row['name_loc'])?$Row['name_loc']:$Row['name'];
+	$creature['name'] = localizedName($Row);
 	// Подимя создания
-	$creature['subname'] = !empty($Row['subname_loc'])?$Row['subname_loc']:$Row['subname'];
+	$creature['subname'] = localizedName($Row, 'subname');
 	// Min/Max уровни
 	$creature['minlevel'] = $Row['minlevel'];
 	$creature['maxlevel'] = $Row['maxlevel'];

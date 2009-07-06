@@ -17,16 +17,19 @@
 		visibleCols: [{if $level}'level'{/if}],
 		hiddenCols: [{if !$reagents}'reagents',{/if}{if !$skill}'skill',{/if}'school'],
 		sort: [{if isset($sort)}{$sort}{else}'name'{/if}],
-		{if $script}note: sprintf(LANG.lvnote_scripttype, '{$script|escape:"quotes"}'),{/if}
+		{if $script}note: sprintf(LANG.lvnote_scripttype, '{$script|escape:"javascript"}'),{/if}
 		{if isset($tabsid)}tabs:{$tabsid}, parent: 'listview-generic',{/if}
 		data:[
 			{section name=i loop=$data}
 				{ldelim}
-					name: '{$data[i].quality}{$data[i].name|escape:"quotes"}',
+					name: '{$data[i].quality}{$data[i].name|escape:"javascript"}',
 					{if $level}level: {$data[i].level},{/if}
 					school: {$data[i].school},
 					{if isset($data[i].rank)}
-						rank: '{$data[i].rank|escape:"quotes"}',
+						rank: '{$data[i].rank|escape:"javascript"}',
+					{/if}
+					{if isset($data[i].talent)}
+						talent:1,
 					{/if}
 					{if isset($data[i].skill)}
 						skill: [{$data[i].skill}],

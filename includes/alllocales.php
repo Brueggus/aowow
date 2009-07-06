@@ -3,6 +3,25 @@ function d($d,$v)
 {
 	define($d,$v);
 }
+function localizedName($arr, $key = 'name')
+{
+	if(!$_SESSION['locale'])
+		return $arr[$key];
+
+	if(empty($arr[$key]))
+		return '';
+
+	$lkey = $key.'_loc'.$_SESSION['locale'];
+	if(empty($arr[$lkey]))
+	{
+		if(substr($arr[$key], 0, 1) == '[' && substr($arr[$key], -1, 1) == ']')
+			return $arr[$key];
+		else
+			return '['.$arr[$key].']';
+	}
+	else
+		return $arr[$lkey];
+}
 switch($_SESSION['locale'])
 {
 	// --- RUSSIAN LOCALE ---
@@ -190,6 +209,9 @@ switch($_SESSION['locale'])
 		d('LOCALE_REQUIRES_LEVEL',		'Требует уровень');
 		d('LOCALE_DURABILITY',			'Прочность:');
 		d('LOCALE_CLASSES',				'Классы');
+		d('LOCALE_VALUE_DELIM',			' - ');
+		d('LOCALE_REAGENTS',			'Реагенты: ');
+		d('LOCALE_TOOLS',				'Инструменты: ');
 
 		break;
 	// --- ENGLISH default LOCALE ---
@@ -377,5 +399,8 @@ switch($_SESSION['locale'])
 		d('LOCALE_REQUIRES_LEVEL',		'Requires Level');
 		d('LOCALE_DURABILITY',			'Durability');
 		d('LOCALE_CLASSES',				'Classes');
+		d('LOCALE_VALUE_DELIM',			' to ');
+		d('LOCALE_REAGENTS',			'Reagents: ');
+		d('LOCALE_TOOLS',				'Tools: ');
 }
 ?>

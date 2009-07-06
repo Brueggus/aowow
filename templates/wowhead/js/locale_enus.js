@@ -759,6 +759,7 @@ var LANG = {
 	standing: "Standing",
 	stock: "Stock",
 	subject: "Subject",
+	talent: "Talent",
 	territory: "Territory",
 	tp: "TP",
 	type: "Type",

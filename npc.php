@@ -48,8 +48,8 @@ if(!$npc = load_cache(1, intval($id)))
 	if ($row)
 	{
 		$npc = $row;
-		$npc['name'] = $row['name_loc']?$row['name_loc']:$row['name'];
-		$npc['subname'] = $row['subname_loc']?$row['subname_loc']:$row['subname'];
+		$npc['name'] = localizedName($row);
+		$npc['subname'] = localizedName($row, 'subname');
 		if($npc['rank'] == 3)
 		{
 			$npc['minlevel'] = '??';

@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS  `aowow_comments` (
+CREATE TABLE IF NOT EXISTS `aowow_comments` (
   `id` bigint(20) unsigned NOT NULL auto_increment COMMENT 'Comment ID',
   `type` int(10) unsigned NOT NULL COMMENT 'Type of Page',
   `typeid` int(10) unsigned NOT NULL COMMENT 'ID Of Page',
@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS  `aowow_comments` (
   UNIQUE KEY `id` (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=248 DEFAULT CHARSET=utf8 COMMENT='AoWoW Comments Table';
 
-CREATE TABLE IF NOT EXISTS  `aowow_comments_rates` (
+CREATE TABLE IF NOT EXISTS `aowow_comments_rates` (
   `commentid` bigint(20) unsigned NOT NULL default 0 COMMENT 'Comment ID',
   `userid` bigint(20) unsigned NOT NULL default 0 COMMENT 'User ID',
   `rate` tinyint(4) NOT NULL default 0 COMMENT 'Rating Set'

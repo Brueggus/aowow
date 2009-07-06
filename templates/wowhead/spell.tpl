@@ -61,36 +61,32 @@
 {/if}
 			</script>
 
-					{if $spell.reagents}
-					{if $spell.tools}<div style="float: left; margin-right: 75px">{/if}
+{if $spell.reagents}{if $spell.tools}<div style="float: left; margin-right: 75px">{/if}
 					<h3>{#Reagents#}</h3>
 					<table class="iconlist">
-						{section name=i loop=$spell.reagents}
+{section name=i loop=$spell.reagents}
 						<tr><th align="right" id="iconlist-icon{$iconlist1++}"></th><td><span class="q{$spell.reagents[i].quality}"><a href="?item={$spell.reagents[i].entry}">{$spell.reagents[i].name}</a></span></td></tr>
-						{/section}
+{/section}
 					</table>
 					<script type="text/javascript">
-						{section name=i loop=$spell.reagents}
+{section name=i loop=$spell.reagents}
 						ge('iconlist-icon{$iconlist2++}').appendChild(g_items.createIcon({$spell.reagents[i].entry}, 0, {$spell.reagents[i].count}));
-						{/section}
+{/section}
 					</script>
-					{if $spell.tools}</div>{/if}
-					{/if}
-					{if $spell.tools}
-					{if $spell.reagents}<div style="float: left">{/if}
+{if $spell.tools}</div>{/if}{/if}
+{if $spell.tools}{if $spell.reagents}<div style="float: left">{/if}
 					<h3>{#Tools#}</h3>
 					<table class="iconlist">
-						{section name=i loop=$spell.tools}
+{section name=i loop=$spell.tools}
 						<tr><th align="right" id="iconlist-icon{$iconlist1++}"></th><td><span class="q1"><a href="?item={$spell.tools[i].entry}">{$spell.tools[i].name}</a></span></td></tr>
-						{/section}
+{/section}
 					</table>
 					<script type="text/javascript">
-						{section name=i loop=$spell.tools}
+{section name=i loop=$spell.tools}
 						ge('iconlist-icon{$iconlist2++}').appendChild(g_items.createIcon({$spell.tools[i].entry}, 0, 1));
-						{/section}
+{/section}
 					</script>
-					{if $spell.reagents}</div>{/if}
-					{/if}
+{if $spell.reagents}</div>{/if}{/if}
 
 			<div class="clear"></div>
 			<h3>{#Spell_Details#}</h3>

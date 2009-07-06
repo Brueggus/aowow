@@ -4533,7 +4533,7 @@ Listview.templates = {
 				L.href = this.template.getItemLink(F);
 				ae(L, ct(F.name.substring(1)));
 				ae(A, L);
-				var B = F.talent != null && this._noTalents == null;
+				var B = F.talent != null;
 				if (F.rank != null || B) {
 					var H = ce("div");
 					H.className = "small2";
@@ -4545,7 +4545,7 @@ Listview.templates = {
 						}
 					}
 					if (B) {
-						D += "(Talent)"
+						D += "(" + LANG.talent + ")"
 					}
 					ae(H, ct(D));
 					ae(A, H)

@@ -57,7 +57,3 @@ UPDATE aowow_zones SET areatableID=4075 WHERE mapID=580;
 
 -- Magister's Terrace
 UPDATE aowow_zones SET areatableID=4095 WHERE mapID=585;
-
-
--- Champions' Hall
-INSERT INTO aowow_zones(mapID, areatableID, name) VALUES (449, 2918, "Champions' Hall");
