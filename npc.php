@@ -134,6 +134,7 @@ if(!$npc = load_cache(1, intval($id)))
 
 	// Обучает:
 	// Если это пет со способностью:
+	/* // Временно закомментировано
 	$row = $DB->selectRow('
 		SELECT Spell1, Spell2, Spell3, Spell4
 		FROM petcreateinfo_spell
@@ -168,7 +169,7 @@ if(!$npc = load_cache(1, intval($id)))
 					}
 				}
 	}
-	unset ($row);
+	unset ($row);*/
 
 	// Если это просто тренер
 	$teachspells = $DB->select('
