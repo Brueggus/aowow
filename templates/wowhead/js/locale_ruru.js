@@ -1072,7 +1072,7 @@ var LANG = {
 	tab_latestreplies: "Latest replies",
 	tab_latestscreenshots: "Latest screenshots",
 	tab_latesttopics: "Latest topics",
-	tab_members: "Состоят в фракции",
+	tab_members: "Участники",
 	tab_minedfrom: "Добывается из",
 	tab_mining: "Рудокопство",
 	tab_normaldrops: "Обычный дроп",

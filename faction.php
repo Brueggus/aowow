@@ -79,9 +79,9 @@ if(!$faction = load_cache(18, intval($id)))
 		);
 		if ($creature_rows)
 		{
-			$faction['creatures'] = array();
+			$faction['npcs'] = array();
 			foreach ($creature_rows as $i=>$row)
-				$faction['creatures'][] = creatureinfo2($row);
+				$faction['npcs'][] = creatureinfo2($row);
 			unset ($creature_rows);
 		}
 
