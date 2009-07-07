@@ -89,6 +89,8 @@ var tabsRelated = new Tabs({ldelim}parent: ge('tabs-generic'){rdelim});
 {if isset($item.createdfrom)}{include			file='bricks/spell_table.tpl'			id='created-by'				tabsid='tabsRelated' data=$item.createdfrom			name='createdby'		}{/if}
 {if isset($item.disenchanting)}{include			file='bricks/item_table.tpl'			id='disenchanting'			tabsid='tabsRelated' data=$item.disenchanting		name='disenchanting'	}{/if}
 {if isset($item.disenchantedfrom)}{include		file='bricks/item_table.tpl'			id='disenchanting'			tabsid='tabsRelated' data=$item.disenchantedfrom	name='disenchantedfrom'	}{/if}
+{if isset($item.milling)}{include				file='bricks/item_table.tpl'			id='milling'				tabsid='tabsRelated' data=$item.milling				name='milling'		}{/if}
+{if isset($item.milledfrom)}{include			file='bricks/item_table.tpl'			id='milling'				tabsid='tabsRelated' data=$item.milledfrom			name='milledfrom'	}{/if}
 new Listview({ldelim}template: 'comment', id: 'comments', name: LANG.tab_comments, tabs: tabsRelated, parent: 'listview-generic', data: lv_comments{rdelim});
 tabsRelated.flush();
 </script>

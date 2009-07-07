@@ -462,9 +462,6 @@ function iteminfo2(&$Row, $level=0)
 	global $spell_cols;
 	global $object_cols;
 
-	if(!isset($Row['entry']))
-		return;
-
 	$item = array();
 	// Номер вещи
 	$item['entry'] = $Row['entry'];
@@ -600,7 +597,7 @@ function iteminfo($id, $level=0)
 	global $item_cols;
 	global $DB;
 	$row = $DB->selectRow('
-		SELECT i.?#, i.entry, maxcount
+		SELECT i.?#, i.entry
 		{
 			, l.name_loc'.$_SESSION['locale'].' as `name_loc`
 			, l.description_loc'.$_SESSION['locale'].' as `description_loc`

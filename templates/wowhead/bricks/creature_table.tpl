@@ -29,35 +29,35 @@
 new Listview(
 	{ldelim}template:'npc',
 		id:'{$id}',
-		{if isset($name)}name: LANG.tab_{$name},{/if}
-		{if isset($tabsid)}tabs:{$tabsid},parent: 'listview-generic',{/if}
+		{if isset($name)}name:LANG.tab_{$name},{/if}
+		{if isset($tabsid)}tabs:{$tabsid},parent:'listview-generic',{/if}
 		extraCols:[
 			{if $percent}Listview.extraCols.percent{/if}
 			{if $cost}Listview.extraCols.stock, {if $stack}Listview.funcBox.createSimpleCol('stack', 'stack', '10%', 'stack'),{/if} Listview.extraCols.cost{/if}
 		],
 		hiddenCols:[{if $cost}'type'{else}'location'{/if}],
-		sort: [{if $percent}'-percent',{/if} 'name'],
+		sort:[{if $percent}'-percent',{/if} 'name'],
 		data:[
 			{section name=i loop=$data}
 				{ldelim}
-					name: '{$data[i].name|escape:"quotes"}',
+					name:'{$data[i].name|escape:"quotes"}',
 					{if $data[i].subname}
-						tag: '{$data[i].subname|escape:"quotes"}',
+						tag:'{$data[i].subname|escape:"quotes"}',
 					{/if}
-					minlevel: {$data[i].minlevel},
-					maxlevel: {$data[i].maxlevel},
-					type: {$data[i].type},
-					classification: {$data[i].classification},
-					react: [{$data[i].react}],
+					minlevel:{$data[i].minlevel},
+					maxlevel:{$data[i].maxlevel},
+					type:{$data[i].type},
+					classification:{$data[i].classification},
+					react:[{$data[i].react}],
 					{if $percent}
-						percent: {$data[i].percent},
+						percent:{$data[i].percent},
 					{/if}
 					{if $cost}
-						stock: {$data[i].stock},
+						stock:{$data[i].stock},
 						{if isset($data[i].stack)}
-							stack: {$data[i].stack},
+							stack:{$data[i].stack},
 						{/if}
-						cost: [
+						cost:[
 							{if isset($data[i].cost.money)}{$data[i].cost.money}{/if}
 							{if isset($data[i].cost.honor) or isset($data[i].cost.arena) or isset($data[i].cost.items)}
 								,{if isset($data[i].cost.honor)}{$data[i].cost.honor}{/if}
@@ -75,7 +75,7 @@ new Listview(
 							{/if}
 						],
 					{/if}
-					id: {$data[i].entry}
+					id:{$data[i].entry}
 				{rdelim}
 				{if $smarty.section.i.last}{else},{/if}
 			{/section}

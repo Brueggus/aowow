@@ -299,28 +299,50 @@ function factioninfo($id)
 	return $faction;
 }
 
-// Function, that creates loot_table (without references) from lootid
-//   $table - table, in which we search
-//   $lootid - loot ident
-//   $repetition_factor - repetition factor
+function add_loot(&$loot, $newloot)
+{
+	// Записываем все существующие в луте итемы в массив
+	$exist = array();
+	foreach($loot as $offset => $item)
+		$exist[$item['entry']] = $offset;
 
-function loot_table($table, $lootid, $max_percent=100)
+	foreach($newloot as $newitem)
+	{
+		if(!is_array($newitem))
+		{
+			echo 'wtf ?<br />';
+			return;
+		}
+		// Если в луте есть такая вещь
+		if(isset($exist[$newitem['entry']]))
+		{
+			$loot[$exist[$item['entry']]]['mincount'] = min($loot[$exist[$item['entry']]]['mincount'], $newitem['mincount']);
+			$loot[$exist[$item['entry']]]['maxcount'] = max($loot[$exist[$item['entry']]]['maxcount'], $newitem['maxcount']);
+			$loot[$exist[$item['entry']]]['percent'] += $newitem['percent'];
+			$loot[$exist[$item['entry']]]['group'] = 0;
+		}
+		else
+			$loot[] = $newitem;
+	}
+}
+
+// Что дропает
+function loot($table, $lootid, $mod = 1)
 {
 	// Все элементы
-	global $DB;
-	global $loot_groups;
-	global $item_cols;
+	global $DB, $item_cols;
 	$loot = array();
 	$groups = array();
 	// Мего запрос :)
 	$rows = $DB->select('
-		SELECT l.ChanceOrQuestChance, l.mincountOrRef, l.maxcount as `d-max`, l.groupid, ?#, i.entry, i.maxcount
+		SELECT l.ChanceOrQuestChance, l.mincountOrRef, l.maxcount, l.groupid, ?#, i.entry
 			{, loc.name_loc?d AS `name_loc`}
 		FROM ?# l
 			LEFT JOIN (?_icons a, item_template i) ON l.item=i.entry AND a.id=i.displayid
 			{LEFT JOIN (locales_item loc) ON loc.entry=i.entry AND ?d}
 		WHERE
 			l.entry=?d
+		ORDER BY groupid ASC, ChanceOrQuestChance DESC
 		{LIMIT ?d}
 		',
 		$item_cols[2],
@@ -330,120 +352,233 @@ function loot_table($table, $lootid, $max_percent=100)
 		$lootid,
 		($AoWoWconf['limit']!=0)? $AoWoWconf['limit']: DBSIMPLE_SKIP
 	);
-	
+
+	$last_group = 0;
+	$last_group_equal_chance = 100;
 	// Перебираем
-	foreach ($rows as $i => $row)
+	foreach($rows as $row)
 	{
-		if ($row['mincountOrRef']>0)
+		// Не группа
+		if($row['groupid'] == 0)
 		{
-			// Не ссылка!
-			if ($row['groupid']>0)
+			// Ссылка
+			if($row['mincountOrRef'] < 0)
+				add_loot($loot, loot_table('reference_loot_template', -$row['mincountOrRef'], abs($row['ChanceOrQuestChance']) / 100 * $row['maxcount'] * $mod));
+			else
+				// Обыкновенный дроп
+				add_loot($loot, array(array_merge(array(
+						'percent'  => max(abs($row['ChanceOrQuestChance']) * $mod, 0)*sign($row['ChanceOrQuestChance']),
+						'mincount' => $row['mincountOrRef'],
+						'maxcount' => $row['maxcount']
+					),
+					iteminfo2($row, 0)
+				)));
+		}
+		// Группа
+		else
+		{
+			$chance = abs($row['ChanceOrQuestChance']);
+			// Новая группа?
+			if($row['groupid'] <> $last_group)
 			{
-				// Групповой лут!
-				$groups[$row['groupid']][] = array(
-					'mincount' => $row['mincountOrRef'],
-					'maxcount' => $row['d-max'],
-					'percent'  => $row['ChanceOrQuestChance']*$max_percent/100,
-					'item'     => iteminfo2($row,0)
-				);
-				// Общее число элементов группы с равнозначным шансом
-				if (!(IsSet($group_idx[$row['groupid']]['num-equal'])))
-					$group_idx[$row['groupid']]['num-equal'] = 0;
-				// Общий шанс дропа для группового лута
-				if (!(IsSet($group_idx[$row['groupid']]['percent'])))
-					$group_idx[$row['groupid']]['percent'] = 0;
-				// Если шанс дропа=0, значит это равнозначный лут в группе
-				// Иначе, увеличиваем зарезервированный шанс для элементов лута с четко определенным шансом дропа
-				if ($row['ChanceOrQuestChance']==0)
-					$group_idx[$row['groupid']]['num-equal'] ++;
-				else
-					$group_idx[$row['groupid']]['percent'] += abs($row['ChanceOrQuestChance']);
+				$last_group = $row['groupid'];
+				$last_group_equal_chance = 100;
 			}
+
+			// Шанс лута задан
+			if($chance > 0)
+			{
+				$last_group_equal_chance -= $chance;
+				$last_group_equal_chance = max($last_group_equal_chance, 0);
+
+				// Ссылка
+				if($row['mincountOrRef'] < 0)
+				{
+					add_loot($loot, loot_table('reference_loot_template', -$row['mincountOrRef'], $chance / 100 * $row['maxcount'] * $mod));
+				}
+				else
+					add_loot($loot, array(array_merge(array(
+							'percent'  => $chance * $mod,
+							'mincount' => $row['mincountOrRef'],
+							'maxcount' => $row['maxcount'],
+						),
+						iteminfo2($row, 0)
+					)));
+			}
+			// Шанс не задан, добавляем эту группу в группы
 			else
 			{
-				// Старый добрый обычный лут :)
-				$lootitem = iteminfo2($row, 0);
-				if($lootitem)
-					$loot[] = array_merge(array(
-						'percent'  => ($max_percent!=100)? $max_percent : $row['ChanceOrQuestChance'],
+				$groups[$last_group][] = array_merge(array(
 						'mincount' => $row['mincountOrRef'],
-						'maxcount' => $row['d-max'],
-						'group'    => 0
-					), $lootitem);
+						'maxcount' => $row['maxcount'],
+						'groupchance'=>$last_group_equal_chance * $mod
+					),
+					iteminfo2($row, 0)
+				);
 			}
-		} else {
-			// Ссылка!
-			// Вот если это ссылка, то ######
-			// Наша задача - вызвать эту же функцию, но с предопределенным значением percent и maxcount
-			for ($j=1;$j<=$row['d-max'];$j++)
-				$loot = array_merge($loot, loot_table('reference_loot_template', -$row['mincountOrRef'], $row['ChanceOrQuestChance']));
 		}
 	}
-	// Перебираем группы лута
-	foreach ($groups as $groupid => $group)
-	{
-		foreach($group as $field => $group_item)
-		{
-			if(isset($group_item['item']))
-				$loot[] = array_merge(array(
-					'mincount' => $group_item['mincount'],
-					'maxcount' => $group_item['maxcount'],
-					'percent'  => ($group_item['percent']==0)? (($max_percent-$group_idx[$groupid]['percent'])/$group_idx[$groupid]['num-equal']) : $group_item['percent'],
-					'group'    => $loot_groups,
-					'grouppercent' => ($group_idx[$groupid]['num-equal']>0)? $max_percent : $group_idx[$groupid]['percent']
-				), $group_item['item']);
-		}
-		$loot_groups++;
-	}
-	return $loot;
-}
 
-function loot($table, $lootid)
-{
-	global $loot_groups;
-	$loot_groups=1;
-	$loot = loot_table($table, $lootid);
+	// Перебираем и добавляем группы
+	foreach($groups as $group)
+	{
+		$num = count($group);
+		foreach($group as $item)
+		{
+			$item['percent'] = $item['groupchance'] / $num;
+			add_loot($loot, array($item));
+		}
+	}
 	return $loot;
 }
 
 // Кто дропает
 function drop($table, $item)
 {
-	global $DB;
-	$rows = $DB->select('
-		SELECT l.ChanceOrQuestChance, l.mincountOrRef, l.maxcount, l.entry
-		FROM ?# l
-		WHERE
-			l.item=?
-		{LIMIT ?d}
-		',
-		$table,
-		$item,
-		($AoWoWconf['limit']!=0)? $AoWoWconf['limit']: DBSIMPLE_SKIP
-	);
+	global $DB, $AoWoWconf;
+
+	$total = 0;
+
+	// Реверсный поиск лута начиная с референсной таблицы
+	// Ищем в группах
 	$drop = array();
-	foreach ($rows as $i => $row)
+	$curtable = 'reference_loot_template';
+	$rows = $DB->select('
+			SELECT entry, groupid, ChanceOrQuestChance, mincountOrRef, maxcount
+			FROM ?#
+			WHERE
+				item = ?
+				AND mincountOrRef > 0
+		',
+		$curtable,
+		$item
+	);
+	while(true)
 	{
-		if ($row['mincountOrRef'] > 0)
+		foreach($rows as $i => $row)
 		{
-			$num = $row['entry'];
-			$drop[$num] = array();
-			$drop[$num]['percent'] = abs($row['ChanceOrQuestChance']);
-			$drop[$num]['mincount'] = $row['mincountOrRef'];
-			$drop[$num]['maxcount'] = $row['maxcount'];
-			
-			// Ищем лут, который ссылается на этот лут
-			$refrows = $DB->select('SELECT entry FROM ?# WHERE mincountOrRef=? LIMIT 200',$table, -$num);
-			foreach ($refrows as $i => $refrow)
+			$chance = abs($row['ChanceOrQuestChance']);
+			if($chance == 0)
 			{
-				$num = $refrow['entry'];
+				// Запись из группы с равным шансом дропа, считаем реальную вероятность
+				$zerocount = 0;
+				$chancesum = 0;
+				$subrows = $DB->select('
+						SELECT ChanceOrQuestChance, mincountOrRef, maxcount
+						FROM ?#
+						WHERE entry = ? AND groupid = ?
+					',
+					$curtable,
+					$row['entry'],
+					$row['groupid']
+				);
+				foreach($subrows as $i => $subrow)
+				{
+					if($subrow['ChanceOrQuestChance'] == 0)
+						$zerocount++;
+					else
+						$chancesum += abs($subrow['ChanceOrQuestChance']);
+				}
+				$chance = (100 - $chancesum) / $zerocount;
+			}
+			$chance = max($chance, 0);
+			$chance = min($chance, 100);
+			$mincount = $row['mincountOrRef'];
+			$maxcount = $row['maxcount'];
+
+			if($mincount < 0)
+			{
+				// Референсная ссылка. Вероятность основывается на уже подсчитанной.
+				$num = $mincount;
+				$mincount = $drop[$num]['mincount'];
+				$chance = $chance * (1 - pow(1 - $drop[$num]['percent']/100, $maxcount));
+				$maxcount = $drop[$num]['maxcount']*$maxcount;
+			}
+
+			// Сохраняем подсчитанные для этих групп вероятности
+			//(референсные записи хранятся с отрицательными номерами)
+			$num = ($curtable <> $table) ? -$row['entry'] : $row['entry'];
+			if(isset($drop[$num]))
+			{
+				// Этот же элемент уже падал в другой подгруппе - считаем общую вероятность.
+				$newmin =($drop[$num]['mincount'] < $mincount) ? $drop[$num]['mincount'] : $mincount;
+				$newmax = $drop[$num]['maxcount'] + $maxcount;
+				$newchance = 100 - (100 - $drop[$num]['percent'])*(100-$chance)/100;
+				$drop[$num]['percent'] = $newchance;
+				$drop[$num]['mincount'] = $newmin;
+				$drop[$num]['maxcount'] = $newmax;
+			}
+			else
+			{
 				$drop[$num] = array();
-				$drop[$num]['percent'] = abs($row['ChanceOrQuestChance']);
-				$drop[$num]['mincount'] = $row['mincountOrRef'];
-				$drop[$num]['maxcount'] = $row['maxcount'];
+				$drop[$num]['percent'] = $chance;
+				$drop[$num]['mincount'] = $mincount;
+				$drop[$num]['maxcount'] = $maxcount;
+				$drop[$num]['checked'] = false;
+
+				if($AoWoWconf['limit'] > 0 && $num > 0 && ++$total > $AoWoWconf['limit'])
+					break;
 			}
 		}
+
+		// Ищем хоть одну непроверенную reference-ную запись
+		$num = 0;
+		foreach($drop as $i => $value)
+		{
+			if($i < 0 && !$value['checked'])
+			{
+				$num = $i;
+				break;
+			}
+		}
+
+		// Нашли?
+		if($num == 0)
+		{
+			// Все элементы проверены
+			if($curtable != $table)
+			{
+				// но это была reference-ная таблица - надо поискать в основной
+				$curtable = $table;
+
+				foreach($drop as $i => $value)
+					$drop[$i]['checked'] = false;
+
+				$rows = $DB->select('
+						SELECT entry, groupid, ChanceOrQuestChance, mincountOrRef, maxcount
+						FROM ?#
+						WHERE
+							item = ?
+							AND mincountOrRef > 0
+					',
+					$curtable,
+					$item
+				);
+			}
+			else
+				// Если ничего не нашли и в основной таблице, то поиск закончен
+				break;
+		}
+		else
+		{
+			// Есть непроверенный элемент, надо его проверить
+			$drop[$num]['checked'] = true;
+			$rows = $DB->select('
+					SELECT entry, groupid, ChanceOrQuestChance, mincountOrRef, maxcount
+					FROM ?#
+					WHERE mincountOrRef = ?
+				',
+				$curtable,
+				$num
+			);
+		}
 	}
+
+	// Чистим reference-ные ссылки
+	foreach($drop as $i => $value)
+		if($i < 0)
+			unset($drop[$i]);
+
 	return $drop;
 }
 

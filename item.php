@@ -538,6 +538,42 @@ if(!$item = load_cache(5, $id))
 	}
 	unset ($drops_fi);
 
+	// Размалывается в
+	if(!$item['milling'] = loot('milling_loot_template', $item['entry']))
+		unset ($item['milling']);
+
+	// Получается размалыванием из
+	$drops_mi = drop('milling_loot_template', $item['entry']);
+	if($drops_mi)
+	{
+		$item['milledfrom'] = array();
+		foreach($drops_mi as $lootid => $drop)
+		{
+			$rows = $DB->select('
+				SELECT c.?#, c.entry, maxcount
+				{
+					, l.name_loc?d as `name_loc`
+				}
+				FROM ?_icons, item_template c
+				{ LEFT JOIN (locales_item l) ON l.entry=c.entry AND ? }
+				WHERE
+					entry=?d
+					AND id=displayid
+				',
+				$item_cols[2],
+				($_SESSION['locale']>0)? $_SESSION['locale']: DBSIMPLE_SKIP,
+				($_SESSION['locale']>0)? 1: DBSIMPLE_SKIP,
+				$lootid
+			);
+			foreach ($rows as $numRow=>$row)
+				$item['milledfrom'][] = array_merge(iteminfo2($row, 0), $drop);
+		}
+		unset ($rows);
+		unset ($lootid);
+		unset ($drop);
+	}
+	unset ($drops_mi);
+
 	save_cache(5, $item['entry'], $item);
 }
 global $page;

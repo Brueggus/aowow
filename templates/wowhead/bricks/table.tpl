@@ -13,7 +13,7 @@
 <div id="tabs-generic"></div>
 <div id="listview-generic" class="listview"></div>
 <script type="text/javascript">
-	var {$tabsid} = new Tabs({ldelim}parent: ge('tabs-generic'){rdelim});
+	var {$tabsid} = new Tabs({ldelim}parent:ge('tabs-generic'){rdelim});
 	{section name=k loop=$data}
 		{include file=$data[k].file id=$data[k].id tabsid=$tabsid data=$data[k].data name=$data[k].name}
 	{/section}

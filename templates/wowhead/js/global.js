@@ -5804,7 +5804,7 @@ function() {
 			clearTimeout(timer);
 			timer = 0
 		}
-		timer = setTimeout(fetch.bind(0, textbox, search), 200)
+		timer = setTimeout(fetch.bind(0, textbox, search), 500)
 	}
 	function cycle(dir) {
 		if (!isVisible()) {

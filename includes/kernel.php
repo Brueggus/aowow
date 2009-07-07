@@ -27,6 +27,13 @@ function point_delim(&$str, &$a, &$b)
 	return;
 }
 
+function sign($val)
+{
+	if($val > 0) return 1;
+	if($val < 0) return -1;
+	if($val == 0) return 0;
+}
+
 function CheckPwd($username, $shapass)
 {
 	// Проверка пароля пользователя

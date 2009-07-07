@@ -13,26 +13,26 @@
 	new Listview({ldelim}
 		template:'spell',
 		id:'{$id}',
-		{if isset($name)}name: LANG.tab_{$name},{/if}
-		visibleCols: [{if $level}'level'{/if}],
-		hiddenCols: [{if !$reagents}'reagents',{/if}{if !$skill}'skill',{/if}'school'],
-		sort: [{if isset($sort)}{$sort}{else}'name'{/if}],
-		{if $script}note: sprintf(LANG.lvnote_scripttype, '{$script|escape:"javascript"}'),{/if}
-		{if isset($tabsid)}tabs:{$tabsid}, parent: 'listview-generic',{/if}
+		{if isset($name)}name:LANG.tab_{$name},{/if}
+		visibleCols:[{if $level}'level'{/if}],
+		hiddenCols:[{if !$reagents}'reagents',{/if}{if !$skill}'skill',{/if}'school'],
+		sort:[{if isset($sort)}{$sort}{else}'name'{/if}],
+		{if $script}note:sprintf(LANG.lvnote_scripttype, '{$script|escape:"javascript"}'),{/if}
+		{if isset($tabsid)}tabs:{$tabsid}, parent:'listview-generic',{/if}
 		data:[
 			{section name=i loop=$data}
 				{ldelim}
-					name: '{$data[i].quality}{$data[i].name|escape:"javascript"}',
-					{if $level}level: {$data[i].level},{/if}
-					school: {$data[i].school},
+					name:'{$data[i].quality}{$data[i].name|escape:"javascript"}',
+					{if $level}level:{$data[i].level},{/if}
+					school:{$data[i].school},
 					{if isset($data[i].rank)}
-						rank: '{$data[i].rank|escape:"javascript"}',
+						rank:'{$data[i].rank|escape:"javascript"}',
 					{/if}
 					{if isset($data[i].talent)}
 						talent:1,
 					{/if}
 					{if isset($data[i].skill)}
-						skill: [{$data[i].skill}],
+						skill:[{$data[i].skill}],
 					{/if}
 					{if $data[i].reagents}
 						reagents:[
@@ -52,7 +52,7 @@
 						],
 					{/if}
 					{if isset($data[i].learnedat)}
-						learnedat: {$data[i].learnedat},
+						learnedat:{$data[i].learnedat},
 					{/if}
 					{if isset($data[i].colors)}
 						colors:[
@@ -62,7 +62,7 @@
 							{/section}
 						],
 					{/if}
-					id: {$data[i].entry}
+					id:{$data[i].entry}
 				{rdelim}
 				{if $smarty.section.i.last}{else},{/if}
 			{/section}

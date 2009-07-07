@@ -2,18 +2,18 @@
 	new Listview({ldelim}
 		template:'quest',
 		id:'{$id}',
-		{if isset($name)}name: LANG.tab_{$name},{/if}
+		{if isset($name)}name:LANG.tab_{$name},{/if}
 		{if isset($tabsid)}tabs:{$tabsid},parent:'listview-generic',{/if}
 		data:[
 			{section name=i loop=$data}
 				{ldelim}
-					id: '{$data[i].entry}',
-					name: '{$data[i].Title|escape:"quotes"}',
-					level: '{$data[i].QuestLevel}',
+					id:'{$data[i].entry}',
+					name:'{$data[i].Title|escape:"quotes"}',
+					level:'{$data[i].QuestLevel}',
 					{if ($data[i].MinLevel)}
 						reqlevel:{$data[i].MinLevel},
 					{/if}
-					side: '{$data[i].side.side}'
+					side:'{$data[i].side.side}'
 					{if isset($data[i].itemrewards)}
 						,itemrewards:[
 							{section name=j loop=$data[i].itemrewards}
@@ -46,7 +46,7 @@
 						,type:{$data[i].type}
 					{/if}
 					{if isset($data[i].Daily)}
-						,daily: 1
+						,daily:1
 					{/if}
 				{rdelim}
 				{if $smarty.section.i.last}{else},{/if}

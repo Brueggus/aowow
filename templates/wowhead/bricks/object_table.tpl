@@ -11,29 +11,29 @@
 new Listview({ldelim}
 	template:'object',
 	id:'{$id}',
-	{if isset($name)}name: LANG.tab_{$name},{/if}
+	{if isset($name)}name:LANG.tab_{$name},{/if}
 	{if isset($tabsid)}tabs:{$tabsid},parent:'listview-generic',{/if}
 	{if $percent}extraCols:[Listview.extraCols.percent],{/if}
 	{if $skill}visibleCols:['skill'],{/if}
-	sort: [{if $skill}'skill',{/if}{if $percent}'-percent',{/if} 'name'],
+	sort:[{if $skill}'skill',{/if}{if $percent}'-percent',{/if} 'name'],
 	hiddenCols:[],
 	data:[
 		{section name=i loop=$data}
 			{ldelim}
 				{* Название обекта, обязательно *}
-				name: '{$data[i].name|escape:"quotes"}',
+				name:'{$data[i].name|escape:"quotes"}',
 				{* Тип обекта, обязательно *}
-				type: {$data[i].type},
+				type:{$data[i].type},
 				{* Процент дропа *}
 				{if $percent}
-					percent: {$data[i].percent},
+					percent:{$data[i].percent},
 				{/if}
 				{* Необходимый уровень скилла *}
 				{if $skill}
-					skill: {$data[i].skill},
+					skill:{$data[i].skill},
 				{/if}
 				{* Номер объекта, обязателен *}
-					id: {$data[i].entry}
+					id:{$data[i].entry}
 				{rdelim}
 				{if $smarty.section.i.last}{else},{/if}
 		{/section}
