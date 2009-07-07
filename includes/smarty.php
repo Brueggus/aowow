@@ -32,11 +32,9 @@ class Smarty_AoWoW extends Smarty
 			$this->assign('app_name', $AoWoWconf['aowow']['name']);
 		}
 
-		function uDebug($name, $val='')
+		function uDebug($name, $val = 'unset')
 		{
-			if (!$val) $val='unset';
-				$this->append($name,$val);
-//			$this->append("UserDebug",);
+			$this->append($name,$val);
 		}
 }
 
