@@ -394,7 +394,8 @@ function objectinfo2(&$Row, $level=0)
 			{
 				for($j=1;$j<=5;$j++)
 				{
-					switch ($lock_row['type'.$j]):
+					switch ($lock_row['type'.$j])
+					{
 						case 0:
 							// Не замок
 							break;
@@ -405,7 +406,8 @@ function objectinfo2(&$Row, $level=0)
 							break;
 						case 2:
 							// Скилл
-							switch ($lock_row['lockproperties'.$j]):
+							switch ($lock_row['lockproperties'.$j])
+							{
 								case LOCK_PROPERTIES_FOOTLOCK:
 									// Сундук
 									$object['type'] = -5;
@@ -421,8 +423,13 @@ function objectinfo2(&$Row, $level=0)
 									$object['type'] = -4;
 									$object['mining'] = $lock_row['requiredskill'.$j];
 									break;
-							endswitch;
-					endswitch;
+								default:
+									break;
+							}
+							break;
+						default:
+							break;
+					}
 				}
 			}
 		}
