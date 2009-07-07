@@ -1077,6 +1077,8 @@ var LANG = {
 	tab_latestscreenshots: "Latest screenshots",
 	tab_latesttopics: "Latest topics",
 	tab_members: "Members",
+	tab_milledfrom: "Milled from",
+	tab_milling: "Milling",
 	tab_minedfrom: "Mined from",
 	tab_mining: "Mining",
 	tab_normaldrops: "Normal drops",

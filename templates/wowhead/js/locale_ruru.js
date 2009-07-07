@@ -1073,6 +1073,8 @@ var LANG = {
 	tab_latestscreenshots: "Latest screenshots",
 	tab_latesttopics: "Latest topics",
 	tab_members: "Участники",
+	tab_milledfrom: "Измельчается из",
+	tab_milling: "Измельчение",
 	tab_minedfrom: "Добывается из",
 	tab_mining: "Рудокопство",
 	tab_normaldrops: "Добыча (нормал.)",
