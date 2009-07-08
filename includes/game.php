@@ -394,7 +394,7 @@ function loot($table, $lootid, $mod = 1)
 				// Ссылка
 				if($row['mincountOrRef'] < 0)
 				{
-					add_loot($loot, loot_table('reference_loot_template', -$row['mincountOrRef'], $chance / 100 * $row['maxcount'] * $mod));
+					add_loot($loot, loot('reference_loot_template', -$row['mincountOrRef'], $chance / 100 * $row['maxcount'] * $mod));
 				}
 				else
 					add_loot($loot, array(array_merge(array(
