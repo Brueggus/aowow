@@ -160,7 +160,7 @@ function GetQuestReq($id, $count, $type)
 		case 1:
 			$row = $DB->selectRow('
 					SELECT name
-						{, l.name_loc?d AS name_loc}
+						{, l.name_loc?d}
 					FROM creature_template c
 						{ LEFT JOIN (locales_creature l) ON l.entry=c.entry AND ? }
 					WHERE
@@ -177,7 +177,7 @@ function GetQuestReq($id, $count, $type)
 		case 2:
 			$row = $DB->selectRow('
 					SELECT name
-						{, l.name_loc?d AS name_loc}
+						{, l.name_loc?d}
 					FROM item_template c
 						{ LEFT JOIN (locales_item l) ON l.entry=c.entry AND ? }
 					WHERE
@@ -247,16 +247,16 @@ function GetQuestDBLocale($quest)
 	$loc = $_SESSION['locale'];
 	$row = $DB->selectRow('
 			SELECT
-				Title_loc?d				AS Title,
-				Details_loc?d			AS Details,
-				Objectives_loc?d		AS Objectives,
-				OfferRewardText_loc?d	AS OfferRewardText,
-				RequestItemsText_loc?d	AS RequestItemsText,
-				EndText_loc?d			AS EndText,
-				ObjectiveText1_loc?d	AS ObjectiveText1,
-				ObjectiveText2_loc?d	AS ObjectiveText2,
-				ObjectiveText3_loc?d	AS ObjectiveText3,
-				ObjectiveText4_loc?d	AS ObjectiveText4
+				Title_loc?d,
+				Details_loc?d,
+				Objectives_loc?d,
+				OfferRewardText_loc?d,
+				RequestItemsText_loc?d,
+				EndText_loc?d,
+				ObjectiveText1_loc?d,
+				ObjectiveText2_loc?d,
+				ObjectiveText3_loc?d,
+				ObjectiveText4_loc?d
 			FROM locales_quest
 			WHERE entry = ?d
 			LIMIT 1
@@ -336,16 +336,16 @@ function GetQuestInfo(&$data, $dataflag = QUEST_DATAFLAG_MINIMUM)
 	if($dataflag & QUEST_DATAFLAG_LOCALE && $_SESSION['locale'] > 0)
 		$data = array_merge($data, $DB->selectRow('
 				SELECT
-					Title_loc?d				AS Title_loc,
-					Details_loc?d			AS Details_loc,
-					Objectives_loc?d		AS Objectives_loc,
-					OfferRewardText_loc?d	AS OfferRewardText_loc,
-					RequestItemsText_loc?d	AS RequestItemsText_loc,
-					EndText_loc?d			AS EndText_loc,
-					ObjectiveText1_loc?d	AS ObjectiveText1_loc,
-					ObjectiveText2_loc?d	AS ObjectiveText2_loc,
-					ObjectiveText3_loc?d	AS ObjectiveText3_loc,
-					ObjectiveText4_loc?d	AS ObjectiveText4_loc
+					Title_loc?d,
+					Details_loc?d,
+					Objectives_loc?d,
+					OfferRewardText_loc?d,
+					RequestItemsText_loc?d,
+					EndText_loc?d,
+					ObjectiveText1_loc?d,
+					ObjectiveText2_loc?d,
+					ObjectiveText3_loc?d,
+					ObjectiveText4_loc?d
 				FROM locales_quest
 				WHERE entry = ?d
 				LIMIT 1
