@@ -4,8 +4,8 @@
 error_reporting(2039);
 
 session_start();
-if(!isset($_SESSION['locale']) || !is_int($_SESSION['locale']))
-	$_SESSION['locale'] = 0;
+//if(!isset($_SESSION['locale']) || !is_int($_SESSION['locale']))
+//	$_SESSION['locale'] = 0;
 
 require_once 'configs/config.php';
 // Для Ajax отключаем debug
@@ -16,12 +16,11 @@ $AoWoWconf['realmd'] = false;
 global $DB;
 require_once('includes/db.php');
 
+// Принимаются запросы минимум из 2 символов (хотя на вовхеде и на 1 символ)
 $search_query = $_GET['search'];
 if(strlen($search_query) < 2)
 	exit('["", []]');
 $search_query = '%'.str_replace('%', '\%', $search_query).'%';
-
-
 
 echo '["'.str_replace('"', '\"', $_GET['search']).'", [';
 
@@ -43,22 +42,26 @@ function SideByRace($race)
 	}
 }
 
+$rows = array();
+
 // Ищем вещи:
+
 $rows = $DB->select('
-	SELECT i.entry, ?#, iconname, quality
+	SELECT i.entry, ?# as name, a.iconname, i.quality
 	FROM ?_icons a, item_template i{, ?# l}
 	WHERE
 		?# LIKE ?
 		AND a.id = i.displayid
-		{ AND l.entry = i.entry AND ? }
-	ORDER BY i.quality DESC, i.name
+		{ AND i.entry = l.?# }
+	ORDER BY i.quality DESC, ?#
 	LIMIT 3
 	',
-	$_SESSION['locale'] == 0 ? 'name' : 'name_loc'.$_SESSION['locale'],		// SELECT
-	$_SESSION['locale'] == 0 ? DBSIMPLE_SKIP : 'locales_item',				// FROM
-	$_SESSION['locale'] == 0 ? 'name' : 'name_loc'.$_SESSION['locale'],		// WHERE
+	$_SESSION['locale'] == 0 ? 'name' : 'name_loc'.$_SESSION['locale'],	// SELECT
+	$_SESSION['locale'] == 0 ? DBSIMPLE_SKIP : 'locales_item',			// FROM
+	$_SESSION['locale'] == 0 ? 'name' : 'name_loc'.$_SESSION['locale'],	// WHERE1
 	$search_query,
-	$_SESSION['locale'] == 0 ? 1 : DBSIMPLE_SKIP
+	$_SESSION['locale'] == 0 ? DBSIMPLE_SKIP : 'entry',					// WHERE2
+	$_SESSION['locale'] == 0 ? 'name' : 'name_loc'.$_SESSION['locale']	// ORDER
 );
 
 foreach ($rows as $i => $row)
@@ -71,14 +74,20 @@ foreach ($rows as $i => $row)
 
 // Ищем объекты:
 $rows = $DB->select('
-	SELECT entry, name
-	FROM gameobject_template
+	SELECT g.entry, ?# as name
+	FROM gameobject_template g {, ?# l}
 	WHERE
-		(name LIKE ?)
-	ORDER BY name
+		(?# LIKE ?)
+		{AND (g.entry=l.?#)}
+	ORDER BY ?#
 	LIMIT 3
 	',
-	$search_query
+	$_SESSION['locale'] == 0 ? 'name' : 'name_loc'.$_SESSION['locale'],	// SELECT
+	$_SESSION['locale'] == 0 ? DBSIMPLE_SKIP : 'locales_gameobject',	// FROM
+	$_SESSION['locale'] == 0 ? 'name' : 'name_loc'.$_SESSION['locale'],	// WHERE1
+	$search_query,
+	$_SESSION['locale'] == 0 ? DBSIMPLE_SKIP : 'entry',					// WHERE2
+	$_SESSION['locale'] == 0 ? 'name' : 'name_loc'.$_SESSION['locale']	// ORDER
 );
 
 foreach ($rows as $i => $row)
@@ -89,14 +98,20 @@ foreach ($rows as $i => $row)
 
 // Ищем квесты:
 $rows = $DB->select('
-	SELECT entry, Title, RequiredRaces
-	FROM quest_template
+	SELECT q.entry, ?# as Title, q.RequiredRaces
+	FROM quest_template q {, ?# l}
 	WHERE
-		(Title LIKE ?)
-	ORDER BY Title
+		(?# LIKE ?)
+		{AND (q.entry=l.?#)}
+	ORDER BY ?#
 	LIMIT 3
 	',
-	$search_query
+	$_SESSION['locale'] == 0 ? 'Title' : 'Title_loc'.$_SESSION['locale'],	// SELECT
+	$_SESSION['locale'] == 0 ? DBSIMPLE_SKIP : 'locales_quest',				// FROM
+	$_SESSION['locale'] == 0 ? 'Title' : 'Title_loc'.$_SESSION['locale'],	// WHERE1
+	$search_query,
+	$_SESSION['locale'] == 0 ? DBSIMPLE_SKIP : 'entry',						// WHERE2
+	$_SESSION['locale'] == 0 ? 'Title' : 'Title_loc'.$_SESSION['locale']	// ORDER
 );
 
 foreach ($rows as $i => $row)
@@ -108,14 +123,20 @@ foreach ($rows as $i => $row)
 
 // Ищем creature:
 $rows = $DB->select('
-	SELECT entry, name
-	FROM creature_template
+	SELECT c.entry, ?# as name
+	FROM creature_template c {, ?# l}
 	WHERE
-		(name LIKE ?)
-	ORDER BY name
+		(?# LIKE ?)
+		{AND (c.entry=l.?#)}
+	ORDER BY ?#
 	LIMIT 3
 	',
-	$search_query
+	$_SESSION['locale'] == 0 ? 'name' : 'name_loc'.$_SESSION['locale'],	// SELECT
+	$_SESSION['locale'] == 0 ? DBSIMPLE_SKIP : 'locales_creature',		// FROM
+	$_SESSION['locale'] == 0 ? 'name' : 'name_loc'.$_SESSION['locale'],	// WHERE1
+	$search_query,
+	$_SESSION['locale'] == 0 ? DBSIMPLE_SKIP : 'entry',					// WHERE2
+	$_SESSION['locale'] == 0 ? 'name' : 'name_loc'.$_SESSION['locale']	// ORDER
 );
 
 foreach ($rows as $i => $row)
@@ -131,7 +152,7 @@ if (!IsSet($found))
 	die();
 }
 
-ksort($found);
+//ksort($found);
 
 $found = array_slice($found, 0, 10);
 
