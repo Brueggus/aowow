@@ -19,7 +19,7 @@ if(!$items = load_cache(7, $cache_str))
 	// Составляем запрос к БД, выполняющий поиск по заданным классу и подклассу
 	$rows = $DB->select('
 		SELECT ?#, i.entry, maxcount
-			{, l.name_loc?d AS `name_loc`}
+			{, l.name_loc?d}
 		FROM ?_icons, item_template i
 			{LEFT JOIN (locales_item l) ON l.entry=i.entry AND ?d}
 		WHERE
