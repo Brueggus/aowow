@@ -10,11 +10,11 @@ require_once 'includes/allquests.php';
 // для allitems($level=0) - соответствия номер-иконка
 $item_cols[0] = array('entry', 'iconname', 'quality', 'name');
 // для allitems($level=1) - ajax, тултип
-$item_cols[1] = array('entry', 'name', 'quality', 'iconname', 'maxcount', 'bonding', 'startquest', 'Map', 'ContainerSlots', 'class', 'InventoryType', 'subclass', 'dmg_type1','dmg_min1', 'dmg_max1', 'delay', 'dmg_type2', 'dmg_min2', 'dmg_max2', 'dmg_type3', 'dmg_min3', 'dmg_max3', 'dmg_type4', 'dmg_min4', 'dmg_max4', 'dmg_type5', 'dmg_min5', 'dmg_max5', 'armor', 'block', 'GemProperties', 'stat_type1', 'stat_type2', 'stat_type3', 'stat_type4', 'stat_type5', 'stat_type6', 'stat_type7', 'stat_type8', 'stat_type9', 'stat_type10', 'stat_value1', 'stat_value2', 'stat_value3', 'stat_value4', 'stat_value5', 'stat_value6', 'stat_value7', 'stat_value8', 'stat_value9', 'stat_value10', 'holy_res', 'fire_res', 'nature_res', 'frost_res', 'shadow_res', 'arcane_res', 'RandomProperty', 'RandomSuffix', 'socketColor_1', 'socketColor_2', 'socketColor_3', 'socketBonus', 'MaxDurability', 'AllowableClass', 'RequiredLevel', 'RequiredSkill', 'requiredspell', 'RequiredReputationFaction', 'RequiredReputationRank', 'spellid_1', 'spellid_2', 'spellid_3','spellid_4','spellid_5', 'spelltrigger_1', 'spelltrigger_2', 'spelltrigger_3', 'spelltrigger_4', 'spelltrigger_5', 'description', 'PageText', 'BagFamily', 'RequiredSkillRank');
+$item_cols[1] = array('entry', 'name', 'quality', 'iconname', 'maxcount', 'bonding', 'startquest', 'Map', 'ContainerSlots', 'class', 'InventoryType', 'subclass', 'dmg_type1','dmg_min1', 'dmg_max1', 'delay', 'dmg_type2', 'dmg_min2', 'dmg_max2','armor', 'block', 'GemProperties', 'stat_type1', 'stat_type2', 'stat_type3', 'stat_type4', 'stat_type5', 'stat_type6', 'stat_type7', 'stat_type8', 'stat_type9', 'stat_type10', 'stat_value1', 'stat_value2', 'stat_value3', 'stat_value4', 'stat_value5', 'stat_value6', 'stat_value7', 'stat_value8', 'stat_value9', 'stat_value10', 'holy_res', 'fire_res', 'nature_res', 'frost_res', 'shadow_res', 'arcane_res', 'RandomProperty', 'RandomSuffix', 'socketColor_1', 'socketColor_2', 'socketColor_3', 'socketBonus', 'MaxDurability', 'AllowableClass', 'RequiredLevel', 'RequiredSkill', 'requiredspell', 'RequiredReputationFaction', 'RequiredReputationRank', 'spellid_1', 'spellid_2', 'spellid_3','spellid_4','spellid_5', 'spelltrigger_1', 'spelltrigger_2', 'spelltrigger_3', 'spelltrigger_4', 'spelltrigger_5', 'description', 'PageText', 'BagFamily', 'RequiredSkillRank');
 // для iteminfo($level=0) - строчки списка
-$item_cols[2] = array('name', 'quality', 'iconname', 'InventoryType', 'ItemLevel', 'RequiredLevel', 'class', 'subclass', 'stackable', 'BuyPrice', 'armor', 'dmg_type1','dmg_min1', 'dmg_max1', 'delay', 'dmg_type2', 'dmg_min2', 'dmg_max2', 'dmg_type3', 'dmg_min3', 'dmg_max3', 'dmg_type4', 'dmg_min4', 'dmg_max4', 'dmg_type5', 'dmg_min5', 'dmg_max5', 'ContainerSlots');
+$item_cols[2] = array('name', 'quality', 'iconname', 'InventoryType', 'ItemLevel', 'RequiredLevel', 'class', 'subclass', 'stackable', 'BuyPrice', 'armor', 'dmg_type1','dmg_min1', 'dmg_max1', 'delay', 'dmg_type2', 'dmg_min2', 'dmg_max2', 'ContainerSlots');
 // для iteminfo($level=1)
-$item_cols[3] = array('entry', 'name', 'quality', 'iconname', 'maxcount', 'bonding', 'startquest', 'Map', 'ContainerSlots', 'class', 'InventoryType', 'subclass', 'dmg_type1','dmg_min1', 'dmg_max1', 'delay', 'dmg_type2', 'dmg_min2', 'dmg_max2', 'dmg_type3', 'dmg_min3', 'dmg_max3', 'dmg_type4', 'dmg_min4', 'dmg_max4', 'dmg_type5', 'dmg_min5', 'dmg_max5', 'armor', 'block', 'GemProperties', 'stat_type1', 'stat_type2', 'stat_type3', 'stat_type4', 'stat_type5', 'stat_type6', 'stat_type7', 'stat_type8', 'stat_type9', 'stat_type10', 'stat_value1', 'stat_value2', 'stat_value3', 'stat_value4', 'stat_value5', 'stat_value6', 'stat_value7', 'stat_value8', 'stat_value9', 'stat_value10', 'holy_res', 'fire_res', 'nature_res', 'frost_res', 'shadow_res', 'arcane_res', 'RandomProperty', 'RandomSuffix', 'socketColor_1', 'socketColor_2', 'socketColor_3', 'socketBonus', 'MaxDurability', 'AllowableClass', 'RequiredLevel', 'RequiredSkill', 'requiredspell', 'RequiredReputationFaction', 'RequiredReputationRank', 'spellid_1', 'spellid_2', 'spellid_3','spellid_4','spellid_5', 'spelltrigger_1', 'spelltrigger_2', 'spelltrigger_3', 'spelltrigger_4', 'spelltrigger_5', 'description', 'PageText', 'BagFamily', 'RequiredSkillRank', 'ItemLevel', 'stackable', 'BuyPrice', 'DisenchantID', 'SellPrice', 'RequiredDisenchantSkill', 'displayid');
+$item_cols[3] = array('entry', 'name', 'quality', 'iconname', 'maxcount', 'bonding', 'startquest', 'Map', 'ContainerSlots', 'class', 'InventoryType', 'subclass', 'dmg_type1','dmg_min1', 'dmg_max1', 'delay', 'dmg_type2', 'dmg_min2', 'dmg_max2', 'armor', 'block', 'GemProperties', 'stat_type1', 'stat_type2', 'stat_type3', 'stat_type4', 'stat_type5', 'stat_type6', 'stat_type7', 'stat_type8', 'stat_type9', 'stat_type10', 'stat_value1', 'stat_value2', 'stat_value3', 'stat_value4', 'stat_value5', 'stat_value6', 'stat_value7', 'stat_value8', 'stat_value9', 'stat_value10', 'holy_res', 'fire_res', 'nature_res', 'frost_res', 'shadow_res', 'arcane_res', 'RandomProperty', 'RandomSuffix', 'socketColor_1', 'socketColor_2', 'socketColor_3', 'socketBonus', 'MaxDurability', 'AllowableClass', 'RequiredLevel', 'RequiredSkill', 'requiredspell', 'RequiredReputationFaction', 'RequiredReputationRank', 'spellid_1', 'spellid_2', 'spellid_3','spellid_4','spellid_5', 'spelltrigger_1', 'spelltrigger_2', 'spelltrigger_3', 'spelltrigger_4', 'spelltrigger_5', 'description', 'PageText', 'BagFamily', 'RequiredSkillRank', 'ItemLevel', 'stackable', 'BuyPrice', 'DisenchantID', 'SellPrice', 'RequiredDisenchantSkill', 'displayid');
 
 $resz = array('holy_res', 'fire_res', 'nature_res', 'frost_res', 'shadow_res', 'arcane_res');
 $resz_desc = array (LOCALE_HOLY_RESISTANCE, LOCALE_FIRE_RESISTANCE, LOCALE_NATURE_RESISTANCE, LOCALE_FROST_RESISTANCE, LOCALE_SHADOW_RESISTANCE, LOCALE_ARCANE_RESISTANCE);
@@ -283,7 +283,7 @@ function render_item_tooltip(&$Row)
 
 	// Урон
 	$dps=0;
-	for($j=1;$j<=5;$j++)
+	for($j=1;$j<=2;$j++)
 	{
 		$d_type = $Row['dmg_type'.$j];
 		$d_min = $Row['dmg_min'.$j];
@@ -493,7 +493,7 @@ function iteminfo2(&$Row, $level=0)
 	$dps = 0;
 	if($Row['class']==2)
 	{
-		for($i=1;$i<=5;$i++)
+		for($i=1;$i<=2;$i++)
 		{
 			$d_type = $Row['dmg_type'.$i];
 			$d_min = $Row['dmg_min'.$i];
