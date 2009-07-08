@@ -17,8 +17,12 @@ if(!$quests = load_cache(12, $cache_str))
 	global $DB, $quest_class, $quest_cols;
 
 	$rows = $DB->select('
-		SELECT ?#
+		SELECT ?#, q.entry
+		{
+			, l.Title_loc?d 
+		}
 		FROM quest_template q
+		{ LEFT JOIN (locales_quest l) ON l.entry=q.entry AND ? }
 		WHERE
 			1 = 1
 			{ AND ZoneOrSort = ? }
@@ -27,10 +31,13 @@ if(!$quests = load_cache(12, $cache_str))
 		{LIMIT ?d}
 		',
 		$quest_cols[2],
+		($_SESSION['locale']>0)? $_SESSION['locale']: DBSIMPLE_SKIP,
+		($_SESSION['locale']>0)? 1: DBSIMPLE_SKIP,
 		(IsSet($ZoneOrSort))? $ZoneOrSort : DBSIMPLE_SKIP,
 		((!IsSet($ZoneOrSort)) and $Type)? $quest_class[$Type] : DBSIMPLE_SKIP,
 		($AoWoWconf['limit'] > 0)? $AoWoWconf['limit']: DBSIMPLE_SKIP
 	);
+
 	$quests = array();
 	foreach($rows as $numRow=>$row)
 		$quests[] = GetQuestInfo($row, QUEST_DATAFLAG_LISTINGS);

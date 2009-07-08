@@ -22,8 +22,8 @@ if(!$npcs = load_cache(2, $cache_str))
 	$rows = $DB->select('
 		SELECT c.?#, c.entry
 		{
-			, l.name_loc?d as `name_loc`
-			, l.subname_loc'.$_SESSION['locale'].' as `subname_loc`
+			, l.name_loc?d 
+			, l.subname_loc?d 
 		}
 		FROM ?_factiontemplate, creature_template c
 		{ LEFT JOIN (locales_creature l) ON l.entry=c.entry AND ? }
@@ -36,12 +36,15 @@ if(!$npcs = load_cache(2, $cache_str))
 		',
 		$npc_cols[0],
 		($_SESSION['locale']>0)? $_SESSION['locale']: DBSIMPLE_SKIP,
+		($_SESSION['locale']>0)? $_SESSION['locale']: DBSIMPLE_SKIP,
 		($_SESSION['locale']>0)? 1: DBSIMPLE_SKIP,
 		($type!='')? $type: DBSIMPLE_SKIP,
 		(isset($family))? $family: DBSIMPLE_SKIP,
 		($AoWoWconf['limit']!=0)? $AoWoWconf['limit']: DBSIMPLE_SKIP
 	);
 
+	//print_r($rows);
+	
 	$npcs = array();
 	foreach ($rows as $numRow=>$row)
 	{
