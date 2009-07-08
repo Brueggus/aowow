@@ -5,12 +5,6 @@ error_reporting(2039);
 ini_set('serialize_precision', 4);
 session_start();
 
-if(isset($_GET['admin-loader']) && $_SESSION['roles'] == 2)
-{
-	include 'templates/wowhead/js/admin.js';
-	exit;
-}
-
 // Настройки
 require_once 'configs/config.php';
 // Для Ajax отключаем debug
