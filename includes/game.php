@@ -336,7 +336,7 @@ function loot($table, $lootid, $mod = 1)
 	// Мего запрос :)
 	$rows = $DB->select('
 		SELECT l.ChanceOrQuestChance, l.mincountOrRef, l.maxcount, l.groupid, ?#, i.entry
-			{, loc.name_loc?d AS `name_loc`}
+			{, loc.name_loc?d}
 		FROM ?# l
 			LEFT JOIN (?_icons a, item_template i) ON l.item=i.entry AND a.id=i.displayid
 			{LEFT JOIN (locales_item loc) ON loc.entry=i.entry AND ?d}

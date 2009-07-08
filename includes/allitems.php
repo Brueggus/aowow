@@ -173,7 +173,7 @@ function getitemname($id)
 {
 	global $DB;
 	$z = $DB->selectRow('
-			SELECT name {, l.name_loc?d as `name_loc`}
+			SELECT name {, l.name_loc?d}
 			FROM item_template i
 			{ LEFT JOIN (locales_item l) ON l.entry=i.entry AND ? }
 			WHERE
@@ -200,8 +200,8 @@ function allitemsinfo($id, $level=0)
 		$row = $DB->selectRow('
 			SELECT i.?#
 			{
-				, l.name_loc'.$_SESSION['locale'].' as `name_loc`
-				, l.description_loc'.$_SESSION['locale'].' as `description_loc`
+				, l.name_loc?d
+				, l.description_loc?d
 				, ?
 			}
 			FROM ?_icons, item_template i
@@ -215,6 +215,8 @@ function allitemsinfo($id, $level=0)
 			LIMIT 1
 			',
 			$item_cols[$level],
+			($_SESSION['locale']>0)? $_SESSION['locale']: DBSIMPLE_SKIP,
+			($_SESSION['locale']>0)? $_SESSION['locale']: DBSIMPLE_SKIP,
 			($_SESSION['locale']>0)? 1: DBSIMPLE_SKIP,
 			($_SESSION['locale']>0)? 1: DBSIMPLE_SKIP,
 			$id
@@ -599,9 +601,8 @@ function iteminfo($id, $level=0)
 	$row = $DB->selectRow('
 		SELECT i.?#, i.entry
 		{
-			, l.name_loc'.$_SESSION['locale'].' as `name_loc`
-			, l.description_loc'.$_SESSION['locale'].' as `description_loc`
-			, ?
+			, l.name_loc?d
+			, l.description_loc?d
 		}
 		FROM ?_icons, item_template i
 		{ LEFT JOIN (locales_item l) ON l.entry=i.entry AND ? }
@@ -610,7 +611,8 @@ function iteminfo($id, $level=0)
 		LIMIT 1
 		',
 		$item_cols[2+$level],
-		($_SESSION['locale']>0)? 1: DBSIMPLE_SKIP,
+		($_SESSION['locale']>0)? $_SESSION['locale']: DBSIMPLE_SKIP,
+		($_SESSION['locale']>0)? $_SESSION['locale']: DBSIMPLE_SKIP,
 		($_SESSION['locale']>0)? 1: DBSIMPLE_SKIP,
 		$id
 	);

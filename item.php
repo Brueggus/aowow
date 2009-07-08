@@ -37,8 +37,8 @@ if(!$item = load_cache(5, $id))
 			$rows = $DB->select('
 				SELECT c.?#, c.entry
 				{
-					, l.name_loc?d as `name_loc`
-					, l.subname_loc'.$_SESSION['locale'].' as `subname_loc`
+					, l.name_loc?d
+					, l.subname_loc?d
 				}
 				FROM ?_factiontemplate, creature_template c
 				{ LEFT JOIN (locales_creature l) ON l.entry=c.entry AND ? }
@@ -47,6 +47,7 @@ if(!$item = load_cache(5, $id))
 					AND factiontemplateID=faction_A
 				',
 				$npc_cols[0],
+				($_SESSION['locale']>0)? $_SESSION['locale']: DBSIMPLE_SKIP,
 				($_SESSION['locale']>0)? $_SESSION['locale']: DBSIMPLE_SKIP,
 				($_SESSION['locale']>0)? 1: DBSIMPLE_SKIP,
 				$lootid
@@ -71,13 +72,16 @@ if(!$item = load_cache(5, $id))
 		{
 			// Сундуки
 			$rows = $DB->select('
-				SELECT g.entry, g.name, g.type, a.lockproperties1
-				FROM gameobject_template g, ?_lock a
+				SELECT g.entry, g.name, g.type, a.lockproperties1 {, l.name_loc?d}
+				FROM ?_lock a, gameobject_template g
+				{ LEFT JOIN (locales_gameobject l) ON l.entry=g.entry AND ? }
 				WHERE
 					g.data1=?d
 					AND g.type=?d
 					AND a.lockID=g.data0
 				',
+				($_SESSION['locale']>0)? $_SESSION['locale']: DBSIMPLE_SKIP,
+				($_SESSION['locale']>0)? 1: DBSIMPLE_SKIP,
 				$lootid,
 				GAMEOBJECT_TYPE_CHEST,
 				LOCK_PROPERTIES_HERBALISM,
@@ -115,8 +119,8 @@ if(!$item = load_cache(5, $id))
 	$rows_soldby = $DB->select('
 		SELECT ?#, c.entry, v.ExtendedCost, v.maxcount AS stock
 		{
-			, l.name_loc?d as `name_loc`
-			, l.subname_loc'.$_SESSION['locale'].' as `subname_loc`
+			, l.name_loc?d
+			, l.subname_loc?d
 		}
 		FROM npc_vendor v, ?_factiontemplate, creature_template c
 		{ LEFT JOIN (locales_creature l) ON l.entry=c.entry AND ? }
@@ -127,6 +131,7 @@ if(!$item = load_cache(5, $id))
 		ORDER BY 1 DESC, 2 DESC
 		',
 		$npc_cols['0'],
+		($_SESSION['locale']>0)? $_SESSION['locale']: DBSIMPLE_SKIP,
 		($_SESSION['locale']>0)? $_SESSION['locale']: DBSIMPLE_SKIP,
 		($_SESSION['locale']>0)? 1: DBSIMPLE_SKIP,
 		$item['entry']
@@ -166,8 +171,9 @@ if(!$item = load_cache(5, $id))
 
 	// Поиск квестов, для выполнения которых нужен этот предмет
 	$rows_qr = $DB->select('
-		SELECT ?#
-		FROM quest_template
+		SELECT ?# {, l.Title_loc?d}
+		FROM quest_template q
+		{ LEFT JOIN (locales_quest l) ON l.entry=q.entry AND ? }
 		WHERE
 			ReqItemId1=?d
 			OR ReqItemId2=?d
@@ -175,6 +181,8 @@ if(!$item = load_cache(5, $id))
 			OR ReqItemId4=?d
 		',
 		$quest_cols[2],
+		($_SESSION['locale']>0)? $_SESSION['locale']: DBSIMPLE_SKIP,
+		($_SESSION['locale']>0)? 1: DBSIMPLE_SKIP,
 		$item['entry'], $item['entry'], $item['entry'], $item['entry']
 	);
 	if ($rows_qr)
@@ -187,8 +195,9 @@ if(!$item = load_cache(5, $id))
 
 	// Поиск квестов, наградой за выполнение которых, является этот предмет
 	$rows_qrw = $DB->select('
-		SELECT ?#
-		FROM quest_template
+		SELECT ?# {, l.Title_loc?d}
+		FROM quest_template q 
+		{ LEFT JOIN (locales_quest l) ON l.entry=q.entry AND ? }
 		WHERE
 			RewItemId1=?d
 			OR RewItemId2=?d
@@ -202,6 +211,8 @@ if(!$item = load_cache(5, $id))
 			OR RewChoiceItemId6=?d
 		',
 		$quest_cols[2],
+		($_SESSION['locale']>0)? $_SESSION['locale']: DBSIMPLE_SKIP,
+		($_SESSION['locale']>0)? 1: DBSIMPLE_SKIP,
 		$item['entry'], $item['entry'], $item['entry'], $item['entry'], $item['entry'],
 		$item['entry'], $item['entry'], $item['entry'], $item['entry'], $item['entry']
 	);
@@ -222,7 +233,7 @@ if(!$item = load_cache(5, $id))
 		{
 			$rows = $DB->select('
 				SELECT c.?#, c.entry, maxcount
-				{ , l.name_loc?d AS `name_loc`}
+				{ , l.name_loc?d}
 				FROM ?_icons, item_template c
 				{ LEFT JOIN (locales_item l) ON l.entry=c.entry AND ? }
 				WHERE
@@ -257,8 +268,8 @@ if(!$item = load_cache(5, $id))
 			$rows = $DB->select('
 				SELECT c.?#, c.entry
 				{
-					, l.name_loc?d as `name_loc`
-					, l.subname_loc'.$_SESSION['locale'].' as `subname_loc`
+					, l.name_loc?d
+					, l.subname_loc?d
 				}
 				FROM ?_factiontemplate, creature_template c
 				{ LEFT JOIN (locales_creature l) ON l.entry=c.entry AND ? }
@@ -267,6 +278,7 @@ if(!$item = load_cache(5, $id))
 					AND factiontemplateID=faction_A
 				',
 				$npc_cols[0],
+				($_SESSION['locale']>0)? $_SESSION['locale']: DBSIMPLE_SKIP,
 				($_SESSION['locale']>0)? $_SESSION['locale']: DBSIMPLE_SKIP,
 				($_SESSION['locale']>0)? 1: DBSIMPLE_SKIP,
 				$lootid
@@ -290,8 +302,8 @@ if(!$item = load_cache(5, $id))
 			$rows = $DB->select('
 				SELECT c.?#, c.entry
 				{
-					, l.name_loc?d as `name_loc`
-					, l.subname_loc'.$_SESSION['locale'].' as `subname_loc`
+					, l.name_loc?d
+					, l.subname_loc?d
 				}
 				FROM ?_factiontemplate, creature_template c
 				{ LEFT JOIN (locales_creature l) ON l.entry=c.entry AND ? }
@@ -300,6 +312,7 @@ if(!$item = load_cache(5, $id))
 					AND factiontemplateID=faction_A
 				',
 				$npc_cols[0],
+				($_SESSION['locale']>0)? $_SESSION['locale']: DBSIMPLE_SKIP,
 				($_SESSION['locale']>0)? $_SESSION['locale']: DBSIMPLE_SKIP,
 				($_SESSION['locale']>0)? 1: DBSIMPLE_SKIP,
 				$lootid
@@ -323,7 +336,7 @@ if(!$item = load_cache(5, $id))
 			$rows = $DB->select('
 				SELECT c.?#, c.entry, maxcount
 				{
-					, l.name_loc?d as `name_loc`
+					, l.name_loc?d
 				}
 				FROM ?_icons, item_template c
 				{ LEFT JOIN (locales_items l) ON l.entry=c.entry AND ? }
@@ -359,7 +372,7 @@ if(!$item = load_cache(5, $id))
 			$rows = $DB->select('
 				SELECT c.?#, c.entry, maxcount
 				{
-					, l.name_loc?d as `name_loc`
+					, l.name_loc?d
 				}
 				FROM ?_icons, item_template c
 				{ LEFT JOIN (locales_item l) ON l.entry=c.entry AND ? }
@@ -390,7 +403,7 @@ if(!$item = load_cache(5, $id))
 		$rows_cpi = $DB->select('
 			SELECT c.?#, c.entry, maxcount
 			{
-				, l.name_loc?d as `name_loc`
+				, l.name_loc?d
 			}
 			FROM ?_icons, item_template c
 			{ LEFT JOIN (locales_item l) ON l.entry=c.entry AND ? }
@@ -552,7 +565,7 @@ if(!$item = load_cache(5, $id))
 			$rows = $DB->select('
 				SELECT c.?#, c.entry, maxcount
 				{
-					, l.name_loc?d as `name_loc`
+					, l.name_loc?d
 				}
 				FROM ?_icons, item_template c
 				{ LEFT JOIN (locales_item l) ON l.entry=c.entry AND ? }
