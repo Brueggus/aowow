@@ -331,6 +331,7 @@ if(!$spell = load_cache(13, intval($id)))
 		if ($taughtbyspells)
 		{
 			// Список петов, кастующих спелл, обучающий нужному спеллу
+			/*
 			$taughtbypets = $DB->select('
 				SELECT ?#, c.entry
 				{ , name_loc?d AS name_loc, subname_loc'.$_SESSION['locale'].' AS subname_loc }
@@ -352,6 +353,7 @@ if(!$spell = load_cache(13, intval($id)))
 					$spell['taughtbynpc'][] = creatureinfo2($petrow);
 				unset ($taughtbypets);
 			}
+			*/
 
 			// Список квестов, наградой за которые является спелл, обучающий нужному спеллу
 			$taughtbyquest = $DB->select('
