@@ -6,7 +6,7 @@ $AoWoWconf['mangos']['host']	= '127.0.0.1';
 $AoWoWconf['mangos']['user']	= 'mangos';
 $AoWoWconf['mangos']['pass']	= '';
 $AoWoWconf['mangos']['db']		= 'mangos';
-$AoWoWconf['mangos']['aowow']	= 'aowow_';
+$AoWoWconf['mangos']['aowow']	= 'aowow_'; // AoWoW table prefix
 // -- Realmd Database --
 $AoWoWconf['realmd']['host']	= '127.0.0.1';
 $AoWoWconf['realmd']['user']	= 'mangos';
@@ -16,9 +16,16 @@ $AoWoWconf['realmd']['db']		= 'realmd';
 $AoWoWconf['aowow']['name'] = 'AoWoW';
 $AoWoWconf['aowow']['template'] = 'wowhead';
 $AoWoWconf['aowow']['cache_time'] = (60*60*24*7); // Time to keep cache in seconds (Default: 1 week)
+// Default locale
 $AoWoWconf['locale'] = 8;
 $AoWoWconf['register'] = false;
 $AoWoWconf['expansion'] = 2; // Used with register
 $AoWoWconf['limit'] = 300;
 $AoWoWconf['debug'] = false;
+
+// Map object grouping factor. Meters = 10^param.
+// 0 to disable.
+// 1 is default and highly recommended.
+// Do not use float values or values > 3.
+$AoWoWconf['map_grouping'] = 1;
 ?>

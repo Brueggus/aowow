@@ -2,44 +2,32 @@
 // Настройка шаблонизатора и ДБ
 include('includes/kernel.php');
 
-// Объект шаблонизатора
-$smarty = new Smarty_AoWoW('wowhead');
-
-// Имя пользователя и пасс
-session_start();
-
-if (IsSet($_COOKIE['remember_me']) and !(IsSet($_SESSION['username'])))
+if(isset($_COOKIE['remember_me']) && !isset($_SESSION['username']))
 {
 	$_SESSION['username'] = substr($_COOKIE['remember_me'], 0, strlen($_COOKIE['remember_me'])-40);
 	$_SESSION['shapass'] = substr($_COOKIE['remember_me'], strlen($_COOKIE['remember_me'])-40, 40);
 }
 
-if (IsSet($_SESSION['username']) and IsSet($_SESSION['shapass']))
+if(isset($_SESSION['username']) && isset($_SESSION['shapass']))
 {
 	$user = array();
 	$user = CheckPwd($_SESSION['username'], $_SESSION['shapass']);
 	$_SESSION['userid'] = $user['id'];
 	$_SESSION['roles'] = $user['roles'];
-	if ($user>0)
+	if($user > 0)
 		$smarty->assign('user', $user);
 	else
-		UnSet($user);
+		unset($user);
 }
 
-// Язык сайта
-if(!isset($_SESSION['locale']) || !in_array($_SESSION['locale'], array(0, 8)))
-	$_SESSION['locale'] = $AoWoWconf['locale'];
-
 $smarty->assign('locale', $_SESSION['locale']);
-$smarty->assign('language', $languages[$smarty->get_template_vars('locale')]);
+$smarty->assign('language', $languages[$_SESSION['locale']]);
+$conf_file = $languages[$_SESSION['locale']].'.conf';
+$smarty->assign('conf_file', $conf_file);
 
 // Параметры передаваемые скрипту
 $queryx = $_SERVER['QUERY_STRING'];
 @list($razdel, $podrazdel) = explode('=', $_SERVER['QUERY_STRING'], 2);
-
-// Язык, настройки
-$conf_file = $smarty->get_template_vars('language').'.conf';
-$smarty->assign('conf_file', $conf_file);
 $smarty->assign('query', $_SERVER['QUERY_STRING']);
 
 // Параметры страницы
@@ -59,9 +47,10 @@ switch($razdel)
 {
 	case 'locale':
 		// Изменение языка сайта
-		if(in_array($podrazdel, array(0, 8)))
-			$_SESSION['locale'] = $podrazdel;
-		header('Location: '.$_SERVER["HTTP_REFERER"]);
+		// Проверка на корректность данных происходит в checklocale()
+		$_SESSION['locale'] = $podrazdel;
+		checklocale();
+		header('Location: '.($_SERVER['HTTP_REFERER'] ? $_SERVER['HTTP_REFERER'] : '.'));
 		break;
 	case 'account':
 		include 'account.php';

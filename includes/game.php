@@ -1,294 +1,7 @@
 <?php
 
-require_once('includes/allitems.php');
+//require_once('includes/allitems.php');
 require_once('includes/alllocales.php');
-
-// Классы персонажей (битовые маски)
-define('CLASS_WARRIOR', 1);
-define('CLASS_PALADIN', 2);
-define('CLASS_HUNTER', 4);
-define('CLASS_ROGUE', 8);
-define('CLASS_PRIEST', 16);
-define('CLASS_SHAMAN', 64);
-define('CLASS_MAGE', 128);
-define('CLASS_WARLOCK', 256);
-define('CLASS_DRUID', 1024);
-
-// Классы персонажей (архив)
-$classes = array(
-	1 => LOCALE_WARRIOR,
-	2 => LOCALE_PALADIN,
-	3 => LOCALE_HUNTER,
-	4 => LOCALE_ROGUE,
-	5 => LOCALE_PRIEST,
-	6 => LOCALE_DEATH_KNIGHT,
-	7 => LOCALE_SHAMAN,
-	8 => LOCALE_MAGE,
-	9 => LOCALE_WARLOCK,
-	11 => LOCALE_DRUID
-);
-
-define('RACE_HUMAN', 1);
-define('RACE_ORC', 2);
-define('RACE_DWARF', 4);
-define('RACE_NIGHTELF', 8);
-define('RACE_UNDEAD', 16);
-define('RACE_TAUREN', 32);
-define('RACE_GNOME', 64);
-define('RACE_TROLL', 128);
-define('RACE_BLOODELF', 512);
-define('RACE_DRAENEI', 1024);
-
-// Типы разделов
-global $types;
-$types = array(
-	1 => 'npc',
-	2 => 'object',
-	3 => 'item',
-	4 => 'itemset',
-	5 => 'quest',
-	6 => 'spell',
-	7 => 'zone',
-	8 => 'faction'
-);
-
-// Отношения со фракциями
-$reputations = array(
-	1 => LOCALE_NEUTRAL,
-	3000 => LOCALE_FRIENDLY,
-	9000 => LOCALE_HONORED,
-	21000 => LOCALE_REVERED,
-	42000 => LOCALE_EXALTED
-);
-
-function sec_to_time($secs)
-{
-	$time = array();
-	if ($secs>=3600)
-	{
-		$time['h'] = floor($secs/3600);
-		$secs = $secs - $time['h']*3600;
-	}
-	if ($secs>=60)
-	{
-		$time['m'] = floor($secs/60);
-		$secs = $secs - $time['m']*60;
-	}
-	if ($secs>0)
-		$time['s'] = $secs;
-	return $time;
-}
-
-function money2coins($money)
-{
-	$coins = array();
-	if ($money>=10000)
-	{
-		$coins['moneygold'] = floor($money/10000);
-		$money = $money - $coins['moneygold']*10000;
-	}
-	if ($money>=100)
-	{
-		$coins['moneysilver'] = floor($money/100);
-		$money = $money - $coins['moneysilver']*100;
-	}
-	if ($money>0)
-		$coins['moneycopper'] = $money;
-	return $coins;
-}
-
-// Классы, для которых предназначена вещь
-function classes($class)
-{
-	$tmp = '';
-	if ($class & CLASS_WARRIOR)
-		$tmp = LOCALE_WARRIOR;
-	if ($class & CLASS_PALADIN)
-		if ($tmp) $tmp = $tmp.', '.LOCALE_PALADIN; else $tmp = LOCALE_PALADIN;
-	if ($class & CLASS_HUNTER)
-		if ($tmp) $tmp = $tmp.', '.LOCALE_HUNTER; else $tmp = LOCALE_HUNTER;
-	if ($class & CLASS_ROGUE)
-		if ($tmp) $tmp = $tmp.', '.LOCALE_ROGUE; else $tmp = LOCALE_ROGUE;
-	if ($class & CLASS_PRIEST)
-		if ($tmp) $tmp = $tmp.', '.LOCALE_PRIEST; else $tmp = LOCALE_PRIEST;
-	if ($class & CLASS_SHAMAN)
-		if ($tmp) $tmp = $tmp.', '.LOCALE_SHAMAN; else $tmp = LOCALE_SHAMAN;
-	if ($class & CLASS_MAGE)
-		if ($tmp) $tmp = $tmp.', '.LOCALE_MAGE; else $tmp = LOCALE_MAGE;
-	if ($class & CLASS_WARLOCK)
-		if ($tmp) $tmp = $tmp.', '.LOCALE_WARLOCK; else $tmp = LOCALE_WARLOCK;
-	if ($class & CLASS_DRUID)
-		if ($tmp) $tmp = $tmp.', '.LOCALE_DRUID; else $tmp = LOCALE_DRUID;
-	if ($tmp == LOCALE_WARRIOR.', '.LOCALE_PALADIN.', '.LOCALE_HUNTER.', '.LOCALE_ROGUE
-		.', '.LOCALE_PRIEST.', '.LOCALE_SHAMAN.', '.LOCALE_MAGE.', '.LOCALE_WARLOCK.', '.LOCALE_DRUID)
-		return;
-	else
-		return $tmp;
-}
-
-function races($race)
-{
-	// Простые варианты:
-	if($race == RACE_HUMAN|RACE_ORC|RACE_DWARF|RACE_NIGHTELF|RACE_UNDEAD|RACE_TAUREN|RACE_GNOME|RACE_TROLL|RACE_BLOODELF|RACE_DRAENEI || $race == 0)
-		return array('side' => 3, 'name' => LOCALE_BOTH);
-	elseif($race == RACE_ORC|RACE_UNDEAD|RACE_TAUREN|RACE_TROLL|RACE_BLOODELF)
-		return array('side' => 2, 'name' => LOCALE_HORDE);
-	elseif($race == RACE_HUMAN|RACE_DWARF|RACE_NIGHTELF|RACE_GNOME|RACE_DRAENEI)
-		return array('side' => 1, 'name' => LOCALE_ALLIANCE);
-	else
-	{
-		$races = array('name' => '', 'side' => 0);
-		if ($race & RACE_HUMAN)
-		{
-			(($races['side']==2) or ($races['side']==3))? $races['side']=3 : $races['side']=1;
-			if ($races['name']) $races['name'] .= ', '; $races['name'] .= LOCALE_HUMAN;
-		}
-		if ($race & RACE_ORC)
-		{
-			(($races['side']==1) or ($races['side']==3))? $races['side']=3 : $races['side']=2;
-			if ($races['name']) $races['name'] .= ', '; $races['name'] .= LOCALE_ORC;
-		}
-		if ($race & RACE_DWARF)
-		{
-			(($races['side']==2) or ($races['side']==3))? $races['side']=3 : $races['side']=1;
-			if ($races['name']) $races['name'] .= ', '; $races['name'] .= LOCALE_DWARF;
-		}
-		if ($race & RACE_NIGHTELF)
-		{
-			(($races['side']==2) or ($races['side']==3))? $races['side']=3 : $races['side']=1;
-			if ($races['name']) $races['name'] .= ', '; $races['name'] .= LOCALE_NIGHT_ELF;
-		}
-		if ($race & RACE_UNDEAD)
-		{
-			(($races['side']==1) or ($races['side']==3))? $races['side']=3 : $races['side']=2;
-			if ($races['name']) $races['name'] .= ', '; $races['name'] .= LOCALE_UNDEAD;
-		}
-		if ($race & RACE_TAUREN)
-		{
-			(($races['side']==1) or ($races['side']==3))? $races['side']=3 : $races['side']=2;
-			if ($races['name']) $races['name'] .= ', '; $races['name'] .= LOCALE_TAUREN;
-		}
-		if ($race & RACE_GNOME)
-		{
-			(($races['side']==2) or ($races['side']==3))? $races['side']=3 : $races['side']=1;
-			if ($races['name']) $races['name'] .= ', '; $races['name'] .= LOCALE_GNOME;
-		}
-		if ($race & RACE_TROLL)
-		{
-			(($races['side']==1) or ($races['side']==3))? $races['side']=3 : $races['side']=2;
-			if ($races['name']) $races['name'] .= ', '; $races['name'] .= LOCALE_TROLL;
-		}
-		if ($race & RACE_BLOODELF)
-		{
-			(($races['side']==1) or ($races['side']==3))? $races['side']=3 : $races['side']=2;
-			if ($races['name']) $races['name'] .= ', '; $races['name'] .= LOCALE_BLOOD_ELF;
-		}
-		if ($race & RACE_DRAENEI)
-		{
-			(($races['side']==2) or ($races['side']==3))? $races['side']=3 : $races['side']=1;
-			if ($races['name']) $races['name'] .= ', '; $races['name'] .= LOCALE_DRAENEI;
-		}
-		return $races;
-	}
-}
-
-function sum_subarrays_by_key( $tab, $key ) {
-	$sum = 0;
-	foreach($tab as $sub_array) {
-		$sum += $sub_array[$key];
-	}
-	return $sum;
-}
-
-function coord_mangos2wow($mapid, $x, $y, $global)
-{
-	// Карты
-	global $map_images;
-	// Подключение к базе
-	global $DB;
-
-	$rows = $DB->select("SELECT * FROM ?_zones WHERE (mapID=? and x_min<? and x_max>? and y_min<? and y_max>?)", $mapid, $x, $x, $y, $y);
-
-	foreach ($rows as $numRow=>$row) {
-		// Сохраяняем имя карты и координаты
-		$wow['zone'] = $row['areatableID'];
-		$wow['name'] = $row['name_loc'.$_SESSION['locale']];
-
-		// Т.к. в игре координаты начинают отсчёт с левого верхнего угла
-		//  а в системе координат сервера с правого нижнего,
-		//  делаем соответствующее преобразование.
-		$tx = 100 - ($y - $row["y_min"]) / (($row["y_max"] - $row["y_min"]) / 100);
-		$ty = 100 - ($x - $row["x_min"]) / (($row["x_max"] - $row["x_min"]) / 100);
-
-		// А если ещё и с цветом совпала - нах цикл, это всё наше :) Оо
-		// Если ещё не загружена - загружаем.
-		if (!isset($map_images[$wow['zone']])) {
-			$mapname = str_replace("\\", "/", getcwd()).'/images/tmp/'.$row['areatableID'].'.png';
-			if (file_exists($mapname)) {
-				$map_images[$wow['zone']] = @ImageCreateFromPNG($mapname);
-			} else {
-				echo "<font color=red>....Map $mapname not found (ID=".$wow['zone'].")</font><br>";
-			}
-		}
-
-		// Если так и не загрузилась... Возможно такой карты ещё просто нету :)
-		if ($map_images[$wow['zone']]) {
-			if (@ImageColorAt($map_images[$wow['zone']], round($tx * 10), round($ty * 10)) === 0) {
-				break;
-			}
-		}
-	}
-
-	if (count($rows)==0)
-	{
-		// Ничего не найдено. Мб инста??
-
-		$row = $DB->selectRow("SELECT * FROM ?_zones WHERE (mapID=? and x_min=0 and x_max=0 and y_min=0 and y_max=0)", $mapid);
-		if ($row) {
-			$wow['zone'] = $row['areatableID'];
-			$wow['name'] = $row['name_loc'.$_SESSION['locale']];
-		} else {
-			echo "<font color=red>....Location for Map with ID=$mapid not found</font><br>";
-			return;
-		}
-	}
-
-	$wow['x'] = round($tx, 4);
-	$wow['y'] = round($ty, 4);
-
-	return $wow;
-}
-
-// Преобразование целого массива координат
-// Всегда пользовацца только им!
-function mass_coord(&$data)
-{
-	// Карты
-	global $map_images;
-
-	// Гуиды для эвента
-	$guids = array();
-	// Объявляем новый массив с преобразованными данными
-	$xdata = array();
-	// Перебираем по порядку все координаты, посланные функции
-	//  Если таких же координат (уже преобразованных) ещё нет, добавляем в новый массив
-	foreach ($data as $ndata) {
-		// Если помимо координат есть ещё данные о респауне, преобразуем их к удобочитаемому виду:
-		if (isset($ndata['spawntimesecs']))
-			$tmp = array_merge(coord_mangos2wow($ndata['m'], $ndata['x'], $ndata['y'], false), array('r' => sec_to_time($ndata['spawntimesecs'])));
-		else
-			$tmp = coord_mangos2wow($ndata['m'], $ndata['x'], $ndata['y'], false);
-		$tmp['t'] = $ndata['type'];
-		$xdata[] = $tmp;
-	}
-	// Освобождаем всю память выделенную под карты
-	if ($map_images)
-		foreach ($map_images as $map_image)
-			imagedestroy($map_image);
-
-	// Возвращаем новый массив
-	return $xdata;
-}
 
 // Функция информации о фракции
 function factioninfo($id)
@@ -308,11 +21,10 @@ function add_loot(&$loot, $newloot)
 
 	foreach($newloot as $newitem)
 	{
+		// MUST NOT HAPPEN
 		if(!is_array($newitem))
-		{
-			echo 'wtf ?<br />';
 			return;
-		}
+
 		// Если в луте есть такая вещь
 		if(isset($exist[$newitem['entry']]))
 		{
@@ -582,21 +294,245 @@ function drop($table, $item)
 	return $drop;
 }
 
-// позиция
+
+
+// Функция преобразует координаты из серверных в игровые
+function transform_point($at, $point)
+{
+	$result = $point;
+
+	$result['x'] = round(100 - ($point['y']-$at['y_min']) / (($at['y_max']-$at['y_min']) / 100), 2);
+	$result['y'] = round(100 - ($point['x']-$at['x_min']) / (($at['x_max']-$at['x_min']) / 100), 2);
+	$result['r'] = sec_to_time($point['spawntimesecs']);
+	unset($result['spawntimesecs']);
+
+	return $result;
+}
+
+// Функция выбирает подходящую зону для точки из списка
+function select_zone($at_data, $point)
+{
+	global $cached_images, $at_dataoffsets;
+
+	$chosen_area = 0;
+	// Сначала ищем в закешированных локациях
+	$matching_locations = array();
+	foreach($at_data as $at)
+	{
+		if($at['mapID'] == $point['m'] && $at['x_min'] <= $point['x'] && $at['x_max'] >= $point['x'] && $at['y_min'] <= $point['y'] && $at['y_max'] >= $point['y'])
+		{
+			// Если нам не сказано игнорировать негативы
+			if(!$point['n'])
+			{
+				if(!$cached_images[$at['areatableID']])
+				{
+					$filename = 'images/tmp/'.$at['areatableID'].'.png';
+					if(!file_exists($filename))
+						continue; // Не существует - пропускаем зону
+
+					$cached_images[$at['areatableID']] = imagecreatefrompng($filename);
+				}
+
+				$game_x = 100 - ($point['y']-$at['y_min']) / (($at['y_max']-$at['y_min']) / 100);
+				$game_y = 100 - ($point['x']-$at['x_min']) / (($at['x_max']-$at['x_min']) / 100);
+
+				if(imagecolorat($cached_images[$at['areatableID']], round($game_x * 10), round($game_y * 10)) !== 0)
+					continue;
+			}
+
+			$matching_locations[] = $at['areatableID'];
+		}
+	}
+	if($matching_locations)
+	{
+		if(count($matching_locations) > 1)
+		{
+			// TODO: а такое бывает? поидеи да, со столицами
+			// Из нескольких локаций выбираем самую маленькую
+			$chosen_area = $matching_locations[0];
+			foreach($matching_locations as $loc)
+			{
+				$our = $at_data[$at_dataoffsets[$chosen_area]];
+				$chk = $at_data[$at_dataoffsets[$loc]];
+				// Если эта карта меньше выбранной вначале
+				if(abs($our['x_max']-$our['x_min']) > abs($chk['x_max']-$chk['x_min']) || abs($our['y_max']-$our['y_min']) > abs($chk['y_max']-$chk['y_min']))
+					$chosen_area = $loc;
+			}
+		}
+		else
+			$chosen_area = $matching_locations[0];
+	}
+	return $chosen_area;
+}
+
+// Функция преобразовывает массив серверных координат
+// в массив координат и локаций клиента
+function transform_coords($recv)
+{
+	global $DB, $at_dataoffsets;
+	// Cached data
+	$map_data = array();
+	$at_data = array();
+	$map_dataoffsets = array();
+	$zone_dataoffsets = array();
+	$at_dataoffsets = array();
+	$at_dataoffsets_offset = 0;
+	$loaded_areas = array();
+
+	$data = array();
+	$i = -1; // на самом деле в этой переменной хранится id последнего элемента в $data
+
+	// Собираем номера всех карт, где находятся точки
+	$mapids = array();
+	foreach($recv as $point)
+	{
+		if(!in_array($point['m'], $mapids))
+			$mapids[] = $point['m'];
+	}
+	// Считываем сколько всего карт существует
+	$result = $DB->select('SELECT mapID, areatableID, name_loc?d AS name, x_min, COUNT(*) AS c FROM ?_zones WHERE mapID IN (?a) GROUP BY mapID', $_SESSION['locale'], $mapids);
+
+	if(!$result)
+		return false;
+
+	foreach($result as $record)
+	{
+		$mapid = $record['mapID'];
+		$atid = $record['areatableID'];
+		$map_data[$mapid] = array(
+			'name' => $record['name']
+		);
+		// Для этой карты существует всего одна локация,
+		// причем неизвестно, есть для нее карта или нет.
+		if($record['c'] == 1)
+		{
+			if(file_exists('images/maps/enus/normal/'.$atid.'.jpg'))
+			{
+				$map_data[$mapid]['atid'] = $atid;
+				// Это хак, но пусть так
+				if($record['x_min'] == 0)
+					$map_data[$mapid]['coords_not_available'] = true;
+				else
+					// Задаем директиву не использовать негативы
+					$map_data[$mapid]['ignore_negatives'] = true;
+			}
+			else
+				// Карта не доступна - записываем, что бы потом не жрать ресурсы.
+				$map_data[$mapid]['map_not_available'] = true;
+		}
+		else
+			$map_data[$mapid]['multiple_areas'] = true;
+	}
+
+	foreach($recv as $point)
+	{
+		$mapid = $point['m'];
+
+		$md = $map_data[$mapid];
+		$point['n'] = $md['ignore_negatives'];
+		// Карта не доступна
+		if($md['map_not_available'] || $md['coords_not_available'])
+		{
+			if(isset($map_dataoffsets[$mapid]))
+			{
+				// Если у нас уже была точка с такой картой,
+				// то увеличиваем население на ней.
+				$data[$map_dataoffsets[$mapid]]['population']++;
+			}
+			else
+			{
+				// Если нет - создаем новую.
+				$data[++$i] = array(
+					'population' => 1,
+					'name' => $md['name'],
+					'atid' => $md['map_not_available'] ? 0 : $md['atid']
+				);
+				$map_dataoffsets[$mapid] = $i;
+			}
+			continue;
+		}
+		// Если всего одна зона на карту,
+		// и для нее есть изображение и координаты,
+		// сразу же указываем номер зоны
+		if(!$md['multiple_areas'])
+			$chosen_area = $md['atid'];
+		else
+			$chosen_area = select_zone($at_data, $point);
+
+		// Если зон на карту много и/или нужная нам не загружена
+		if(!$chosen_area || !in_array($chosen_area, $loaded_areas))
+		{
+			// Загружаем зоны
+			$result = $DB->select('
+					SELECT mapID, areatableID, x_min, x_max, y_min, y_max, name_loc?d AS name
+					FROM ?_zones
+					WHERE
+						(? BETWEEN x_min AND x_max)
+						AND (? BETWEEN y_min AND y_max)
+						AND mapID = ?
+				',
+				$_SESSION['locale'],
+				$point['x'],
+				$point['y'],
+				$point['m']
+			);
+			foreach($result as $area)
+			{
+				$loaded_areas[] = $area['areatableID'];
+				$at_dataoffsets[$area['areatableID']] = $at_dataoffsets_offset++;
+			}
+			$at_data = array_merge($at_data, $result);
+			$chosen_area = select_zone($at_data, $point);
+		}
+		// Если зона так и не найдена (исключительный случай)
+		// просто этой точки не будет на карте.
+
+		// Если мы в финальном массиве уже имеем запись на
+		// данный номер зоны
+		if(isset($zone_dataoffsets[$chosen_area]))
+		{
+			$offset = $zone_dataoffsets[$chosen_area];
+			// Если у нас уже была точка с такой картой,
+			// то увеличиваем население на ней, записываем новую точку
+			$data[$offset]['population']++;
+
+			if($chosen_area)
+				$data[$offset]['points'][] = transform_point($at_data[$at_dataoffsets[$chosen_area]], $point);
+		}
+		else
+		{
+			$points_array = $chosen_area ? array(transform_point($at_data[$at_dataoffsets[$chosen_area]], $point)) : array();
+			// Если нет - создаем новую.
+			$data[++$i] = array(
+				'population' => 1,
+				'name' => $at_data[$at_dataoffsets[$chosen_area]]['name'],
+				'atid' => $chosen_area,
+				'points' => $points_array
+			);
+			$zone_dataoffsets[$chosen_area] = $i;
+		}
+	}
+
+	return $data;
+}
+
+// Функция создает полный и окончательный массив информации о местоположении объектов или НПС
 function position($id, $type, $spawnMask = 0)
 {
-	global $smarty, $exdata, $zonedata, $DB;
+	global $smarty, $exdata, $zonedata, $DB, $AoWoWconf, $cached_images;
 
 	$data = $DB->select('
 			SELECT guid, map AS m, position_x AS x, position_y AS y, spawntimesecs, {MovementType AS ?#, }"0" AS `type`
 			FROM '.$type.'
 			WHERE id = ?d {AND spawnMask & ?d}
-			GROUP BY ROUND(x,-2), ROUND(y,-2)
+			{ GROUP BY ROUND(x,?d), ROUND(y,?d) }
 			ORDER BY x,y
 		',
 		($type == 'gameobject' ? DBSIMPLE_SKIP : 'mt'),
 		$id,
-		$spawnMask ? $spawnMask : DBSIMPLE_SKIP
+		$spawnMask ? $spawnMask : DBSIMPLE_SKIP,
+		$AoWoWconf['map_grouping'] > 0 ? -$AoWoWconf['map_grouping'] : DBSIMPLE_SKIP,
+		$AoWoWconf['map_grouping'] > 0 ? -$AoWoWconf['map_grouping'] : DBSIMPLE_SKIP
 	);
 	if($type <> 'gameobject')
 	{
@@ -608,80 +544,52 @@ function position($id, $type, $spawnMask = 0)
 		}
 		if($wpWalkingCreaturesGuids)
 		{
-			$wps = $DB->select('SELECT c.map AS m, m.position_x AS x, m.position_y AS y, "3" AS `type` FROM creature_movement m, creature c WHERE m.id = c.guid AND m.id IN (?a) GROUP BY ROUND(x,-2), ROUND(y,-2) ORDER BY x,y', $wpWalkingCreaturesGuids);
+			$wps = $DB->select('
+					SELECT c.map AS m, m.position_x AS x, m.position_y AS y, "3" AS `type`
+					FROM creature_movement m, creature c
+					WHERE
+						m.id = c.guid
+						AND m.id IN (?a)
+					{ GROUP BY ROUND(x,?d), ROUND(y,?d) }
+					ORDER BY x,y
+				',
+				$wpWalkingCreaturesGuids,
+				$AoWoWconf['map_grouping'] > 0 ? -$AoWoWconf['map_grouping'] : DBSIMPLE_SKIP,
+				$AoWoWconf['map_grouping'] > 0 ? -$AoWoWconf['map_grouping'] : DBSIMPLE_SKIP
+			);
 			$data = array_merge($data, $wps);
 		}
 	}
 
-	if(count($data) > 0)
+	if($data)
 	{
-		$data = mass_coord($data);
+		$data = transform_coords($data);
 
-		// Сортируем массив. Зачем???
-		if($data)
-			sort($data);
-
-		// Во временную переменную tmp заносим номер локации
-		$j = 0;
-		$tmp = $data[$j]['zone'];
-		// Номер массива
-		$n = 0;
-		$k = 0;
-		$real_count = 0;
-		$zonedata[$n] = array();
-		$zonedata[$n]['zone'] = $data[$j]['zone'];
-		$zonedata[$n]['name'] = $data[$j]['name'];
-
-		for($j=0; $j<count($data); $j++)
+		// Сортируем массив
+		do
 		{
-			// Если изменился номер карты, то начинаем новый массив
-			if($tmp!=$data[$j]['zone'])
+			$changed = false;
+			for($i = 0; $i < count($data); $i++)
 			{
-				// Количество объектов на зоне
-				$zonedata[$n]['count'] = $k;
-				$n++;
-				$exdata[$n] = array();
-				$zonedata[$n] = array();
-				$tmp=$data[$j]['zone'];
-				// Заносим номер зоны в список зон
-				$zonedata[$n]['zone'] = $data[$j]['zone'];
-				// TODO: Заносим название зоны в список зон
-				$zonedata[$n]['name'] = $data[$j]['name'];
-				$k = 0;
-				$real_count = 0;
-			}
-			$exdata[$n][$k] = array();
-			$exdata[$n][$k] = $data[$j];
-			$k++;
-
-			if($data[$j]['t'] <> 3) // Waypoint
-				$real_count++;
-		}
-
-		// Количество объектов на зоне
-		$zonedata[$n]['count'] = $real_count;
-
-		// Сортировка массивов по количеству объектов на зоне.
-		for($i=0; $i<=$n; $i++)
-		{
-			for($j=$i; $j<=$n; $j++)
-			{
-				if($zonedata[$j]['count'] > $zonedata[$i]['count'])
+				// $l - предыдущий элемент массива
+				if(isset($l) && $data[$l]['population'] < $data[$i]['population'])
 				{
-					unset($tmp);
-					$tmp = $zonedata[$i];
-					$zonedata[$i] = $zonedata[$j];
-					$zonedata[$j] = $tmp;
-					unset($tmp);
-					$tmp = $exdata[$i];
-					$exdata[$i] = $exdata[$j];
-					$exdata[$j] = $tmp;
+					$tmp = $data[$l];
+					$data[$l] = $data[$i];
+					$data[$i] = $tmp;
+					$changed = true;
 				}
+				$l = $i;
 			}
-		}
+			unset($l);
+		} while($changed);
 
-		$smarty->assign('zonedata',$zonedata);
-		$smarty->assign('exdata',$exdata);
+		// Удаляем карты
+		if($cached_images)
+			foreach($cached_images as $img)
+				imagedestroy($img);
+
+		return $data;
 	}
 }
 ?>

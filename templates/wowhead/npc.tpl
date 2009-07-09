@@ -51,41 +51,47 @@
 				<div class="pad"></div>
 {/if}
 
-{if $zonedata}
-				<div>{#This_NPC_can_be_found_in#}
-{strip}
-				<span id="locations">
-					{foreach from=$zonedata item=zone_c name=zone_f}
+{if $npc.position}
+				<div>{#This_NPC_can_be_found_in#} {strip}<span id="locations">
+					{foreach from=$npc.position item=zone name=zone}
 						<a href="javascript:;" onclick="
+						{if $zone.atid}
 							myMapper.update(
 								{ldelim}
-									zone: {$zone_c.zone},
-									coords: [
-										{foreach from=$exdata[$smarty.foreach.zone_f.index] item=exdata_c name=exdata_f}
-											{if (isset($exdata_c.x) and isset($exdata_c.y))}
-												[{$exdata_c.x},{$exdata_c.y},
+									zone:{$zone.atid}
+									{if $zone.points}
+										,
+									{/if}
+								{if $zone.points}
+									coords:[
+										{foreach from=$zone.points item=point name=point}
+												[{$point.x},{$point.y},
 												{ldelim}
 													label:'$<br>
 													<div class=q0>
 														<small>
-															{if $exdata_c.t == 0}
+															{if $point.t == 0}
 																{#Respawn#}:
-																{if isset($exdata_c.r.h)} {$exdata_c.r.h}{#hr#}{/if}
-																{if isset($exdata_c.r.m)} {$exdata_c.r.m}{#min#}{/if}
-																{if isset($exdata_c.r.s)} {$exdata_c.r.s}{#sec#}{/if}
+																{if isset($point.r.h)} {$point.r.h}{#hr#}{/if}
+																{if isset($point.r.m)} {$point.r.m}{#min#}{/if}
+																{if isset($point.r.s)} {$point.r.s}{#sec#}{/if}
 															{else}
 																{#Waypoint#}
 															{/if}
 														</small>
-													</div>',type:'{$exdata_c.t}'
+													</div>',type:'{$point.t}'
 												{rdelim}]
-											{if $smarty.foreach.exdata_f.last}{else},{/if}
-											{/if}
+												{if !$smarty.foreach.point.last},{/if}
 										{/foreach}
 									]
+								{/if}
 								{rdelim});
-							g_setSelectedLink(this, 'mapper'); return false" onmousedown="return false">
-							{$zone_c.name}</a>{if $zone_c.count>1}&nbsp;({$zone_c.count}){/if}{if $smarty.foreach.zone_f.last}.{else}, {/if}
+							ge('mapper-generic').style.display='block';
+						{else}
+							ge('mapper-generic').style.display='none';
+						{/if}
+								g_setSelectedLink(this, 'mapper'); return false" onmousedown="return false">
+							{$zone.name}</a>{if $zone.population > 1}&nbsp;({$zone.population}){/if}{if $smarty.foreach.zone.last}.{else}, {/if}
 					{/foreach}
 				</span></div>
 {/strip}
@@ -93,7 +99,7 @@
 				<div class="clear"></div>
 
 				<script type="text/javascript">
-					var myMapper = new Mapper({ldelim}parent: 'mapper-generic', zone: '{$zonedata[0].zone}'{rdelim});
+					var myMapper = new Mapper({ldelim}parent: 'mapper-generic', zone: '{$npc.position[0].atid}'{rdelim});
 					gE(ge('locations'), 'a')[0].onclick();
 				</script>
 {else}

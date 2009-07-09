@@ -32,36 +32,43 @@
 				<a href="http://www.wowhead.com/?{$query}" class="button-red"><div><blockquote><i>Wowhead</i></blockquote><span>Wowhead</span></div></a>
 				<h1>{$object.name}</h1>
 
-{if $zonedata}
+{if $object.position}
 				<div>{#This_Object_can_be_found_in#}
 {strip}
 				<span id="locations">
-					{foreach from=$zonedata item=zone_c name=zone_f}
+					{foreach from=$object.position item=zone name=zone}
 						<a href="javascript:;" onclick="
 							myMapper.update(
 								{ldelim}
-									zone: {$zone_c.zone},
-									coords: [
-										{foreach from=$exdata[$smarty.foreach.zone_f.index] item=exdata_c name=exdata_f}
-											{if ($exdata_c.x and $exdata_c.y)}
-												[{$exdata_c.x},{$exdata_c.y},
+								{if $zone.atid}
+									zone:{$zone.atid}
+									{if $zone.points}
+										,
+									{/if}
+								{else}
+									show:false
+								{/if}
+								{if $zone.points}
+									coords:[
+										{foreach from=$zone.points item=point name=point}
+												[{$point.x},{$point.y},
 												{ldelim}
 													label:'$<br>
 													<div class=q0>
 														<small>{#Respawn#}:
-															{if isset($exdata_c.r.h)} {$exdata_c.r.h}{#hr#}{/if}
-															{if isset($exdata_c.r.m)} {$exdata_c.r.m}{#min#}{/if}
-															{if isset($exdata_c.r.s)} {$exdata_c.r.s}{#sec#}{/if}
+															{if isset($point.r.h)} {$point.r.h}{#hr#}{/if}
+															{if isset($point.r.m)} {$point.r.m}{#min#}{/if}
+															{if isset($point.r.s)} {$point.r.s}{#sec#}{/if}
 														</small>
 													</div>',type:'0'
 												{rdelim}]
-											{if $smarty.foreach.exdata_f.last}{else},{/if}
-											{/if}
+												{if !$smarty.foreach.point.last},{/if}
 										{/foreach}
 									]
+								{/if}
 								{rdelim});
 							g_setSelectedLink(this, 'mapper'); return false" onmousedown="return false">
-							{$zone_c.name}</a>{if $zone_c.count>1}&nbsp;({$zone_c.count}){/if}{if $smarty.foreach.zone_f.last}.{else}, {/if}
+							{$zone.name}</a>{if $zone.population > 1}&nbsp;({$zone.population}){/if}{if $smarty.foreach.zone.last}.{else}, {/if}
 					{/foreach}
 				</span></div>
 {/strip}
@@ -69,7 +76,7 @@
 				<div class="clear"></div>
 
 				<script type="text/javascript">
-					var myMapper = new Mapper({ldelim}parent: 'mapper-generic', zone: '{$zonedata[0].zone}'{rdelim});
+					var myMapper = new Mapper({ldelim}parent: 'mapper-generic', zone: '{$object.position[0].atid}'{rdelim});
 					gE(ge('locations'), 'a')[0].onclick();
 				</script>
 

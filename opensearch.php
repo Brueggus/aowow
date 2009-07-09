@@ -1,13 +1,7 @@
 <?php
 
-// Настройки
-error_reporting(2039);
-
-session_start();
-//if(!isset($_SESSION['locale']) || !is_int($_SESSION['locale']))
-//	$_SESSION['locale'] = 0;
-
-require_once 'configs/config.php';
+require_once('configs/config.php');
+require_once('includes/allutil.php');
 // Для Ajax отключаем debug
 $AoWoWconf['debug'] = false;
 // Для Ajax ненужен реалм
@@ -23,24 +17,6 @@ if(strlen($search_query) < 2)
 $search_query = '%'.str_replace('%', '\%', $search_query).'%';
 
 echo '["'.str_replace('"', '\"', $_GET['search']).'", [';
-
-function SideByRace($race)
-{
-	switch ($race)
-	{
-		case '0':
-			// Для всех?
-			return 3;
-		case '690':
-			// Орда?
-			return 2;
-		case '1101':
-			// Альянс?
-			return 1;
-		default:
-			return 0;
-	}
-}
 
 $rows = array();
 
@@ -64,7 +40,7 @@ $rows = $DB->select('
 	$_SESSION['locale'] == 0 ? 'name' : 'name_loc'.$_SESSION['locale']	// ORDER
 );
 
-foreach ($rows as $i => $row)
+foreach($rows as $i => $row)
 	$found[$row['name'].' (Item)'] = array(
 		'type'		=> 3,
 		'entry'		=> $row['entry'],
@@ -90,7 +66,7 @@ $rows = $DB->select('
 	$_SESSION['locale'] == 0 ? 'name' : 'name_loc'.$_SESSION['locale']	// ORDER
 );
 
-foreach ($rows as $i => $row)
+foreach($rows as $i => $row)
 	$found[$row['name'].' (Object)'] = array(
 		'type' => 2,
 		'entry'=>$row['entry'],
@@ -114,7 +90,7 @@ $rows = $DB->select('
 	$_SESSION['locale'] == 0 ? 'Title' : 'Title_loc'.$_SESSION['locale']	// ORDER
 );
 
-foreach ($rows as $i => $row)
+foreach($rows as $i => $row)
 	$found[$row['Title'].' (Quest)'] = array(
 		'type' => 5,
 		'entry'=> $row['entry'],
@@ -139,17 +115,17 @@ $rows = $DB->select('
 	$_SESSION['locale'] == 0 ? 'name' : 'name_loc'.$_SESSION['locale']	// ORDER
 );
 
-foreach ($rows as $i => $row)
+foreach($rows as $i => $row)
 	$found[$row['name'].' (NPC)'] = array(
 		'type' => 1,
 		'entry'=> $row['entry']
 	);
 
 // Если ничего не найдено...
-if (!IsSet($found))
+if(!isset($found))
 {
 	echo ']]';
-	die();
+	exit;
 }
 
 //ksort($found);
@@ -157,10 +133,10 @@ if (!IsSet($found))
 $found = array_slice($found, 0, 10);
 
 $i=0;
-foreach ($found as $name => $fitem)
+foreach($found as $name => $fitem)
 {
 	echo '"'.str_replace('"','\"',$name).'"';
-	if ($i<count($found)-1)
+	if($i<count($found)-1)
 		echo ', ';
 	$i++;
 }
@@ -168,14 +144,14 @@ foreach ($found as $name => $fitem)
 echo '], [], [], [], [], [], [';
 
 $i=0;
-foreach ($found as $name => $fitem)
+foreach($found as $name => $fitem)
 {
 	echo '['.$fitem['type'].', '.$fitem['entry'];
-	if (IsSet($fitem['iconname'])) echo ', "'.$fitem['iconname'].'"';
-	if (IsSet($fitem['quality'])) echo ", ".$fitem['quality'];
-	if (IsSet($fitem['side'])) echo ", ".$fitem['side'];
+	if(isset($fitem['iconname'])) echo ', "'.$fitem['iconname'].'"';
+	if(isset($fitem['quality'])) echo ", ".$fitem['quality'];
+	if(isset($fitem['side'])) echo ", ".$fitem['side'];
 	echo ']';
-	if ($i<count($found)-1)
+	if($i<count($found)-1)
 		echo ',';
 	$i++;
 }

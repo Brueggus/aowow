@@ -1,9 +1,9 @@
 <?php
 
-require_once ('includes/allobjects.php');
-require_once ('includes/allitems.php');
-require_once ('includes/allcomments.php');
-require_once ('includes/allquests.php');
+require_once('includes/allobjects.php');
+require_once('includes/allitems.php');
+require_once('includes/allcomments.php');
+require_once('includes/allquests.php');
 
 $smarty->config_load($conf_file, 'object');
 
@@ -32,13 +32,13 @@ if(!$object = load_cache(3, intval($id)))
 		$quest_cols[2],
 		$id
 	);
-	if ($rows_qs)
+	if($rows_qs)
 	{
 		$object['starts'] = array();
-		foreach ($rows_qs as $numRow=>$row)
+		foreach($rows_qs as $numRow=>$row)
 			$object['starts'][] = GetQuestInfo($row, 0xFFFFFF);
 	}
-	unset ($rows_qs);
+	unset($rows_qs);
 
 	// Заканчивают квесты...
 	$rows_qe = $DB->select('
@@ -51,16 +51,16 @@ if(!$object = load_cache(3, intval($id)))
 		$quest_cols[2],
 		$id
 	);
-	if ($rows_qe)
+	if($rows_qe)
 	{
 		$object['ends'] = array();
-		foreach ($rows_qe as $numRow=>$row)
+		foreach($rows_qe as $numRow=>$row)
 			$object['ends'][] = GetQuestInfo($row, 0xFFFFFF);
 	}
-	unset ($rows_qe);
+	unset($rows_qe);
 
 	// Положения объектофф:
-	position($object['entry'], 'gameobject');
+	$object['position'] = position($object['entry'], 'gameobject');
 
 	save_cache(3, $object['entry'], $object);
 }
@@ -84,9 +84,9 @@ $smarty->assign('page', $page);
 // Комментарии
 $smarty->assign('comments', getcomments($page['type'], $page['typeid']));
 
-if (isset($allitems))
+if(isset($allitems))
 	$smarty->assign('allitems', $allitems);
-if (isset($object))
+if(isset($object))
 	$smarty->assign('object', $object);
 // Количество MySQL запросов
 $smarty->assign('mysql', $DB->getStatistics());

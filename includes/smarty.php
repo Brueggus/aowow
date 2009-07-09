@@ -1,5 +1,5 @@
 <?php
-require_once 'configs/config.php';
+require_once('configs/config.php');
 
 // Директория
 global $cwd;
@@ -8,7 +8,7 @@ global $AoWoWconf;
 $cwd = str_replace("\\", "/", getcwd());
 
 // загружаем библиотеку Smarty
-require_once $cwd.'/includes/Smarty-2.6.19/libs/Smarty.class.php';
+require_once('includes/Smarty-2.6.19/libs/Smarty.class.php');
 class Smarty_AoWoW extends Smarty
 {
 		function Smarty_AoWoW()
@@ -30,6 +30,8 @@ class Smarty_AoWoW extends Smarty
 			$this->caching = false;
 			// Имя сайта
 			$this->assign('app_name', $AoWoWconf['aowow']['name']);
+			// Ревизия
+			$this->assign('AOWOW_REVISION', AOWOW_REVISION);
 		}
 
 		function uDebug($name, $val = 'unset')
@@ -37,5 +39,8 @@ class Smarty_AoWoW extends Smarty
 			$this->append($name,$val);
 		}
 }
+
+// Объект шаблонизатора
+$smarty = new Smarty_AoWoW('wowhead');
 
 ?>

@@ -70,7 +70,8 @@ if (($_REQUEST['account']=='signin') and (isset($_POST['username'])) and (isset(
 }
 
 
-switch($_REQUEST['account']):
+switch($_REQUEST['account'])
+{
 	case '':
 		// TODO: Настройки аккаунта (Account Settings)
 		break;
@@ -104,5 +105,5 @@ switch($_REQUEST['account']):
 			$_REQUEST['next']='';
 		header('Location: ?'.$_REQUEST['next']);
 		break;
-endswitch;
+}
 ?>

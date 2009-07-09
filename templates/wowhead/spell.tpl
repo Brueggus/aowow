@@ -37,7 +37,7 @@
 			<div style="clear: left"></div>
 
 			<script type="text/javascript">
-				ge('icon{$spell.entry}-generic').appendChild(Icon.create('{$spell.icon}', 2, 0, 0, 0));
+				ge('icon{$spell.entry}-generic').appendChild(Icon.create('{$spell.icon}', 2, 0, 0, {$spell.stack}));
 				Tooltip.fix(ge('tooltip{$spell.entry}-generic'), 1, 1);
 			</script>
 

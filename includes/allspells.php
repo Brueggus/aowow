@@ -1,6 +1,6 @@
 <?php
 
-require_once 'includes/allitems.php';
+require_once('includes/allitems.php');
 
 // Названия аур
 $spell_aura_names = array(
@@ -386,7 +386,7 @@ function spell_desc2($spellRow, $type='tooltip')
 				if($op && is_numeric($oparg) && is_numeric($base))
 				{
 					$equation = $base.$op.$oparg;
-					eval('$base = $equation;');
+					eval("\$base = $equation;");
 				}
 				$str .= $base;
 				break;
@@ -404,7 +404,7 @@ function spell_desc2($spellRow, $type='tooltip')
 				if(in_array($op, $signs) && is_numeric($oparg) && is_numeric($base))
 				{
 					$equation = $base.$op.$oparg;
-					eval('$base = $equation;');
+					eval("\$base = $equation;");
 				}
 
 				$str .= $base;
@@ -422,7 +422,7 @@ function spell_desc2($spellRow, $type='tooltip')
 				if(in_array($op, $signs) && is_numeric($oparg) && is_numeric($base))
 				{
 					$equation = $base.$op.$oparg;
-					eval('$base = $equation;');
+					eval("\$base = $equation;");
 				}
 
 				@$str .= abs($base).($spell['effect'.$exprData[0].'DieSides'] > 1 ? LOCALE_VALUE_DELIM.abs(($base+$spell['effect'.$exprData[0].'DieSides'])) : '');
@@ -460,7 +460,7 @@ function spell_desc2($spellRow, $type='tooltip')
 				if(in_array($op, $signs) && is_numeric($oparg) && is_numeric($base))
 				{
 					$equation = $base.$op.$oparg;
-					eval('$base = $equation;');
+					eval("\$base = $equation;");
 				}
 				$str .= abs($base);
 				$lastvalue = $base;
@@ -479,7 +479,7 @@ function spell_desc2($spellRow, $type='tooltip')
 				if(in_array($op, $signs) && is_numeric($oparg) && is_numeric($base))
 				{
 					$equation = $base.$op.$oparg;
-					eval('$base = $equation;');
+					eval("\$base = $equation;");
 				}
 				$str .= abs($base);
 				$lastvalue = $base;
@@ -495,7 +495,7 @@ function spell_desc2($spellRow, $type='tooltip')
 				if(in_array($op, $signs) && is_numeric($oparg) && is_numeric($base))
 				{
 					$equation = $base.$op.$oparg;
-					eval('$base = $equation;');
+					eval("\$base = $equation;");
 				}
 				$str .= abs($base);
 				$lastvalue = $base;
@@ -513,7 +513,7 @@ function spell_desc2($spellRow, $type='tooltip')
 				if(in_array($op, $signs) && is_numeric($oparg) && is_numeric($base))
 				{
 					$equation = $base.$op.$oparg;
-					eval('$base = $equation;');
+					eval("\$base = $equation;");
 				}
 				$str .= abs($base);
 				$lastvalue = $base;
@@ -531,7 +531,7 @@ function spell_desc2($spellRow, $type='tooltip')
 				if(in_array($op, $signs) && is_numeric($oparg) && is_numeric($base))
 				{
 					$equation = $base.$op.$oparg;
-					eval('$base = $equation;');
+					eval("\$base = $equation;");
 				}
 				$str .= abs($base);
 				break;
@@ -546,7 +546,7 @@ function spell_desc2($spellRow, $type='tooltip')
 				if(in_array($op, $signs) && is_numeric($oparg) && is_numeric($base))
 				{
 					$equation = $base.$op.$oparg;
-					eval('$base = $equation;');
+					eval("\$base = $equation;");
 				}
 				$str .= abs($base);
 				break;
@@ -561,7 +561,7 @@ function spell_desc2($spellRow, $type='tooltip')
 				if(in_array($op, $signs) && is_numeric($oparg) && is_numeric($base))
 				{
 					$equation = $base.$op.$oparg;
-					eval('$base = $equation;');
+					eval("\$base = $equation;");
 				}
 				$str .= abs($base);
 				break;
@@ -576,7 +576,7 @@ function spell_desc2($spellRow, $type='tooltip')
 				if(in_array($op, $signs) && is_numeric($oparg) && is_numeric($base))
 				{
 					$equation = $base.$op.$oparg;
-					eval('$base = $equation;');
+					eval("\$base = $equation;");
 				}
 				$str .= abs($base);
 				break;
@@ -592,7 +592,7 @@ function spell_desc2($spellRow, $type='tooltip')
 				if($op && is_numeric($oparg) && is_numeric($base))
 				{
 					$equation = $base.$op.$oparg;
-					eval('$base = $equation;');
+					eval("\$base = $equation;");
 				}
 				$str .= spell_duration($base);
 				break;
@@ -602,7 +602,7 @@ function spell_desc2($spellRow, $type='tooltip')
 				if($op && is_numeric($oparg) && is_numeric($base))
 				{
 					$equation = $base.$op.$oparg;
-					eval('$base = $equation;');
+					eval("\$base = $equation;");
 				}
 				$str .= $base;
 				break;
@@ -617,7 +617,7 @@ function spell_desc2($spellRow, $type='tooltip')
 				if(in_array($op, $signs) && is_numeric($oparg) && is_numeric($base))
 				{
 					$equation = $base.$op.$oparg;
-					eval('$base = $equation;');
+					eval("\$base = $equation;");
 				}
 
 				$str .= $base;
@@ -629,7 +629,7 @@ function spell_desc2($spellRow, $type='tooltip')
 				if($op && $oparg > 0 && $base > 0)
 				{
 					$equation = $base.$op.$oparg;
-					eval('$base = $equation;');
+					eval("\$base = $equation;");
 				}
 				$str .= $base;
 				break; 
@@ -646,7 +646,7 @@ function spell_desc2($spellRow, $type='tooltip')
 				if(in_array($op, $signs) && is_numeric($oparg) && is_numeric($base))
 				{
 					$equation = $base.$op.$oparg;
-					eval('$base = $equation;');
+					eval("\$base = $equation;");
 				}
 				$str .= abs($base);
 				$lastvalue = $base;
@@ -662,7 +662,7 @@ function spell_desc2($spellRow, $type='tooltip')
 				if(in_array($op, $signs) && is_numeric($oparg) && is_numeric($base))
 				{
 					$equation = $base.$op.$oparg;
-					eval('$base = $equation;');
+					eval("\$base = $equation;");
 				}
 				$str .= abs($base);
 				$lastvalue = $base;
@@ -703,7 +703,7 @@ function render_spell_tooltip(&$row)
 	$i=0;
 	for($j=1;$j<=8;$j++)
 	{
-		if($row['reagent'.$j])
+		if($row['reagent'.$j] > 0)
 		{
 			$reagents[$i] = array();
 			// Имя реагента
@@ -718,7 +718,8 @@ function render_spell_tooltip(&$row)
 			);
 			$reagents[$i]['name'] = localizedName($names);
 			// Количество реагентов
-			$reagents[$i]['count'] = $row['reagentcount'.$j];
+			// В количестве может быть значение -1, что с ним делать?
+			$reagents[$i]['count'] = abs($row['reagentcount'.$j]);
 			$i++;
 		}
 	}

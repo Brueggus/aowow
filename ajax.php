@@ -1,24 +1,15 @@
 <?php
-
 header('Content-type: application/x-javascript');
-error_reporting(2039);
-ini_set('serialize_precision', 4);
-session_start();
+require_once('includes/allutil.php');
 
 // Настройки
-require_once 'configs/config.php';
+require_once('configs/config.php');
 // Для Ajax отключаем debug
 $AoWoWconf['debug'] = false;
 // Для Ajax ненужен реалм
 $AoWoWconf['realmd'] = false;
 // Настройка БД
-global $DB;
 require_once('includes/db.php');
-
-function str_normalize($string)
-{
-	return strtr($string, array('\\'=>'\\\\',"'"=>"\\'",'"'=>'\\"',"\r"=>'\\r',"\n"=>'\\n','</'=>'<\/'));
-}
 
 // Параметры передаваемые скрипту
 @list($what, $id) = explode("=", $_SERVER['QUERY_STRING']);
@@ -37,13 +28,13 @@ switch($what)
 		}
 		$x .= '$WowheadPower.registerItem('.$id.', 0, {';
 		if ($item['name'])
-			$x .= 'name: \''.str_normalize($item['name']).'\',';
+			$x .= 'name: \''.ajax_str_normalize($item['name']).'\',';
 		if ($item['quality'])
 			$x .= 'quality: '.$item['quality'].',';
 		if ($item['icon'])
-			$x .= 'icon: \''.str_normalize($item['icon']).'\',';
+			$x .= 'icon: \''.ajax_str_normalize($item['icon']).'\',';
 		if ($item['info'])
-			$x .= 'tooltip: \''.str_normalize($item['info']).'\'';
+			$x .= 'tooltip: \''.ajax_str_normalize($item['info']).'\'';
 		$x .= '});';
 		break;
 	case 'spell':
@@ -55,11 +46,11 @@ switch($what)
 		}
 		$x .= '$WowheadPower.registerSpell('.$id.', 0,{';
 		if ($spell['name'])
-			$x .= 'name: \''.str_normalize($spell['name']).'\',';
+			$x .= 'name: \''.ajax_str_normalize($spell['name']).'\',';
 		if ($spell['icon'])
-			$x .= 'icon: \''.str_normalize($spell['icon']).'\',';
+			$x .= 'icon: \''.ajax_str_normalize($spell['icon']).'\',';
 		if ($spell['info'])
-			$x .= 'tooltip: \''.str_normalize($spell['info']).'\'';
+			$x .= 'tooltip: \''.ajax_str_normalize($spell['info']).'\'';
 		$x .= '});';
 		break;
 	case 'quest':
@@ -72,9 +63,9 @@ switch($what)
 		}
 		$x .= '$WowheadPower.registerQuest('.$id.', 0,{';
 		if($quest['name'])
-			$x .= 'name: \''.str_normalize($quest['name']).'\',';
+			$x .= 'name: \''.ajax_str_normalize($quest['name']).'\',';
 		if($quest['tooltip'])
-			$x .= 'tooltip: \''.str_normalize($quest['tooltip']).'\'';
+			$x .= 'tooltip: \''.ajax_str_normalize($quest['tooltip']).'\'';
 		$x .= '});';
 		break;
 	default:

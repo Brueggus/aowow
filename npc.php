@@ -370,10 +370,10 @@ if(!$npc = load_cache(1, intval($id)))
 	// Положения созданий божих (для героик НПС не задана карта, юзаем из нормала):
 	if($normal_entry)
 		// мы - героик НПС, определяем позицию по нормалу
-		position($normal_entry, 'creature', 2);
+		$npc['position'] = position($normal_entry, 'creature', 2);
 	else
 		// мы - нормал НПС или НПС без сложности
-		position($npc['entry'], 'creature', 1);
+		$npc['position'] = position($npc['entry'], 'creature', 1);
 
 	save_cache(1, $npc['entry'], $npc);
 }
