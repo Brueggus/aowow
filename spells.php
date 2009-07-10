@@ -218,9 +218,9 @@ $smarty->assign('page', $page);
 // Статистика выполнения mysql запросов
 $smarty->assign('mysql', $DB->getStatistics());
 // Если хоть одна информация о вещи найдена - передаём массив с информацией о вещях шаблонизатору
-$smarty->assign('allitems',$allitems);
-$smarty->assign('allspells',$allspells);
-$smarty->assign('spells',$spells['data']);
+$smarty->assign('allitems', $allitems);
+$smarty->assign('allspells', $allspells);
+$smarty->assign('spells', $spells['data']);
 // Загружаем страницу
 $smarty->display('spells.tpl');
 

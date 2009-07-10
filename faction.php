@@ -22,11 +22,20 @@ if(!$faction = load_cache(18, intval($id)))
 	global $DB;
 
 	$row = $DB->selectRow('
-			SELECT factionID, name_loc'.$_SESSION['locale'].', description1_loc'.$_SESSION['locale'].', description2_loc'.$_SESSION['locale'].', team, side
-			FROM ?_factions
-			WHERE factionID=?d
+			SELECT
+				f1.factionID, f1.name_loc?d, f1.description1_loc?d, f1.description2_loc?d,
+				f1.team, f1.side, f2.factionID AS category2, f2.name_loc?d AS `group`
+			FROM ?_factions f1
+			LEFT JOIN (?_factions f2) ON f1.team <> 0
+			WHERE
+				f1.factionID = ?d
+				AND f1.team = f2.factionID
 			LIMIT 1
 		',
+		$_SESSION['locale'],
+		$_SESSION['locale'],
+		$_SESSION['locale'],
+		$_SESSION['locale'],
 		$id
 	);
 	if($row)
@@ -41,10 +50,14 @@ if(!$faction = load_cache(18, intval($id)))
 		// Описание фракции, c wowwiki.com, находится в таблице factions.sql:
 		$faction['description2'] = $row['description2_loc'.$_SESSION['locale']];
 		// Команда/Группа фракции
-		if($row['team']!=0)
-			$faction['group'] = $DB->selectCell('SELECT name_loc'.$_SESSION['locale'].' FROM ?_factions WHERE factionID = ?d LIMIT 1', $row['team']);
+		if($row['category2'] <> 0)
+		{
+			$faction['group'] = $row['group'];
+			$faction['category'] = $DB->selectCell('SELECT team FROM ?_factions WHERE factionID = ?d LIMIT 1', $row['category2']);
+			$faction['category2'] = $row['category2'];
+		}
 		// Альянс(1)/Орда(2)
-		if($row['side']!=0)
+		if($row['side'] <> 0)
 			$faction['side'] = $row['side'];
 
 		// Итемы с requiredreputationfaction
@@ -118,7 +131,7 @@ $page = array(
 	'tab' => 0,
 	'type' => 8,
 	'typeid' => $faction['entry'],
-	'path' => '[0, 7, 0]'
+	'path' => '[0, 7'.($faction['category']?', '.$faction['category']:'').($faction['category2']?', '.$faction['category2']:'').']'
 );
 $smarty->assign('page', $page);
 
