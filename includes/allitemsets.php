@@ -24,11 +24,11 @@ function itemsetinfo2(&$row)
 		}
 	if(isset($item))
 	{
-		$itemset['quality2'] = 6 - $item['quality'];
+		$itemset['quality2'] = 7 - $item['quality'];
 		if($item['classs']==4)
 			$itemset['type'] = $item['subclass'];
 	} else {
-		$itemset['quality2'] = 6;
+		$itemset['quality2'] = 7;
 	}
 	// TODO: classes
 	$itemset['classes'][] = 0;

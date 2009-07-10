@@ -3,44 +3,82 @@ $smarty->config_load($conf_file, 'factions');
 
 global $DB;
 
-$rows = $DB->select('
-		SELECT factionID, team, name_loc?d AS name, side
-		FROM ?_factions
-		WHERE
-			reputationListID != -1
-	',
-	$_SESSION['locale']
-);
-if(!$factions = load_cache(19, 'x'))
+@list($c1, $c2) = explode('.', $podrazdel);
+$category = $c2 ? $c2 : $c1;
+
+$cache_str = $category ? $category : 'x';
+
+if(!$factions = load_cache(19, $cache_str))
 {
 	unset($factions);
 
-	$factions = array();
-	foreach($rows as $i => $row)
+	$factions = $DB->select('
+			SELECT f1.factionID AS entry, f1.team, f1.name_loc?d AS name, f1.side, { f2.?# }{ ?d } AS category2, ?d AS category
+			FROM ?_factions f1
+			{ LEFT JOIN (?_factions f2) ON f1.team <> ?d }
+			WHERE
+				f1.reputationListID != -1
+				{ AND f1.team = f2.?# }
+				{ AND f1.team = ? }
+			ORDER BY f1.name_loc?d
+		',
+		$_SESSION['locale'],
+		!$category ? 'factionID' : DBSIMPLE_SKIP,
+		$category ? intval($c1) : DBSIMPLE_SKIP,
+		intval($c2),
+		!$category ? 0 : DBSIMPLE_SKIP,
+		!$category ? 'factionID' : DBSIMPLE_SKIP,
+		$category ? $category : DBSIMPLE_SKIP,
+		$_SESSION['locale']
+	);
+	if($c1 && !$c2)
 	{
-		$factions[$i] = array();
-		$factions[$i]['entry'] = $row['factionID'];
+		$entrys = array();
+		foreach($factions as $f)
+			$entrys[] = $f['entry'];
 
-		if($row['team'] <> 0)
-			$factions[$i]['group'] = $DB->selectCell('SELECT name_loc'.$_SESSION['locale'].' FROM ?_factions WHERE factionID=? LIMIT 1', $row['team']);
+		$factions = array_merge($factions, $DB->select('
+				SELECT f1.factionID AS entry, f1.team, f1.name_loc?d AS name, f1.side, f1.team AS category2, ?d AS category
+				FROM ?_factions f1
+				WHERE
+					f1.reputationListID != -1
+					AND f1.team IN (?a)
+			',
+			$_SESSION['locale'],
+			intval($c2),
+			$entrys
+		));
 
-		if($row['side'])
-			$factions[$i]['side'] = $row['side'];
-
-		$factions[$i]['name'] = $row['name'];
+		// Сортируем массив
+		do
+		{
+			$changed = false;
+			for($i = 0; $i < count($factions); $i++)
+			{
+				// $l - предыдущий элемент массива
+				if(isset($l) && strcmp($factions[$l]['name'], $factions[$i]['name']) == 1)
+				{
+					$tmp = $factions[$l];
+					$factions[$l] = $factions[$i];
+					$factions[$i] = $tmp;
+					$changed = true;
+				}
+				$l = $i;
+			}
+			unset($l);
+		} while($changed);
 	}
-	save_cache(19, 'x', $factions);
+
+	save_cache(19, $cache_str, $factions);
 }
 
 global $page;
 $page = array(
-	'Mapper' => false,
-	'Book' => false,
 	'Title' => $smarty->get_config_vars('Factions'),
 	'tab' => 0,
 	'type' => 0,
 	'typeid' => 0,
-	'path' => '[0, 7]'
+	'path' => '[0, 7'.($c1?', '.$c1:'').($c2?', '.$c2:'').']'
 );
 $smarty->assign('page', $page);
 
