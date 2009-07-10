@@ -2,6 +2,7 @@
 
 require_once('includes/game.php');
 require_once('includes/alllocales.php');
+require_once('includes/allitems.php');
 
 global $AoWoWconf;
 
