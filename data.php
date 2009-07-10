@@ -130,6 +130,7 @@ switch($_GET['data'])
 			imagetograyscale($im);
 			imagejpeg($im, 'cache/images/'.$iconname.'.jpg');
 			imagejpeg($im);
+			save_cache(21, $iconname, $iconname);
 		}
 		break;
 	default:
