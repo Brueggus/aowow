@@ -118,7 +118,7 @@ $rows = $DB->select('
 foreach($rows as $i => $row)
 	$found[$row['name'].' (NPC)'] = array(
 		'type' => 1,
-		'entry'=> $row['entry']
+		'entry' => $row['entry']
 	);
 
 // Если ничего не найдено...
@@ -135,7 +135,7 @@ $found = array_slice($found, 0, 10);
 $i=0;
 foreach($found as $name => $fitem)
 {
-	echo '"'.str_replace('"','\"',$name).'"';
+	echo '"'.str_replace('"', '\"', $name).'"';
 	if($i<count($found)-1)
 		echo ', ';
 	$i++;
@@ -152,7 +152,7 @@ foreach($found as $name => $fitem)
 	if(isset($fitem['side'])) echo ", ".$fitem['side'];
 	echo ']';
 	if($i<count($found)-1)
-		echo ',';
+		echo ', ';
 	$i++;
 }
 

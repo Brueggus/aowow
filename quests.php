@@ -33,13 +33,13 @@ if(!$quests = load_cache(12, $cache_str))
 		$quest_cols[2],
 		($_SESSION['locale']>0)? $_SESSION['locale']: DBSIMPLE_SKIP,
 		($_SESSION['locale']>0)? 1: DBSIMPLE_SKIP,
-		(IsSet($ZoneOrSort))? $ZoneOrSort : DBSIMPLE_SKIP,
-		((!IsSet($ZoneOrSort)) and $Type)? $quest_class[$Type] : DBSIMPLE_SKIP,
+		(isset($ZoneOrSort))? $ZoneOrSort : DBSIMPLE_SKIP,
+		((!isset($ZoneOrSort)) and $Type)? $quest_class[$Type] : DBSIMPLE_SKIP,
 		($AoWoWconf['limit'] > 0)? $AoWoWconf['limit']: DBSIMPLE_SKIP
 	);
 
 	$quests = array();
-	foreach($rows as $numRow=>$row)
+	foreach($rows as $row)
 		$quests[] = GetQuestInfo($row, QUEST_DATAFLAG_LISTINGS);
 
 	save_cache(12, $cache_str, $quests);
@@ -57,10 +57,8 @@ $page = array(
 $smarty->assign('page', $page);
 
 // Если хоть одна информация о вещи найдена - передаём массив с информацией о вещях шаблонизатору
-if($allitems)
-	$smarty->assign('allitems',$allitems);
-if($quests)
-	$smarty->assign('quests',$quests);
+$smarty->assign('allitems',$allitems);
+$smarty->assign('quests',$quests);
 // Количество MySQL запросов
 $smarty->assign('mysql', $DB->getStatistics());
 // Загружаем страницу

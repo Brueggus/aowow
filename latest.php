@@ -55,7 +55,8 @@ switch($_GET['latest'])
 		}
 		$smarty->assign('comments', $comments);
 		break;
-	default: break;
+	default:
+		break;
 }
 
 global $page;

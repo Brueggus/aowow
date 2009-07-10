@@ -9,7 +9,7 @@ require_once('includes/allobjects.php');
 require_once('includes/allcomments.php');
 
 // Загружаем файл перевода для smarty
-$smarty->config_load($conf_file,'item');
+$smarty->config_load($conf_file, 'item');
 
 $id = $podrazdel;
 if(!$item = load_cache(5, $id))
@@ -28,8 +28,8 @@ if(!$item = load_cache(5, $id))
 	$item = iteminfo($podrazdel, 1);
 
 	// Поиск мобов с которых эта вещь лутится
-	$drops_cr = drop('creature_loot_template',$item['entry']);
-	if ($drops_cr)
+	$drops_cr = drop('creature_loot_template', $item['entry']);
+	if($drops_cr)
 	{
 		$item['droppedby'] = array();
 		foreach($drops_cr as $lootid => $drop)
@@ -52,18 +52,18 @@ if(!$item = load_cache(5, $id))
 				($_SESSION['locale']>0)? 1: DBSIMPLE_SKIP,
 				$lootid
 			);
-			foreach ($rows as $numRow=>$row)
+			foreach($rows as $row)
 				$item['droppedby'][] = array_merge(creatureinfo2($row), $drop);
 		}
-		unset ($rows);
-		unset ($lootid);
-		unset ($drop);
+		unset($rows);
+		unset($lootid);
+		unset($drop);
 	}
-	unset ($drops_cr);
+	unset($drops_cr);
 
 	// Поиск объектов, из которых лутится эта вещь
-	$drops_go = drop('gameobject_loot_template',$item['entry']);
-	if ($drops_go)
+	$drops_go = drop('gameobject_loot_template', $item['entry']);
+	if($drops_go)
 	{
 		$item['containedinobject'] = array();
 		$item['minedfromobject'] = array();
@@ -87,33 +87,30 @@ if(!$item = load_cache(5, $id))
 				LOCK_PROPERTIES_HERBALISM,
 				LOCK_PROPERTIES_MINING
 			);
-			foreach ($rows as $numRow=>$row)
+			foreach($rows as $row)
 			{
-				if ($row['lockproperties1'] == LOCK_PROPERTIES_MINING)
-				{
-					// Залежи руды
+				// Залежи руды
+				if($row['lockproperties1'] == LOCK_PROPERTIES_MINING)
 					$item['minedfromobject'][] = array_merge(objectinfo2($row), $drop);
-				} elseif ($row['lockproperties1'] == LOCK_PROPERTIES_HERBALISM)
-				{
-					// Собирается с трав
+				// Собирается с трав
+				elseif($row['lockproperties1'] == LOCK_PROPERTIES_HERBALISM)
 					$item['gatheredfromobject'][] = array_merge(objectinfo2($row), $drop);
-				} else {
-					// Сундуки
+				// Сундуки
+				else
 					$item['containedinobject'][] = array_merge(objectinfo2($row), $drop);
-				}
 			}
 		}
 
-		if (!($item['containedinobject']))
-			unset ($item['containedinobject']);
-		if (!($item['minedfromobject']))
-			unset ($item['minedfromobject']);
-		if (!($item['gatheredfromobject']))
-			unset ($item['gatheredfromobject']);
+		if(!$item['containedinobject'])
+			unset($item['containedinobject']);
+		if(!$item['minedfromobject'])
+			unset($item['minedfromobject']);
+		if(!$item['gatheredfromobject'])
+			unset($item['gatheredfromobject']);
 
-		unset ($rows);
+		unset($rows);
 	}
-	unset ($drops_go);
+	unset($drops_go);
 
 	// Поиск вендеров, которые эту вещь продают
 	$rows_soldby = $DB->select('
@@ -136,36 +133,34 @@ if(!$item = load_cache(5, $id))
 		($_SESSION['locale']>0)? 1: DBSIMPLE_SKIP,
 		$item['entry']
 	);
-	if ($rows_soldby)
+	if($rows_soldby)
 	{
 		$item['soldby'] = array();
-		foreach ($rows_soldby as $numRow=>$row)
+		foreach($rows_soldby as $i => $row)
 		{
-			$item['soldby'][$numRow] = array();
-			$item['soldby'][$numRow] = creatureinfo2($row);
-			$item['soldby'][$numRow]['stock'] = ($row['stock']==0)? -1 : $row['stock'];
-			if ($row['ExtendedCost'])
+			$item['soldby'][$i] = array();
+			$item['soldby'][$i] = creatureinfo2($row);
+			$item['soldby'][$i]['stock'] = ($row['stock'] == 0 ? -1 : $row['stock']);
+			if($row['ExtendedCost'])
 			{
-				$item['soldby'][$numRow]['cost'] = array();
+				$item['soldby'][$i]['cost'] = array();
 				$extcost = $DB->selectRow('SELECT * FROM ?_item_extended_cost WHERE extendedcostID=?d LIMIT 1', $row['ExtendedCost']);
-				if ($extcost['reqhonorpoints']>0)
-					$item['soldby'][$numRow]['cost']['honor'] = (($row['A']==1)? 1: -1) * $extcost['reqhonorpoints'];
-				if ($extcost['reqarenapoints']>0)
-					$item['soldby'][$numRow]['cost']['arena'] = $extcost['reqarenapoints'];
-				$item['soldby'][$numRow]['cost']['items'] = array();
+				if($extcost['reqhonorpoints'])
+					$item['soldby'][$i]['cost']['honor'] = ($row['A'] == 1 ? 1 : -1) * $extcost['reqhonorpoints'];
+				if($extcost['reqarenapoints'])
+					$item['soldby'][$i]['cost']['arena'] = $extcost['reqarenapoints'];
+				$item['soldby'][$i]['cost']['items'] = array();
 				for ($j=1;$j<=5;$j++)
-					if (($extcost['reqitem'.$j]>0) and ($extcost['reqitemcount'.$j]>0))
+					if(($extcost['reqitem'.$j]>0) and ($extcost['reqitemcount'.$j]>0))
 					{
 						allitemsinfo($extcost['reqitem'.$j], 0);
-						$item['soldby'][$numRow]['cost']['items'][] = array('item' => $extcost['reqitem'.$j], 'count' => $extcost['reqitemcount'.$j]);
+						$item['soldby'][$i]['cost']['items'][] = array('item' => $extcost['reqitem'.$j], 'count' => $extcost['reqitemcount'.$j]);
 					}
-			} else {
-				$item['soldby'][$numRow]['cost']['money'] = $item['BuyPrice'];
 			}
+			else
+				$item['soldby'][$i]['cost']['money'] = $item['BuyPrice'];
 		}
 		unset($extcost);
-		unset($numRow);
-		unset($row);
 	}
 	unset($rows_soldby);
 
@@ -181,17 +176,17 @@ if(!$item = load_cache(5, $id))
 			OR ReqItemId4=?d
 		',
 		$quest_cols[2],
-		($_SESSION['locale']>0)? $_SESSION['locale']: DBSIMPLE_SKIP,
-		($_SESSION['locale']>0)? 1: DBSIMPLE_SKIP,
+		$_SESSION['locale'] > 0 ? $_SESSION['locale'] : DBSIMPLE_SKIP,
+		$_SESSION['locale'] > 0 ? 1 : DBSIMPLE_SKIP,
 		$item['entry'], $item['entry'], $item['entry'], $item['entry']
 	);
-	if ($rows_qr)
+	if($rows_qr)
 	{
 		$item['objectiveof'] = array();
-		foreach ($rows_qr as $numRow=>$row)
+		foreach($rows_qr as $row)
 			$item['objectiveof'][] = GetQuestInfo($row, 0xFFFFFF);
 	}
-	unset ($rows_qr);
+	unset($rows_qr);
 
 	// Поиск квестов, наградой за выполнение которых, является этот предмет
 	$rows_qrw = $DB->select('
@@ -216,17 +211,17 @@ if(!$item = load_cache(5, $id))
 		$item['entry'], $item['entry'], $item['entry'], $item['entry'], $item['entry'],
 		$item['entry'], $item['entry'], $item['entry'], $item['entry'], $item['entry']
 	);
-	if ($rows_qrw)
+	if($rows_qrw)
 	{
 		$item['rewardof'] = array();
-		foreach ($rows_qrw as $numRow=>$row)
+		foreach($rows_qrw as $row)
 			$item['rewardof'][] = GetQuestInfo($row, 0xFFFFFF);
 	}
-	unset ($rows_qrw);
+	unset($rows_qrw);
 
 	// Поиск вещей, в которых находятся эти вещи
-	$drops_cii = drop('item_loot_template',$item['entry']);
-	if ($drops_cii)
+	$drops_cii = drop('item_loot_template', $item['entry']);
+	if($drops_cii)
 	{
 		$item['containedinitem'] = array();
 		foreach($drops_cii as $lootid => $drop)
@@ -245,22 +240,22 @@ if(!$item = load_cache(5, $id))
 				($_SESSION['locale']>0)? 1: DBSIMPLE_SKIP,
 				$lootid
 			);
-			foreach ($rows as $numRow=>$row)
+			foreach($rows as $row)
 				$item['containedinitem'][] = array_merge(iteminfo2($row, 0), $drop);
 		}
-		unset ($drops_cii);
-		unset ($rows);
-		unset ($lootid);
-		unset ($drop);
+		unset($drops_cii);
+		unset($rows);
+		unset($lootid);
+		unset($drop);
 	}
 
 	// Какие вещи содержатся в этой вещи
-	if (!($item['contains'] = loot('item_loot_template', $item['entry'])))
-		unset ($item['contains']);
+	if(!($item['contains'] = loot('item_loot_template', $item['entry'])))
+		unset($item['contains']);
 
 	// Поиск созданий, у которых воруется вещь
-	$drops_pp = drop('pickpocketing_loot_template',$item['entry']);
-	if ($drops_pp)
+	$drops_pp = drop('pickpocketing_loot_template', $item['entry']);
+	if($drops_pp)
 	{
 		$item['pickpocketingloot'] = array();
 		foreach($drops_pp as $lootid => $drop)
@@ -283,18 +278,18 @@ if(!$item = load_cache(5, $id))
 				($_SESSION['locale']>0)? 1: DBSIMPLE_SKIP,
 				$lootid
 			);
-			foreach ($rows as $numRow=>$row)
+			foreach($rows as $row)
 				$item['pickpocketingloot'][] = array_merge(creatureinfo2($row), $drop);
 		}
-		unset ($rows);
-		unset ($lootid);
-		unset ($drop);
+		unset($rows);
+		unset($lootid);
+		unset($drop);
 	}
-	unset ($drops_pp);
+	unset($drops_pp);
 
 	// Поиск созданий, с которых сдираеццо эта шкура
-	$drops_sk = drop('skinning_loot_template',$item['entry']);
-	if ($drops_sk)
+	$drops_sk = drop('skinning_loot_template', $item['entry']);
+	if($drops_sk)
 	{
 		$item['skinnedfrom'] = array();
 		foreach($drops_sk as $lootid => $drop)
@@ -317,18 +312,18 @@ if(!$item = load_cache(5, $id))
 				($_SESSION['locale']>0)? 1: DBSIMPLE_SKIP,
 				$lootid
 			);
-			foreach ($rows as $numRow=>$row)
+			foreach($rows as $row)
 				$item['skinnedfrom'][] = array_merge(creatureinfo2($row), $drop);
 		}
-		unset ($rows);
-		unset ($lootid);
-		unset ($drop);
+		unset($rows);
+		unset($lootid);
+		unset($drop);
 	}
-	unset ($drops_sk);
+	unset($drops_sk);
 
 	// Поиск вещей, из которых перерабатывается эта вещь
-	$drops_pr = drop('prospecting_loot_template',$item['entry']);
-	if ($drops_pr)
+	$drops_pr = drop('prospecting_loot_template', $item['entry']);
+	if($drops_pr)
 	{
 		$item['prospectingloot'] = array();
 		foreach($drops_pr as $lootid => $drop)
@@ -349,22 +344,22 @@ if(!$item = load_cache(5, $id))
 				($_SESSION['locale']>0)? 1: DBSIMPLE_SKIP,
 				$lootid
 			);
-			foreach ($rows as $numRow=>$row)
+			foreach($rows as $row)
 				$item['prospectingloot'][] = array_merge(iteminfo2($row, 0), $drop);
 		}
-		unset ($rows);
-		unset ($lootid);
-		unset ($drop);
+		unset($rows);
+		unset($lootid);
+		unset($drop);
 	}
-	unset ($drops_pr);
+	unset($drops_pr);
 
 	// Дизенчантитcя в:
-	if (!($item['disenchanting'] = loot('disenchant_loot_template', $item['DisenchantID'])))
-		unset ($item['disenchanting']);
+	if(!($item['disenchanting'] = loot('disenchant_loot_template', $item['DisenchantID'])))
+		unset($item['disenchanting']);
 
 	// Получается дизэнчантом из..
-	$drops_de = drop('disenchant_loot_template',$item['entry']);
-	if ($drops_de)
+	$drops_de = drop('disenchant_loot_template', $item['entry']);
+	if($drops_de)
 	{
 		$item['disenchantedfrom'] = array();
 		foreach($drops_de as $lootid => $drop)
@@ -385,21 +380,21 @@ if(!$item = load_cache(5, $id))
 				($_SESSION['locale']>0)? 1: DBSIMPLE_SKIP,
 				$lootid
 			);
-			foreach ($rows as $numRow=>$row)
+			foreach($rows as $row)
 				$item['disenchantedfrom'][] = array_merge(iteminfo2($row, 0), $drop);
 		}
-		unset ($rows);
-		unset ($lootid);
-		unset ($drop);
+		unset($rows);
+		unset($lootid);
+		unset($drop);
 	}
-	unset ($drops_de);
+	unset($drops_de);
 
 	// Поиск сумок в которые эту вещь можно положить
-	if ($item['BagFamily'] == 256)
+	if($item['BagFamily'] == 256)
 	{
 		// Если это ключ
 		$item['key'] = true;
-	} elseif ($item['BagFamily'] > 0 and $item['ContainerSlots'] == 0) {
+	} elseif($item['BagFamily'] > 0 and $item['ContainerSlots'] == 0) {
 		$rows_cpi = $DB->select('
 			SELECT c.?#, c.entry, maxcount
 			{
@@ -417,13 +412,13 @@ if(!$item = load_cache(5, $id))
 			($_SESSION['locale']>0)? 1: DBSIMPLE_SKIP,
 			$item['BagFamily']
 		);
-		if ($rows_cpi)
+		if($rows_cpi)
 		{
 			$item['canbeplacedin'] = array();
-			foreach ($rows_cpi as $numRow=>$row)
+			foreach($rows_cpi as $row)
 				$item['canbeplacedin'][] = iteminfo2($row, 0);
 		}
-		unset ($rows_cpi);
+		unset($rows_cpi);
 	}
 
 	// Реагент для...
@@ -445,39 +440,39 @@ if(!$item = load_cache(5, $id))
 		$item['entry'], $item['entry'], $item['entry'], $item['entry'],
 		$item['entry'], $item['entry'], $item['entry'], $item['entry']
 	);
-	if ($rows_r)
+	if($rows_r)
 	{
 		$item['reagentfor'] = array();
 		$quality = 1;
-		foreach ($rows_r as $numRow=>$row)
+		foreach($rows_r as $i=>$row)
 		{
-			$item['reagentfor'][$numRow] = array();
-			$item['reagentfor'][$numRow]['entry'] = $row['spellID'];
-			$item['reagentfor'][$numRow]['name'] = $row['spellname_loc'.$_SESSION['locale']];
-			$item['reagentfor'][$numRow]['school'] = $row['resistancesID'];
-			$item['reagentfor'][$numRow]['level'] = $row['levelspell'];
-			$item['reagentfor'][$numRow]['quality'] = '@';
+			$item['reagentfor'][$i] = array();
+			$item['reagentfor'][$i]['entry'] = $row['spellID'];
+			$item['reagentfor'][$i]['name'] = $row['spellname_loc'.$_SESSION['locale']];
+			$item['reagentfor'][$i]['school'] = $row['resistancesID'];
+			$item['reagentfor'][$i]['level'] = $row['levelspell'];
+			$item['reagentfor'][$i]['quality'] = '@';
 			for ($j=1;$j<=8;$j++)
-				if ($row['reagent'.$j])
+				if($row['reagent'.$j])
 				{
-					$item['reagentfor'][$numRow]['reagents'][]['entry'] = $row['reagent'.$j];
-					$item['reagentfor'][$numRow]['reagents'][count($item['reagentfor'][$numRow]['reagents'])-1]['count'] = $row['reagentcount'.$j];
+					$item['reagentfor'][$i]['reagents'][]['entry'] = $row['reagent'.$j];
+					$item['reagentfor'][$i]['reagents'][count($item['reagentfor'][$i]['reagents'])-1]['count'] = $row['reagentcount'.$j];
 					allitemsinfo($row['reagent'.$j], 0);
 				}
 			for ($j=1;$j<=3;$j++)
-				if ($row['effect'.$j.'itemtype'])
+				if($row['effect'.$j.'itemtype'])
 				{
-					$item['reagentfor'][$numRow]['creates'][]['entry'] = $row['effect'.$j.'itemtype'];
-					$item['reagentfor'][$numRow]['creates'][count($item['reagentfor'][$numRow]['creates'])-1]['count'] = 1 + $row['effect'.$j.'BasePoints'];
+					$item['reagentfor'][$i]['creates'][]['entry'] = $row['effect'.$j.'itemtype'];
+					$item['reagentfor'][$i]['creates'][count($item['reagentfor'][$i]['creates'])-1]['count'] = 1 + $row['effect'.$j.'BasePoints'];
 					allitemsinfo($row['effect'.$j.'itemtype'], 0);
-					@$item['reagentfor'][$numRow]['quality'] = 6 - $allitems[$row['effect'.$j.'itemtype']]['quality'];
+					@$item['reagentfor'][$i]['quality'] = 6 - $allitems[$row['effect'.$j.'itemtype']]['quality'];
 				}
 			// Добавляем в таблицу спеллов
 			allspellsinfo2($row);
 		}
-		unset ($quality);
+		unset($quality);
 	}
-	unset ($rows_r);
+	unset($rows_r);
 
 	// Создается из...
 	$rows_cf = $DB->select('
@@ -492,10 +487,10 @@ if(!$item = load_cache(5, $id))
 		$spell_cols[2],
 		$item['entry'], $item['entry'], $item['entry']
 	);
-	if ($rows_cf)
+	if($rows_cf)
 	{
 		$item['createdfrom'] = array();
-		foreach ($rows_cf as $numRow=>$row)
+		foreach($rows_cf as $row)
 		{
 			$skillrow = $DB->selectRow('
 				SELECT skillID, min_value, max_value
@@ -506,13 +501,13 @@ if(!$item = load_cache(5, $id))
 			);
 			$item['createdfrom'][] = spellinfo2(array_merge($row, $skillrow));
 		}
-		unset ($skillrow);
+		unset($skillrow);
 	}
-	unset ($rows_cf);
+	unset($rows_cf);
 
 	// Ловится в ...
-	$drops_fi = drop('fishing_loot_template',$item['entry']);
-	if ($drops_fi)
+	$drops_fi = drop('fishing_loot_template', $item['entry']);
+	if($drops_fi)
 	{
 		$item['fishedin'] = array();
 		foreach($drops_fi as $lootid => $drop)
@@ -528,7 +523,7 @@ if(!$item = load_cache(5, $id))
 				',
 				$lootid
 			);
-			if ($row)
+			if($row)
 			{
 				$item['fishedin'][] = array_merge($row, $drop);
 			} else {
@@ -542,18 +537,18 @@ if(!$item = load_cache(5, $id))
 					',
 					$lootid
 				);
-				if ($row)
+				if($row)
 					$item['fishedin'][] = array_merge($row, $drop);
 			}
 		}
-		unset ($row);
-		unset ($num);
+		unset($row);
+		unset($num);
 	}
-	unset ($drops_fi);
+	unset($drops_fi);
 
 	// Размалывается в
 	if(!$item['milling'] = loot('milling_loot_template', $item['entry']))
-		unset ($item['milling']);
+		unset($item['milling']);
 
 	// Получается размалыванием из
 	$drops_mi = drop('milling_loot_template', $item['entry']);
@@ -578,14 +573,14 @@ if(!$item = load_cache(5, $id))
 				($_SESSION['locale']>0)? 1: DBSIMPLE_SKIP,
 				$lootid
 			);
-			foreach ($rows as $numRow=>$row)
+			foreach($rows as $row)
 				$item['milledfrom'][] = array_merge(iteminfo2($row, 0), $drop);
 		}
-		unset ($rows);
-		unset ($lootid);
-		unset ($drop);
+		unset($rows);
+		unset($lootid);
+		unset($drop);
 	}
-	unset ($drops_mi);
+	unset($drops_mi);
 
 	save_cache(5, $item['entry'], $item);
 }
@@ -597,7 +592,7 @@ $page = array(
 	'tab' => 0,
 	'type' => 3,
 	'typeid' => $item['entry'],
-	'path' => '[0,0,'.$item['classs'].','.$item['subclass'].']',
+	'path' => '[0,0, '.$item['classs'].', '.$item['subclass'].']',
 );
 $smarty->assign('page', $page);
 
@@ -606,11 +601,8 @@ $smarty->assign('comments', getcomments($page['type'], $page['typeid']));
 
 // Количество MySQL запросов
 $smarty->assign('mysql', $DB->getStatistics());
-if (IsSet($allitems))
-	$smarty->assign('allitems', $allitems);
-if (IsSet($allspells))
-	$smarty->assign('allspells', $allspells);
+$smarty->assign('allitems', $allitems);
+$smarty->assign('allspells', $allspells);
 $smarty->assign('item', $item);
 $smarty->display('item.tpl');
-
 ?>

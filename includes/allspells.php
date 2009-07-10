@@ -502,7 +502,7 @@ function spell_desc2($spellRow, $type='tooltip')
 				break;
 			case 'q':
 				if($lookup > 0 && $exprData[0])
-					$spell = $DB->selectRow('SELECT effect'.$exprData[0].'MiscValue FROM ?_spell WHERE spellID=? LIMIT 1',$lookup);
+					$spell = $DB->selectRow('SELECT effect'.$exprData[0].'MiscValue FROM ?_spell WHERE spellID=? LIMIT 1', $lookup);
 				else
 					$spell = $spellRow;
 
@@ -859,7 +859,7 @@ function allspellsinfo2(&$row, $level=0)
 		if(IsSet($allitems[$row['effect1itemtype']]['icon']))
 			$allspells[$num]['icon'] = $allitems[$row['effect1itemtype']]['icon'];
 		else
-			$allspells[$num]['icon'] = $DB->selectCell('SELECT iconname FROM ?_icons, item_template WHERE id = displayid AND entry = ?d LIMIT 1',$row['effect1itemtype']);
+			$allspells[$num]['icon'] = $DB->selectCell('SELECT iconname FROM ?_icons, item_template WHERE id = displayid AND entry = ?d LIMIT 1', $row['effect1itemtype']);
 	} else {
 		$allspells[$num]['icon'] = $row['iconname'];
 	}
@@ -973,7 +973,7 @@ function spellinfo2(&$row)
 		$spell['cat'] = 0;
 		// Скилл
 //		if(!(isset($row['skillID'])))
-//		$skillrow = list($row['skillID'],$row['req_skill_value'],$row['min_value'],$row['max_value']);//$DB->selectRow('SELECT skillID, req_skill_value, min_value, max_value  FROM ?_skill_line_ability WHERE spellID=?d LIMIT 1', $spell['entry']);
+//		$skillrow = list($row['skillID'], $row['req_skill_value'], $row['min_value'], $row['max_value']);//$DB->selectRow('SELECT skillID, req_skill_value, min_value, max_value  FROM ?_skill_line_ability WHERE spellID=?d LIMIT 1', $spell['entry']);
 		if(isset($row['skillID']))
 		{
 //			if($skillrow['req_skill_value'] != 1)

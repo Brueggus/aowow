@@ -31,12 +31,12 @@ if(!$npc = load_cache(1, intval($id)))
 		FROM ?_factiontemplate ft, ?_factions f, creature_template c
 		{
 			LEFT JOIN (locales_creature l)
-			ON l.entry=c.entry AND ?
+			ON l.entry = c.entry AND ?
 		}
 		WHERE
-			c.entry=?
-			AND ft.factiontemplateID=c.faction_A
-			AND f.factionID=ft.factionID
+			c.entry = ?
+			AND ft.factiontemplateID = c.faction_A
+			AND f.factionID = ft.factionID
 		LIMIT 1
 			',
 		$npc_cols[1],
@@ -45,7 +45,7 @@ if(!$npc = load_cache(1, intval($id)))
 		$id
 	);
 
-	if ($row)
+	if($row)
 	{
 		$npc = $row;
 		$npc['name'] = localizedName($row);
@@ -60,22 +60,8 @@ if(!$npc = load_cache(1, intval($id)))
 		
 		$toDiv = array('minhealth', 'maxmana', 'minmana', 'maxhealth', 'armor', 'mindmg', 'maxdmg');
 		// Разделяем на тысячи (ххххххххх => ххх,ххх,ххх)
-		foreach($toDiv as $element)
-		{
-			$current = array();
-			$length = strlen($npc[$element]);
-			if($length<=3)
-				continue;
-			$cell1 = $length%3>0?$length%3:3;
-			$cell = $cell1;
-			for($i=0;$i<$length/3;$i++)
-			{
-				$pos = $i>0?$cell1+($i>1?($i-1)*3:0):0;
-				$current[] = substr($npc[$element], $pos, $cell);
-				$cell=3;
-			}
-			$npc[$element] = implode(',', $current);
-		}
+		foreach($toDiv as $e)
+			$npc[$e] = divideThousand($npc[$e]);
 
 		$npc['rank'] = $smarty->get_config_vars('rank'.$npc['rank']);
 		// faction_A = faction_H
@@ -83,9 +69,7 @@ if(!$npc = load_cache(1, intval($id)))
 		$npc['faction'] = $row['faction-name'];
 		// Деньги
 		$money = ($row['mingold']+$row['maxgold']) / 2;
-		$npc['moneygold'] = floor($money/10000);
-		$npc['moneysilver'] = floor(($money - ($npc['moneygold']*10000))/100);
-		$npc['moneycopper'] = floor($money - ($npc['moneygold']*10000) - ($npc['moneysilver']*100));
+		$npc = array_merge($npc, money2coins($money));
 		// Героик/нормал копия НПС
 		if($npc['heroic_entry'])
 		{
@@ -192,12 +176,12 @@ if(!$npc = load_cache(1, intval($id)))
 		',
 		$npc['entry']
 	);
-	if ($row)
+	if($row)
 	{
 		$npc['teaches'] = array();
-		for ($j=1;$j<=4;$j++)
-			if ($row['Spell'.$j])
-				for ($k=1;$k<=3;$k++)
+		for($j=1;$j<=4;$j++)
+			if($row['Spell'.$j])
+				for($k=1;$k<=3;$k++)
 				{
 					$spellrow = $DB->selectRow('
 						SELECT ?#, spellID
@@ -210,7 +194,7 @@ if(!$npc = load_cache(1, intval($id)))
 						$spell_cols[2],
 						$row['Spell'.$j]
 					);
-					if ($spellrow)
+					if($spellrow)
 					{
 						$num = count($npc['teaches']);
 						$npc['teaches'][$num] = array();
@@ -232,11 +216,11 @@ if(!$npc = load_cache(1, intval($id)))
 		$spell_cols[2],
 		$npc['entry']
 	);
-	if ($teachspells)
+	if($teachspells)
 	{
-		if (!(IsSet($npc['teaches'])))
+		if(!(IsSet($npc['teaches'])))
 			$npc['teaches'] = array();
-		foreach ($teachspells as $teachspell)
+		foreach($teachspells as $teachspell)
 		{
 					$num = count($npc['teaches']);
 					$npc['teaches'][$num] = array();
@@ -261,31 +245,31 @@ if(!$npc = load_cache(1, intval($id)))
 		($_SESSION['locale'])? 1: DBSIMPLE_SKIP,
 		$id
 	);
-	if ($rows_s)
+	if($rows_s)
 	{
 		$npc['sells'] = array();
-		foreach ($rows_s as $numRow=>$row)
+		foreach($rows_s as $numRow=>$row)
 		{
 			$npc['sells'][$numRow] = array();
 			$npc['sells'][$numRow] = iteminfo2($row);
 			$npc['sells'][$numRow]['maxcount'] = $row['drop-maxcount'];
 			$npc['sells'][$numRow]['cost'] = array();
-			if ($row['ExtendedCost'])
+			if($row['ExtendedCost'])
 			{
 				$extcost = $DB->selectRow('SELECT * FROM ?_item_extended_cost WHERE extendedcostID=?d LIMIT 1', $row['ExtendedCost']);
-				if ($extcost['reqhonorpoints']>0)
+				if($extcost['reqhonorpoints']>0)
 					$npc['sells'][$numRow]['cost']['honor'] = (($npc['A']==1)? 1: -1) * $extcost['reqhonorpoints'];
-				if ($extcost['reqarenapoints']>0)
+				if($extcost['reqarenapoints']>0)
 					$npc['sells'][$numRow]['cost']['arena'] = $extcost['reqarenapoints'];
 				$npc['sells'][$numRow]['cost']['items'] = array();
-				for ($j=1;$j<=5;$j++)
-					if (($extcost['reqitem'.$j]>0) and ($extcost['reqitemcount'.$j]>0))
+				for($j=1;$j<=5;$j++)
+					if(($extcost['reqitem'.$j]>0) and ($extcost['reqitemcount'.$j]>0))
 					{
 						allitemsinfo($extcost['reqitem'.$j], 0);
 						$npc['sells'][$numRow]['cost']['items'][] = array('item' => $extcost['reqitem'.$j], 'count' => $extcost['reqitemcount'.$j]);
 					}
 			}
-			if ($row['BuyPrice']>0)
+			if($row['BuyPrice']>0)
 				$npc['sells'][$numRow]['cost']['money'] = $row['BuyPrice'];
 		}
 		unset ($row);
@@ -295,15 +279,15 @@ if(!$npc = load_cache(1, intval($id)))
 	unset ($rows_s);
 
 	// Дроп
-	if (!($npc['drop'] = loot('creature_loot_template', $lootid)))
+	if(!($npc['drop'] = loot('creature_loot_template', $lootid)))
 		unset ($npc['drop']);
 
 	// Кожа
-	if (!($npc['skinning'] = loot('skinning_loot_template', $lootid)))
+	if(!($npc['skinning'] = loot('skinning_loot_template', $lootid)))
 		unset ($npc['skinning']);
 
 	// Воруеццо
-	if (!($npc['pickpocketing'] = loot('pickpocketing_loot_template', $lootid)))
+	if(!($npc['pickpocketing'] = loot('pickpocketing_loot_template', $lootid)))
 		unset ($npc['pickpocketing']);
 
 	// Начиниают квесты...
@@ -317,10 +301,10 @@ if(!$npc = load_cache(1, intval($id)))
 		$quest_cols[2],
 		$id
 	);
-	if ($rows_qs)
+	if($rows_qs)
 	{
 		$npc['starts'] = array();
-		foreach ($rows_qs as $numRow=>$row) {
+		foreach($rows_qs as $numRow=>$row) {
 			$npc['starts'][] = GetQuestInfo($row, 0xFFFFFF);
 		}
 	}
@@ -337,10 +321,10 @@ if(!$npc = load_cache(1, intval($id)))
 		$quest_cols[2],
 		$id
 	);
-	if ($rows_qe)
+	if($rows_qe)
 	{
 		$npc['ends'] = array();
-		foreach ($rows_qe as $numRow=>$row) {
+		foreach($rows_qe as $numRow=>$row) {
 			$npc['ends'][] = GetQuestInfo($row, 0xFFFFFF);
 		}
 	}
@@ -359,10 +343,10 @@ if(!$npc = load_cache(1, intval($id)))
 		$quest_cols[2],
 		$id, $id, $id, $id
 	);
-	if ($rows_qo)
+	if($rows_qo)
 	{
 		$npc['objectiveof'] = array();
-		foreach ($rows_qo as $numRow=>$row)
+		foreach($rows_qo as $numRow=>$row)
 			$npc['objectiveof'][] = GetQuestInfo($row, 0xFFFFFF);
 	}
 	unset ($rows_qo);
@@ -395,10 +379,8 @@ $smarty->assign('page', $page);
 $smarty->assign('comments', getcomments($page['type'], $page['typeid']));
 
 // Если хоть одна информация о вещи найдена - передаём массив с информацией о вещях шаблонизатору
-if (IsSet($allitems))
-	$smarty->assign('allitems',$allitems);
-if (IsSet($allspells))
-	$smarty->assign('allspells',$allspells);
+$smarty->assign('allitems',$allitems);
+$smarty->assign('allspells',$allspells);
 
 $smarty->assign('npc',$npc);
 

@@ -12,46 +12,46 @@
 */
 
 // Types of Game Objects
-define("GAMEOBJECT_TYPE_DOOR", 0);
-define("GAMEOBJECT_TYPE_BUTTON", 1);
-define("GAMEOBJECT_TYPE_QUESTGIVER", 2);
-define("GAMEOBJECT_TYPE_CHEST", 3);
-define("GAMEOBJECT_TYPE_BINDER", 4);
-define("GAMEOBJECT_TYPE_GENERIC", 5);
-define("GAMEOBJECT_TYPE_TRAP", 6);
-define("GAMEOBJECT_TYPE_CHAIR", 7);
-define("GAMEOBJECT_TYPE_SPELL_FOCUS", 8);
-define("GAMEOBJECT_TYPE_TEXT", 9);
-define("GAMEOBJECT_TYPE_GOOBER", 10);
-define("GAMEOBJECT_TYPE_TRANSPORT", 11);
-define("GAMEOBJECT_TYPE_AREADAMAGE", 12);
-define("GAMEOBJECT_TYPE_CAMERA", 13);
-define("GAMEOBJECT_TYPE_MAP_OBJECT", 14);
-define("GAMEOBJECT_TYPE_MO_TRANSPORT", 15);
-define("GAMEOBJECT_TYPE_DUEL_ARBITER", 16);
-define("GAMEOBJECT_TYPE_FISHINGNODE", 17);
-define("GAMEOBJECT_TYPE_RITUAL", 18);
-define("GAMEOBJECT_TYPE_MAILBOX", 19);
-define("GAMEOBJECT_TYPE_AUCTIONHOUSE", 20);
-define("GAMEOBJECT_TYPE_GUARDPOST", 21);
-define("GAMEOBJECT_TYPE_SPELLCASTER", 22);
-define("GAMEOBJECT_TYPE_MEETINGSTONE", 23);
-define("GAMEOBJECT_TYPE_FLAGSTAND", 24);
-define("GAMEOBJECT_TYPE_FISHINGHOLE", 25);
-define("GAMEOBJECT_TYPE_FLAGDROP", 26);
-define("GAMEOBJECT_TYPE_MINI_GAME", 27);
-define("GAMEOBJECT_TYPE_LOTTERY_KIOSK", 28);
-define("GAMEOBJECT_TYPE_CAPTURE_POINT", 29);
-define("GAMEOBJECT_TYPE_AURA_GENERATOR", 30);
-define("GAMEOBJECT_TYPE_DUNGEON_DIFFICULTY", 31);
-define("GAMEOBJECT_TYPE_UNK", 32);
-define("GAMEOBJECT_TYPE_DESTRUCTIBLE_BUILDING", 33);
-define("GAMEOBJECT_TYPE_GUILD_BANK", 34);
+define('GAMEOBJECT_TYPE_DOOR', 0);
+define('GAMEOBJECT_TYPE_BUTTON', 1);
+define('GAMEOBJECT_TYPE_QUESTGIVER', 2);
+define('GAMEOBJECT_TYPE_CHEST', 3);
+define('GAMEOBJECT_TYPE_BINDER', 4);
+define('GAMEOBJECT_TYPE_GENERIC', 5);
+define('GAMEOBJECT_TYPE_TRAP', 6);
+define('GAMEOBJECT_TYPE_CHAIR', 7);
+define('GAMEOBJECT_TYPE_SPELL_FOCUS', 8);
+define('GAMEOBJECT_TYPE_TEXT', 9);
+define('GAMEOBJECT_TYPE_GOOBER', 10);
+define('GAMEOBJECT_TYPE_TRANSPORT', 11);
+define('GAMEOBJECT_TYPE_AREADAMAGE', 12);
+define('GAMEOBJECT_TYPE_CAMERA', 13);
+define('GAMEOBJECT_TYPE_MAP_OBJECT', 14);
+define('GAMEOBJECT_TYPE_MO_TRANSPORT', 15);
+define('GAMEOBJECT_TYPE_DUEL_ARBITER', 16);
+define('GAMEOBJECT_TYPE_FISHINGNODE', 17);
+define('GAMEOBJECT_TYPE_RITUAL', 18);
+define('GAMEOBJECT_TYPE_MAILBOX', 19);
+define('GAMEOBJECT_TYPE_AUCTIONHOUSE', 20);
+define('GAMEOBJECT_TYPE_GUARDPOST', 21);
+define('GAMEOBJECT_TYPE_SPELLCASTER', 22);
+define('GAMEOBJECT_TYPE_MEETINGSTONE', 23);
+define('GAMEOBJECT_TYPE_FLAGSTAND', 24);
+define('GAMEOBJECT_TYPE_FISHINGHOLE', 25);
+define('GAMEOBJECT_TYPE_FLAGDROP', 26);
+define('GAMEOBJECT_TYPE_MINI_GAME', 27);
+define('GAMEOBJECT_TYPE_LOTTERY_KIOSK', 28);
+define('GAMEOBJECT_TYPE_CAPTURE_POINT', 29);
+define('GAMEOBJECT_TYPE_AURA_GENERATOR', 30);
+define('GAMEOBJECT_TYPE_DUNGEON_DIFFICULTY', 31);
+define('GAMEOBJECT_TYPE_UNK', 32);
+define('GAMEOBJECT_TYPE_DESTRUCTIBLE_BUILDING', 33);
+define('GAMEOBJECT_TYPE_GUILD_BANK', 34);
 
 // Column LockProperties in Lock.dbc
-define("LOCK_PROPERTIES_FOOTLOCK",1);
-define("LOCK_PROPERTIES_HERBALISM",2);
-define("LOCK_PROPERTIES_MINING",3);
+define('LOCK_PROPERTIES_FOOTLOCK',1);
+define('LOCK_PROPERTIES_HERBALISM',2);
+define('LOCK_PROPERTIES_MINING',3);
 
 // objectinfo required columns
 $object_cols[0] = array('entry', 'name', 'type');
@@ -89,10 +89,11 @@ function objectinfo2(&$Row, $level=0)
 	$object['name'] = localizedName($Row);
 	// Тип объекта
 	$object['type'] = $Row['type'];
-	if($level>0)
+	if($level > 0)
 	{
 		// В зависимости от типа объекта, заполняем поля:
-		switch ($object['type']):
+		switch($object['type'])
+		{
 			case GAMEOBJECT_TYPE_DOOR:
 				/*
 						* data0: startOpen (Boolean flag)
@@ -378,7 +379,7 @@ function objectinfo2(&$Row, $level=0)
 			case GAMEOBJECT_TYPE_GUILD_BANK:
 				/*	No data data used, all are always 0 */
 				break;
-		endswitch;
+		}
 		// Тип объекта и требуемый уровень скилла, и какого скилла
 		if($object['lockid'])
 		{
@@ -394,7 +395,7 @@ function objectinfo2(&$Row, $level=0)
 			{
 				for($j=1;$j<=5;$j++)
 				{
-					switch ($lock_row['type'.$j])
+					switch($lock_row['type'.$j])
 					{
 						case 0:
 							// Не замок
@@ -406,7 +407,7 @@ function objectinfo2(&$Row, $level=0)
 							break;
 						case 2:
 							// Скилл
-							switch ($lock_row['lockproperties'.$j])
+							switch($lock_row['lockproperties'.$j])
 							{
 								case LOCK_PROPERTIES_FOOTLOCK:
 									// Сундук
@@ -467,11 +468,11 @@ function objectinfo2(&$Row, $level=0)
 			}
 		}
 		// Лут...
-		if(IsSet($object['lootid']))
+		if(isset($object['lootid']))
 		{
 			$object['drop'] = array();
-			if(!($object['drop'] = loot('gameobject_loot_template', $object['lootid'])))
-				unset ($object['drop']);
+			if(!$object['drop'] = loot('gameobject_loot_template', $object['lootid']))
+				unset($object['drop']);
 		}
 	}
 	return $object;

@@ -131,7 +131,18 @@ function money2coins($money)
 
 	return $coins;
 }
+function divideThousand($val)
+{
+	$thousands = array();
 
+	do
+	{
+		array_unshift($thousands, $val % 1000);
+		$val = floor($val / 1000);
+	} while($val);
+
+	return implode(',', $thousands);
+}
 // Классы, для которых предназначена вещь
 function classes($class)
 {

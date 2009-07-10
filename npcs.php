@@ -8,7 +8,7 @@ $smarty->config_load($conf_file, 'npc');
 global $npc_cols;
 
 // Разделяем из запроса класс и подкласс вещей
-point_delim($podrazdel,$type,$family);
+point_delim($podrazdel, $type, $family);
 
 $cache_str = (empty($type)?'x':intval($type)).'_'.(empty($family)?'x':intval($family));
 
@@ -46,11 +46,8 @@ if(!$npcs = load_cache(2, $cache_str))
 	//print_r($rows);
 	
 	$npcs = array();
-	foreach ($rows as $numRow=>$row)
-	{
-		$npcs[$numRow] = array();
-		$npcs[$numRow] = creatureinfo2($row);
-	}
+	foreach($rows as $row)
+		$npcs[] = creatureinfo2($row);
 	save_cache(5, $cache_str, $npcs);
 }
 
@@ -62,12 +59,11 @@ $page = array(
 	'tab' => 0,
 	'type' => 0,
 	'typeid' => 0,
-	'path' => '[0, 4,'.$type.','.$family.']'
+	'path' => '[0, 4, '.$type.', '.$family.']'
 );
 $smarty->assign('page', $page);
 
-if (count($npcs>=0))
-	$smarty->assign('npcs',$npcs);
+$smarty->assign('npcs', $npcs);
 // Количество MySQL запросов
 $smarty->assign('mysql', $DB->getStatistics());
 // Загружаем страницу

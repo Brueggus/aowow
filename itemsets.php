@@ -23,7 +23,7 @@ if(!$itemsets = load_cache(9, 'x'))
 	);
 
 	$itemsets = array();
-	foreach ($rows as $numRow=>$row)
+	foreach($rows as $row)
 		$itemsets[] = itemsetinfo2($row);
 
 	save_cache(9, 'x', $itemsets);
@@ -46,8 +46,7 @@ $smarty->assign('page', $page);
 // Количество MySQL запросов
 $smarty->assign('mysql', $DB->getStatistics());
 // Если хоть одна информация о вещи найдена - передаём массив с информацией о вещях шаблонизатору
-if (isset($allitems))
-	$smarty->assign('allitems',$allitems);
+$smarty->assign('allitems', $allitems);
 // Запускаем шаблонизатор
 $smarty->display('itemsets.tpl');
 

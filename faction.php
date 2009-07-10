@@ -9,7 +9,7 @@ global $npc_cols;
 global $item_cols;
 global $quest_cols;
 
-$smarty->config_load($conf_file,'faction');
+$smarty->config_load($conf_file, 'faction');
 
 // Номер фракции
 $id = $podrazdel;
@@ -29,7 +29,7 @@ if(!$faction = load_cache(18, intval($id)))
 		',
 		$id
 	);
-	if ($row)
+	if($row)
 	{
 		$faction=array();
 		// Номер фракции
@@ -42,7 +42,7 @@ if(!$faction = load_cache(18, intval($id)))
 		$faction['description2'] = $row['description2_loc'.$_SESSION['locale']];
 		// Команда/Группа фракции
 		if($row['team']!=0)
-			$faction['group'] = $DB->selectCell('SELECT name_loc'.$_SESSION['locale'].' FROM ?_factions WHERE factionID=?d LIMIT 1', $row['team']);
+			$faction['group'] = $DB->selectCell('SELECT name_loc'.$_SESSION['locale'].' FROM ?_factions WHERE factionID = ?d LIMIT 1', $row['team']);
 		// Альянс(1)/Орда(2)
 		if($row['side']!=0)
 			$faction['side'] = $row['side'];
@@ -58,12 +58,12 @@ if(!$faction = load_cache(18, intval($id)))
 			$item_cols[2],
 			$id
 		);
-		if ($item_rows)
+		if($item_rows)
 		{
 			$faction['items'] = array();
-			foreach ($item_rows as $i=>$row)
+			foreach($item_rows as $i=>$row)
 				$faction['items'][] = iteminfo2($row, 0);
-			unset ($faction['items']);
+			unset($faction['items']);
 		}
 
 		// Персонажи, состоящие во фракции
@@ -77,12 +77,12 @@ if(!$faction = load_cache(18, intval($id)))
 			$npc_cols[0],
 			$id
 		);
-		if ($creature_rows)
+		if($creature_rows)
 		{
 			$faction['npcs'] = array();
-			foreach ($creature_rows as $i=>$row)
+			foreach($creature_rows as $i=>$row)
 				$faction['npcs'][] = creatureinfo2($row);
-			unset ($creature_rows);
+			unset($creature_rows);
 		}
 
 		// Квесты для этой фракции
@@ -98,12 +98,12 @@ if(!$faction = load_cache(18, intval($id)))
 			$quest_cols[2],
 			$id, $id, $id, $id
 		);
-		if ($quests_rows)
+		if($quests_rows)
 		{
 			$faction['quests'] = array();
-			foreach ($quests_rows as $i=>$row)
+			foreach($quests_rows as $i => $row)
 				$faction['quests'][] = GetQuestInfo($row, 0xFFFFFF);
-			unset ($quests_rows);
+			unset($quests_rows);
 		}
 
 		// Faction cache
@@ -128,16 +128,7 @@ $smarty->assign('comments', getcomments($page['type'], $page['typeid']));
 // Данные о квесте
 $smarty->assign('faction', $faction);
 // Если хоть одна информация о вещи найдена - передаём массив с информацией о вещях шаблонизатору
-if (isset($allitems))
-	$smarty->assign('allitems',$allitems);
-/*
-if (isset($npcs))
-	$smarty->assign('npcs',$npcs);
-if (isset($quests))
-	$smarty->assign('quests',$quests);
-if (isset($items))
-	$smarty->assign('items',$items);
-*/
+$smarty->assign('allitems', $allitems);
 // Количество MySQL запросов
 $smarty->assign('mysql', $DB->getStatistics());
 // Загружаем страницу

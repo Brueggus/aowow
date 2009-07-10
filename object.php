@@ -84,10 +84,8 @@ $smarty->assign('page', $page);
 // Комментарии
 $smarty->assign('comments', getcomments($page['type'], $page['typeid']));
 
-if(isset($allitems))
-	$smarty->assign('allitems', $allitems);
-if(isset($object))
-	$smarty->assign('object', $object);
+$smarty->assign('allitems', $allitems);
+$smarty->assign('object', $object);
 // Количество MySQL запросов
 $smarty->assign('mysql', $DB->getStatistics());
 $smarty->display('object.tpl');

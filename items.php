@@ -6,7 +6,7 @@ require_once('includes/allitems.php');
 $smarty->config_load($conf_file, 'items');
 
 // Разделяем из запроса класс и подкласс вещей
-point_delim($podrazdel,$class,$subclass);
+point_delim($podrazdel, $class, $subclass);
 
 global $DB;
 
@@ -38,7 +38,7 @@ if(!$items = load_cache(7, $cache_str))
 
 	$i=0;
 	$items = array();
-	foreach ($rows as $numRow=>$row)
+	foreach($rows as $numRow=>$row)
 	{
 		$items[$i] = array();
 		$items[$i] = iteminfo2($row);
@@ -62,11 +62,8 @@ $smarty->assign('page', $page);
 
 // Статистика выполнения mysql запросов
 $smarty->assign('mysql', $DB->getStatistics());
-// Если хоть одна информация о вещи найдена - передаём массив с информацией о вещях шаблонизатору
-if (count($allitems)>=0)
-	$smarty->assign('allitems',$allitems);
-if (count($items>=0))
-	$smarty->assign('items', $items);
+$smarty->assign('allitems', $allitems);
+$smarty->assign('items', $items);
 // Загружаем страницу
 $smarty->display('items.tpl');
 ?>

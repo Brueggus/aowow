@@ -76,7 +76,7 @@ if(!$quest = load_cache(10, intval($id)))
 		}
 	}
 	unset($tmp);
-	if (count($quest['series'])<=1)
+	if(count($quest['series'])<=1)
 		unset($quest['series']);
 
 
@@ -85,7 +85,7 @@ if(!$quest = load_cache(10, intval($id)))
 
 
 	// Квесты, которые необходимо выполнить, что бы получить этот квест
-	if (!$quest['req'] = $DB->select('
+	if(!$quest['req'] = $DB->select('
 				SELECT q.entry, q.Title, q.NextQuestInChain
 					{, l.Title_loc?d}
 				FROM quest_template q
@@ -103,7 +103,7 @@ if(!$quest = load_cache(10, intval($id)))
 			$questItems[] = 'req';
 
 	// Квесты, которые становятся доступными, только после того как выполнен этот квест (необязательно только он)
-	if (!$quest['open'] = $DB->select('
+	if(!$quest['open'] = $DB->select('
 				SELECT q.entry, q.Title
 					{, l.Title_loc?d}
 				FROM quest_template q
@@ -121,8 +121,8 @@ if(!$quest = load_cache(10, intval($id)))
 			$questItems[] = 'open';
 
 	// Квесты, которые становятся недоступными после выполнения этого квеста
-	if ($quest['ExclusiveGroup']>0)
-		if (!$quest['closes'] = $DB->select('
+	if($quest['ExclusiveGroup']>0)
+		if(!$quest['closes'] = $DB->select('
 				SELECT q.entry, q.Title
 					{, l.Title_loc?d}
 				FROM quest_template q
@@ -230,13 +230,13 @@ if(!$quest = load_cache(10, intval($id)))
 		$quest['reqclass'] = $classes[abs($quest['SkillOrClass'])];
 
 	// Требуемые отношения с фракциями, что бы начать квест
-	if ($quest['RequiredMinRepFaction'] && $quest['RequiredMinRepValue'])
+	if($quest['RequiredMinRepFaction'] && $quest['RequiredMinRepValue'])
 		$quest['RequiredMinRep'] = array(
 			'name' => $DB->selectCell('SELECT name_loc'.$_SESSION['locale'].' FROM ?_factions WHERE factionID=?d LIMIT 1', $quest['RequiredMinRepFaction']),
 			'entry' => $quest['RequiredMinRepFaction'],
 			'value' => $reputations[$quest['RequiredMinRepValue']]
 		);
-	if ($quest['RequiredMaxRepFaction'] && $quest['RequiredMaxRepValue'])
+	if($quest['RequiredMaxRepFaction'] && $quest['RequiredMaxRepValue'])
 		$quest['RequiredMaxRep'] = array(
 			'name' => $DB->selectCell('SELECT name_loc'.$_SESSION['locale'].' FROM ?_factions WHERE factionID=?d LIMIT 1', $quest['RequiredMaxRepFaction']),
 			'entry' => $quest['RequiredMaxRepFaction'],
@@ -320,7 +320,7 @@ if(!$quest = load_cache(10, intval($id)))
 			// Количество
 			$quest['coreqs'][$i]['count'] = $quest['ReqCreatureOrGOCount'.$i];
 			// Спелл
-			if ($quest['ReqSpellCast'.$i])
+			if($quest['ReqSpellCast'.$i])
 				$quest['coreqs'][$i]['spell'] = array(
 					'name' => $DB->selectCell('SELECT spellname_loc'.$_SESSION['locale'].' FROM ?_spell WHERE spellid=?d LIMIT 1', $quest['ReqSpellCast'.$i]),
 					'entry' => $quest['ReqSpellCast'.$i]
@@ -505,10 +505,8 @@ $smarty->assign('comments', getcomments($page['type'], $page['typeid']));
 // Данные о квесте
 $smarty->assign('quest', $quest);
 // Если хоть одна информация о вещи найдена - передаём массив с информацией о вещях шаблонизатору
-if (isset($allitems))
-	$smarty->assign('allitems',$allitems);
-if (isset($allspells))
-	$smarty->assign('allspells',$allspells);
+$smarty->assign('allitems',$allitems);
+$smarty->assign('allspells',$allspells);
 // Количество MySQL запросов
 $smarty->assign('mysql', $DB->getStatistics());
 // Загружаем страницу

@@ -30,36 +30,38 @@ if(!$data = load_cache(4, intval($type)))
 			ORDER by name
 			{LIMIT ?d}
 		',
-		(($type==-3) or ($type==-4))? 'skill': DBSIMPLE_SKIP,
-		($type==-5)? 'skill': DBSIMPLE_SKIP,
-		($_SESSION['locale']>0)? $_SESSION['locale']: DBSIMPLE_SKIP,
-		($type==-2)? 'q': DBSIMPLE_SKIP,
-		(($type==-3) or ($type==-4) or ($type==-5))? 'a': DBSIMPLE_SKIP,
-		($_SESSION['locale']>0)? 1: DBSIMPLE_SKIP,
-		($type>0)? $type : DBSIMPLE_SKIP,
-		(($type==-3) or ($type==-4))? 1: DBSIMPLE_SKIP,
-		($type==-5)? 1: DBSIMPLE_SKIP,
-		($type==-3)? 1: DBSIMPLE_SKIP,
-		($type==-4)? 1: DBSIMPLE_SKIP,
-		($type==-5)? 1: DBSIMPLE_SKIP,
-		($type==-2)? 'id': DBSIMPLE_SKIP,
-		($AoWoWconf['limit']!=0)? $AoWoWconf['limit']: DBSIMPLE_SKIP
+		in_array($type, array(-3, -4)) ? 'skill' : DBSIMPLE_SKIP,
+		$type == -5 ? 'skill' : DBSIMPLE_SKIP,
+		$_SESSION['locale'] > 0 ? $_SESSION['locale'] : DBSIMPLE_SKIP,
+		$type == -2 ? 'q': DBSIMPLE_SKIP,
+		in_array($type, array(-3, -4, -5)) ? 'a' : DBSIMPLE_SKIP,
+		$_SESSION['locale'] > 0 ? 1: DBSIMPLE_SKIP,
+		$type > 0 ? $type : DBSIMPLE_SKIP,
+		in_array($type, array(-3, -4)) ? 1 : DBSIMPLE_SKIP,
+		$type == -5 ? 1 : DBSIMPLE_SKIP,
+		$type == -3 ? 1 : DBSIMPLE_SKIP,
+		$type == -4 ? 1 : DBSIMPLE_SKIP,
+		$type == -5 ? 1 : DBSIMPLE_SKIP,
+		$type == -2 ? 'id' : DBSIMPLE_SKIP,
+		$AoWoWconf['limit'] <> 0? $AoWoWconf['limit'] : DBSIMPLE_SKIP
 	);
 
 
 	$i = 0;
 	$data = array();
-	foreach ($rows as $numRow=>$row)
+	foreach($rows as $row)
 	{
 		$data[$i] = array();
 		$data[$i]['entry'] = $row['entry'];
-		if (IsSet($row['skill']))
+
+		if(isset($row['skill']))
 			$data[$i]['skill'] = $row['skill'];
-		$data[$i]['name'] = $row['name_loc']?$row['name_loc']:$row['name'];
+
+		$data[$i]['name'] = localizedName($row);
 		// TODO: Расположение
 		$data[$i]['location'] = "[-1]";
 		// Тип объекта
-		$data[$i]['type'] = (isset($type))? $type : $row['type'];
+		$data[$i]['type'] = isset($type) ? $type : $row['type'];
 		$i++;
 	}
 	save_cache(4, intval($type), $data);

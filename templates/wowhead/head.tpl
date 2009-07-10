@@ -26,7 +26,7 @@
 {/if}
 
 	<script type="text/javascript">
-		var g_serverTime = new Date('{$smarty.now|date_format:"%Y/%m/%d %H:%M:%s"}');
+		var g_serverTime = new Date('{$smarty.now|date_format:"%Y/%m/%d %H:%M:%S"}');
 		g_locale = {ldelim} id: {$locale}, name: '{$language}' {rdelim};
 {if $user}
 		g_user = {ldelim} id: {$user.id}, name: '{$user.name|escape:quotes}', roles: {$user.roles}, permissions: {$user.perms} {rdelim};
