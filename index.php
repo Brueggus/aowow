@@ -115,6 +115,12 @@ switch($razdel)
 	case 'spells':
 		include 'spells.php';
 		break;
+	case 'talent':
+		include 'talent.php';
+		break;
+	case 'data':
+		include 'data.php';
+		break;
 	default:
 		include 'main.php';
 		break;
