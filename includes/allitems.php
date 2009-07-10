@@ -474,8 +474,6 @@ function iteminfo2(&$Row, $level=0)
 	// Уровень вещи
 	$item['level'] = $Row['ItemLevel'];
 	// Качество вещи...
-	/*if($Row['quality'] == 7)
-		$Row['quality'] = 6;*/
 	$item['quality'] = $Row['quality'];
 	$item['quality2'] = 7 - $Row['quality'];
 	// Требуемый уровень вещи:
