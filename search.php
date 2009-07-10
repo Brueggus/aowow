@@ -14,9 +14,6 @@ $smarty->config_load($conf_file, 'search');
 // Строка поиска:
 $search = urldecode($podrazdel);
 $nsearch = '%'.$search.'%';
-
-// Заголовок страницы
-$title = $search.' - '.$smarty->get_config_vars('name').' '.$smarty->get_config_vars('Search');
 $smarty->assign('search', $search);
 
 // Подключаемся к ДБ
@@ -33,7 +30,7 @@ $found = array();
 // Ищем вещи:
 if($_SESSION['locale']>0)
 {
-	$tmp = $DB->select('
+	$m = $DB->selectCol('
 			SELECT entry
 			FROM locales_item
 			WHERE name_loc?d LIKE ?
@@ -41,10 +38,6 @@ if($_SESSION['locale']>0)
 		$_SESSION['locale'],
 		$nsearch
 	);
-	foreach($tmp as $t)
-	{
-		$m[] = $t['entry'];
-	}
 }
 
 $rows = $DB->select('
@@ -63,15 +56,13 @@ $rows = $DB->select('
 	($m)? $m: DBSIMPLE_SKIP
 );
 unset($m);
-unset($t);
-unset($tmp);
-foreach ($rows as $numRow=>$row)
+foreach($rows as $row)
 	$found['item'][] = iteminfo2($row);
 
 // Ищем NPC:
 if($_SESSION['locale']>0)
 {
-	$tmp = $DB->select('
+	$m = $DB->selectCol('
 			SELECT entry
 			FROM locales_creature
 			WHERE
@@ -81,10 +72,6 @@ if($_SESSION['locale']>0)
 		$_SESSION['locale'], $nsearch,
 		$_SESSION['locale'], $nsearch
 	);
-	foreach($tmp as $t)
-	{
-		$m[] = $t['entry'];
-	}
 }
 $rows = $DB->select('
 		SELECT ?#, c.entry
@@ -105,15 +92,13 @@ $rows = $DB->select('
 	($m)? $m: DBSIMPLE_SKIP
 );
 unset($m);
-unset($t);
-unset($tmp);
-foreach ($rows as $numRow=>$row)
+foreach($rows as $row)
 	$found['npc'][] = creatureinfo2($row);
 
 // Ищем объекты
 if($_SESSION['locale']>0)
 {
-	$tmp = $DB->select('
+	$m = $DB->selectCol('
 			SELECT entry
 			FROM locales_gameobject
 			WHERE
@@ -121,10 +106,6 @@ if($_SESSION['locale']>0)
 		',
 		$_SESSION['locale'], $nsearch
 	);
-	foreach($tmp as $t)
-	{
-		$m[] = $t['entry'];
-	}
 }
 $rows = $DB->select('
 		SELECT g.?#
@@ -140,15 +121,13 @@ $rows = $DB->select('
 	($m)? $m: DBSIMPLE_SKIP
 );
 unset($m);
-unset($t);
-unset($tmp);
-foreach ($rows as $numRow=>$row)
+foreach($rows as $row)
 	$found['object'][] = objectinfo2($row);
 
 // Ищем квесты
 if($_SESSION['locale']>0)
 {
-	$tmp = $DB->select('
+	$m = $DB->selectCol('
 			SELECT entry
 			FROM locales_quest
 			WHERE
@@ -156,10 +135,6 @@ if($_SESSION['locale']>0)
 		',
 		$_SESSION['locale'], $nsearch
 	);
-	foreach($tmp as $t)
-	{
-		$m[] = $t['entry'];
-	}
 }
 $rows = $DB->select('
 		SELECT *
@@ -174,9 +149,7 @@ $rows = $DB->select('
 	($m)? $m: DBSIMPLE_SKIP
 );
 unset($m);
-unset($t);
-unset($tmp);
-foreach ($rows as $numRow=>$row)
+foreach($rows as $row)
 	$found['quest'][] = GetQuestInfo($row, 0xFFFFFF);
 
 // Ищем наборы вещей
@@ -187,7 +160,7 @@ $rows = $DB->select('
 	',
 	$nsearch
 );
-foreach ($rows as $numRow=>$row)
+foreach($rows as $row)
 	$found['itemset'][] = itemsetinfo2($row);
 
 // Ищем спеллы
@@ -201,30 +174,30 @@ $rows = $DB->select('
 	$spell_cols[2],
 	$nsearch
 );
-foreach ($rows as $numRow=>$row)
+foreach($rows as $row)
 	$found['spell'][] = spellinfo2($row);
 
 $keys = array_keys($found);
 
-if ((count($found)==1) and (count($found[$keys[0]])==1))
+// Если найден один элемент - перенаправляем на него
+if(count($found) == 1 && count($found[$keys[0]]) == 1)
 {
 	header("Location: ?".$keys[0].'='.$found[$keys[0]][0]['entry']);
-} else {
-
+}
+else
+{
 	$smarty->assign('found', $found);
 
 	// Если хоть одна информация о вещи найдена - передаём массив с информацией о вещях шаблонизатору
-	if (isset($allitems))
-		$smarty->assign('allitems', $allitems);
-	if (isset($allspells))
-		$smarty->assign('allspells', $allspells);
+	$smarty->assign('allitems', $allitems);
+	$smarty->assign('allspells', $allspells);
 
 	// Параметры страницы
 	$page = array();
 	// Номер вкладки меню
 	$page['tab'] = 0;
 	// Заголовок страницы
-	$page['title'] = $search.' - '.$smarty->get_config_vars('Search');
+	$page['Title'] = $search.' - '.$smarty->get_config_vars('Search');
 	$smarty->assign('page', $page);
 
 	$smarty->assign('mysql', $DB->getStatistics());
