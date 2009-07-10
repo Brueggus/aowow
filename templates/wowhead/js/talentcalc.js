@@ -886,7 +886,7 @@ function TalentCalc() {
 			for (var bq = bw[bm].t.length - 1; bq >= 0; --bq) {
 				var bj = bw[bm].t[bq],
 				//bu = Icon.create(by, 1, null, "javascript:;"),
-				bu = Icon.create(bj.icon, 1, null, "javascript:;"),
+				bu = Icon.create(bj.iconname, 1, null, "javascript:;"),
 				bf = Icon.getLink(bu),
 				bn = br[(bj.y * 4 + bj.x + 1) - 1];
 				if (Browser.ie6) {
@@ -1969,6 +1969,7 @@ function TalentCalc() {
 						bd.bubble.style.color = "#17FD17"
 					}
 					//Icon.moveTexture(bd.icon, 1, be, 0);
+					Icon.setTexture(bd.icon, 1, bd.iconname);
 					bd.link.className = "bubbly";
 					bd.bubble.style.visibility = "visible";
 					if (bd.r) {
@@ -1980,6 +1981,7 @@ function TalentCalc() {
 				} else {
 					bd.border.style.backgroundPosition = "0 0";
 					//Icon.moveTexture(bd.icon, 1, be, 1);
+					Icon.setTexture(bd.icon, 1, "?data=talent-icon&icon=" + bd.iconname);
 					bd.link.className = "";
 					bd.bubble.style.visibility = "hidden";
 					if (bd.r) {

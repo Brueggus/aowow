@@ -2475,7 +2475,7 @@ var Icon = {
 			return
 		}
 		var a = d.firstChild.style;
-		if (b.indexOf("/") != -1) {
+		if (b.indexOf("?") != -1) {
 			a.backgroundImage = "url(" + b + ")"
 		} else {
 			a.backgroundImage = "url(images/icons/" + Icon.sizes[c] + "/" + b.toLowerCase() + ".jpg)"

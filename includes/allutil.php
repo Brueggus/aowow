@@ -279,7 +279,10 @@ $cache_types = array(
 	17	=> 'zone_listing',
 
 	18	=> 'faction_page',
-	19	=> 'faction_listing'
+	19	=> 'faction_listing',
+
+	20	=> 'talent_data',
+	21	=> 'talent_icon',
 );
 function save_cache($type, $type_id, $data, $prefix = '')
 {
@@ -364,5 +367,53 @@ function SideByRace($race)
 function ajax_str_normalize($string)
 {
 	return strtr($string, array('\\'=>'\\\\',"'"=>"\\'",'"'=>'\\"',"\r"=>'\\r',"\n"=>'\\n','</'=>'<\/'));
+}
+
+function php2js($data)
+{
+	if (is_array($data))
+	{
+		// Массив
+		if (array_key_exists (0,$data))
+		{
+			// Простой массив []
+			$ret = "[";
+			$first = true;
+			foreach ($data as $key => $obj)
+			{
+				if(!$first) $ret .= ',';
+				$ret .= php2js($obj);
+				$first = false;
+			}			
+			$ret .= "]";
+		} else {
+			// Ассоциативный массив {}
+			$ret = "{";
+			$first = true;
+			foreach ($data as $key => $obj)
+			{
+				if(!$first) $ret .= ',';
+				$ret .= $key.':'.php2js($obj)."";
+				$first = false;
+			}			
+			$ret .= "}";
+		}
+	} else {
+		// Просто значение
+		$ret = is_string($data)? "'".str_replace("\n", "<br>", str_normalize($data))."'" : $data;
+	}
+	return $ret;
+}
+function imagetograyscale($im)
+{
+    if (imageistruecolor($im)) {
+        imagetruecolortopalette($im, false, 256);
+    }
+
+    for ($c = 0; $c < imagecolorstotal($im); $c++) {
+        $col = imagecolorsforindex($im, $c);
+        $gray = round(0.299 * $col['red'] + 0.587 * $col['green'] + 0.114 * $col['blue']);
+        imagecolorset($im, $c, $gray, $gray, $gray);
+    }
 }
 ?>
