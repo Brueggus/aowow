@@ -465,7 +465,7 @@ if(!$item = load_cache(5, $id))
 					$item['reagentfor'][$i]['creates'][]['entry'] = $row['effect'.$j.'itemtype'];
 					$item['reagentfor'][$i]['creates'][count($item['reagentfor'][$i]['creates'])-1]['count'] = 1 + $row['effect'.$j.'BasePoints'];
 					allitemsinfo($row['effect'.$j.'itemtype'], 0);
-					@$item['reagentfor'][$i]['quality'] = 6 - $allitems[$row['effect'.$j.'itemtype']]['quality'];
+					@$item['reagentfor'][$i]['quality'] = 7 - $allitems[$row['effect'.$j.'itemtype']]['quality'];
 				}
 			// Добавляем в таблицу спеллов
 			allspellsinfo2($row);
