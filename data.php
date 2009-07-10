@@ -5,14 +5,14 @@ require_once('includes/allutil.php');
 switch($_GET['data'])
 {
 	case 'talents':
-		// i - id ñêèëëà (id èç aowow_talent)
-		// n - íàçâàíèå (spellname èç aowow_spell äëÿ spellID=rank1)
-		// m - êîë-âî ðàíêîâ (6-êîëè÷åñòâî_ïóñòûõ_ðàíêîâ)
-		// s - ñïåëëû äëÿ ðàíêîâ (rank1, rank2, ..., rank5 èç aowow_talent)
-		// d - îïèñàíèÿ ñïåëëîâ
-		// x - ñòîëáåö (col èç aowow_talent)
-		// y - ñòðîêà (row èç aowow_talent)
-		// r - îò ÷åãî è êàêîãî ðàíêà çàâèñèò: "r: [r_1, r_2]", ãäå r_1 - íîìåð (íóìåðàöèÿ ñ 0) òàëàíòà, r_2 - ðàíê
+		// i - id ÑÐºÐ¸Ð»Ð»Ð° (id Ð¸Ð· aowow_talent)
+		// n - Ð½Ð°Ð·Ð²Ð°Ð½Ð¸Ðµ (spellname Ð¸Ð· aowow_spell Ð´Ð»Ñ spellID=rank1)
+		// m - ÐºÐ¾Ð»-Ð²Ð¾ Ñ€Ð°Ð½ÐºÐ¾Ð² (6-ÐºÐ¾Ð»Ð¸Ñ‡ÐµÑÑ‚Ð²Ð¾_Ð¿ÑƒÑÑ‚Ñ‹Ñ…_Ñ€Ð°Ð½ÐºÐ¾Ð²)
+		// s - ÑÐ¿ÐµÐ»Ð»Ñ‹ Ð´Ð»Ñ Ñ€Ð°Ð½ÐºÐ¾Ð² (rank1, rank2, ..., rank5 Ð¸Ð· aowow_talent)
+		// d - Ð¾Ð¿Ð¸ÑÐ°Ð½Ð¸Ñ ÑÐ¿ÐµÐ»Ð»Ð¾Ð²
+		// x - ÑÑ‚Ð¾Ð»Ð±ÐµÑ† (col Ð¸Ð· aowow_talent)
+		// y - ÑÑ‚Ñ€Ð¾ÐºÐ° (row Ð¸Ð· aowow_talent)
+		// r - Ð¾Ñ‚ Ñ‡ÐµÐ³Ð¾ Ð¸ ÐºÐ°ÐºÐ¾Ð³Ð¾ Ñ€Ð°Ð½ÐºÐ° Ð·Ð°Ð²Ð¸ÑÐ¸Ñ‚: "r: [r_1, r_2]", Ð³Ð´Ðµ r_1 - Ð½Ð¾Ð¼ÐµÑ€ (Ð½ÑƒÐ¼ÐµÑ€Ð°Ñ†Ð¸Ñ Ñ 0) Ñ‚Ð°Ð»Ð°Ð½Ñ‚Ð°, r_2 - Ñ€Ð°Ð½Ðº
 		$class = intval($_GET['class']);
 		if(!in_array($class, array_keys($classes)))
 			exit;
@@ -23,7 +23,7 @@ switch($_GET['data'])
 
 			require_once('includes/allspells.php');
 
-			// Âñå "Òàáû" òàëàíòîâ çàäàííîãî êëàññà
+			// Ð’ÑÐµ "Ð¢Ð°Ð±Ñ‹" Ñ‚Ð°Ð»Ð°Ð½Ñ‚Ð¾Ð² Ð·Ð°Ð´Ð°Ð½Ð½Ð¾Ð³Ð¾ ÐºÐ»Ð°ÑÑÐ°
 			$tabs = $DB->select('
 					SELECT `id`, name_loc?d as `name`
 					FROM ?_talenttab
@@ -84,9 +84,9 @@ switch($_GET['data'])
 		break;
 	case 'glyphs':
 		/*
-			name - Èìÿ âåùè
-			description - Òóëòèï ñïåëëà
-			icon - Èêîíêà âåùè
+			name - Ð˜Ð¼Ñ Ð²ÐµÑ‰Ð¸
+			description - Ð¢ÑƒÐ»Ñ‚Ð¸Ð¿ ÑÐ¿ÐµÐ»Ð»Ð°
+			icon - Ð˜ÐºÐ¾Ð½ÐºÐ° Ð²ÐµÑ‰Ð¸
 		*/
 		$glyphs = array();
 		$glyphs = $DB->select('
