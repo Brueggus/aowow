@@ -12,13 +12,12 @@ require_once('includes/allobjects.php');
 $smarty->config_load($conf_file, 'search');
 
 // Строка поиска:
-$nsearch = '%'.urldecode($podrazdel).'%';
-
-$search_array = explode(' ', $nsearch);
+$search = urldecode($podrazdel);
+$nsearch = '%'.$search.'%';
 
 // Заголовок страницы
 $title = $search.' - '.$smarty->get_config_vars('name').' '.$smarty->get_config_vars('Search');
-$tab = '0';
+$smarty->assign('search', $search);
 
 // Подключаемся к ДБ
 global $DB;

@@ -39,7 +39,7 @@
 		</div>
 		<div id="topbar-right">
 			<div>
-				<form action="?"><a href="javascript:;"></a><input name="search" size="35" value="" id="live-search-generic" /></form>
+				<form action="?"><a href="javascript:;"></a><input name="search" size="35" value="{$search|escape:"html"}" id="live-search-generic" /></form>
 			</div>
 		</div>
 		<div id="topbar">
