@@ -157,8 +157,6 @@ function allitemsinfo2(&$Row, $level=0)
 	// Ищем иконку
 	$allitems[$num]['icon'] = $Row['iconname'];
 	// Качество вещи
-	if($Row['quality'] == 7)
-		$Row['quality'] = 6;
 	$allitems[$num]['quality'] = $Row['quality'];
 	// Название вещи вместе с локализацией
 	$allitems[$num]['name'] = localizedName($Row);
@@ -476,10 +474,8 @@ function iteminfo2(&$Row, $level=0)
 	// Уровень вещи
 	$item['level'] = $Row['ItemLevel'];
 	// Качество вещи...
-	if($Row['quality'] == 7)
-		$Row['quality'] = 6;
 	$item['quality'] = $Row['quality'];
-	$item['quality2'] = 6 - $Row['quality'];
+	$item['quality2'] = 7 - $Row['quality'];
 	// Требуемый уровень вещи:
 	$item['reqlevel'] = $Row['RequiredLevel'];
 	// Класс и подкласс вещи
