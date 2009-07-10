@@ -43,7 +43,7 @@
 			</table>
 
 			<div class="text">
-				<a href="http://www.wowhead.com/?{$query}" target="_blank" class="button-red"><div><blockquote><i>Wowhead</i></blockquote><span>Wowhead</span></div></a>
+				<a href="http://www.wowhead.com/?{$query}" class="button-red"><em><b><i>Wowhead</i></b><span>Wowhead</span></em></a>
 				<h1>{$npc.name}{if $npc.subname} &lt;{$npc.subname}&gt;{/if}</h1>
 
 {if $npc.heroic}

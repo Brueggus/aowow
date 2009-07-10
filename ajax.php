@@ -10,6 +10,7 @@ $AoWoWconf['debug'] = false;
 $AoWoWconf['realmd'] = false;
 // Настройка БД
 require_once('includes/db.php');
+global $languages;
 
 // Параметры передаваемые скрипту
 @list($what, $id) = explode("=", $_SERVER['QUERY_STRING']);
@@ -26,7 +27,7 @@ switch($what)
 			$item = allitemsinfo($id, 1);
 			save_cache(6, $id, $item);
 		}
-		$x .= '$WowheadPower.registerItem('.$id.', 0, {';
+		$x .= '$WowheadPower.registerItem('.$id.', '.$_SESSION['locale'].', {';
 		if ($item['name'])
 			$x .= 'name: \''.ajax_str_normalize($item['name']).'\',';
 		if ($item['quality'])
@@ -34,7 +35,7 @@ switch($what)
 		if ($item['icon'])
 			$x .= 'icon: \''.ajax_str_normalize($item['icon']).'\',';
 		if ($item['info'])
-			$x .= 'tooltip: \''.ajax_str_normalize($item['info']).'\'';
+			$x .= 'tooltip_'.$languages[$_SESSION['locale']].': \''.ajax_str_normalize($item['info']).'\'';
 		$x .= '});';
 		break;
 	case 'spell':
@@ -44,13 +45,13 @@ switch($what)
 			$spell = allspellsinfo($id, 1);
 			save_cache(14, $id, $spell);
 		}
-		$x .= '$WowheadPower.registerSpell('.$id.', 0,{';
+		$x .= '$WowheadPower.registerSpell('.$id.', '.$_SESSION['locale'].',{';
 		if ($spell['name'])
 			$x .= 'name: \''.ajax_str_normalize($spell['name']).'\',';
 		if ($spell['icon'])
 			$x .= 'icon: \''.ajax_str_normalize($spell['icon']).'\',';
 		if ($spell['info'])
-			$x .= 'tooltip: \''.ajax_str_normalize($spell['info']).'\'';
+			$x .= 'tooltip_'.$languages[$_SESSION['locale']].': \''.ajax_str_normalize($spell['info']).'\'';
 		$x .= '});';
 		break;
 	case 'quest':
@@ -61,11 +62,11 @@ switch($what)
 			$quest['tooltip'] = GetQuestTooltip($quest);
 			save_cache(11, $id, $quest);
 		}
-		$x .= '$WowheadPower.registerQuest('.$id.', 0,{';
+		$x .= '$WowheadPower.registerQuest('.$id.', '.$_SESSION['locale'].',{';
 		if($quest['name'])
 			$x .= 'name: \''.ajax_str_normalize($quest['name']).'\',';
 		if($quest['tooltip'])
-			$x .= 'tooltip: \''.ajax_str_normalize($quest['tooltip']).'\'';
+			$x .= 'tooltip_'.$languages[$_SESSION['locale']].': \''.ajax_str_normalize($quest['tooltip']).'\'';
 		$x .= '});';
 		break;
 	default:

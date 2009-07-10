@@ -189,7 +189,7 @@
 				<script type="text/javascript">ss_appendSticky()</script>
 
 				<div class="text">
-					<a href="http://www.wowhead.com/?{$query}" class="button-red"><div><blockquote><i>Wowhead</i></blockquote><span>Wowhead</span></div></a>
+					<a href="http://www.wowhead.com/?{$query}" class="button-red"><em><b><i>Wowhead</i></b><span>Wowhead</span></em></a>
 					<h1>{$quest.Title}</h1>
 
 					{if isset($quest.RequiredMinRep) or isset($quest.RequiredMaxRep)}

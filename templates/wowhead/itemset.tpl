@@ -33,7 +33,7 @@
 				<script type="text/javascript">ss_appendSticky()</script>
 
 				<div class="text">
-					<a href="http://www.wowhead.com/?{$query}" class="button-red"><div><blockquote><i>Wowhead</i></blockquote><span>Wowhead</span></div></a>
+					<a href="http://www.wowhead.com/?{$query}" class="button-red"><em><b><i>Wowhead</i></b><span>Wowhead</span></em></a>
 					<h1>{$itemset.name}</h1>
 					{$itemset.article}
 					This {$itemset.count}-piece set includes the following items:

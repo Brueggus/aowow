@@ -13,38 +13,23 @@
 			<a href="."></a>
 			<h1>{$page.Title|escape:"html"}</h1>
 		</div>
-		<div id="header-ad">
-			<iframe width="728" height="90" frameborder="0" style="display: none;"/></iframe>
-		</div>
+		<div id="header-ad"></div>
 	</div>
 
-	<div id="sidebar">
-		<div id="sidebar-contents">
-			<a href="javascript:;" class="expand-site" title="Purge ads and expand layout" onclick="g_expandSite()"></a>
-			<div id="sidebar-ad"><iframe width="160" height="600" frameborder="0" style="display: none;"/></iframe></div>
-		</div>
-	</div>
-
-	<div id="toplinks" class="toplinks">
-		{if isset($user)}<a href="?user={$user.name}">{$user.name}</a>|<a href="?account=signout{if $query}&amp;next={$query|escape}{/if}">{#Sign_out#}</a>{else}<a href="?account=signin{if $query}&amp;next={$query|escape}{/if}">{#Sign_in#}</a>{/if}|<a href="javascript:;" id="language-changer">{#Language#} <small>&#9660;</small></a>
-	</div>
-
-	<div id="wrapper">
+		<div id="wrapper" class="nosidebar">
 		<div id="toptabs">
 			<div id="toptabs-inner">
-				<div id="toptabs-right"></div>
-				<div id="toptabs-right-generic"></div>
+				<div id="toptabs-right">
+					<div id="toplinks" class="toplinks">
+						{if $user}<a href="?user={$user.name}">{$user.name}</a>|<a href="?account=signout">{#Sign_out#}</a>{else}<a href="?account=signin">{#Sign_in#}</a>{/if}
+						|<a href="javascript:;" id="toptabs-menu-language">{#Language#} <small>&#9660;</small></a>
+						<script type="text/javascript">g_initHeaderMenus()</script>
+					</div>
+				</div>
+				<div id="ptewhjkst46"></div>
 				<div class="clear"></div>
 			</div>
 		</div>
-		<div id="topbar-right">
-			<div>
-				<form action="?"><a href="javascript:;"></a><input name="search" size="35" value="{$search|escape:"html"}" id="live-search-generic" /></form>
-			</div>
-		</div>
-		<div id="topbar">
-			<span id="menu-buttons-generic" class="menu-buttons"></span>
-			<div class="clear"></div>
-		</div>
-
-		<script type="text/javascript">g_initHeader({$page.tab}); LiveSearch.attach(ge('live-search-generic'));</script>
+		<div id="topbar-right"><div><form action="."><a href="javascript:;"></a><input name="search" size="35" value="" id="oh2345v5ks" /></form></div></div>
+		<div id="topbar"><span id="kbl34h6b43" class="menu-buttons"></span><div class="clear"></div></div>
+		<script type="text/javascript">g_initHeader({$page.tab}); LiveSearch.attach(ge('oh2345v5ks'));</script>

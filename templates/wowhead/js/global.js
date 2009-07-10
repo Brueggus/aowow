@@ -1,152 +1,241 @@
-function $(C) {
+/*
+ global.js version 278 (09.07.2009)
+ Differences from origin:
+ 1. Change:
+   - http://static.wowhead.com/images/icons/	->	images/icons/
+   - http://static.wowhead.com/images/	->	templates/wowhead/images/
+ 2. In function M(aa, W) of class $WowheadPower:
+   - commented locale definition from host
+   - chaned Y calculation to use locale.id
+ 3. In fucntion b(W, S, X, Q, T) of class $WowheadPower:
+   - commented host definition
+ 4. In function g_initHeaderMenus()
+   - commented old (host-based) locale definition
+   - added new (locale.id-based) locale definition
+   - changed language-menu to include only English and Russian
+   - changed Russian locale.id to 8 (like in WoW-client)
+ 5. In g_locales array:
+   - Changed id of ruru locale to 8
+ 6. Change to relative path:
+   - ?		->		?	(104)
+ 7. Changed LiveSearch
+   - relocate ?search to opensearch.php?search
+*/
+function $(c) {
 	if (arguments.length > 1) {
-		var D = [];
-		for (var B = 0, A = arguments.length; B < A; ++B) {
-			D.push($(arguments[B]))
+		var b = [];
+		var a;
+		for (var d = 0, a = arguments.length; d < a; ++d) {
+			b.push($(arguments[d]))
 		}
-		return D
+		return b
 	}
-	if (typeof C == "string") {
-		C = ge(C)
+	if (typeof c == "string") {
+		c = ge(c)
 	}
-	return C
+	return c
 }
-function $E(A) {
-	if (!A) {
-		A = event
+function $E(a) {
+	if (!a) {
+		if (typeof event != "undefined") {
+			a = event
+		} else {
+			return null
+		}
 	}
-	A._button = A.which ? A.which: A.button;
-	A._target = A.target ? A.target: A.srcElement;
-	return A
-}
-function $A(B) {
-	var D = [];
-	for (var C = 0, A = B.length; C < A; ++C) {
-		D.push(B[C])
+	if (a.which) {
+		a._button = a.which
+	} else {
+		a._button = a.button;
+		if (Browser.ie) {
+			if (a._button & 4) {
+				a._button = 2
+			} else {
+				if (a._button & 2) {
+					a._button = 3
+				}
+			}
+		} else {
+			a._button = a.button + 1
+		}
 	}
-	return D
+	a._target = a.target ? a.target: a.srcElement;
+	a._wheelDelta = a.wheelDelta ? a.wheelDelta: -a.detail;
+	return a
 }
-Function.prototype.bind = function() {
-	var A = this,
-	C = $A(arguments),
-	B = C.shift();
-	return function() {
-		return A.apply(B, C.concat($A(arguments)))
+function $A(c) {
+	var e = [];
+	for (var d = 0, b = c.length; d < b; ++d) {
+		e.push(c[d])
+	}
+	return e
+}
+Function.prototype.bind = function () {
+	var c = this,
+	a = $A(arguments),
+	b = a.shift();
+	return function () {
+		return c.apply(b, a.concat($A(arguments)))
 	}
 };
-function strcmp(B, A) {
-	if (B == A) {
+function strcmp(d, c) {
+	if (d == c) {
 		return 0
 	}
-	if (B == null) {
+	if (d == null) {
 		return - 1
 	}
-	if (A == null) {
+	if (c == null) {
 		return 1
 	}
-	return B < A ? -1: 1
+	return d < c ? -1 : 1
 }
-function trim(A) {
-	return A.replace(/(^\s*|\s*$)/g, "")
+function trim(a) {
+	return a.replace(/(^\s*|\s*$)/g, "")
 }
-function rtrim(B, C) {
-	var A = B.length;
-	while (--A > 0 && B.charAt(A) == C) {}
-	B = B.substring(0, A + 1);
-	if (B == C) {
-		B = ""
+function rtrim(c, d) {
+	var b = c.length;
+	while (--b > 0 && c.charAt(b) == d) {}
+	c = c.substring(0, b + 1);
+	if (c == d) {
+		c = ""
 	}
-	return B
+	return c
 }
-function sprintf(C) {
-	for (var B = 1, A = arguments.length; B < A; ++B) {
-		C = C.replace("$" + B, arguments[B])
+function sprintf(b) {
+	var a;
+	for (a = 1, len = arguments.length; a < len; ++a) {
+		b = b.replace("$" + a, arguments[a])
 	}
-	return C
+	return b
 }
-function str_replace(C, B, A) {
-	while (C.indexOf(B) != -1) {
-		C = C.replace(B, A)
+function sprintfa(b) {
+	var a;
+	for (a = 1, len = arguments.length; a < len; ++a) {
+		b = b.replace(new RegExp("\\$" + a, "g"), arguments[a])
 	}
-	return C
+	return b
 }
-function urlencode(A) {
-	A = encodeURIComponent(A);
-	A = str_replace(A, "+", "%2B");
-	return A
-}
-function number_format(A) {
-	A = "" + parseInt(A);
-	if (A.length <= 3) {
-		return A
+function sprintfo(c) {
+	if (typeof c == "object" && c.length) {
+		var a = c;
+		c = a[0];
+		var b;
+		for (b = 1; b < a.length; ++b) {
+			c = c.replace("$" + b, a[b])
+		}
+		return c
 	}
-	return number_format(A.substr(0, A.length - 3)) + "," + A.substr(A.length - 3)
 }
-function in_array(B, E, F, D) {
-	if (B == null) {
+function str_replace(e, d, c) {
+	while (e.indexOf(d) != -1) {
+		e = e.replace(d, c)
+	}
+	return e
+}
+function urlencode(a) {
+	a = encodeURIComponent(a);
+	a = str_replace(a, "+", "%2B");
+	return a
+}
+function urlencode2(a) {
+	a = encodeURIComponent(a);
+	a = str_replace(a, "%20", "+");
+	return a
+}
+function number_format(a) {
+	a = "" + parseInt(a);
+	if (a.length <= 3) {
+		return a
+	}
+	return number_format(a.substr(0, a.length - 3)) + "," + a.substr(a.length - 3)
+}
+function in_array(c, g, h, e) {
+	if (c == null) {
 		return - 1
 	}
-	if (F) {
-		return in_arrayf(B, E, F, D)
+	if (h) {
+		return in_arrayf(c, g, h, e)
 	}
-	for (var C = D || 0, A = B.length; C < A; ++C) {
-		if (B[C] == E) {
-			return C
+	for (var d = e || 0, b = c.length; d < b; ++d) {
+		if (c[d] == g) {
+			return d
 		}
 	}
 	return - 1
 }
-function in_arrayf(B, E, F, D) {
-	for (var C = D || 0, A = B.length; C < A; ++C) {
-		if (F(B[C]) == E) {
-			return C
+function in_arrayf(c, g, h, e) {
+	for (var d = e || 0, b = c.length; d < b; ++d) {
+		if (h(c[d]) == g) {
+			return d
 		}
 	}
 	return - 1
 }
-function array_walk(C, F, B) {
-	var E;
-	for (var D = 0, A = C.length; D < A; ++D) {
-		E = F(C[D], B, C, D);
-		if (E != null) {
-			C[D] = E
+function array_walk(d, h, c) {
+	var g;
+	for (var e = 0, b = d.length; e < b; ++e) {
+		g = h(d[e], c, d, e);
+		if (g != null) {
+			d[e] = g
 		}
 	}
 }
-function array_apply(C, F, B) {
-	var E;
-	for (var D = 0, A = C.length; D < A; ++D) {
-		F(C[D], B, C, D)
+function array_apply(d, h, c) {
+	var g;
+	for (var e = 0, b = d.length; e < b; ++e) {
+		h(d[e], c, d, e)
 	}
 }
-function ge(A) {
-	return document.getElementById(A)
+function ge(a) {
+	return document.getElementById(a)
 }
-function gE(A, B) {
-	return A.getElementsByTagName(B)
+function gE(a, b) {
+	return a.getElementsByTagName(b)
 }
-function ce(C, B) {
-	var A = document.createElement(C);
-	if (B) {
-		cOr(A, B)
+function ce(c, b) {
+	var a = document.createElement(c);
+	if (b) {
+		cOr(a, b)
 	}
-	return A
+	return a
 }
-function de(A) {
-	A.parentNode.removeChild(A)
+function de(a) {
+	a.parentNode.removeChild(a)
 }
-function ae(A, B) {
-	return A.appendChild(B)
+function ae(a, b) {
+	return a.appendChild(b)
 }
-function ct(A) {
-	return document.createTextNode(A)
+function aef(a, b) {
+	return a.insertBefore(b, a.firstChild)
+}
+function ee(a, b) {
+	if (!b) {
+		b = 0
+	}
+	while (a.childNodes[b]) {
+		a.removeChild(a.childNodes[b])
+	}
+}
+function ct(a) {
+	return document.createTextNode(a)
+}
+function st(a, b) {
+	if (a.firstChild && a.firstChild.nodeType == 3) {
+		a.firstChild.nodeValue = b
+	} else {
+		aef(a, ct(b))
+	}
+}
+function nw(a) {
+	a.style.whiteSpace = "nowrap"
 }
 function rf() {
 	return false
 }
-function rf2(A) {
-	A = $E(A);
-	if (A.ctrlKey || A.shiftKey || A.altKey || A.metaKey) {
+function rf2(a) {
+	a = $E(a);
+	if (a.ctrlKey || a.shiftKey || a.altKey || a.metaKey) {
 		return
 	}
 	return false
@@ -154,102 +243,137 @@ function rf2(A) {
 function tb() {
 	this.blur()
 }
-function ac(C) {
-	var B = 0,
-	A = 0;
-	while (C) {
-		B += C.offsetLeft;
-		A += C.offsetTop;
-		C = C.offsetParent
-	}
-	return [B, A]
-}
-function aE(B, C, A) {
-	if (Browser.ie) {
-		B.attachEvent("on" + C, A)
-	} else {
-		B.addEventListener(C, A, false)
-	}
-}
-function dE(B, C, A) {
-	if (Browser.ie) {
-		B.detachEvent("on" + C, A)
-	} else {
-		B.removeEventListener(C, A, false)
-	}
-}
-function sp(A) {
-	if (!A) {
-		A = event
-	}
-	if (Browser.ie) {
-		A.cancelBubble = true
-	} else {
-		A.stopPropagation()
-	}
-}
-function sc(F, G, B, D, E) {
-	var C = new Date();
-	var A = F + "=" + escape(B) + "; ";
-	C.setDate(C.getDate() + G);
-	A += "expires=" + C.toUTCString() + "; ";
-	if (D) {
-		A += "path=" + D + "; "
-	}
-	if (E) {
-		A += "domain=" + E + "; "
-	}
-	document.cookie = A
-}
-function dc(A) {
-	sc(A, -1)
-}
-function gc(D) {
-	var A,
-	E;
-	if (!D) {
-		var B = [];
-		E = document.cookie.split("; ");
-		for (var C = 0; C < E.length; ++C) {
-			A = E[C].split("=");
-			B[A[0]] = unescape(A[1])
-		}
-		return B
-	} else {
-		A = document.cookie.indexOf(D + "=");
-		if (A != -1) {
-			if (A == 0 || document.cookie.substring(A - 2, A) == "; ") {
-				A += D.length + 1;
-				E = document.cookie.indexOf("; ", A);
-				if (E == -1) {
-					E = document.cookie.length
-				}
-				return unescape(document.cookie.substring(A, E))
+function ac(c, d) {
+	var a = 0,
+	g = 0,
+	b;
+	while (c) {
+		a += c.offsetLeft;
+		g += c.offsetTop;
+		b = c.parentNode;
+		while (b && b != c.offsetParent && b.offsetParent) {
+			if (b.scrollLeft || b.scrollTop) {
+				a -= (b.scrollLeft | 0);
+				g -= (b.scrollTop | 0);
+				break
 			}
+			b = b.parentNode
 		}
+		c = c.offsetParent
 	}
-	return null
+	if (Lightbox.isVisible()) {
+		d = true
+	}
+	if (d && !Browser.ie6) {
+		var f = g_getScroll();
+		a += f.x;
+		g += f.y
+	}
+	var e = [a, g];
+	e.x = a;
+	e.y = g;
+	return e
 }
-function ns(A) {
-	A.onmousedown = A.onselectstart = A.ondragstart = rf;
+function aE(b, c, a) {
 	if (Browser.ie) {
-		A.onfocus = tb
+		b.attachEvent("on" + c, a)
+	} else {
+		b.addEventListener(c, a, false)
 	}
 }
-function cO(C, A) {
-	for (var B in A) {
-		C[B] = A[B]
+function dE(b, c, a) {
+	if (Browser.ie) {
+		b.detachEvent("on" + c, a)
+	} else {
+		b.removeEventListener(c, a, false)
 	}
 }
-function cOr(C, A) {
-	for (var B in A) {
-		if (typeof A[B] == "object") {
-			if (!C[B]) {
-				C[B] = {}
+function sp(a) {
+	if (!a) {
+		a = event
+	}
+	if (Browser.ie) {
+		a.cancelBubble = true
+	} else {
+		a.stopPropagation()
+	}
+}
+function sc(h, i, d, f, g) {
+	var e = new Date();
+	var c = h + "=" + escape(d) + "; ";
+	e.setDate(e.getDate() + i);
+	c += "expires=" + e.toUTCString() + "; ";
+	if (f) {
+		c += "path=" + f + "; "
+	}
+	if (g) {
+		c += "domain=" + g + "; "
+	}
+	document.cookie = c;
+	gc.C[h] = d
+}
+function dc(a) {
+	sc(a, -1);
+	gc.C[a] = null
+}
+function gc(f) {
+	if (gc.I == null) {
+		var e = unescape(document.cookie).split("; ");
+		gc.C = {};
+		for (var c = 0, a = e.length; c < a; ++c) {
+			var g = e[c].indexOf("="),
+			b,
+			d;
+			if (g != -1) {
+				b = e[c].substr(0, g);
+				d = e[c].substr(g + 1)
+			} else {
+				b = e[c];
+				d = ""
 			}
-			cOr(C[B], A[B])
+			gc.C[b] = d
+		}
+		gc.I = 1
+	}
+	if (!f) {
+		return gc.C
+	} else {
+		return gc.C[f]
+	}
+}
+function ns(a) {
+	if (Browser.ie) {
+		a.onfocus = tb;
+		a.onmousedown = a.onselectstart = a.ondragstart = rf
+	}
+}
+function eO(b) {
+	for (var a in b) {
+		delete b[a]
+	}
+}
+function cO(f, c, b) {
+	for (var e in c) {
+		if (b && typeof c[e] == "object" && c[e].length) {
+			f[e] = c[e].slice(0)
 		} else {
-			C[B] = A[B]
+			f[e] = c[e]
+		}
+	}
+}
+function cOr(f, c, b) {
+	for (var e in c) {
+		if (typeof c[e] == "object") {
+			if (b && c[e].length) {
+				f[e] = c[e].slice(0)
+			} else {
+				if (!f[e]) {
+					f[e] = {}
+				}
+				cOr(f[e], c[e], b)
+			}
+		} else {
+			f[e] = c[e]
 		}
 	}
 }
@@ -259,8 +383,10 @@ var Browser = {
 	safari: navigator.userAgent.indexOf("Safari") != -1,
 	gecko: navigator.userAgent.indexOf("Gecko") != -1 && navigator.userAgent.indexOf("KHTML") == -1
 };
-Browser.ie7 = Browser.ie && navigator.userAgent.indexOf("MSIE 7.0") != -1;
+Browser.ie8 = Browser.ie && navigator.userAgent.indexOf("MSIE 8.0") != -1;
+Browser.ie7 = Browser.ie && navigator.userAgent.indexOf("MSIE 7.0") != -1 && !Browser.ie8;
 Browser.ie6 = Browser.ie && navigator.userAgent.indexOf("MSIE 6.0") != -1 && !Browser.ie7;
+Browser.ie67 = Browser.ie6 || Browser.ie7;
 navigator.userAgent.match(/Gecko\/([0-9]+)/);
 Browser.geckoVersion = parseInt(RegExp.$1) | 0;
 var OS = {
@@ -268,624 +394,980 @@ var OS = {
 	mac: navigator.appVersion.indexOf("Macintosh") != -1,
 	linux: navigator.appVersion.indexOf("Linux") != -1
 };
+var DomContentLoaded = new
+function () {
+	var a = [];
+	this.now = function () {
+		array_apply(a, function (b) {
+			b()
+		});
+		DomContentLoaded = null
+	};
+	this.addEvent = function (b) {
+		a.push(b)
+	}
+};
 function g_getWindowSize() {
-	var B = 0,
-	A = 0;
-	if (typeof window.innerWidth == "number") {
-		B = window.innerWidth;
-		A = window.innerHeight
+	var a = 0,
+	b = 0;
+	if (document.documentElement && (document.documentElement.clientWidth || document.documentElement.clientHeight)) {
+		a = document.documentElement.clientWidth;
+		b = document.documentElement.clientHeight
 	} else {
-		if (document.documentElement && (document.documentElement.clientWidth || document.documentElement.clientHeight)) {
-			B = document.documentElement.clientWidth;
-			A = document.documentElement.clientHeight
+		if (document.body && (document.body.clientWidth || document.body.clientHeight)) {
+			a = document.body.clientWidth;
+			b = document.body.clientHeight
 		} else {
-			if (document.body && (document.body.clientWidth || document.body.clientHeight)) {
-				B = document.body.clientWidth;
-				A = document.body.clientHeight
+			if (typeof window.innerWidth == "number") {
+				a = window.innerWidth;
+				b = window.innerHeight
 			}
 		}
 	}
 	return {
-		w: B,
-		h: A
+		w: a,
+		h: b
 	}
 }
 function g_getScroll() {
-	var A = 0,
-	B = 0;
+	var a = 0,
+	b = 0;
 	if (typeof(window.pageYOffset) == "number") {
-		A = window.pageXOffset;
-		B = window.pageYOffset
+		a = window.pageXOffset;
+		b = window.pageYOffset
 	} else {
 		if (document.body && (document.body.scrollLeft || document.body.scrollTop)) {
-			A = document.body.scrollLeft;
-			B = document.body.scrollTop
+			a = document.body.scrollLeft;
+			b = document.body.scrollTop
 		} else {
 			if (document.documentElement && (document.documentElement.scrollLeft || document.documentElement.scrollTop)) {
-				A = document.documentElement.scrollLeft;
-				B = document.documentElement.scrollTop
+				a = document.documentElement.scrollLeft;
+				b = document.documentElement.scrollTop
 			}
 		}
 	}
 	return {
-		x: A,
-		y: B
+		x: a,
+		y: b
 	}
 }
-function g_getCursorPos(C) {
-	var B,
-	D;
+function g_getCursorPos(c) {
+	var a, d;
 	if (window.innerHeight) {
-		B = C.pageX;
-		D = C.pageY
+		a = c.pageX;
+		d = c.pageY
 	} else {
-		var A = g_getScroll();
-		B = C.clientX + A.x;
-		D = C.clientY + A.y
+		var b = g_getScroll();
+		a = c.clientX + b.x;
+		d = c.clientY + b.y
 	}
 	return {
-		x: B,
-		y: D
+		x: a,
+		y: d
 	}
 }
-function g_scrollTo(C, B) {
-	var M,
-	K = g_getWindowSize(),
-	L = g_getScroll(),
-	I = K.w,
-	E = K.h,
-	G = L.x,
-	D = L.y;
-	C = $(C);
-	if (B == null) {
-		B = []
+function g_scrollTo(c, b) {
+	var l, k = g_getWindowSize(),
+	m = g_getScroll(),
+	i = k.w,
+	e = k.h,
+	g = m.x,
+	d = m.y;
+	c = $(c);
+	if (b == null) {
+		b = []
 	} else {
-		if (typeof B == "number") {
-			B = [B]
+		if (typeof b == "number") {
+			b = [b]
 		}
 	}
-	M = B.length;
-	if (M == 0) {
-		B[0] = B[1] = B[2] = B[3] = 0
+	l = b.length;
+	if (l == 0) {
+		b[0] = b[1] = b[2] = b[3] = 0
 	} else {
-		if (M == 1) {
-			B[1] = B[2] = B[3] = B[0]
+		if (l == 1) {
+			b[1] = b[2] = b[3] = b[0]
 		} else {
-			if (M == 2) {
-				B[2] = B[0];
-				B[3] = B[1]
+			if (l == 2) {
+				b[2] = b[0];
+				b[3] = b[1]
 			} else {
-				if (M == 3) {
-					B[3] = B[1]
+				if (l == 3) {
+					b[3] = b[1]
 				}
 			}
 		}
 	}
-	M = ac(C);
-	var A = M[0] - B[3];
-	var H = M[1] - B[0];
-	var J = M[0] + C.offsetWidth + B[1];
-	var F = M[1] + C.offsetHeight + B[2];
-	if (J - A > I || A < G) {
-		G = A
+	l = ac(c);
+	var a = l[0] - b[3],
+	h = l[1] - b[0],
+	j = l[0] + c.offsetWidth + b[1],
+	f = l[1] + c.offsetHeight + b[2];
+	if (j - a > i || a < g) {
+		g = a
 	} else {
-		if (J - I > G) {
-			G = J - I
+		if (j - i > g) {
+			g = j - i
 		}
 	}
-	if (F - H > E || H < D) {
-		D = H
+	if (f - h > e || h < d) {
+		d = h
 	} else {
-		if (F - E > D) {
-			D = F - E
+		if (f - e > d) {
+			d = f - e
 		}
 	}
-	scrollTo(G, D)
+	scrollTo(g, d)
 }
-function g_setTextNodes(C, B) {
-	if (C.nodeType == 3) {
-		C.nodeValue = B
+function g_setTextNodes(c, b) {
+	if (c.nodeType == 3) {
+		c.nodeValue = b
 	} else {
-		for (var A = 0; A < C.childNodes.length; ++A) {
-			g_setTextNodes(C.childNodes[A], B)
+		for (var a = 0; a < c.childNodes.length; ++a) {
+			g_setTextNodes(c.childNodes[a], b)
 		}
 	}
 }
-function g_getTextContent(C) {
-	var A = "";
-	for (var B = 0; B < C.childNodes.length; ++B) {
-		if (C.childNodes[B].nodeValue) {
-			A += C.childNodes[B].nodeValue
+function g_getTextContent(c) {
+	var a = "";
+	for (var b = 0; b < c.childNodes.length; ++b) {
+		if (c.childNodes[b].nodeValue) {
+			a += c.childNodes[b].nodeValue
 		} else {
-			if (C.childNodes[B].nodeName == "BR") {
+			if (c.childNodes[b].nodeName == "BR") {
 				if (Browser.ie) {
-					A += "\r"
+					a += "\r"
 				} else {
-					A += "\n"
+					a += "\n"
 				}
 			}
 		}
-		A += g_getTextContent(C.childNodes[B])
+		a += g_getTextContent(c.childNodes[b])
 	}
-	return A
+	return a
 }
-function g_setSelectedLink(C, B) {
+function g_setSelectedLink(c, b) {
 	if (!g_setSelectedLink.groups) {
 		g_setSelectedLink.groups = {}
 	}
-	var A = g_setSelectedLink.groups;
-	if (A[B]) {
-		A[B].className = ""
+	var a = g_setSelectedLink.groups;
+	if (a[b]) {
+		a[b].className = a[b].className.replace("selected", "")
 	}
-	C.className = "selected";
-	A[B] = C
+	c.className += " selected";
+	a[b] = c
 }
-function g_toggleDisplay(A) {
-	if (A.style.display == "none") {
-		A.style.display = "";
+function g_toggleDisplay(a) {
+	if (a.style.display == "none") {
+		a.style.display = "";
 		return true
 	} else {
-		A.style.display = "none";
+		a.style.display = "none";
 		return false
 	}
 }
-function g_initHeader(B) {
-	var H = ce("dl");
-	g_expandSite()
-	for (var G = 0, J = mn_path.length; G < J; ++G) {
-		var E = ce("dt");
-		var L = ce("a");
-		var I = ce("ins");
-		var F = ce("big");
-		var D = ce("span");
-		if (mn_path[G][0] != B) {
-			L.menu = mn_path[G][3];
-			L.onmouseover = Menu.show;
-			L.onmouseout = Menu.hide
-		}
-		if (mn_path[G][2]) {
-			L.href = mn_path[G][2]
-		} else {
-			L.href = "javascript:;";
-			ns(L);
-			L.style.cursor = "default"
-		}
-		if (B != null && mn_path[G][0] == B) {
-			L.className = "selected"
-		}
-		ae(F, ct(mn_path[G][1].charAt(0)));
-		ae(I, F);
-		ae(I, ct(mn_path[G][1].substr(1)));
-		ae(L, I);
-		ae(L, D);
-		ae(E, L);
-		ae(H, E)
+function g_enableScroll(a) {
+	if (!a) {
+		aE(document, "mousewheel", g_enableScroll.F);
+		aE(window, "DOMMouseScroll", g_enableScroll.F)
+	} else {
+		dE(document, "mousewheel", g_enableScroll.F);
+		dE(window, "DOMMouseScroll", g_enableScroll.F)
 	}
-	ae(ge("toptabs-right-generic"), H);
-	var A = ge("menu-buttons-generic");
-	if (B != null && B >= 0 && B < mn_path.length) {
-		switch (B) {
+}
+g_enableScroll.F = function (a) {
+	if (a.stopPropagation) {
+		a.stopPropagation()
+	}
+	if (a.preventDefault) {
+		a.preventDefault()
+	}
+	a.returnValue = false;
+	a.cancelBubble = true;
+	return false
+};
+function g_getGets() {
+	if (g_getGets.C != null) {
+		return g_getGets.C
+	}
+	var e = {};
+	if (location.search) {
+		var f = decodeURIComponent(location.search.substr(1)).split("&");
+		for (var c = 0, a = f.length; c < a; ++c) {
+			var g = f[c].indexOf("="),
+			b,
+			d;
+			if (g != -1) {
+				b = f[c].substr(0, g);
+				d = f[c].substr(g + 1)
+			} else {
+				b = f[c];
+				d = ""
+			}
+			e[b] = d
+		}
+	}
+	g_getGets.C = e;
+	return e
+}
+function g_createRect(d, c, a, b) {
+	return {
+		l: d,
+		t: c,
+		r: d + a,
+		b: c + b
+	}
+}
+function g_intersectRect(d, c) {
+	return ! (d.l >= c.r || c.l >= d.r || d.t >= c.b || c.t >= d.b)
+}
+function g_createRange(c, a) {
+	range = {};
+	for (var b = c; b <= a; ++b) {
+		range[b] = b
+	}
+	return range
+}
+function g_sortIdArray(a, b, c) {
+	a.sort(c ?
+	function (e, d) {
+		return strcmp(b[e][c], b[d][c])
+	}: function (e, d) {
+		return strcmp(b[e], b[d])
+	})
+}
+function g_sortJsonArray(e, d, f, a) {
+	var c = [];
+	for (var b in e) {
+		if (d[b] && (a == null || a(d[b]))) {
+			c.push(b)
+		}
+	}
+	if (f != null) {
+		c.sort(f)
+	} else {
+		g_sortIdArray(c, d)
+	}
+	return c
+}
+function g_urlize(a, b) {
+	a = str_replace(a, "'", "");
+	a = trim(a);
+	if (b) {
+		a = str_replace(a, " ", "-")
+	} else {
+		a = a.replace(/[^a-z0-9]/i, "-")
+	}
+	a = str_replace(a, "--", "-");
+	a = str_replace(a, "--", "-");
+	a = rtrim(a, "-");
+	a = a.toLowerCase();
+	return a
+}
+function g_getLocale(a) {
+	if (a && g_locale.id == 25) {
+		return 0
+	}
+	return g_locale.id
+}
+function g_createReverseLookupJson(b) {
+	var c = {};
+	for (var a in b) {
+		c[b[a]] = a
+	}
+	return c
+}
+function g_initHeader(c) {
+	var l = ce("dl"),
+	p = (c == 5);
+	for (var k = 0, m = mn_path.length; k < m; ++k) {
+		var g = ce("dt");
+		var q = ce("a");
+		var n = ce("ins");
+		var h = ce("big");
+		var f = ce("span");
+		var o = mn_path[k][0];
+		var j = (o == c);
+		var e = (!j && mn_path[k][3]);
+		if (p && o == 5) {
+			e = true;
+			mn_path[k][3] = mn_profiles
+		}
+		if (e) {
+			q.menu = mn_path[k][3];
+			q.onmouseover = Menu.show;
+			q.onmouseout = Menu.hide
+		} else {
+			q.onmouseover = Menu._hide
+		}
+		if (mn_path[k][2]) {
+			q.href = mn_path[k][2]
+		} else {
+			q.href = "javascript:;";
+			ns(q);
+			q.style.cursor = "default"
+		}
+		if (j) {
+			q.className = "selected"
+		}
+		ae(h, ct(mn_path[k][1].charAt(0)));
+		ae(n, h);
+		ae(n, ct(mn_path[k][1].substr(1)));
+		ae(q, n);
+		ae(q, f);
+		ae(g, q);
+		ae(l, g)
+	}
+	ae(ge("ptewhjkst46"), l);
+	var b = ge("kbl34h6b43");
+	if (c != null && c >= 0 && c < mn_path.length) {
+		switch (c) {
 		case 0:
-			Menu.addButtons(A, Menu.explode(mn_database));
+			Menu.addButtons(b, Menu.explode(mn_database));
 			break;
 		case 1:
-			Menu.addButtons(A, mn_tools);
+			Menu.addButtons(b, mn_tools);
 			break;
 		case 2:
-			Menu.addButtons(A, Menu.explode(mn_more));
+			Menu.addButtons(b, Menu.explode(mn_more));
 			break;
 		case 3:
-			Menu.addButtons(A, Menu.explode(mn_forums));
+			Menu.addButtons(b, Menu.explode(mn_forums));
+			break;
+		case 5:
+			pr_initTopBarSearch();
 			break
 		}
 	} else {
-		ae(A, ct(String.fromCharCode(160)))
+		ae(b, ct(String.fromCharCode(160)))
 	}
-	g_initLanguageChanger();
-	var M = ge("live-search-generic");
-	var K = M.previousSibling;
-	var C = M.parentNode;
-	ns(K);
-	K.onclick = function() {
+	var r = ge("oh2345v5ks");
+	var s = r.previousSibling;
+	var d = r.parentNode;
+	ns(s);
+	s.onclick = function () {
 		this.parentNode.onsubmit()
 	};
-	if (M.value == "") {
-		M.className = "search-database"
+	if (Browser.ie) {
+		setTimeout(function () {
+			r.value = ""
+		},
+		1)
 	}
-	M.onmousemove = function() {
+	if (r.value == "") {
+		r.className = "search-database"
+	}
+	r.onmouseover = function () {
 		if (trim(this.value) != "") {
-			M.className = ""
+			this.className = ""
 		}
 	};
-	M.onfocus = function() {
-		M.className = ""
+	r.onfocus = function () {
+		this.className = ""
 	};
-	M.onblur = function() {
+	r.onblur = function () {
 		if (trim(this.value) == "") {
-			M.className = "search-database"
+			this.className = "search-database";
+			this.value = ""
 		}
 	};
-	C.onsubmit = function() {
-		var N = this.elements[0].value;
-		if (trim(N) == "") {
+	d.onsubmit = function () {
+		var a = this.elements[0].value;
+		if (trim(a) == "") {
 			return false
 		}
 		this.submit()
 	}
 }
-
-function g_initLanguageChanger() {
-	var A = ge("language-changer");
-	if (!A) {
-		return
-	}
-	A.menu = [[0, "English", (g_locale.id != 0 ? "?locale=0" : null)], [0, "Русский", (g_locale.id != 8 ? "?locale=8" : null)]];
-	A.menu.rightAligned = 1;
-	if (g_locale.id != 25) {
-		A.menu[{
-			0: 0,
-			8: 1
-		} [g_locale.id]].checked = 1
-	}
-	A.onmouseover = Menu.show;
-	A.onmouseout = Menu.hide
-}
-function g_initPath(K, D) {
-	var G = mn_path,
-	H = null,
-	C = null,
-	L = 0,
-	I = ge("main-precontents"),
-	A = ce("div");
-	A.className = "path";
-	if (D != null) {
-		var J = ce("div");
-		J.className = "path-right";
-		var M = ce("a");
-		M.href = "javascript:;";
-		M.id = "fi_toggle";
-		ns(M);
-		M.onclick = fi_Toggle;
-		if (D) {
-			M.className = "disclosure-on";
-			ae(M, ct(LANG.fihide))
+function g_initHeaderMenus() {
+	var c = ge("toptabs-menu-user");
+	if (c) {
+		c.menu = [[0, LANG.userpage, "?user=" + g_user.name], [0, LANG.settings, "?account"], [0, LANG.signout, "?account=signout"]];
+		if (location.href.match(new RegExp("?user=" + g_user.name + "$", "i"))) {
+			c.menu[0].checked = 1
 		} else {
-			M.className = "disclosure-off";
-			ae(M, ct(LANG.fishow))
+			if (location.href.indexOf("?account") != -1) {
+				c.menu[1].checked = 1
+			}
 		}
-		ae(J, M);
-		ae(I, J)
+		c.onmouseover = Menu.show;
+		c.onmouseout = Menu.hide;
+		c.href = "?user=" + g_user.name
 	}
-	for (var F = 0; F < K.length; ++F) {
-		var M,
-		B,
-		N = 0;
-		for (var E = 0; E < G.length; ++E) {
-			if (G[E][0] == K[F]) {
-				N = 1;
-				G = G[E];
-				G.checked = 1;
+	c = ge("toptabs-menu-profiles");
+	if (c) {
+		c.menu = [];
+		if (g_user.characters) {
+			c.menu.push([, LANG.tab_characters]);
+			for (var f = 0, b = g_user.characters.length; f < b; ++f) {
+				var h = g_user.characters[f],
+				e = [0, h.name + " (" + h.realmname + LANG.hyphen + h.region.toUpperCase() + ")", "?profile=" + h.region + "." + h.realm + "." + g_cleanCharacterName(h.name)];
+				e.smallIcon = h.icon ? h.icon: "chr_" + g_file_races[h.race] + "_" + g_file_genders[h.gender] + "_" + g_file_classes[h.classs] + "0" + (h.level > 59 ? (Math.floor((h.level - 60) / 10) + 2) : 1);
+				c.menu.push(e)
+			}
+		}
+		c.menu.push([, LANG.tab_profiles]);
+		if (g_user.profiles) {
+			for (var f = 0, b = g_user.profiles.length; f < b; ++f) {
+				var h = g_user.profiles[f],
+				e = [0, h.name, "?profile=" + h.id];
+				e.smallIcon = h.icon ? h.icon: "chr_" + g_file_races[h.race] + "_" + g_file_genders[h.gender] + "_" + g_file_classes[h.classs] + "0" + (h.level > 59 ? (Math.floor((h.level - 60) / 10) + 2) : 1);
+				c.menu.push(e)
+			}
+		}
+		var e = [0, "(" + LANG.button_new + ")", "?profile&new"];
+		e.smallIcon = "inv_misc_questionmark";
+		c.menu.push(e);
+		c.menu.rightAligned = 1;
+		c.onmouseover = Menu.show;
+		c.onmouseout = Menu.hide;
+		c.href = "?user=" + g_user.name + "#profiles"
+	}
+	c = ge("toptabs-menu-language");
+	if (c) {
+		var g = "www",
+		d = location.href,
+		j = location.hostname.indexOf(".");
+		if (j != -1 && j <= 5) {
+			g = location.hostname.substr(0, j)
+		}
+		j = d.indexOf("#");
+		if (j != -1) {
+			d = d.substr(0, j)
+		}
+		//c.menu = [[0, "Deutsch", (g_locale.id != 3 ? d.replace(g, "de") : null)], [0, "English", (g_locale.id != 0 ? d.replace(g, "www") : null)], [0, "Espa" + String.fromCharCode(241) + "ol", (g_locale.id != 6 ? d.replace(g, "es") : null)], [0, "Fran" + String.fromCharCode(231) + "ais", (g_locale.id != 2 ? d.replace(g, "fr") : null)], [0, String.fromCharCode(1056, 1091, 1089, 1089, 1082, 1080, 1081), (g_locale.id != 7 ? d.replace(g, "ru") : null)]];
+		c.menu = [[0, "English", (g_locale.id != 0 ? "?locale=0" : null)], [0, String.fromCharCode(1056, 1091, 1089, 1089, 1082, 1080, 1081), (g_locale.id != 8 ? "?locale=8" : null)]];
+		c.menu.rightAligned = 1;
+		if (g_locale.id != 25) {
+			c.menu[{
+				0 : 0,
+				8 : 1
+			} [g_locale.id]].checked = 1
+		}
+		c.onmouseover = Menu.show;
+		c.onmouseout = Menu.hide
+	}
+}
+function g_initPath(p, f) {
+	var h = mn_path,
+	c = null,
+	k = null,
+	o = 0,
+	l = ge("main-precontents"),
+	n = ce("div");
+	ee(l);
+	if (g_initPath.lastIt) {
+		g_initPath.lastIt.checked = null
+	}
+	n.className = "path";
+	if (f != null) {
+		var m = ce("div");
+		m.className = "path-right";
+		var q = ce("a");
+		q.href = "javascript:;";
+		q.id = "fi_toggle";
+		ns(q);
+		q.onclick = fi_toggle;
+		if (f) {
+			q.className = "disclosure-on";
+			ae(q, ct(LANG.fihide))
+		} else {
+			q.className = "disclosure-off";
+			ae(q, ct(LANG.fishow))
+		}
+		ae(m, q);
+		ae(l, m)
+	}
+	for (var g = 0; g < p.length; ++g) {
+		var q, b, r = 0;
+		for (var e = 0; e < h.length; ++e) {
+			if (h[e][0] == p[g]) {
+				r = 1;
+				h = h[e];
+				h.checked = 1;
 				break
 			}
 		}
-		if (!N) {
-			L = 1;
+		if (!r) {
+			o = 1;
 			break
 		}
-		M = ce("a");
-		B = ce("span");
-		if (G[2]) {
-			M.href = G[2]
+		q = ce("a");
+		b = ce("span");
+		if (h[2]) {
+			q.href = h[2]
 		} else {
-			M.href = "javascript:;";
-			ns(M);
-			M.style.textDecoration = "none";
-			M.style.color = "white";
-			M.style.cursor = "default"
+			q.href = "javascript:;";
+			ns(q);
+			q.style.textDecoration = "none";
+			q.style.color = "white";
+			q.style.cursor = "default"
 		}
-		if (F < K.length - 1 && G[3]) {
-			B.className = "menuarrow"
+		if (g < p.length - 1 && h[3]) {
+			b.className = "menuarrow"
 		}
-		ae(M, ct(G[4] == null ? G[1] : G[4]));
-		if (F == 0) {
-			M.menu = mn_path
+		ae(q, ct(h[4] == null ? h[1] : h[4]));
+		if (g == 0) {
+			q.menu = mn_path
 		} else {
-			M.menu = H[3]
+			q.menu = c[3]
 		}
-		M.onmouseover = Menu.show;
-		M.onmouseout = Menu.hide;
-		ae(B, M);
-		ae(A, B);
-		C = B;
-		H = G;
-		G = G[3];
-		if (!G) {
-			L = 1;
+		q.onmouseover = Menu.show;
+		q.onmouseout = Menu.hide;
+		ae(b, q);
+		ae(n, b);
+		k = b;
+		c = h;
+		h = h[3];
+		if (!h) {
+			o = 1;
 			break
 		}
 	}
-	if (L && C) {
-		C.className = ""
+	if (o && k) {
+		k.className = ""
+	} else {
+		if (c && c[3]) {
+			k.className = "menuarrow";
+			q = ce("a");
+			b = ce("span");
+			q.href = "javascript:;";
+			ns(q);
+			q.style.textDecoration = "none";
+			q.style.paddingRight = "16px";
+			q.style.color = "white";
+			q.style.cursor = "default";
+			ae(q, ct("..."));
+			q.menu = c[3];
+			q.onmouseover = Menu.show;
+			q.onmouseout = Menu.hide;
+			ae(b, q);
+			ae(n, b)
+		}
 	}
-	var J = ce("div");
-	J.className = "clear";
-	ae(A, J);
-	ae(I, A);
-	g_initPath.lastIt = H
+	var m = ce("div");
+	m.className = "clear";
+	ae(n, m);
+	ae(l, n);
+	g_initPath.lastIt = c
 }
-function g_formatTimeElapsed(D) {
-	function G(L, K, J) {
-		if (J && LANG.timeunitsab[K] == "") {
-			J = 0
+function g_formatTimeElapsed(e) {
+	function c(m, l, i) {
+		if (i && LANG.timeunitsab[l] == "") {
+			i = 0
 		}
-		if (J) {
-			return L + " " + LANG.timeunitsab[K]
+		if (i) {
+			return m + " " + LANG.timeunitsab[l]
 		} else {
-			return L + " " + (L == 1 ? LANG.timeunitssg[K] : LANG.timeunitspl[K])
+			return m + " " + (m == 1 ? LANG.timeunitssg[l] : LANG.timeunitspl[l])
 		}
 	}
-	var E = [31557600, 2629800, 604800, 86400, 3600, 60, 1];
-	var H = [1, 3, 3, -1, 5, -1, -1];
-	D = Math.max(D, 1);
-	for (var C = 3, F = E.length; C < F; ++C) {
-		if (D >= E[C]) {
-			var B = C;
-			var I = Math.floor(D / E[B]);
-			if (H[B] != -1) {
-				var A = H[B];
-				D %= E[B];
-				v2 = Math.floor(D / E[A]);
-				if (v2 > 0) {
-					return G(I, B, 1) + " " + G(v2, A, 1)
+	var g = [31557600, 2629800, 604800, 86400, 3600, 60, 1];
+	var a = [1, 3, 3, -1, 5, -1, -1];
+	e = Math.max(e, 1);
+	for (var f = 3, h = g.length; f < h; ++f) {
+		if (e >= g[f]) {
+			var d = f;
+			var k = Math.floor(e / g[d]);
+			if (a[d] != -1) {
+				var b = a[d];
+				e %= g[d];
+				var j = Math.floor(e / g[b]);
+				if (j > 0) {
+					return c(k, d, 1) + " " + c(j, b, 1)
 				}
 			}
-			return G(I, B, 0)
+			return c(k, d, 0)
 		}
 	}
 	return "(n/a)"
 }
-function g_formatDateSimple(E, A) {
-	function C(J) {
-		return (J < 10 ? "0" + J: J)
+function g_formatDateSimple(g, c) {
+	function a(b) {
+		return (b < 10 ? "0" + b: b)
 	}
-	var H = "",
-	G = E.getDate(),
-	D = E.getMonth() + 1,
-	F = E.getFullYear();
-	H += sprintf(LANG.date_simple, C(G), C(D), F);
-	if (A == 1) {
-		var I = E.getHours() + 1,
-		B = E.getMinutes() + 1;
-		H += LANG.date_at + C(I) + ":" + C(B)
+	var i = "",
+	j = g.getDate(),
+	f = g.getMonth() + 1,
+	h = g.getFullYear();
+	i += sprintf(LANG.date_simple, a(j), a(f), h);
+	if (c == 1) {
+		var k = g.getHours() + 1,
+		e = g.getMinutes() + 1;
+		i += LANG.date_at + a(k) + ":" + a(e)
 	}
-	return H
+	return i
 }
-function g_createGlow(A, G) {
-	var D = ce("span");
-	for (var C = -1; C <= 1; ++C) {
-		for (var B = -1; B <= 1; ++B) {
-			var F = ce("div");
-			F.style.position = "absolute";
-			F.style.whiteSpace = "nowrap";
-			F.style.left = C + "px";
-			F.style.top = B + "px";
-			if (C == 0 && B == 0) {
-				F.style.zIndex = 4
-			} else {
-				F.style.color = "black";
-				F.style.zIndex = 2
-			}
-			ae(F, ct(A));
-			ae(D, F)
+function g_cleanCharacterName(e) {
+	var d = "";
+	for (var c = 0, a = e.length; c < a; ++c) {
+		var b = e.charAt(c).toLowerCase();
+		if (b >= "a" && b <= "z") {
+			d += b
+		} else {
+			d += e.charAt(c)
 		}
 	}
-	D.style.position = "relative";
-	D.className = "glow" + (G != null ? " " + G: "");
-	var E = ce("span");
-	E.style.visibility = "hidden";
-	ae(E, ct(A));
-	ae(D, E);
-	return D
+	return d
 }
-function g_appendReputation(G, F, D, E) {
-	G = $(G);
-	var B = ce("a");
-	B.href = "javascript:;";
-	B.className = "reputation";
-	var H = ce("div");
-	H.className = "reputation-text";
-	var A = ce("del");
-	ae(A, ct(g_reputation_standings[F]));
-	ae(H, A);
-	var C = ce("ins");
-	ae(C, ct(E));
-	ae(H, C);
-	ae(B, H);
-	H = ce("div");
-	H.className = "reputation-bar" + F;
-	if (D <= 0 || D > 100) {
-		H.style.visibility = "hidden"
+function g_createGlow(a, h) {
+	var e = ce("span");
+	for (var c = -1; c <= 1; ++c) {
+		for (var b = -1; b <= 1; ++b) {
+			var g = ce("div");
+			g.style.position = "absolute";
+			g.style.whiteSpace = "nowrap";
+			g.style.left = c + "px";
+			g.style.top = b + "px";
+			if (c == 0 && b == 0) {
+				g.style.zIndex = 4
+			} else {
+				g.style.color = "black";
+				g.style.zIndex = 2
+			}
+			ae(g, ct(a));
+			ae(e, g)
+		}
 	}
-	H.style.width = D + "%";
-	ae(H, ct(String.fromCharCode(160)));
-	ae(B, H);
-	ae(G, B)
+	e.style.position = "relative";
+	e.className = "glow" + (h != null ? " " + h: "");
+	var f = ce("span");
+	f.style.visibility = "hidden";
+	ae(f, ct(a));
+	ae(e, f);
+	return e
 }
-function g_convertRatingToPercent(E, A, D) {
-	var C = {
-		12: 1.5,
-		13: 12,
-		14: 15,
-		15: 5,
-		16: 10,
-		17: 10,
-		18: 8,
-		19: 14,
-		20: 14,
-		21: 14,
-		22: 0,
-		23: 0,
-		24: 0,
-		25: 0,
-		26: 0,
-		27: 0,
-		28: 10,
-		29: 10,
-		30: 10,
-		31: 10,
-		32: 14,
-		33: 0,
-		34: 0,
-		35: 25,
-		36: 10,
-		37: 2.5
+function g_createProgressBar(c) {
+	if (c == null) {
+		c = {}
+	}
+	if (!c.text) {
+		c.text = " "
+	}
+	if (c.color == null) {
+		c.color = "rep0"
+	}
+	if (c.width == null) {
+		c.width = 100
+	}
+	var d, e;
+	if (c.hoverText) {
+		d = ce("a");
+		d.href = "javascript:;"
+	} else {
+		d = ce("span")
+	}
+	d.className = "progressbar";
+	if (c.text || c.hoverText) {
+		e = ce("div");
+		e.className = "progressbar-text";
+		if (c.text) {
+			var a = ce("del");
+			ae(a, ct(c.text));
+			ae(e, a)
+		}
+		if (c.hoverText) {
+			var b = ce("ins");
+			ae(b, ct(c.hoverText));
+			ae(e, b)
+		}
+		ae(d, e)
+	}
+	e = ce("div");
+	e.className = "progressbar-" + c.color;
+	e.style.width = c.width + "%";
+	ae(e, ct(String.fromCharCode(160)));
+	ae(d, e);
+	return d
+}
+function g_createReputationBar(g) {
+	var f = g_createReputationBar.P;
+	if (!g) {
+		g = 0
+	}
+	g += 42000;
+	if (g < 0) {
+		g = 0
+	} else {
+		if (g > 84999) {
+			g = 84999
+		}
+	}
+	var e = g,
+	h, b = 0;
+	for (var d = 0, a = f.length; d < a; ++d) {
+		if (f[d] > e) {
+			break
+		}
+		if (d < a - 1) {
+			e -= f[d];
+			b = d + 1
+		}
+	}
+	h = f[b];
+	var c = {
+		text: g_reputation_standings[b],
+		hoverText: e + " / " + h,
+		color: "rep" + b,
+		width: parseInt(e / h * 100)
 	};
-	if (E < 10) {
-		E = 10
+	return g_createProgressBar(c)
+}
+g_createReputationBar.P = [36000, 3000, 3000, 3000, 6000, 12000, 21000, 999];
+function g_createAchievementBar(a, c) {
+	if (!a) {
+		a = 0
+	}
+	var b = {
+		text: a + (c > 0 ? " / " + c: ""),
+		color: (c > 700 ? "rep7": "ach" + (c > 0 ? 0 : 1)),
+		width: (c > 0 ? parseInt(a / c * 100) : 100)
+	};
+	return g_createProgressBar(b)
+}
+function g_createCaptcha(c) {
+	var b = ce("a");
+	b.href = "javascript:;";
+	b.className = "captcha";
+	b.title = LANG.tooltip_captcha;
+	if (c & 1) {
+		b.style.marginLeft = b.style.marginRight = "auto"
+	}
+	if (Browser.ie6) {
+		var d = ce("img");
+		d.src = "?captcha&foo=" + Math.random();
+		ae(b, d);
+		b.onclick = function () {
+			de(this.firstChild);
+			var a = ce("img");
+			a.src = "?captcha&foo=" + Math.random();
+			ae(b, a);
+			this.blur()
+		}
 	} else {
-		if (E > 70) {
-			E = 70
+		b.style.backgroundImage = "url(?captcha&foo=" + Math.random() + ")";
+		b.onclick = function () {
+			this.style.backgroundImage = "url(?captcha&foo=" + Math.random() + ")"
 		}
 	}
-	if (D < 0) {
-		D = 0
+	return b
+}
+function g_revealCaptcha(a) {
+	if ((g_user.permissions & 1) == 0) {
+		var c = ge("klrbetkjerbt46");
+		if (!c.firstChild) {
+			var b = g_createCaptcha(a);
+			ae(c, b);
+			c.parentNode.style.display = ""
+		}
 	}
-	var B;
-	if (C[A] == null) {
-		B = 0
+}
+function g_convertRatingToPercent(g, b, f, d) {
+	var e = {
+		12 : 1.5,
+		13 : 12,
+		14 : 15,
+		15 : 5,
+		16 : 10,
+		17 : 10,
+		18 : 8,
+		19 : 14,
+		20 : 14,
+		21 : 14,
+		22 : 10,
+		23 : 10,
+		24 : 0,
+		25 : 0,
+		26 : 0,
+		27 : 0,
+		28 : 10,
+		29 : 10,
+		30 : 10,
+		31 : 10,
+		32 : 14,
+		33 : 0,
+		34 : 0,
+		35 : 25,
+		36 : 10,
+		37 : 2.5,
+		44 : 3.756097412109376
+	};
+	if (g < 0) {
+		g = 1
 	} else {
-		f = C[A];
-		if (E >= 1 && E <= 59) {
-			B = D / f / ((1 / 52) * E - (8 / 52))
+		if (g > 80) {
+			g = 80
+		}
+	}
+	if ((b == 14 || b == 12 || b == 15) && g < 34) {
+		g = 34
+	}
+	if ((b == 28 || b == 36) && (d == 2 || d == 6 || d == 7 || d == 11)) {
+		e[b] /= 1.3
+	}
+	if (f < 0) {
+		f = 0
+	}
+	var a;
+	if (e[b] == null) {
+		a = 0
+	} else {
+		var c;
+		if (g > 70) {
+			c = (82 / 52) * Math.pow((131 / 63), ((g - 70) / 10))
 		} else {
-			if (E >= 60 && E <= 70) {
-				B = D / f * (( - 3 / 82) * E + (131 / 41))
+			if (g > 60) {
+				c = (82 / (262 - 3 * g))
 			} else {
-				B = 0
+				if (g > 10) {
+					c = ((g - 8) / 52)
+				} else {
+					c = 2 / 52
+				}
 			}
 		}
+		a = f / e[b] / c
 	}
-	return B
+	return a
 }
-function g_setRatingLevel(F, E, A, C) {
-	var D = prompt(LANG.prompt_ratinglevel, E);
-	if (D != null) {
-		D |= 0;
-		if (D != E && D >= 1 && D <= 70) {
-			E = D;
-			var B = g_convertRatingToPercent(E, A, C);
-			B = (Math.round(B * 100) / 100);
-			if (A != 12 && A != 37) {
-				B += "%"
+function g_setRatingLevel(f, e, b, c) {
+	var d = prompt(sprintf(LANG.prompt_ratinglevel, 1, 80), e);
+	if (d != null) {
+		d |= 0;
+		if (d != e && d >= 1 && d <= 80) {
+			e = d;
+			var a = g_convertRatingToPercent(e, b, c);
+			a = (Math.round(a * 100) / 100);
+			if (b != 12 && b != 37) {
+				a += "%"
 			}
-			F.innerHTML = sprintf(LANG.tooltip_combatrating, B, E);
-			F.onclick = g_setRatingLevel.bind(0, F, E, A, C)
+			f.innerHTML = sprintf(LANG.tooltip_combatrating, a, e);
+			f.onclick = g_setRatingLevel.bind(0, f, e, b, c)
 		}
 	}
 }
-function g_getMoneyHtml(C) {
-	var B = 0,
-	A = "";
-	if (C >= 10000) {
-		B = 1;
-		A += '<span class="moneygold">' + Math.floor(C / 10000) + "</span>";
-		C %= 10000
+function g_getMoneyHtml(c) {
+	var b = 0,
+	a = "";
+	if (c >= 10000) {
+		b = 1;
+		a += '<span class="moneygold">' + Math.floor(c / 10000) + "</span>";
+		c %= 10000
 	}
-	if (C >= 100) {
-		if (B) {
-			A += " "
+	if (c >= 100) {
+		if (b) {
+			a += " "
 		} else {
-			B = 1
+			b = 1
 		}
-		A += '<span class="moneysilver">' + Math.floor(C / 100) + "</span>";
-		C %= 100
+		a += '<span class="moneysilver">' + Math.floor(c / 100) + "</span>";
+		c %= 100
 	}
-	if (C >= 1) {
-		if (B) {
-			A += " "
+	if (c >= 1) {
+		if (b) {
+			a += " "
 		} else {
-			B = 1
+			b = 1
 		}
-		A += '<span class="moneycopper">' + C + "</span>"
+		a += '<span class="moneycopper">' + c + "</span>"
 	}
-	return A
+	return a
 }
-function g_getPatchVersion(E) {
-	var D = g_getPatchVersion;
-	var B = 0,
-	C = D.T.length - 2,
-	A;
-	while (C > B) {
-		A = Math.floor((C + B) / 2);
-		if (E >= D.T[A] && E < D.T[A + 1]) {
-			return D.V[A]
+function g_getPatchVersion(e) {
+	var d = g_getPatchVersion;
+	var b = 0,
+	c = d.T.length - 2,
+	a;
+	while (c > b) {
+		a = Math.floor((c + b) / 2);
+		if (e >= d.T[a] && e < d.T[a + 1]) {
+			return d.V[a]
 		}
-		if (E >= D.T[A]) {
-			B = A + 1
+		if (e >= d.T[a]) {
+			b = a + 1
 		} else {
-			C = A - 1
+			c = a - 1
 		}
 	}
-	A = Math.ceil((C + B) / 2);
-	return D.V[A]
+	a = Math.ceil((c + b) / 2);
+	return d.V[a]
 }
-g_getPatchVersion.V = ["1.12.0", "1.12.1", "1.12.2", "2.0.1", "2.0.3", "2.0.4", "2.0.5", "2.0.6", "2.0.7", "2.0.8", "2.0.10", "2.0.12", "2.1.0", "2.1.1", "2.1.2", "2.1.3", "2.2.0", "2.2.2", "2.2.3", "2.3.0", "2.3.2", "2.3.3", "2.4.0", "2.4.1", "2.4.2", "???"];
-g_getPatchVersion.T = [1153540800000, 1159243200000, 1160712000000, 1165294800000, 1168318800000, 1168578000000, 1168750800000, 1169528400000, 1171342800000, 1171602000000, 1173157200000, 1175572800000, 1179806400000, 1181016000000, 1182225600000, 1184040000000, 1190692800000, 1191297600000, 1191902400000, 1194930000000, 1199768400000, 1200978000000, 1206417600000, 1207022400000, 1210651200000, 9999999999999];
+g_getPatchVersion.V = ["1.12.0", "1.12.1", "1.12.2", "2.0.1", "2.0.3", "2.0.4", "2.0.5", "2.0.6", "2.0.7", "2.0.8", "2.0.10", "2.0.12", "2.1.0", "2.1.1", "2.1.2", "2.1.3", "2.2.0", "2.2.2", "2.2.3", "2.3.0", "2.3.2", "2.3.3", "2.4.0", "2.4.1", "2.4.2", "2.4.3", "3.0.2", "3.0.3", "3.0.8", "3.0.9", "3.1.0", "3.1.1", "3.1.2", "3.1.3", "???"];
+g_getPatchVersion.T = [1153540800000, 1159243200000, 1160712000000, 1165294800000, 1168318800000, 1168578000000, 1168750800000, 1169528400000, 1171342800000, 1171602000000, 1173157200000, 1175572800000, 1179806400000, 1181016000000, 1182225600000, 1184040000000, 1190692800000, 1191297600000, 1191902400000, 1194930000000, 1199768400000, 1200978000000, 1206417600000, 1207022400000, 1210651200000, 1216094400000, 1223956800000, 1225774800000, 1232427600000, 1234242000000, 1239681600000, 1240286400000, 1242705600000, 1243915200000, 9999999999999];
 function g_expandSite() {
-	de(ge("sidebar"));
-	de(ge("header-ad"));
-	ge("wrapper").className = "noads";
-	var A = ge("contribute-ad");
-	if (A) {
-		de(A)
+	ge("wrapper").className = "nosidebar";
+	Ads.removeAll();
+	var a = ge("topbar-expand");
+	if (a) {
+		de(a)
+	}
+	a = ge("sidebar");
+	if (a) {
+		de(a)
 	}
 }
-function g_insertTag(E, H, A, J) {
-	var C = $(E);
-	C.focus();
-	if (C.selectionStart != null) {
-		var K = C.selectionStart,
-		G = C.selectionEnd,
-		I = C.scrollLeft,
-		D = C.scrollTop;
-		var B = C.value.substring(K, G);
-		if (typeof J == "function") {
-			B = J(B)
+function g_insertTag(d, a, i, j) {
+	var b = $(d);
+	b.focus();
+	if (b.selectionStart != null) {
+		var l = b.selectionStart,
+		h = b.selectionEnd,
+		k = b.scrollLeft,
+		c = b.scrollTop;
+		var g = b.value.substring(l, h);
+		if (typeof j == "function") {
+			g = j(g)
 		}
-		C.value = C.value.substr(0, K) + H + B + A + C.value.substr(G);
-		C.selectionStart = C.selectionEnd = G + H.length;
-		C.scrollLeft = I;
-		C.scrollTop = D
+		b.value = b.value.substr(0, l) + a + g + i + b.value.substr(h);
+		b.selectionStart = b.selectionEnd = h + a.length;
+		b.scrollLeft = k;
+		b.scrollTop = c
 	} else {
 		if (document.selection && document.selection.createRange) {
-			var F = document.selection.createRange();
-			if (F.parentElement() != C) {
+			var f = document.selection.createRange();
+			if (f.parentElement() != b) {
 				return
 			}
-			var B = F.text;
-			if (typeof J == "function") {
-				B = J(B)
+			var g = f.text;
+			if (typeof j == "function") {
+				g = j(g)
 			}
-			F.text = H + B + A
+			f.text = a + g + i
 		}
 	}
-	if (C.onkeyup) {
-		C.onkeyup()
+	if (b.onkeyup) {
+		b.onkeyup()
 	}
 }
-function g_getLocaleFromDomain(B) {
-	var A = g_getLocaleFromDomain.L;
-	return (A[B] ? A[B] : 0)
+function g_getLocaleFromDomain(a) {
+	var c = g_getLocaleFromDomain.L;
+	if (a) {
+		var b = a.indexOf(".");
+		if (b != -1) {
+			a = a.substring(0, b)
+		}
+	}
+	return (c[a] ? c[a] : 0)
 }
 g_getLocaleFromDomain.L = {
 	fr: 2,
 	de: 3,
 	es: 6,
-	wotlk: 25
+	ru: 7,
+	ptr: 25
 };
-function g_getIdFromTypeName(A) {
-	var B = g_getIdFromTypeName.L;
-	return (B[A] ? B[A] : -1)
+function g_getDomainFromLocale(a) {
+	var b;
+	if (g_getDomainFromLocale.L) {
+		b = g_getDomainFromLocale.L
+	} else {
+		b = g_getDomainFromLocale.L = g_createReverseLookupJson(g_getLocaleFromDomain.L)
+	}
+	return (b[a] ? b[a] : "www")
+}
+function g_getIdFromTypeName(a) {
+	var b = g_getIdFromTypeName.L;
+	return (b[a] ? b[a] : -1)
 }
 g_getIdFromTypeName.L = {
 	npc: 1,
@@ -895,55 +1377,199 @@ g_getIdFromTypeName.L = {
 	quest: 5,
 	spell: 6,
 	zone: 7,
-	faction: 8
+	faction: 8,
+	pet: 9,
+	achievement: 10,
+	profile: 100
 };
-function g_getIngameLink(A, C, B) {
-	prompt(LANG.prompt_ingamelink, '/script DEFAULT_CHAT_FRAME:AddMessage("' + sprintf(LANG.message_ingamelink, "\\124c" + A + "\\124H" + C + "\\124h[" + B + ']\\124h\\124r");'))
+function g_getIngameLink(a, c, b) {
+	prompt(LANG.prompt_ingamelink, '/script DEFAULT_CHAT_FRAME:AddMessage("' + sprintf(LANG.message_ingamelink, "\\124c" + a + "\\124H" + c + "\\124h[" + b + ']\\124h\\124r");'))
 }
-function g_isEmailValid(A) {
-	return A.match(/^[A-Z0-9._-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i) != null
+function g_isEmailValid(a) {
+	return a.match(/^([a-z0-9._-]+)(\+[a-z0-9._-]+)?(@[a-z0-9.-]+\.[a-z]{2,4})$/i) != null
 }
-function g_userDescription() {
-	var C = ge("description");
-	var D = (typeof g_pageInfo == "object" && g_user.name == g_pageInfo.username);
-	var B = (C.childNodes.length == 0);
-	if (B) {
-		if (D) {
-			ae(C, ct(LANG.user_nodescription2))
-		} else {
-			ae(C, ct(LANG.user_nodescription))
+function g_onAfterTyping(a, d, c) {
+	var e;
+	var b = function () {
+		if (e) {
+			clearTimeout(e);
+			e = null
 		}
+		e = setTimeout(d, c)
+	};
+	a.onkeyup = b
+}
+function g_onClick(c, d) {
+	var b = 0;
+	function a(e) {
+		if (b) {
+			if (b != e) {
+				return
+			}
+		} else {
+			b = e
+		}
+		d(true)
 	}
-	if (D) {
-		var A = ce("button"),
-		E = ce("div");
-		E.className = "pad";
-		A.onclick = function() {
-			location.href = "?account#public-description"
+	c.oncontextmenu = function () {
+		a(1);
+		return false
+	};
+	c.onmouseup = function (f) {
+		f = $E(f);
+		if (f._button == 3 || f.shiftKey || f.ctrlKey) {
+			a(2)
+		} else {
+			if (f._button == 1) {
+				d(false)
+			}
+		}
+		return false
+	}
+}
+function g_createOrRegex(c) {
+	var e = c.split(" "),
+	d = "";
+	for (var b = 0, a = e.length; b < a; ++b) {
+		if (b > 0) {
+			d += "|"
+		}
+		d += e[b]
+	}
+	return new RegExp("(" + d + ")", "gi")
+}
+function g_addPages(l, b) {
+	function o(q, d) {
+		var i;
+		if (q == b.page) {
+			i = ce("span");
+			i.className = "selected"
+		} else {
+			i = ce("a");
+			i.href = (q > 1 ? b.url + b.sep + q + b.pound: b.url + b.pound)
+		}
+		ae(i, ct(d != null ? d: q));
+		return i
+	}
+	if (!b.pound) {
+		b.pound = ""
+	}
+	if (!b.sep) {
+		b.sep = "."
+	}
+	if (b.allOrNothing && b.nPages <= 1) {
+		return
+	}
+	var c = (b.align && b.align == "left");
+	var e = ce("div"),
+	k,
+	p = ce("var");
+	e.className = "pages";
+	if (c) {
+		e.className += " pages-left"
+	}
+	if (b.nPages > 1) {
+		k = ce("div");
+		k.className = "pages-numbers";
+		var n = Math.max(2, b.page - 3);
+		var h = Math.min(b.nPages - 1, b.page + 3);
+		var m = [];
+		if (b.page != b.nPages) {
+			m.push(o(b.page + 1, LANG.lvpage_next + String.fromCharCode(8250)))
+		}
+		m.push(o(b.nPages));
+		if (h < b.nPages - 1) {
+			var a = ce("span");
+			ae(a, ct("..."));
+			m.push(a)
+		}
+		for (var g = h; g >= n; --g) {
+			m.push(o(g))
+		}
+		if (n > 2) {
+			var a = ce("span");
+			ae(a, ct("..."));
+			m.push(a)
+		}
+		m.push(o(1));
+		if (b.page != 1) {
+			m.push(o(b.page - 1, String.fromCharCode(8249) + LANG.lvpage_previous))
+		}
+		if (c) {
+			m.reverse()
+		}
+		for (var g = 0, j = m.length; g < j; ++g) {
+			ae(k, m[g])
+		}
+		k.firstChild.style.marginRight = "0";
+		k.lastChild.style.marginLeft = "0"
+	}
+	var p = ce("var");
+	ae(p, ct(sprintf(LANG[b.wording[b.nItems == 1 ? 0 : 1]], b.nItems)));
+	if (b.nPages > 1) {
+		var a = ce("span");
+		ae(a, ct(String.fromCharCode(8211)));
+		ae(p, a);
+		var f = ce("a");
+		f.className = "gotopage";
+		f.href = "javascript:;";
+		ns(f);
+		if (Browser.ie) {
+			ae(f, ct(" "))
+		}
+		f.onclick = function () {
+			var d = prompt(sprintf(LANG.prompt_gotopage, 1, b.nPages), b.page);
+			if (d != null) {
+				d |= 0;
+				if (d != b.page && d >= 1 && d <= b.nPages) {
+					document.location.href = (d > 1 ? b.url + b.sep + d + b.pound: b.url + b.pound)
+				}
+			}
 		};
-		if (B) {
-			ae(A, ct(LANG.user_composeone))
-		} else {
-			ae(A, ct(LANG.user_editdescription))
-		}
-		ae(C, E);
-		ae(C, A)
+		f.onmouseover = function (d) {
+			Tooltip.showAtCursor(d, LANG.tooltip_gotopage, 0, 0, "q")
+		};
+		f.onmousemove = Tooltip.cursorUpdate;
+		f.onmouseout = Tooltip.hide;
+		ae(p, f)
 	}
+	if (c) {
+		ae(e, p);
+		if (k) {
+			ae(e, k)
+		}
+	} else {
+		if (k) {
+			ae(e, k)
+		}
+		ae(e, p)
+	}
+	ae(l, e)
+}
+function g_disclose(a, b) {
+	b.className = "disclosure-" + (g_toggleDisplay(a) ? "on": "off");
+	return false
 }
 function co_addYourComment() {
 	tabsContribute.focus(0);
-	var A = gE(document.forms.addcomment, "textarea")[0];
-	A.focus()
+	var a = gE(document.forms.addcomment, "textarea")[0];
+	a.focus()
 }
 function co_cancelReply() {
-	ge("replybox-generic").style.display = "none";
+	ge("gjkdlfgkjh436").style.display = "none";
 	document.forms.addcomment.elements.replyto.value = ""
 }
-function co_validateForm(B) {
-	var A = gE(B, "textarea")[0];
-	if (Listview.funcBox.coValidate(A)) {
+function co_validateForm(b) {
+	var a = gE(b, "textarea")[0];
+	if (Listview.funcBox.coValidate(a)) {
 		if (g_user.permissions & 1) {
 			return true
+		}
+		if (b.elements.captcha.value.length == 5) {
+			return true
+		} else {
+			alert(LANG.message_codenotentered);
+			b.elements.captcha.focus()
 		}
 	}
 	return false
@@ -951,34 +1577,109 @@ function co_validateForm(B) {
 function ss_submitAScreenshot() {
 	tabsContribute.focus(1)
 }
-function ss_validateForm(A) {
-	if (!A.elements.screenshotfile.value.length) {
+function ss_validateForm(a) {
+	if (!a.elements.screenshotfile.value.length) {
 		alert(LANG.message_noscreenshot);
 		return false
 	}
 	return true
 }
 function ss_appendSticky() {
-	var J = ge("infobox-sticky");
-	var F = g_pageInfo.type;
-	var A = g_pageInfo.typeId;
+	var m = ge("infobox-sticky");
+	var i = g_pageInfo.type;
+	var h = g_pageInfo.typeId;
+	var k = in_array(lv_screenshots, 1, function (a) {
+		return a.sticky
+	});
+	if (k != -1) {
+		var c = lv_screenshots[k];
+		var l = ce("a");
+		l.href = "#screenshots:id=" + c.id;
+		l.onclick = function (a) {
+			ScreenshotViewer.show({
+				screenshots: lv_screenshots,
+				pos: k
+			});
+			return rf2(a)
+		};
+		var f = ce("img"),
+		e = Math.min(150 / c.width, 150 / c.height);
+		f.src = "http://static.wowhead.com/uploads/screenshots/thumb/" + c.id + ".jpg";
+		f.className = "border";
+		ae(l, f);
+		ae(m, l);
+		var g = ce("div");
+		var n = ce("small");
+		l = ce("a");
+		if (g_user.id > 0) {
+			l.href = "javascript:;";
+			l.onclick = ss_submitAScreenshot
+		} else {
+			l.href = "?account=signin"
+		}
+		ae(l, ct(LANG.infobox_submitone));
+		ae(n, l);
+		ae(n, ct(" " + String.fromCharCode(160)));
+		var j = ce("b");
+		ae(j, ct("|"));
+		ae(n, j);
+		ae(n, ct(String.fromCharCode(160) + " "));
+		l = ce("a");
+		l.href = "javascript:;";
+		l.onclick = function () {
+			tabsRelated.focus( - 1);
+			return false
+		};
+		ae(l, ct(sprintf(LANG.infobox_showall, lv_screenshots.length)));
+		ae(n, l);
+		ae(g, n);
+		ae(m, g)
+	} else {
+		var l;
+		if (g_user.id > 0) {
+			l = '<a href="javascript:;" onclick="ss_submitAScreenshot(); return false">'
+		} else {
+			l = '<a href="?account=signin">'
+		}
+		m.innerHTML = sprintf(LANG.infobox_noneyet, l + LANG.infobox_submitone + "</a>")
+	}
 }
-function Ajax(B, C) {
-	if (!B) {
+function su_addToSaved(b, a) {
+	if (!b) {
 		return
 	}
-	var A;
+	var d = gc("compare_groups"),
+	c = "?compare";
+	if (!d || confirm(LANG.confirm_addtosaved)) {
+		if (d) {
+			b = d + ";" + b
+		}
+		sc("compare_groups", 20, b, "/", ".wowhead.com")
+	} else {
+		c += "=" + b
+	}
+	if (a) {
+		window.open(c)
+	} else {
+		location.href = c
+	}
+}
+function Ajax(b, c) {
+	if (!b) {
+		return
+	}
+	var a;
 	try {
-		A = new XMLHttpRequest()
-	} catch(D) {
+		a = new XMLHttpRequest()
+	} catch(d) {
 		try {
-			A = new ActiveXObject("Msxml2.XMLHTTP")
-		} catch(D) {
+			a = new ActiveXObject("Msxml2.XMLHTTP")
+		} catch(d) {
 			try {
-				A = new ActiveXObject("Microsoft.XMLHTTP")
-			} catch(D) {
+				a = new ActiveXObject("Microsoft.XMLHTTP")
+			} catch(d) {
 				if (window.createRequest) {
-					A = window.createRequest()
+					a = window.createRequest()
 				} else {
 					alert(LANG.message_ajaxnotsupported);
 					return
@@ -986,17 +1687,17 @@ function Ajax(B, C) {
 			}
 		}
 	}
-	this.request = A;
-	cO(this, C);
+	this.request = a;
+	cO(this, c);
 	this.method = this.method || (this.params && "POST") || "GET";
-	A.open(this.method, B, this.async == null ? true: this.async);
-	A.onreadystatechange = Ajax.onReadyStateChange.bind(this);
+	a.open(this.method, b, this.async == null ? true: this.async);
+	a.onreadystatechange = Ajax.onReadyStateChange.bind(this);
 	if (this.method.toUpperCase() == "POST") {
-		A.setRequestHeader("Content-Type", (this.contentType || "application/x-www-form-urlencoded") + "; charset=" + (this.encoding || "UTF-8"))
+		a.setRequestHeader("Content-Type", (this.contentType || "application/x-www-form-urlencoded") + "; charset=" + (this.encoding || "UTF-8"))
 	}
-	A.send(this.params)
+	a.send(this.params)
 }
-Ajax.onReadyStateChange = function() {
+Ajax.onReadyStateChange = function () {
 	if (this.request.readyState == 4) {
 		if (this.request.status == 0 || (this.request.status >= 200 && this.request.status < 300)) {
 			this.onSuccess != null && this.onSuccess(this.request, this)
@@ -1008,433 +1709,489 @@ Ajax.onReadyStateChange = function() {
 		}
 	}
 };
-function g_ajaxIshRequest(A) {
-	var B = document.getElementsByTagName("head")[0];
-	ae(B, ce("script", {
+function g_ajaxIshRequest(b) {
+	var c = document.getElementsByTagName("head")[0],
+	a = g_getGets();
+	if (a.refresh != null) {
+		b += "&refresh"
+	}
+	ae(c, ce("script", {
 		type: "text/javascript",
-		src: A
+		src: b
 	}))
 }
 var Menu = {
 	iframes: [],
 	divs: [],
 	selection: [],
-	show: function() {
+	show: function () {
 		try {
 			clearTimeout(Menu.timer);
 			if (Menu.currentLink) {
 				Menu._show(this)
 			} else {
-				this.className = "open";
+				if (this.className.indexOf("open") == -1) {
+					this.className += " open"
+				}
 				Menu.timer = setTimeout(Menu._show.bind(0, this), 100)
 			}
-		} catch(A) {}
+		} catch(a) {}
 	},
-	_show: function(B) {
-		if (Menu.currentLink != B) {
-			var A = ac(B);
+	_show: function (b) {
+		if (Menu.currentLink != b) {
+			var a = ac(b);
 			Menu._hide();
 			Menu.selection = [ - 1];
-			Menu.currentLink = B;
-			Menu.showDepth(0, B.menu, A[0], A[1] + B.offsetHeight + 1, B.offsetHeight + 8, B.offsetWidth, A[1]);
-			B.className = "open"
+			Menu.currentLink = b;
+			Menu.showDepth(0, b.menu, a[0], a[1] + b.offsetHeight + 1, b.offsetHeight + 8, b.offsetWidth, a[1], false);
+			if (b.className.indexOf("open") == -1) {
+				b.className += " open"
+			}
 		} else {
 			Menu.truncate(0);
 			Menu.clean(0)
 		}
 	},
-	showAtCursor: function(A) {
-		A = $E(A);
+	showAtCursor: function (b, a, d) {
 		clearTimeout(Menu.timer);
 		Menu._hide();
 		Menu.selection = [ - 1];
 		Menu.currentLink = null;
-		var B = g_getCursorPos(A);
-		Menu.showDepth(0, this.menu, B.x, B.y, 0, 0, 0)
+		if (! (a && d)) {
+			b = $E(b);
+			var c = g_getCursorPos(b);
+			a = c.x;
+			d = c.y
+		}
+		if (Browser.ie6) {
+			a -= 2;
+			d -= 2
+		}
+		Menu.showDepth(0, this.menu, a, d, 0, 0, 0, true)
 	},
-	hide: function() {
+	hide: function () {
 		try {
 			clearTimeout(Menu.timer);
 			if (Menu.currentLink) {
 				Menu.timer = setTimeout(Menu._hide, 333)
 			} else {
-				this.className = ""
+				this.className = this.className.replace("open", "")
 			}
-		} catch(A) {}
+		} catch(a) {}
 	},
-	_hide: function() {
-		for (var B = 0, A = Menu.selection.length; B < A; ++B) {
-			Menu.divs[B].style.display = "none";
-			Menu.divs[B].style.visibility = "hidden";
+	_hide: function () {
+		for (var b = 0, a = Menu.selection.length; b < a; ++b) {
+			Menu.divs[b].style.display = "none";
+			Menu.divs[b].style.visibility = "hidden";
 			if (Browser.ie6) {
-				Menu.iframes[B].style.display = "none"
+				Menu.iframes[b].style.display = "none"
 			}
 		}
 		Menu.selection = [];
 		if (Menu.currentLink) {
-			Menu.currentLink.className = ""
+			Menu.currentLink.className = Menu.currentLink.className.replace("open", "")
 		}
 		Menu.currentLink = null
 	},
-	sepOver: function() {
-		var B = this.d;
-		var A = B.i;
-		Menu.truncate(A);
-		Menu.clean(A);
-		Menu.selection[A] = -1
+	sepOver: function () {
+		var b = this.d;
+		var a = b.i;
+		Menu.truncate(a);
+		Menu.clean(a);
+		Menu.selection[a] = -1
 	},
-	elemOver: function() {
-		var E = this.d;
-		var D = E.i;
-		var C = this.i;
-		var A = this.k;
-		var B = this.firstChild.className == "menusub";
-		Menu.truncate(D + B);
-		if (B && C != Menu.selection[D]) {
-			var F = ac(this);
-			Menu.selection[D + 1] = -1;
-			Menu.showDepth(D + 1, E.menuArray[C][3], F[0], F[1] - 2, this.offsetHeight, this.offsetWidth - 3, 0)
+	elemOver: function () {
+		var g = this.d;
+		var f = g.i;
+		var e = this.i;
+		var a = this.k;
+		var b = this.firstChild.className == "menusub";
+		Menu.truncate(f + b);
+		if (b && a != Menu.selection[f]) {
+			var h = ac(this);
+			Menu.selection[f + 1] = -1;
+			Menu.showDepth(f + 1, g.menuArray[e][3], h[0], h[1] - 2, this.offsetHeight, this.offsetWidth - 3, 0, false)
 		}
-		Menu.clean(D);
-		Menu.selection[D] = A;
+		Menu.clean(f);
+		Menu.selection[f] = a;
 		if (this.className.length) {
 			this.className += " open"
 		} else {
 			this.className = "open"
 		}
 	},
-	getIframe: function(A) {
-		var B;
-		if (Menu.iframes[A] == null) {
-			B = ce("iframe");
-			B.src = "javascript:0;";
-			B.frameBorder = 0;
-			ae(ge("layers"), B);
-			Menu.iframes[A] = B
-		} else {
-			B = Menu.iframes[A]
-		}
-		return B
+	elemClick: function (a) {
+		Menu._hide();
+		a()
 	},
-	getDiv: function(B, A) {
-		var C;
-		if (Menu.divs[B] == null) {
-			C = ce("div");
-			C.className = "menu";
-			ae(ge("layers"), C);
-			Menu.divs[B] = C
+	getIframe: function (a) {
+		var b;
+		if (Menu.iframes[a] == null) {
+			b = ce("iframe");
+			b.src = "javascript:0;";
+			b.frameBorder = 0;
+			ae(ge("layers"), b);
+			Menu.iframes[a] = b
 		} else {
-			C = Menu.divs[B]
+			b = Menu.iframes[a]
 		}
-		C.i = B;
-		C.menuArray = A;
-		return C
+		return b
 	},
-	showDepth: function(Z, V, M, L, g, N, D) {
-		var r,
-		n = Menu.getDiv(Z, V);
-		while (n.firstChild) {
-			de(n.firstChild)
+	getDiv: function (a, b) {
+		var c;
+		if (Menu.divs[a] == null) {
+			c = ce("div");
+			c.className = "menu";
+			ae(ge("layers"), c);
+			Menu.divs[a] = c
+		} else {
+			c = Menu.divs[a]
 		}
-		var l = ce("table"),
+		c.i = a;
+		c.menuArray = b;
+		return c
+	},
+	showDepth: function (M, c, C, B, N, F, z, v) {
+		var W, T = Menu.getDiv(M, c);
+		while (T.firstChild) {
+			de(T.firstChild)
+		}
+		var u = ce("table"),
 		A = ce("tbody"),
-		E = ce("tr"),
-		I = ce("td"),
-		Q = ce("div"),
-		G = ce("div");
-		var S = 999;
-		var P = g_getWindowSize(),
-		C = g_getScroll(),
-		J = P.w,
-		T = P.h,
-		B = C.x,
-		o = C.y;
-		if (g > 0) {
-			if ((25 + 1) * V.length > T - 25 - D) {
-				for (var X = 2; X < 4; ++X) {
-					if (g / X * V.length + 30 < T - D) {
+		R = ce("tr"),
+		e = ce("td"),
+		P = ce("div"),
+		J = ce("div");
+		var I = 999;
+		var b = g_getWindowSize(),
+		l = g_getScroll(),
+		f = b.w,
+		n = b.h,
+		V = l.x,
+		O = l.y;
+		if (N > 0 && (M > 0 || c.length > 20)) {
+			if ((25 + 1) * c.length > n - 25 - z) {
+				for (var L = 2; L < 4; ++L) {
+					if (N / L * c.length + 30 < n - z) {
 						break
 					}
 				}
-				S = Math.floor(V.length / X)
+				I = Math.floor(c.length / L)
 			}
 		}
-		var H = 0;
-		var U = 0;
-		for (var X = 0, e = V.length; X < e; ++X) {
-			if (V[X][0] == null) {
-				var Y = ce("span");
-				Y.className = "separator";
-				ns(Y);
-				ae(Y, ct(V[X][1]));
-				Y.d = n;
-				Y.onmouseover = Menu.sepOver;
-				ae(G, Y)
+		var r = 0;
+		var K = 0;
+		for (var L = 0, t = c.length; L < t; ++L) {
+			var Q = c[L];
+			if (Q[0] == null) {
+				var q = ce("span");
+				q.className = "separator";
+				ns(q);
+				ae(q, ct(Q[1]));
+				q.d = T;
+				q.onmouseover = Menu.sepOver;
+				ae(J, q)
 			} else {
-				var q = ce("a");
-				q.d = n;
-				q.k = U++;
-				q.i = X;
-				if (V[X][2]) {
+				var U = ce("a");
+				U.d = T;
+				U.k = K++;
+				U.i = L;
+				if (Q[2]) {
 					if (Menu.currentLink && Menu.currentLink.menuappend) {
-						if (V[X][2].indexOf(Menu.currentLink.menuappend) == -1) {
-							q.href = V[X][2] + Menu.currentLink.menuappend
+						if (Q[2].indexOf(Menu.currentLink.menuappend) == -1) {
+							U.href = Q[2] + Menu.currentLink.menuappend
 						} else {
-							q.href = V[X][2]
+							U.href = Q[2]
 						}
 					} else {
-						if (typeof V[X][2] == "function") {
-							q.href = "javascript:;";
-							q.onclick = V[X][2];
-							ns(q)
+						if (typeof Q[2] == "function") {
+							U.href = "javascript:;";
+							U.onclick = Menu.elemClick.bind(0, Q[2]);
+							ns(U)
 						} else {
-							q.href = V[X][2]
+							U.href = Q[2]
 						}
 					}
 				} else {
-					q.href = "javascript:;";
-					q.style.cursor = "default";
-					ns(q)
+					U.href = "javascript:;";
+					U.style.cursor = "default";
+					ns(U)
 				}
-				q.onmouseover = Menu.elemOver;
-				var O = ce("span"),
-				F = ce("span");
-				if (V[X][3] != null) {
-					O.className = "menusub"
+				U.onmouseover = Menu.elemOver;
+				var G = ce("span"),
+				S = ce("span");
+				if (Q[3] != null) {
+					G.className = "menusub"
 				}
-				if (V[X][5] != null) {
-					F.className = "icontiny";
-					F.style.backgroundImage = "url(images/icons/tiny/"+V[X][5]+".gif)";
-					if (V[X].checked) {
-						var K = ce("span");
-						K.className = "menucheck";
-						ae(K, ct(V[X][1]));
-						ae(F, K);
-					}
-					else
-					{
-						ae(F, ct(V[X][1]));
-					}
+				if (Q.checked) {
+					S.className = "menucheck"
 				}
-				else
-				{
-					if (V[X].checked) {
-						F.className = "menucheck"
-					}
-					ae(F, ct(V[X][1]));
+				if (Q.newWindow) {
+					U.target = "_blank"
 				}
-				ae(O, F);
-				ae(q, O);
-				ae(G, q)
-			}
-			if (H++==S) {
-				Q.onmouseover = Menu.divOver;
-				Q.onmouseout = Menu.divOut;
-				ae(Q, G);
-				if (!Browser.ie6) {
-					var R = ce("p");
-					ae(R, ce("em"));
-					ae(R, ce("var"));
-					ae(R, ce("strong"));
-					ae(R, Q);
-					ae(I, R)
+				if (Q.tinyIcon) {
+					S.style.background = "url(images/icons/tiny/" + Q.tinyIcon.toLowerCase() + ".gif) left center no-repeat"
 				} else {
-					ae(I, Q)
+					if (Q.socketColor) {
+						S.className += " socket-" + g_file_gems[Q.socketColor]
+					} else {
+						if (Q.smallIcon) {
+							U.style.padding = 0;
+							S.style.padding = "4px 18px 4px 28px";
+							S.style.background = "url(templates/wowhead/images/icon_border_small.png) left center no-repeat transparent";
+							G.style.background = "url(images/icons/small/" + Q.smallIcon.toLowerCase() + ".jpg) 4px 3px no-repeat transparent"
+						}
+					}
 				}
-				ae(E, I);
-				I = ce("td");
-				R = ce("p");
-				Q = ce("div");
-				G = ce("div");
-				H = 0
+				ae(S, ct(Q[1]));
+				ae(G, S);
+				ae(U, G);
+				ae(J, U)
+			}
+			if (r++==I) {
+				P.onmouseover = Menu.divOver;
+				P.onmouseout = Menu.divOut;
+				ae(P, J);
+				if (!Browser.ie6) {
+					var H = ce("p");
+					ae(H, ce("em"));
+					ae(H, ce("var"));
+					ae(H, ce("strong"));
+					ae(H, P);
+					ae(e, H)
+				} else {
+					ae(e, P)
+				}
+				ae(R, e);
+				e = ce("td");
+				H = ce("p");
+				P = ce("div");
+				J = ce("div");
+				r = 0
 			}
 		}
-		Q.onmouseover = Menu.divOver;
-		Q.onmouseout = Menu.divOut;
-		ae(Q, G);
+		P.onmouseover = Menu.divOver;
+		P.onmouseout = Menu.divOut;
+		ae(P, J);
 		if (!Browser.ie6) {
-			if (S != 999) {
-				var R = ce("p");
-				ae(R, ce("em"));
-				ae(R, ce("var"));
-				ae(R, ce("strong"));
-				ae(R, Q);
-				ae(I, R)
+			if (I != 999) {
+				var H = ce("p");
+				ae(H, ce("em"));
+				ae(H, ce("var"));
+				ae(H, ce("strong"));
+				ae(H, P);
+				ae(e, H)
 			} else {
-				ae(n, ce("em"));
-				ae(n, ce("var"));
-				ae(n, ce("strong"));
-				ae(I, Q)
+				ae(T, ce("em"));
+				ae(T, ce("var"));
+				ae(T, ce("strong"));
+				ae(e, P)
 			}
 		} else {
-			ae(I, Q)
+			ae(e, P)
 		}
-		ae(E, I);
-		ae(A, E);
-		ae(l, A);
-		ae(n, l);
-		n.style.left = n.style.top = "-2323px";
-		n.style.display = "";
-		var K = l.offsetWidth,
-		W = l.offsetHeight;
-		if (V.rightAligned) {
-			M = M + N - K
-		} else {
-			if (M + N + K + 15 > J) {
-				M = Math.max(0, M - K - 3)
+		ae(R, e);
+		ae(A, R);
+		ae(u, A);
+		ae(T, u);
+		T.style.left = T.style.top = "-2323px";
+		T.style.display = "";
+		var g = u.offsetWidth,
+		o = u.offsetHeight,
+		E = true,
+		D = true;
+		if (!Browser.ie6) {
+			g += 5;
+			o += 6
+		}
+		if (C + g > f + V || c.rightAligned) {
+			E = false
+		}
+		if (E) {
+			if (C + F + g > f) {
+				C = Math.max(0, C - g)
 			} else {
-				if (Z > 0) {
-					M += N
+				if (M > 0) {
+					C += F
 				}
 			}
+		} else {
+			C = C + F - g;
+			if (Browser.ie) {
+				C -= 3
+			}
 		}
-		if (L + W > T + o) {
-			L = Math.max(o + 5, T + o - W - 10)
+		if ((M > 0 || v) && B + o > n + O) {
+			B = Math.max(O + 5, n + O - o)
 		}
-		n.style.left = M + "px";
-		n.style.top = L + "px";
+		T.style.left = C + "px";
+		T.style.top = B + "px";
 		if (Browser.ie6) {
-			r = Menu.getIframe(Z);
-			r.style.left = M + "px";
-			r.style.top = L + "px";
-			r.style.width = K + "px";
-			r.style.height = W + "px";
-			r.style.display = "";
-			r.style.visibility = "visible"
+			W = Menu.getIframe(M);
+			W.style.left = C + "px";
+			W.style.top = B + "px";
+			W.style.width = g + "px";
+			W.style.height = o + "px";
+			W.style.display = "";
+			W.style.visibility = "visible"
 		}
-		n.style.visibility = "visible";
+		T.style.visibility = "visible";
 		if (Browser.opera) {
-			n.style.display = "none";
-			n.style.display = ""
+			T.style.display = "none";
+			T.style.display = ""
 		}
 	},
-	divOver: function() {
+	divOver: function () {
 		clearTimeout(Menu.timer)
 	},
-	divOut: function() {
+	divOut: function () {
 		clearTimeout(Menu.timer);
 		Menu.timer = setTimeout(Menu._hide, 333)
 	},
-	truncate: function(A) {
-		var B;
-		while (Menu.selection.length - 1 > A) {
-			B = Menu.selection.length - 1;
-			Menu.divs[B].style.display = "none";
-			Menu.divs[B].style.visibility = "hidden";
+	truncate: function (b) {
+		var c;
+		while (Menu.selection.length - 1 > b) {
+			c = Menu.selection.length - 1;
+			Menu.divs[c].style.display = "none";
+			Menu.divs[c].style.visibility = "hidden";
 			if (Browser.ie6) {
-				Menu.iframes[B].style.display = "none"
+				Menu.iframes[c].style.display = "none"
 			}
 			Menu.selection.pop()
 		}
 	},
-	clean: function(A) {
-		for (var B = A; B < Menu.selection.length; ++B) {
-			if (Menu.selection[B] != -1) {
-				d = gE(Menu.divs[B], "a")[Menu.selection[B]];
-				if (d.className.indexOf("sub") != -1) {
-					d.className = "sub"
+	clean: function (b) {
+		for (var c = b; c < Menu.selection.length; ++c) {
+			if (Menu.selection[c] != -1) {
+				var e = gE(Menu.divs[c], "a")[Menu.selection[c]];
+				if (e.className.indexOf("sub") != -1) {
+					e.className = "sub"
 				} else {
-					d.className = ""
+					e.className = ""
 				}
-				Menu.selection[B] = -1
+				Menu.selection[c] = -1
 			}
 		}
 	},
-	append: function(A, B) {
-		A[2] += B;
-		if (A[3] != null) {
-			Menu._append(A[3], B)
+	append: function (b, c) {
+		b[2] += c;
+		if (b[3] != null) {
+			Menu._append(b[3], c)
 		}
 	},
-	_append: function(A, C) {
-		var D,
-		E = 0;
-		for (var B = 0; B < A.length; ++B) {
-			if (A[B][2].indexOf("sl=") != -1) {
-				C = C.replace(/sl=([0-9]:?)+/, "");
-				E = 1
+	_append: function (b, d) {
+		var e, g = 0;
+		for (var c = 0; c < b.length; ++c) {
+			var f = b[c][2].indexOf("&filter=");
+			if (f != -1 && d.indexOf("&filter=") == 0) {
+				d = Menu._fixCollision(b[c][2].substr(f), d)
+			}
+			b[c][2] += d;
+			if (b[c][3]) {
+				Menu._append(b[c][3], d)
+			}
+		}
+	},
+	_splitFilter: function (b) {
+		var g = b.substr(8).split(";"),
+		c = {};
+		for (var e = 0, a = g.length; e < a; ++e) {
+			var h = g[e].indexOf("="),
+			d,
+			f;
+			if (h != -1) {
+				d = g[e].substr(0, h);
+				f = g[e].substr(h + 1)
 			} else {
-				if (A[B][2].indexOf("cl=") != -1) {
-					C = C.replace(/cl=[0-9]+/, "");
-					E = 1
-				}
+				d = g[e];
+				f = ""
 			}
-			if (E) {
-				C = C.replace("&filter=", ";");
-				C = rtrim(C, ";");
-				C = C.replace(";;", ";")
-			}
-			A[B][2] += C;
-			if (A[B][3]) {
-				Menu._append(A[B][3], C)
+			c[d] = f
+		}
+		return c
+	},
+	_fixCollision: function (d, a) {
+		var b = Menu._splitFilter(d),
+		c = Menu._splitFilter(a);
+		a = "";
+		for (var e in c) {
+			if (!b[e] && e != "sl" && e != "cl") {
+				a += ";";
+				a += e + "=" + c[e]
 			}
 		}
+		return a
 	},
-	fixUrls: function(E, B, D) {
-		for (var C = 0, A = E.length; C < A; ++C) {
-			if (E[C][2] == null) {
-				E[C][2] = B + E[C][0]
+	fixUrls: function (g, c, e, b, f) {
+		if (!f) {
+			f = 0
+		}
+		for (var d = 0, a = g.length; d < a; ++d) {
+			if (g[d][2] == null) {
+				g[d][2] = c + g[d][0] + (e ? e: "")
 			}
-			if (E[C][3]) {
-				if (D) {
-					Menu.fixUrls(E[C][3], B, D)
+			if (g[d][3]) {
+				if (b == true || (typeof b == "object" && b[f] == true)) {
+					Menu.fixUrls(g[d][3], c, e, b, f + 1)
 				} else {
-					Menu.fixUrls(E[C][3], B + E[C][0] + ".", D)
+					Menu.fixUrls(g[d][3], c + g[d][0] + ".", e, b, f + 1)
 				}
 			}
 		}
 	},
-	addButtons: function(F, E) {
-		for (var C = 0, A = E.length; C < A; ++C) {
-			if (E[C][0] == null) {
+	addButtons: function (h, g) {
+		for (var e = 0, b = g.length; e < b; ++e) {
+			if (g[e][0] == null) {
 				continue
 			}
-			var B = ce("a"),
-			D = ce("span");
-			if (E[C][2]) {
-				B.href = E[C][2]
+			var c = ce("a"),
+			f = ce("span");
+			if (g[e][2]) {
+				c.href = g[e][2]
 			} else {
-				B.href = "javascript:;";
-				B.style.cursor = "default";
-				B.style.textDecoration = "none";
-				ns(B)
+				c.href = "javascript:;";
+				c.style.cursor = "default";
+				c.style.textDecoration = "none";
+				ns(c)
 			}
-			if (E[C][3] != null) {
-				D.className = "menuarrowd";
-				B.menu = E[C][3];
-				B.onmouseover = Menu.show;
-				B.onmouseout = Menu.hide
+			if (g[e][3] != null) {
+				f.className = "menuarrowd";
+				c.menu = g[e][3];
+				c.onmouseover = Menu.show;
+				c.onmouseout = Menu.hide
+			} else {
+				c.onmouseover = Menu._hide
 			}
-			ae(D, ct(E[C][1]));
-			ae(B, D);
-			ae(F, B)
+			ae(f, ct(g[e][1]));
+			ae(c, f);
+			ae(h, c)
 		}
 	},
-	explode: function(F) {
-		var B = [],
-		E = null,
-		D;
-		for (var C = 0, A = F.length; C < A; ++C) {
-			if (F[C][0] != null) {
-				if (E != null) {
-					D.push(F[C])
+	explode: function (f) {
+		var d = [],
+		e = null,
+		c;
+		for (var b = 0, a = f.length; b < a; ++b) {
+			if (f[b][0] != null) {
+				if (e != null) {
+					c.push(f[b])
 				} else {
-					B.push(F[C])
+					d.push(f[b])
 				}
 			}
-			if (E != null && (F[C][0] == null || C == A - 1)) {
-				B.push([0, E[1], , D])
+			if (e != null && (f[b][0] == null || b == a - 1)) {
+				d.push([0, e[1], , c])
 			}
-			if (F[C][0] == null) {
-				E = F[C];
-				D = []
+			if (f[b][0] == null) {
+				e = f[b];
+				c = []
 			}
 		}
-		return B
+		return d
 	}
 };
-function Tabs(A) {
-	cO(this, A);
+function Tabs(a) {
+	cO(this, a);
 	if (this.parent) {
 		this.parent = $(this.parent)
 	} else {
@@ -1460,528 +2217,600 @@ function Tabs(A) {
 	}
 }
 Tabs.prototype = {
-	add: function(A, D) {
-		var C,
-		B = this.tabs.length;
-		C = {
-			caption: A,
-			index: B,
+	add: function (a, d) {
+		var c, b = this.tabs.length;
+		c = {
+			caption: a,
+			index: b,
 			owner: this
 		};
-		cO(C, D);
-		this.tabs.push(C);
-		return B
+		cO(c, d);
+		this.tabs.push(c);
+		return b
 	},
-	focus: function(A) {
-		if (A < 0) {
-			A = this.tabs.length + A
+	del: function (a) {
+		if (this.tabs[a]) {
+			ge("tab-" + this.tabs[a].id).style.display = "none";
+			this.selectedTab = -1;
+			this.uls = [];
+			this.tabs.splice(a, 1);
+			this.nShows = 0;
+			while (this.parent.firstChild) {
+				de(this.parent.firstChild)
+			}
+			this.flush()
+		}
+	},
+	focus: function (a) {
+		if (a < 0) {
+			a = this.tabs.length + a
 		}
 		this.forceScroll = 1;
-		gE(this.uls[this.oldMode ? 0: 2], "a")[A].onclick({},
+		gE(this.uls[this.oldMode ? 0 : 2], "a")[a].onclick({},
 		true);
 		this.forceScroll = null
 	},
-	show: function(C, E) {
-		var B;
-		if (isNaN(C) || C < 0) {
-			C = 0
+	show: function (c, e) {
+		var b;
+		if (isNaN(c) || c < 0) {
+			c = 0
 		} else {
-			if (C >= this.tabs.length) {
-				C = this.tabs.length - 1
+			if (c >= this.tabs.length) {
+				c = this.tabs.length - 1
 			}
 		}
-		if (E == null && C == this.selectedTab) {
+		if (e == null && c == this.selectedTab) {
 			return
 		}
 		if (this.selectedTab != -1) {
-			B = this.tabs[this.selectedTab];
-			if (this.onHide && !this.onHide(B)) {
+			b = this.tabs[this.selectedTab];
+			if (this.onHide && !this.onHide(b)) {
 				return
 			}
-			if (B.onHide && !B.onHide()) {
+			if (b.onHide && !b.onHide()) {
 				return
 			}
 		}++this.nShows;
-		var A = this.oldMode ? 0: 3;
-		for (var D = 0; D <= A; ++D) {
-			B = gE(this.uls[D], "a");
+		var a = this.oldMode ? 0 : 3;
+		for (var d = 0; d <= a; ++d) {
+			b = gE(this.uls[d], "a");
 			if (this.selectedTab != -1) {
-				B[this.selectedTab].className = ""
+				b[this.selectedTab].className = ""
 			}
-			B[C].className = "selected"
+			b[c].className = "selected"
 		}
-		B = this.tabs[C];
-		if (B.onLoad) {
-			B.onLoad();
-			B.onLoad = null
+		b = this.tabs[c];
+		if (b.onLoad) {
+			b.onLoad();
+			b.onLoad = null
 		}
-		this.onShow(this.tabs[C], this.tabs[this.selectedTab]);
-		if (B.onShow) {
-			B.onShow(this.tabs[this.selectedTab])
+		this.onShow(this.tabs[c], this.tabs[this.selectedTab]);
+		if (b.onShow) {
+			b.onShow(this.tabs[this.selectedTab])
 		}
-		this.selectedTab = C
+		this.selectedTab = c
 	},
-	flush: function(J) {
+	flush: function (p) {
 		if (this.oldMode) {
-			var H,
-			M,
-			C,
-			K;
-			H = ce("ul");
-			H.className = "old-tabs";
-			for (var G = 0; G < this.tabs.length; ++G) {
-				var D = this.tabs[G];
-				M = ce("li");
-				C = ce("div");
-				K = ce("a");
+			var m, s, e, r;
+			m = ce("ul");
+			m.className = "old-tabs";
+			for (var k = 0; k < this.tabs.length; ++k) {
+				var f = this.tabs[k];
+				s = ce("li");
+				e = ce("div");
+				r = ce("a");
 				if (this.poundable) {
-					K.href = "#" + D.id
+					r.href = "#" + f.id
 				} else {
-					K.href = "javascript:;"
+					r.href = "javascript:;"
 				}
-				ns(K);
-				K.onclick = Tabs.onClick.bind(D, K);
-				ae(K, ct(D.caption));
-				ae(M, C);
-				ae(M, K);
-				ae(H, M)
+				ns(r);
+				r.onclick = Tabs.onClick.bind(f, r);
+				ae(r, ct(f.caption));
+				ae(s, e);
+				ae(s, r);
+				ae(m, s)
 			}
-			this.uls[0] = H;
-			ae(this.parent, H)
+			this.uls[0] = m;
+			ae(this.parent, m);
+			var t = ce("div");
+			t.style.cssFloat = t.style.styleFloat = "left";
+			ae(this.parent, t)
 		} else {
-			var L,
-			E,
-			K,
-			I,
-			A;
-			var B = ce("div");
-			B.className = "tabs-container";
-			I = ce("div");
-			I.style.visibility = "hidden";
+			var t, g, r, q, o, c;
+			var n = ce("div");
+			n.className = "tabs-container";
+			o = ce("div");
+			o.style.visibility = "hidden";
 			this.uls[0] = ce("ul");
 			this.uls[0].className = "tabs";
-			ae(I, this.uls[0]);
-			ae(B, I);
-			I = ce("div");
-			I.className = "tabs-levels";
-			for (var G = 1; G <= 3; ++G) {
-				A = ce("div");
-				A.className = "tabs-level";
-				this.uls[G] = ce("ul");
-				this.uls[G].className = "tabs";
-				this.uls[G].style.top = ( - 30 * (3 - G)) + "px";
-				ae(A, this.uls[G]);
-				ae(I, A)
+			ae(o, this.uls[0]);
+			ae(n, o);
+			o = ce("div");
+			o.className = "tabs-levels";
+			for (var k = 1; k <= 3; ++k) {
+				c = ce("div");
+				c.className = "tabs-level";
+				this.uls[k] = ce("ul");
+				this.uls[k].className = "tabs";
+				this.uls[k].style.top = ( - 30 * (3 - k)) + "px";
+				ae(c, this.uls[k]);
+				ae(o, c)
 			}
-			ae(B, I);
-			for (var G = 0; G < this.tabs.length; ++G) {
-				var D = this.tabs[G];
-				for (var F = 0; F <= 3; ++F) {
-					E = ce("li");
-					K = ce("a");
-					b = ce("b");
+			ae(n, o);
+			for (var k = 0; k < this.tabs.length; ++k) {
+				var f = this.tabs[k];
+				for (var h = 0; h <= 3; ++h) {
+					g = ce("li");
+					r = ce("a");
+					q = ce("b");
 					if (this.poundable) {
-						K.href = "#" + D.id
+						r.href = "#" + f.id
 					} else {
-						K.href = "javascript:;"
+						r.href = "javascript:;"
 					}
-					if (F > 0) {
-						ns(K);
-						K.onclick = Tabs.onClick.bind(D, K)
+					if (h > 0) {
+						ns(r);
+						r.onclick = Tabs.onClick.bind(f, r)
 					}
 					if (!Browser.ie6) {
-						I = ce("div");
-						ae(I, ct(D.caption));
-						ae(K, I)
+						o = ce("div");
+						ae(o, ct(f.caption));
+						ae(r, o)
 					}
-					ae(b, ct(D.caption));
-					ae(K, b);
-					ae(E, K);
-					ae(this.uls[F], E)
+					ae(q, ct(f.caption));
+					ae(r, q);
+					ae(g, r);
+					ae(this.uls[h], g)
 				}
 			}
-			ae(this.parent, B)
+			ae(this.parent, n)
 		}
 		if (this.onLoad) {
-			L = this.onLoad();
-			if (L != null) {
-				this.poundedTab = J = L
+			t = this.onLoad();
+			if (t != null) {
+				this.poundedTab = p = t
 			}
 		}
-		this.show(J)
+		this.show(p)
 	},
-	setTabName: function(C, B) {
-		var A = this.oldMode ? 0: 3;
-		for (var D = 0; D <= A; ++D) {
-			_ = gE(this.uls[D], "a");
-			g_setTextNodes(_[C], B)
+	setTabName: function (d, c) {
+		var a = this.oldMode ? 0 : 3;
+		this.tabs[d].caption = c;
+		for (var e = 0; e <= a; ++e) {
+			var b = gE(this.uls[e], "a");
+			g_setTextNodes(b[d], c)
 		}
 	},
-	setTabPound: function(C, A) {
+	setTabPound: function (d, a) {
 		if (!this.poundable) {
 			return
 		}
-		var B = this.oldMode ? 0: 3;
-		for (var D = 0; D <= B; ++D) {
-			_ = gE(this.uls[D], "a");
-			_[C].href = "#" + this.tabs[C].id + ":" + A
+		var b = this.oldMode ? 0 : 3;
+		for (var e = 0; e <= b; ++e) {
+			var c = gE(this.uls[e], "a");
+			c[d].href = "#" + this.tabs[d].id + ":" + a
 		}
+	},
+	getSelectedTab: function () {
+		return this.selectedTab
 	}
 };
-Tabs.onClick = function(A, E, D) {
-	if (D == null && this.index == this.owner.selectedTab) {
+Tabs.onClick = function (b, g, f) {
+	if (f == null && this.index == this.owner.selectedTab) {
 		return
 	}
-	var C = rf2(E);
-	if (C == null) {
+	var d = rf2(g);
+	if (d == null) {
 		return
 	}
-	this.owner.show(this.index, D);
+	this.owner.show(this.index, f);
 	if (this.owner.poundable) {
-		var B = A.href.indexOf("#");
-		B != -1 && location.replace(A.href.substr(B))
+		var c = b.href.indexOf("#");
+		c != -1 && location.replace(b.href.substr(c))
 	}
-	return C
+	return d
 };
-Tabs.onLoad = function() {
+Tabs.onLoad = function () {
 	if (!this.poundable || !location.hash.length) {
 		return
 	}
-	var A = location.hash.substr(1).split(":")[0];
-	if (A) {
-		return in_array(this.tabs, A,
-		function(B) {
-			return B.id
+	var a = location.hash.substr(1).split(":")[0];
+	if (a) {
+		return in_array(this.tabs, a, function (b) {
+			return b.id
 		})
 	}
 };
-Tabs.onShow = function(E, D) {
-	var B;
-	if (D) {
-		ge("tab-" + D.id).style.display = "none"
+Tabs.onShow = function (d, e) {
+	var b;
+	if (e) {
+		ge("tab-" + e.id).style.display = "none"
 	}
-	B = ge("tab-" + E.id);
-	B.style.display = "";
+	b = ge("tab-" + d.id);
+	b.style.display = "";
 	if ((this.nShows == 1 && this.poundedTab != null && this.poundedTab >= 0) || this.forceScroll) {
-		var C,
-		A;
+		var c, a;
 		if (this.__st) {
-			C = this.__st;
-			A = 15
+			c = this.__st;
+			a = 15
 		} else {
-			C = B;
-			A = this.parent.offsetHeight + 15
+			c = b;
+			a = this.parent.offsetHeight + 15
 		}
 		if (Browser.ie) {
-			setTimeout(g_scrollTo.bind(this, C, A), 1)
+			setTimeout(g_scrollTo.bind(this, c, a), 1)
 		} else {
-			g_scrollTo(C, A)
+			g_scrollTo(c, a)
 		}
 	}
 };
 var Icon = {
 	sizes: ["small", "medium", "large"],
-	create: function(A, J, I, D, B, H) {
-		var G;
-		var E = ce("div"),
-		C = ce("div");
-		E.className = "icon" + Icon.sizes[J];
-		if (A != null) {
-			E.style.backgroundImage = "url(images/icons/" + Icon.sizes[J] + "/" + A.toLowerCase() + ".jpg)"
+	sizes2: [18, 36, 56],
+	create: function (c, k, h, b, e, j) {
+		var g = ce("div"),
+		d = ce("ins"),
+		f = ce("del");
+		if (k == null) {
+			k = 1
 		}
-		C.className = "tile";
-		if (I || D) {
-			var F = ce("a");
-			if (I && I.length) {
-				F.tooltip = I;
-				F.onmouseover = Icon.over;
-				F.onmouseout = Icon.out
-			}
-			if (D) {
-				F.href = D
-			} else {
-				F.href = "javascript:;";
-				ns(F)
-			}
-			ae(C, F)
+		g.className = "icon" + Icon.sizes[k];
+		ae(g, d);
+		ae(g, f);
+		Icon.setTexture(g, k, c);
+		if (b) {
+			var i = ce("a");
+			i.href = b;
+			ae(g, i)
 		} else {
-			if (J == 2) {
-				E.ondblclick = function() {
-					prompt("", A)
+			g.ondblclick = Icon.onDblClick
+		}
+		Icon.setNumQty(g, e, j);
+		return g
+	},
+	setTexture: function (d, c, b) {
+		if (!b) {
+			return
+		}
+		var a = d.firstChild.style;
+		if (b.indexOf("/") != -1) {
+			a.backgroundImage = "url(" + b + ")"
+		} else {
+			a.backgroundImage = "url(images/icons/" + Icon.sizes[c] + "/" + b.toLowerCase() + ".jpg)"
+		}
+		Icon.moveTexture(d, c, 0, 0)
+	},
+	moveTexture: function (d, c, a, e) {
+		var b = d.firstChild.style;
+		if (a || e) {
+			b.backgroundPosition = ( - a * Icon.sizes2[c]) + "px " + ( - e * Icon.sizes2[c]) + "px"
+		} else {
+			if (b.backgroundPosition) {
+				b.backgroundPosition = ""
+			}
+		}
+	},
+	setNumQty: function (e, c, f) {
+		var b = gE(e, "span");
+		for (var d = 0, a = b.length; d < a; ++d) {
+			if (b[d]) {
+				de(b[d])
+			}
+		}
+		if (c != null && ((c > 1 && c < 2147483647) || c.length)) {
+			b = g_createGlow(c, "q1");
+			b.style.right = "0";
+			b.style.bottom = "0";
+			b.style.position = "absolute";
+			ae(e, b)
+		}
+		if (f != null && f > 0) {
+			b = g_createGlow("(" + f + ")", "q");
+			b.style.left = "0";
+			b.style.top = "0";
+			b.style.position = "absolute";
+			ae(e, b)
+		}
+	},
+	getLink: function (a) {
+		return gE(a, "a")[0]
+	},
+	onDblClick: function () {
+		if (this.firstChild) {
+			var b = this.firstChild.style;
+			if (b.backgroundImage.length && b.backgroundImage.indexOf("url(http://static.wowhead.com") == 0) {
+				var c = b.backgroundImage.lastIndexOf("/"),
+				a = b.backgroundImage.indexOf(".jpg");
+				if (c != -1 && a != -1) {
+					prompt("", b.backgroundImage.substring(c + 1, a))
 				}
 			}
 		}
-		if (B != null && (B > 1 || B.length)) {
-			G = g_createGlow(B, "q1");
-			G.style.right = "0";
-			G.style.bottom = "0";
-			G.style.position = "absolute";
-			ae(C, G)
-		}
-		if (H != null && H > 0) {
-			G = g_createGlow("(" + H + ")", "q");
-			G.style.left = "0";
-			G.style.top = "0";
-			G.style.position = "absolute";
-			ae(C, G)
-		}
-		ae(E, C);
-		return E
+	}
+};
+var RedButton = {
+	create: function (k, g, j) {
+		var d = ce("a"),
+		f = ce("em"),
+		c = ce("b"),
+		e = ce("i"),
+		h = ce("span");
+		d.href = "javascript:;";
+		d.className = "button-red";
+		ae(c, e);
+		ae(f, c);
+		ae(f, h);
+		ae(d, f);
+		RedButton.setText(d, k);
+		RedButton.enable(d, g);
+		RedButton.setFunc(d, j);
+		return d
 	},
-	over: function() {
-		if (this.tooltip != null) {
-			Tooltip.show(this, this.tooltip, 0, 0)
+	setText: function (a, b) {
+		st(a.firstChild.childNodes[0].firstChild, b);
+		st(a.firstChild.childNodes[1], b)
+	},
+	enable: function (a, b) {
+		if (b || b == null) {
+			a.className = a.className.replace("button-red-disabled", "")
+		} else {
+			if (a.className.indexOf("button-red-disabled") == -1) {
+				a.className += " button-red-disabled"
+			}
 		}
 	},
-	out: function() {
-		Tooltip.hide()
+	setFunc: function (a, b) {
+		a.onclick = (b ? b: null)
 	}
 };
 var Tooltip = {
-	clip: "main-contents",
-	create: function(G) {
-		var E = ce("div"),
-		J = ce("table"),
-		C = ce("tbody"),
-		D = ce("tr"),
-		B = ce("tr"),
-		A = ce("td"),
-		I = ce("th"),
-		H = ce("th"),
-		F = ce("th");
-		E.className = "tooltip";
-		I.style.backgroundPosition = "top right";
-		H.style.backgroundPosition = "bottom left";
-		F.style.backgroundPosition = "bottom right";
-		if (G) {
-			A.innerHTML = G
+	create: function (h) {
+		var f = ce("div"),
+		k = ce("table"),
+		b = ce("tbody"),
+		e = ce("tr"),
+		c = ce("tr"),
+		a = ce("td"),
+		j = ce("th"),
+		i = ce("th"),
+		g = ce("th");
+		f.className = "tooltip";
+		j.style.backgroundPosition = "top right";
+		i.style.backgroundPosition = "bottom left";
+		g.style.backgroundPosition = "bottom right";
+		if (h) {
+			a.innerHTML = h
 		}
-		ae(D, A);
-		ae(D, I);
-		ae(C, D);
-		ae(B, H);
-		ae(B, F);
-		ae(C, B);
-		ae(J, C);
+		ae(e, a);
+		ae(e, j);
+		ae(b, e);
+		ae(c, i);
+		ae(c, g);
+		ae(b, c);
+		ae(k, b);
 		Tooltip.icon = ce("p");
 		Tooltip.icon.style.visibility = "hidden";
 		ae(Tooltip.icon, ce("div"));
-		ae(E, Tooltip.icon);
-		ae(E, J);
-		return E
+		ae(f, Tooltip.icon);
+		ae(f, k);
+		return f
 	},
-	fix: function(D, B, E) {
-		var C = gE(D, "table")[0],
-		G = gE(C, "td")[0],
-		F = G.childNodes;
-		if (F.length >= 2 && F[0].nodeName == "TABLE" && F[1].nodeName == "TABLE") {
-			var A;
-			if (F[1].offsetWidth > 300) {
-				A = Math.max(300, F[0].offsetWidth) + 20
+	fix: function (d, b, f) {
+		var e = gE(d, "table")[0],
+		h = gE(e, "td")[0],
+		g = h.childNodes;
+		if (g.length >= 2 && g[0].nodeName == "TABLE" && g[1].nodeName == "TABLE") {
+			g[0].style.whiteSpace = "nowrap";
+			var a;
+			if (g[1].offsetWidth > 300) {
+				a = Math.max(300, g[0].offsetWidth) + 20
 			} else {
-				A = Math.max(F[0].offsetWidth, F[1].offsetWidth) + 20
+				a = Math.max(g[0].offsetWidth, g[1].offsetWidth) + 20
 			}
-			if (A > 20) {
-				D.style.width = A + "px";
-				F[0].style.width = F[1].style.width = "100%";
-				if (!B && D.offsetHeight > document.body.clientHeight) {
-					C.className = "shrink"
+			if (a > 20) {
+				d.style.width = a + "px";
+				g[0].style.width = g[1].style.width = "100%";
+				if (!b && d.offsetHeight > document.body.clientHeight) {
+					e.className = "shrink"
 				}
 			}
 		}
-		if (E) {
-			D.style.visibility = "visible"
+		if (f) {
+			d.style.visibility = "visible"
 		}
 	},
-	fixSafe: function(C, B, A) {
+	fixSafe: function (c, b, a) {
 		if (Browser.ie) {
-			setTimeout(Tooltip.fix.bind(this, C, B, A), 1)
+			setTimeout(Tooltip.fix.bind(this, c, b, a), 1)
 		} else {
-			Tooltip.fix(C, B, A)
+			Tooltip.fix(c, b, a)
 		}
 	},
-	append: function(B, A) {
-		var B = $(B);
-		var C = Tooltip.create(A);
-		ae(B, C);
-		Tooltip.fixSafe(C, 1, 1)
+	append: function (c, b) {
+		var c = $(c);
+		var a = Tooltip.create(b);
+		ae(c, a);
+		Tooltip.fixSafe(a, 1, 1)
 	},
-	prepare: function() {
-		if (!Tooltip.tooltip) {
-			var B = Tooltip.create();
-			B.style.position = "absolute";
-			B.style.left = B.style.top = "-2323px";
-			var A = ge("layers");
-			ae(A, B);
-			Tooltip.tooltip = B;
-			Tooltip.tooltipTable = gE(B, "table")[0];
-			Tooltip.tooltipTd = gE(B, "td")[0];
-			if (Browser.ie6) {
-				B = ce("iframe");
-				B.src = "javascript:1;";
-				B.frameBorder = 0;
-				ae(A, B);
-				Tooltip.iframe = B
-			}
+	prepare: function () {
+		if (Tooltip.tooltip) {
+			return
+		}
+		var b = Tooltip.create();
+		b.style.position = "absolute";
+		b.style.left = b.style.top = "-2323px";
+		var a = ge("layers");
+		ae(a, b);
+		Tooltip.tooltip = b;
+		Tooltip.tooltipTable = gE(b, "table")[0];
+		Tooltip.tooltipTd = gE(b, "td")[0];
+		if (Browser.ie6) {
+			b = ce("iframe");
+			b.src = "javascript:0;";
+			b.frameBorder = 0;
+			ae(a, b);
+			Tooltip.iframe = b
 		}
 	},
-	move: function(O, M, P, K, B, A, U, H, N, T) {
+	set: function (b) {
+		var a = Tooltip.tooltip;
+		a.style.width = "550px";
+		a.style.left = "-2323px";
+		a.style.top = "-2323px";
+		Tooltip.tooltipTd.innerHTML = b;
+		a.style.display = "";
+		Tooltip.fix(a, 0, 0)
+	},
+	moveTests: [[null, null], [null, false], [false, null], [false, false]],
+	move: function (m, l, d, n, c, a) {
 		if (!Tooltip.tooltipTable) {
 			return
 		}
-		var W,
-		G = O,
-		R = M,
-		J = O,
-		I = M,
-		F = 0,
-		E = 0,
-		Q = g_getWindowSize(),
-		D = g_getScroll(),
-		L = Q.w,
-		S = Q.h,
-		C = D.x,
-		V = D.y;
-		if (U == null) {
-			U = Tooltip.clip
-		}
-		if (H == null) {
-			H = Tooltip.tooltip;
-			N = Tooltip.tooltipTable.offsetWidth;
-			T = Tooltip.tooltipTable.offsetHeight
-		}
-		H.style.width = N + "px";
-		if (U) {
-			W = ge(U);
-			if (W) {
-				c = ac(W);
-				F = c[0];
-				E = c[1];
-				if (W.offsetWidth + F <= C + L) {
-					L = W.offsetWidth + F - C
-				}
-				if (W.offsetHeight + E <= V + S) {
-					S = W.offsetHeight + E - V
-				}
+		var k = Tooltip.tooltip,
+		g = Tooltip.tooltipTable.offsetWidth,
+		b = Tooltip.tooltipTable.offsetHeight,
+		o;
+		k.style.width = g + "px";
+		var j, e;
+		for (var f = 0, h = Tooltip.moveTests.length; f < h; ++f) {
+			o = Tooltip.moveTests[f];
+			j = Tooltip.moveTest(m, l, d, n, c, a, o[0], o[1]);
+			if (!Ads.intersect(j)) {
+				e = true;
+				break
 			}
 		}
-		if (G + P + N > L) {
-			G = Math.max(G - N, F) - B
-		} else {
-			G += P + B
+		if (!e) {
+			Ads.intersect(j, true)
 		}
-		if (G < F) {
-			G = F
+		k.style.left = j.l + "px";
+		k.style.top = j.t + "px";
+		k.style.visibility = "visible";
+		if (Browser.ie6 && Tooltip.iframe) {
+			var o = Tooltip.iframe;
+			o.style.left = j.l + "px";
+			o.style.top = j.t + "px";
+			o.style.width = g + "px";
+			o.style.height = b + "px";
+			o.style.display = "";
+			o.style.visibility = "visible"
+		}
+	},
+	moveTest: function (e, l, n, w, c, a, m, b) {
+		var k = e,
+		v = l,
+		f = Tooltip.tooltip,
+		i = Tooltip.tooltipTable.offsetWidth,
+		p = Tooltip.tooltipTable.offsetHeight,
+		g = g_getWindowSize(),
+		j = g_getScroll(),
+		h = g.w,
+		o = g.h,
+		d = j.x,
+		u = j.y,
+		t = d,
+		s = u,
+		r = d + h,
+		q = u + o;
+		if (m == null) {
+			m = (e + n + i <= r)
+		}
+		if (b == null) {
+			b = (l - p >= s)
+		}
+		if (m) {
+			e += n + c
 		} else {
-			if (G + N > C + L) {
-				G = C + L - N
+			e = Math.max(e - i, t) - c
+		}
+		if (b) {
+			l -= p + a
+		} else {
+			l += w + a
+		}
+		if (e < t) {
+			e = t
+		} else {
+			if (e + i > r) {
+				e = r - i
 			}
 		}
-		if (R - T > Math.max(V, E)) {
-			R -= T + A
+		if (l < s) {
+			l = s
 		} else {
-			R += K + A
-		}
-		if (R < E) {
-			R = E
-		} else {
-			if (R + T > V + S) {
-				R = Math.max(V, V + S - T)
+			if (l + p > q) {
+				l = Math.max(u, q - p)
 			}
 		}
 		if (Tooltip.iconVisible) {
-			if (J >= G - 48 && J <= G && I >= R - 4 && I <= R + 48) {
-				R -= 48 - (I - R)
+			if (k >= e - 48 && k <= e && v >= l - 4 && v <= l + 48) {
+				l -= 48 - (v - l)
 			}
 		}
-		H.style.left = G + "px";
-		H.style.top = R + "px";
-		H.style.visibility = "visible";
-		if (Browser.ie6 && Tooltip.iframe) {
-			W = Tooltip.iframe;
-			W.style.left = G + "px";
-			W.style.top = R + "px";
-			W.style.width = N + "px";
-			W.style.height = T + "px";
-			W.style.display = "";
-			W.style.visibility = "visible"
-		}
+		return g_createRect(e, l, i, p)
 	},
-	show: function(G, E, A, F, C) {
+	show: function (f, e, d, b, c) {
 		if (Tooltip.disabled) {
 			return
 		}
-		var B;
-		Tooltip.prepare();
-		if (C) {
-			E = '<span class="' + C + '">' + E + "</span>"
+		if (!d || d < 1) {
+			d = 1
 		}
-		B = Tooltip.tooltip;
-		B.style.width = "550px";
-		B.style.left = "-2323px";
-		B.style.top = "-2323px";
-		Tooltip.tooltipTd.innerHTML = E;
-		B.style.display = "";
-		var D = ac(G);
-		Tooltip.fix(B, 0, 0);
-		Tooltip.move(D[0], D[1], G.offsetWidth, G.offsetHeight, A, F)
+		if (!b || b < 1) {
+			b = 1
+		}
+		if (c) {
+			e = '<span class="' + c + '">' + e + "</span>"
+		}
+		var a = ac(f);
+		Tooltip.prepare();
+		Tooltip.set(e);
+		Tooltip.move(a.x, a.y, f.offsetWidth, f.offsetHeight, d, b)
 	},
-	showAtCursor: function(B, E, A, G, D) {
+	showAtCursor: function (d, f, c, a, b) {
 		if (Tooltip.disabled) {
 			return
 		}
-		if (!A || A < 10) {
-			A = 10
+		if (!c || c < 10) {
+			c = 10
 		}
-		if (!G || G < 10) {
-			G = 10
+		if (!a || a < 10) {
+			a = 10
 		}
-		B = $E(B);
+		if (b) {
+			f = '<span class="' + b + '">' + f + "</span>"
+		}
+		d = $E(d);
+		var g = g_getCursorPos(d);
 		Tooltip.prepare();
-		if (D) {
-			E = '<span class="' + D + '">' + E + "</span>"
-		}
-		var C;
-		C = Tooltip.tooltip;
-		C.style.width = "550px";
-		C.style.left = "-2323px";
-		C.style.top = "-2323px";
-		Tooltip.tooltipTd.innerHTML = E;
-		C.style.display = "";
-		var F = g_getCursorPos(B);
-		Tooltip.fix(C, 0, 0);
-		Tooltip.move(F.x, F.y, 0, 0, A, G)
+		Tooltip.set(f);
+		Tooltip.move(g.x, g.y, 0, 0, c, a)
 	},
-	showAtXY: function(E, A, F, D, C) {
+	showAtXY: function (d, a, e, c, b) {
 		if (Tooltip.disabled) {
 			return
 		}
 		Tooltip.prepare();
-		var B;
-		B = Tooltip.tooltip;
-		B.style.width = "550px";
-		B.style.left = "-2323px";
-		B.style.top = "-2323px";
-		Tooltip.tooltipTd.innerHTML = E;
-		B.style.display = "";
-		Tooltip.fix(B, 0, 0);
-		Tooltip.move(A, F, 0, 0, D, C, null, null, null, null)
+		Tooltip.set(d);
+		Tooltip.move(a, e, 0, 0, c, b)
 	},
-	cursorUpdate: function(B, A, D) {
+	cursorUpdate: function (b, a, d) {
 		if (Tooltip.disabled || !Tooltip.tooltip) {
 			return
 		}
-		B = $E(B);
-		if (!A || A < 10) {
-			A = 10
+		b = $E(b);
+		if (!a || a < 10) {
+			a = 10
 		}
-		if (!D || D < 10) {
-			D = 10
+		if (!d || d < 10) {
+			d = 10
 		}
-		var C = g_getCursorPos(B);
-		Tooltip.move(C.x, C.y, 0, 0, A, D)
+		var c = g_getCursorPos(b);
+		Tooltip.move(c.x, c.y, 0, 0, a, d)
 	},
-	hide: function() {
+	hide: function () {
 		if (Tooltip.tooltip) {
 			Tooltip.tooltip.style.display = "none";
 			Tooltip.tooltip.visibility = "hidden";
@@ -1989,52 +2818,90 @@ var Tooltip = {
 			if (Browser.ie6) {
 				Tooltip.iframe.style.display = "none"
 			}
-			Tooltip.setIcon(null)
+			Tooltip.setIcon(null);
+			Ads.restoreHidden()
 		}
 	},
-	setIcon: function(A) {
+	setIcon: function (a) {
 		Tooltip.prepare();
-		if (A) {
-			Tooltip.icon.style.backgroundImage = "url(images/icons/medium/" + A.toLowerCase() + ".jpg)";
+		if (a) {
+			Tooltip.icon.style.backgroundImage = "url(images/icons/medium/" + a.toLowerCase() + ".jpg)";
 			Tooltip.icon.style.visibility = "visible"
 		} else {
 			Tooltip.icon.style.backgroundImage = "none";
 			Tooltip.icon.style.visibility = "hidden"
 		}
-		Tooltip.iconVisible = A ? 1: 0
+		Tooltip.iconVisible = a ? 1 : 0
 	}
 };
 var g_listviews = {};
-function Listview(A) {
-	cO(this, A);
+function Listview(a) {
+	cO(this, a);
 	if (this.id) {
-		var K = (this.tabs ? "tab-": "lv-") + this.id;
+		var m = (this.tabs ? "tab-": "lv-") + this.id;
 		if (this.parent) {
-			var H = ce("div");
-			H.id = K;
-			ae($(this.parent), H);
-			this.container = H
+			var k = ce("div");
+			k.id = m;
+			ae($(this.parent), k);
+			this.container = k
 		} else {
-			this.container = ge(K)
+			this.container = ge(m)
 		}
 	} else {
 		return
 	}
-	if (this.template) {
+	if (this.template && Listview.templates[this.template]) {
 		this.template = Listview.templates[this.template]
 	} else {
 		return
 	}
 	g_listviews[this.id] = this;
+	if (this.data == null) {
+		this.data = []
+	}
 	if (this.poundable == null) {
 		if (this.template.poundable != null) {
 			this.poundable = this.template.poundable
 		} else {
-			this.poundable = 1
+			this.poundable = true
+		}
+	}
+	if (this.searchable == null) {
+		if (this.template.searchable != null) {
+			this.searchable = this.template.searchable
+		} else {
+			this.searchable = false
+		}
+	}
+	if (this.filtrable == null) {
+		if (this.template.filtrable != null) {
+			this.filtrable = this.template.filtrable
+		} else {
+			this.filtrable = false
+		}
+	}
+	if (this.data.length == 1) {
+		this.filtrable = false;
+		this.searchable = false
+	}
+	if (this.searchable && this.searchDelay == null) {
+		if (this.template.searchDelay != null) {
+			this.searchDelay = this.template.searchDelay
+		} else {
+			this.searchDelay = 333
 		}
 	}
 	if (this.hideBands == null) {
 		this.hideBands = this.template.hideBands
+	}
+	if (this.hideNav == null) {
+		this.hideNav = this.template.hideNav
+	}
+	if (this.hideHeader == null) {
+		this.hideHeader = this.template.hideHeader
+	}
+	if (this.hideCount == null) {
+		this.hideCount = this.template.hideCount
 	}
 	if (this.computeDataFunc == null && this.template.computeDataFunc != null) {
 		this.computeDataFunc = this.template.computeDataFunc
@@ -2042,8 +2909,12 @@ function Listview(A) {
 	if (this.createCbControls == null && this.template.createCbControls != null) {
 		this.createCbControls = this.template.createCbControls
 	}
-	if (this.onBeforeCreate == null && this.template.onBeforeCreate != null) {
-		this.onBeforeCreate = this.template.onBeforeCreate
+	if (this.template.onBeforeCreate != null) {
+		if (this.onBeforeCreate == null) {
+			this.onBeforeCreate = this.template.onBeforeCreate
+		} else {
+			this.onBeforeCreate = [this.template.onBeforeCreate, this.onBeforeCreate]
+		}
 	}
 	if (this.onAfterCreate == null && this.template.onAfterCreate != null) {
 		this.onAfterCreate = this.template.onAfterCreate
@@ -2051,23 +2922,35 @@ function Listview(A) {
 	if (this.createNote == null && this.template.createNote != null) {
 		this.createNote = this.template.createNote
 	}
-	this.rowOffset = 0;
+	if (this.customFilter == null && this.template.customFilter != null) {
+		this.customFilter = this.template.customFilter
+	}
+	if (this.customFilter) {
+		this.customFilter = this.customFilter.bind(this)
+	}
+	if (this.clip == null && this.template.clip != null) {
+		this.clip = this.template.clip
+	}
 	if (this.mode == null) {
 		this.mode = this.template.mode
 	}
-	this.mode |= 0;
 	if (this.nItemsPerPage == null) {
-		var N = this.template.nItemsPerPage;
-		this.nItemsPerPage = (N != null ? N: 50)
+		if (this.template.nItemsPerPage != null) {
+			this.nItemsPerPage = this.template.nItemsPerPage
+		} else {
+			this.nItemsPerPage = 50
+		}
 	}
 	this.nItemsPerPage |= 0;
 	if (this.nItemsPerPage <= 0) {
 		this.nItemsPerPage = 0
 	}
-	if (this.mode == 3) {
+	this.nFilters = 0;
+	this.resetRowVisibility();
+	if (this.mode == Listview.MODE_TILED) {
 		if (this.nItemsPerRow == null) {
-			var M = this.template.nItemsPerRow;
-			this.nItemsPerRow = (M != null ? M: 4)
+			var q = this.template.nItemsPerRow;
+			this.nItemsPerRow = (q != null ? q: 4)
 		}
 		this.nItemsPerRow |= 0;
 		if (this.nItemsPerRow <= 1) {
@@ -2076,76 +2959,80 @@ function Listview(A) {
 	} else {
 		this.nItemsPerRow = 1
 	}
-	this.columns = this.template.columns.slice(0);
+	this.columns = [];
+	for (var e = 0, j = this.template.columns.length; e < j; ++e) {
+		var p = this.template.columns[e],
+		c = {};
+		cO(c, p);
+		this.columns.push(c)
+	}
 	if (this.extraCols != null) {
-		for (var D = 0, G = this.extraCols.length; D < G; ++D) {
-			var I = null;
-			var C = this.extraCols[D];
-			if (C.after != null) {
-				var F = in_array(this.columns, C.after,
-				function(O) {
-					return O.id
+		for (var e = 0, j = this.extraCols.length; e < j; ++e) {
+			var l = null;
+			var b = this.extraCols[e];
+			if (b.after || b.before) {
+				var h = in_array(this.columns, (b.after ? b.after: b.before), function (d) {
+					return d.id
 				});
-				if (F != -1) {
-					I = F + 1
+				if (h != -1) {
+					l = (b.after ? h + 1 : h - 1)
 				}
 			}
-			if (I == null) {
-				I = this.columns.length
+			if (l == null) {
+				l = this.columns.length
 			}
-			this.columns.splice(I, 0, C)
+			this.columns.splice(l, 0, b)
 		}
 	}
 	this.visibility = [];
-	var L = [],
-	J = [];
+	var n = [],
+	o = [];
 	if (this.visibleCols != null) {
-		array_walk(this.visibleCols,
-		function(O) {
-			L[O] = 1
+		array_walk(this.visibleCols, function (d) {
+			n[d] = 1
 		})
 	}
 	if (this.hiddenCols != null) {
-		array_walk(this.hiddenCols,
-		function(O) {
-			J[O] = 1
+		array_walk(this.hiddenCols, function (d) {
+			o[d] = 1
 		})
 	}
-	for (var D = 0, G = this.columns.length; D < G; ++D) {
-		var C = this.columns[D];
-		if (L[C.id] != null || (!C.hidden && J[C.id] == null)) {
-			this.visibility.push(D)
+	for (var e = 0, j = this.columns.length; e < j; ++e) {
+		var b = this.columns[e];
+		if (n[b.id] != null || (!b.hidden && o[b.id] == null)) {
+			this.visibility.push(e)
 		}
 	}
 	if (this.sort == null && this.template.sort) {
 		this.sort = this.template.sort.slice(0)
 	} else {
 		if (this.sort != null) {
-			var B = this.sort;
+			var g = this.sort;
 			this.sort = [];
-			for (var D = 0, G = B.length; D < G; ++D) {
-				var C = parseInt(B[D]);
-				if (isNaN(C)) {
-					var E = 0;
-					if (B[D].charAt(0) == "-") {
-						E = 1;
-						B[D] = B[D].substring(1)
+			for (var e = 0, j = g.length; e < j; ++e) {
+				var b = parseInt(g[e]);
+				if (isNaN(b)) {
+					var f = 0;
+					if (g[e].charAt(0) == "-") {
+						f = 1;
+						g[e] = g[e].substring(1)
 					}
-					var F = in_array(this.columns, B[D],
-					function(O) {
-						return O.id
+					var h = in_array(this.columns, g[e], function (d) {
+						return d.id
 					});
-					if (F != -1) {
-						if (E) {
-							this.sort.push( - (F + 1))
+					if (h != -1) {
+						if (f) {
+							this.sort.push( - (h + 1))
 						} else {
-							this.sort.push(F + 1)
+							this.sort.push(h + 1)
 						}
 					}
 				} else {
-					this.sort.push(C)
+					this.sort.push(b)
 				}
 			}
+		} else {
+			this.sort = []
 		}
 	}
 	if (this.tabs) {
@@ -2157,15 +3044,17 @@ function Listview(A) {
 		this.initialize()
 	}
 }
+Listview.MODE_DEFAULT = 0;
+Listview.MODE_CHECKBOX = 1;
+Listview.MODE_DIV = 2;
+Listview.MODE_TILED = 3;
 Listview.prototype = {
-	initialize: function() {
-		if (!this.data.length) {
-			this.showNoData();
-			return
-		}
-		if (this.computeDataFunc != null) {
-			for (var E = 0, C = this.data.length; E < C; ++E) {
-				this.computeDataFunc(this.data[E])
+	initialize: function () {
+		if (this.data.length) {
+			if (this.computeDataFunc != null) {
+				for (var d = 0, a = this.data.length; d < a; ++d) {
+					this.computeDataFunc(this.data[d])
+				}
 			}
 		}
 		if (this.tabs) {
@@ -2177,467 +3066,755 @@ Listview.prototype = {
 			this.readPound()
 		}
 		this.updateSortIndex();
-		var B;
+		var b;
 		if (this.onBeforeCreate != null) {
-			B = this.onBeforeCreate()
+			if (typeof this.onBeforeCreate == "function") {
+				b = this.onBeforeCreate()
+			} else {
+				for (var d = 0; d < this.onBeforeCreate.length; ++d) { (this.onBeforeCreate[d].bind(this))()
+				}
+			}
 		}
-		if (this.mode == 2) {
-			this.mainDiv = ce("div");
-			this.mainDiv.className = "listview-mode2";
-			this.refreshRows();
-			this.createBands(this.mainDiv)
+		this.noData = ce("div");
+		this.noData.className = "listview-nodata text";
+		if (this.mode == Listview.MODE_DIV) {
+			this.mainContainer = this.mainDiv = ce("div");
+			this.mainContainer.className = "listview-mode-div"
 		} else {
-			this.table = ce("table");
+			this.mainContainer = this.table = ce("table");
 			this.thead = ce("thead");
 			this.tbody = ce("tbody");
-			if (this.mode == 3) {
-				this.tbody.className = "listview-mode3";
-				var A = ce("colgroup");
-				var F = (100 / this.nItemsPerRow) + "%";
-				for (var E = 0; E < this.nItemsPerRow; ++E) {
-					var D = ce("col");
-					D.style.width = F;
-					ae(A, D)
+			if (this.mode == Listview.MODE_TILED) {
+				this.table.className = "listview-mode-tiled";
+				var e = (100 / this.nItemsPerRow) + "%",
+				f = ce("colgroup"),
+				c;
+				for (var d = 0; d < this.nItemsPerRow; ++d) {
+					c = ce("col");
+					c.style.width = e;
+					ae(f, c)
 				}
-				ae(this.table, A)
+				ae(this.mainContainer, f)
 			} else {
-				this.tbody.className = "listview-std";
+				this.table.className = "listview-mode-default";
 				this.createHeader();
 				this.updateSortArrow()
 			}
 			ae(this.table, this.thead);
 			ae(this.table, this.tbody);
-			this.refreshRows();
-			this.createBands(this.table);
-			if (this.mode == 1 && Browser.ie) {
+			if (this.mode == Listview.MODE_CHECKBOX && Browser.ie) {
 				setTimeout(Listview.cbIeFix.bind(this), 1)
 			}
 		}
-
-//	Сортируем при загрузке, дабы снизить нагрузку с сервера
-		this.applySort();
+		this.createBands();
+		if (this.customFilter != null) {
+			this.updateFilters()
+		}
+		this.updateNav();
 		this.refreshRows();
-
 		if (this.onAfterCreate != null) {
-			this.onAfterCreate(B)
+			this.onAfterCreate(b)
 		}
 	},
-	createHeader: function() {
-		var H = ce("tr");
-		if (this.mode == 1) {
-			var C = ce("th");
-			var B = ce("div");
-			var J = ce("a");
-			C.style.width = "33px";
-			if (this.poundable == 2) {
-				J.style.cursor = "default";
-				J.style.backgroundColor = "#585858"
-			}
-			J.href = "javascript:;";
-			J.className = "listview-cb";
-			ns(J);
-			ae(J, ct(String.fromCharCode(160)));
-			ae(B, J);
-			ae(C, B);
-			ae(H, C)
+	createHeader: function () {
+		var h = ce("tr");
+		if (this.mode == Listview.MODE_CHECKBOX) {
+			var g = ce("th"),
+			j = ce("div"),
+			c = ce("a");
+			g.style.width = "33px";
+			c.href = "javascript:;";
+			c.className = "listview-cb";
+			ns(c);
+			ae(c, ct(String.fromCharCode(160)));
+			ae(j, c);
+			ae(g, j);
+			ae(h, g)
 		}
-		for (var E = 0, G = this.visibility.length; E < G; ++E) {
-			var I = this.visibility[E];
-			var D = this.columns[I];
-			var C = ce("th");
-			var B = ce("div");
-			var J = ce("a");
-			var A = ce("span");
-			var F = ce("span");
-			if (this.poundable == 2) {
-				J.style.cursor = "default";
-				J.style.backgroundColor = "#585858"
+		for (var f = 0, b = this.visibility.length; f < b; ++f) {
+			var e = this.visibility[f],
+			d = this.columns[e],
+			g = ce("th");
+			j = ce("div"),
+			c = ce("a"),
+			outerSpan = ce("span"),
+			innerSpan = ce("span");
+			d.__th = g;
+			c.href = "javascript:;";
+			if (this.filtrable && (d.filtrable == null || d.filtrable)) {
+				c.onmouseup = Listview.headerClick.bind(this, d, e);
+				c.onclick = c.oncontextmenu = rf
+			} else {
+				c.onclick = this.sortBy.bind(this, e + 1)
 			}
-			J.href = "javascript:;";
-			J.onclick = this.sortBy.bind(this, I + 1);
-			ns(J);
-			if (D.tooltip != null) {
-				J.onmouseover = Listview.headerOver.bind(J, D.tooltip);
-				J.onmousemove = Tooltip.cursorUpdate;
-				J.onmouseout = Tooltip.hide
+			c.onmouseover = Listview.headerOver.bind(this, c, d);
+			c.onmouseout = Tooltip.hide;
+			ns(c);
+			if (d.width != null) {
+				g.style.width = d.width
 			}
-			if (D.width != null) {
-				C.style.width = D.width
+			if (d.align != null) {
+				g.style.textAlign = d.align
 			}
-			if (D.align != null) {
-				C.style.textAlign = D.align
+			if (d.span != null) {
+				g.colSpan = d.span
 			}
-			if (D.span != null) {
-				C.colSpan = D.span
-			}
-			ae(F, ct(D.name));
-			ae(A, F);
-			ae(J, A);
-			ae(B, J);
-			ae(C, B);
-			ae(H, C)
+			ae(innerSpan, ct(d.name));
+			ae(outerSpan, innerSpan);
+			ae(c, outerSpan);
+			ae(j, c);
+			ae(g, j);
+			ae(h, g)
 		}
-		ae(this.thead, H)
+		if (this.hideHeader) {
+			this.thead.style.display = "none"
+		}
+		ae(this.thead, h)
 	},
-	createBands: function(E) {
-		var C = ce("div"),
-		D = ce("div");
-		C.className = "listview-band-top";
-		D.className = "listview-band-bottom";
-		this.navTop = this.createNav();
-		this.navBot = this.createNav();
-		var A = ce("div"),
-		B = ce("div");
-		A.className = B.className = "listview-note";
+	createBands: function () {
+		var h = ce("div"),
+		j = ce("div"),
+		k = ce("div"),
+		i = ce("div");
+		this.bandTop = h;
+		this.bandBot = j;
+		this.noteTop = k;
+		this.noteBot = i;
+		h.className = "listview-band-top";
+		j.className = "listview-band-bottom";
+		this.navTop = this.createNav(true);
+		this.navBot = this.createNav(false);
+		k.className = i.className = "listview-note";
 		if (this.note) {
-			A.innerHTML = this.note
+			k.innerHTML = this.note
 		} else {
 			if (this.createNote) {
-				this.createNote(A, B)
+				this.createNote(k, i)
 			}
 		}
-		if (!A.firstChild && this.mode != 1) {
-			ae(A, ct(String.fromCharCode(160)))
+		if (!k.firstChild && this.mode != Listview.MODE_CHECKBOX) {
+			ae(k, ct(String.fromCharCode(160)))
 		}
-		if (this.mode != 1) {
-			ae(B, ct(String.fromCharCode(160)))
+		if (this.mode != Listview.MODE_CHECKBOX) {
+			ae(i, ct(String.fromCharCode(160)))
 		}
-		ae(C, this.navTop);
-		ae(D, this.navBot);
-		ae(C, A);
-		ae(D, B);
-		if (this.mode == 1) {
-			ae(C, this.createCbBar());
-			ae(D, this.createCbBar())
+		ae(h, this.navTop);
+		if (this.searchable) {
+			var l = this.updateFilters.bind(this, true),
+			d = (this._truncated ? "search-within-results2": "search-within-results"),
+			c = ce("span"),
+			b = ce("em"),
+			g = ce("a"),
+			f = ce("input");
+			c.className = "listview-quicksearch";
+			ae(c, b);
+			g.href = "javascript:;";
+			g.onclick = function () {
+				var a = this.nextSibling;
+				a.value = "";
+				a.className = d;
+				l()
+			};
+			g.style.display = "none";
+			ae(g, ce("span"));
+			ae(c, g);
+			ns(g);
+			f.setAttribute("type", "text");
+			f.className = d;
+			f.style.width = (this._truncated ? "19em": "15em");
+			g_onAfterTyping(f, l, this.searchDelay);
+			f.onmouseover = function () {
+				if (trim(this.value) != "") {
+					this.className = ""
+				}
+			};
+			f.onfocus = function () {
+				this.className = ""
+			};
+			f.onblur = function () {
+				if (trim(this.value) == "") {
+					this.className = d;
+					this.value = ""
+				}
+			};
+			if (Browser.ie) {
+				setTimeout(function () {
+					f.value = ""
+				},
+				1)
+			}
+			ae(c, f);
+			this.quickSearchBox = f;
+			this.quickSearchGlass = b;
+			this.quickSearchClear = g;
+			ae(h, c)
 		}
-		this.bandTop = C;
-		this.bandBot = D;
-		this.updateNav();
-		if (this.hideBands != null) {
-			C.style.display = D.style.display = "none"
+		ae(h, k);
+		ae(j, this.navBot);
+		ae(j, i);
+		if (this.mode == Listview.MODE_CHECKBOX) {
+			if (this.note) {
+				k.style.paddingBottom = "5px"
+			}
+			this.cbBarTop = this.createCbBar(true);
+			this.cbBarBot = this.createCbBar(false);
+			ae(h, this.cbBarTop);
+			ae(j, this.cbBarBot);
+			if (!this.noteTop.firstChild && !this.cbBarTop.firstChild) {
+				this.noteTop.innerHTML = "&nbsp;"
+			}
+			if (!this.noteBot.firstChild && !this.cbBarBot.firstChild) {
+				this.noteBot.innerHTML = "&nbsp;"
+			}
+			if (this.noteTop.firstChild && this.cbBarTop.firstChild) {
+				this.noteTop.style.paddingBottom = "6px"
+			}
+			if (this.noteBot.firstChild && this.cbBarBot.firstChild) {
+				this.noteBot.style.paddingBottom = "6px"
+			}
+		}
+		if (this.hideBands & 1) {
+			h.style.display = "none"
+		}
+		if (this.hideBands & 2) {
+			j.style.display = "none"
 		}
 		ae(this.container, this.bandTop);
-		ae(this.container, E);
+		if (this.clip) {
+			var e = ce("div");
+			e.className = "listview-clip";
+			e.style.width = this.clip.w + "px";
+			e.style.height = this.clip.h + "px";
+			this.clipDiv = e;
+			ae(e, this.mainContainer);
+			ae(e, this.noData);
+			ae(this.container, e)
+		} else {
+			ae(this.container, this.mainContainer);
+			ae(this.container, this.noData)
+		}
 		ae(this.container, this.bandBot)
 	},
-	createNav: function() {
-		var B = ce("div");
-		B.className = "listview-nav";
-		var D = ce("a"),
-		C = ce("a"),
-		A = ce("a"),
-		I = ce("a");
-		D.href = C.href = A.href = I.href = "javascript:;";
-		ae(D, ct(String.fromCharCode(171) + LANG.lvpage_first));
-		ae(C, ct(String.fromCharCode(8249) + LANG.lvpage_previous));
-		ae(A, ct(LANG.lvpage_next + String.fromCharCode(8250)));
-		ae(I, ct(LANG.lvpage_last + String.fromCharCode(187)));
-		ns(D);
-		ns(C);
-		ns(A);
-		ns(I);
-		D.onclick = this.firstPage.bind(this);
-		C.onclick = this.previousPage.bind(this);
-		A.onclick = this.nextPage.bind(this);
-		I.onclick = this.lastPage.bind(this);
-		var H = ce("span");
-		var G = ce("b"),
-		F = ce("b"),
-		E = ce("b");
-		ae(G, ct("a"));
-		ae(F, ct("a"));
-		ae(E, ct("a"));
-		ae(H, G);
-		ae(H, ct(LANG.hyphen));
-		ae(H, F);
-		ae(H, ct(LANG.lvpage_of));
-		ae(H, E);
-		ae(B, D);
-		ae(B, C);
-		ae(B, H);
-		ae(B, A);
-		ae(B, I);
-		return B
-	},
-	createCbBar: function() {
-		var F = ce("div");
-		var C = ce("div");
-		var B = ce("a"),
-		A = ce("a"),
-		E = ce("a");
-		B.href = A.href = E.href = "javascript:;";
-		ae(B, ct("All"));
-		ae(A, ct("None"));
-		ae(E, ct("Inverse"));
-		B.onclick = Listview.cbSelect.bind(this, true);
-		A.onclick = Listview.cbSelect.bind(this, false);
-		E.onclick = Listview.cbSelect.bind(this, null);
-		ns(B);
-		ns(A);
-		ns(E);
-		ae(C, ct("Select: "));
-		ae(C, B);
-		ae(C, ct(LANG.comma));
-		ae(C, A);
-		ae(C, ct(LANG.comma));
-		ae(C, E);
-		if (this.createCbControls) {
-			var D = ce("div");
-			this.createCbControls(D, C);
-			D.style.paddingBottom = "6px";
-			ae(F, D)
-		}
-		ae(F, C);
-		return F
-	},
-	refreshRows: function() {
-		var B = this.data.length;
-		var D = (this.mode == 2 ? this.mainDiv: this.tbody);
-		while (D.firstChild) {
-			D.removeChild(D.firstChild)
-		}
-		if (B > 0) {
-			var G,
-			A,
-			F;
-			if (this.nItemsPerPage > 0) {
-				G = this.rowOffset;
-				A = Math.min(B, this.rowOffset + this.nItemsPerPage)
-			} else {
-				G = 0;
-				A = B
-			}
-			if (this.mode == 2) {
-				for (var E = G; E < A; ++E) {
-					ae(this.mainDiv, this.getDiv(E))
-				}
-			} else {
-				if (this.mode == 3) {
-					var C = 0,
-					H = ce("tr");
-					for (var E = G; E < A; ++E) {
-						ae(H, this.getCell(E));
-						if (++C == this.nItemsPerRow) {
-							ae(this.tbody, H);
-							if (E + 1 < A) {
-								H = ce("tr")
-							}
-							C = 0
-						}
-					}
-					if (C != 0) {
-						for (; C < 4; ++C) {
-							D = ce("td");
-							D.className = "empty-cell";
-							ae(H, D)
-						}
-						ae(this.tbody, H)
-					}
-				} else {
-					for (var E = G; E < A; ++E) {
-						ae(this.tbody, this.getRow(E))
-					}
-				}
+	createNav: function (g) {
+		var c = ce("div"),
+		d = ce("a"),
+		b = ce("a"),
+		a = ce("a"),
+		j = ce("a"),
+		i = ce("span"),
+		h = ce("b"),
+		f = ce("b"),
+		e = ce("b");
+		c.className = "listview-nav";
+		d.href = b.href = a.href = j.href = "javascript:;";
+		ae(d, ct(String.fromCharCode(171) + LANG.lvpage_first));
+		ae(b, ct(String.fromCharCode(8249) + LANG.lvpage_previous));
+		ae(a, ct(LANG.lvpage_next + String.fromCharCode(8250)));
+		ae(j, ct(LANG.lvpage_last + String.fromCharCode(187)));
+		ns(d);
+		ns(b);
+		ns(a);
+		ns(j);
+		d.onclick = this.firstPage.bind(this);
+		b.onclick = this.previousPage.bind(this);
+		a.onclick = this.nextPage.bind(this);
+		j.onclick = this.lastPage.bind(this);
+		ae(h, ct("a"));
+		ae(f, ct("a"));
+		ae(e, ct("a"));
+		ae(i, h);
+		ae(i, ct(LANG.hyphen));
+		ae(i, f);
+		ae(i, ct(LANG.lvpage_of));
+		ae(i, e);
+		ae(c, d);
+		ae(c, b);
+		ae(c, i);
+		ae(c, a);
+		ae(c, j);
+		if (g) {
+			if (this.hideNav & 1) {
+				c.style.display = "none"
 			}
 		} else {
-			this.bandTop.style.display = this.bandBot.style.display = "none";
-			if (this.mode == 2) {
-				this.mainDiv.style.display = "none"
-			} else {
-				this.table.style.display = "none"
+			if (this.hideNav & 2) {
+				c.style.display = "none"
 			}
-			this.showNoData()
 		}
+		return c
 	},
-	showNoData: function() {
-		var B = ce("div");
-		B.className = "listview-nodata";
-		var A = -1;
+	createCbBar: function (a) {
+		var b = ce("div");
+		if (this.createCbControls) {
+			this.createCbControls(b, a)
+		}
+		if (b.firstChild) {
+			b.className = "listview-withselected" + (a ? "": "2")
+		}
+		return b
+	},
+	refreshRows: function () {
+		var a = (this.mode == Listview.MODE_DIV ? this.mainContainer: this.tbody);
+		ee(a);
+		if (this.nRowsVisible == 0) {
+			if (!this.filtered) {
+				this.bandTop.style.display = this.bandBot.style.display = "none";
+				this.mainContainer.style.display = "none"
+			}
+			this.noData.style.display = "";
+			this.showNoData();
+			return
+		}
+		var n, b, c;
+		if (! (this.hideBands & 1)) {
+			this.bandTop.style.display = ""
+		}
+		if (! (this.hideBands & 2)) {
+			this.bandBot.style.display = ""
+		}
+		if (this.nItemsPerPage > 0) {
+			n = this.rowOffset;
+			b = Math.min(n + this.nRowsVisible, n + this.nItemsPerPage);
+			if (this.filtered && this.rowOffset > 0) {
+				for (var f = 0, g = 0; f < this.data.length && g < this.rowOffset; ++f) {
+					var o = this.data[f];
+					if (o.__hidden || o.__deleted) {++n
+					} else {++g
+					}
+				}
+				b += (n - this.rowOffset)
+			}
+		} else {
+			n = 0;
+			b = this.nRowsVisible
+		}
+		var h = b - n;
+		if (this.mode == Listview.MODE_DIV) {
+			for (var e = 0; e < h; ++e) {
+				var f = n + e,
+				o = this.data[f];
+				if (!o) {
+					break
+				}
+				if (o.__hidden || o.__deleted) {++h;
+					continue
+				}
+				ae(this.mainDiv, this.getDiv(f))
+			}
+		} else {
+			if (this.mode == Listview.MODE_TILED) {
+				var d = 0,
+				l = ce("tr");
+				for (var e = 0; e < h; ++e) {
+					var f = n + e,
+					o = this.data[f];
+					if (!o) {
+						break
+					}
+					if (o.__hidden || o.__deleted) {++h;
+						continue
+					}
+					ae(l, this.getCell(f));
+					if (++d == this.nItemsPerRow) {
+						ae(this.tbody, l);
+						if (e + 1 < h) {
+							l = ce("tr")
+						}
+						d = 0
+					}
+				}
+				if (d != 0) {
+					for (; d < 4; ++d) {
+						var m = ce("td");
+						m.className = "empty-cell";
+						ae(l, m)
+					}
+					ae(this.tbody, l)
+				}
+			} else {
+				for (var e = 0; e < h; ++e) {
+					var f = n + e,
+					o = this.data[f];
+					if (!o) {
+						break
+					}
+					if (o.__hidden || o.__deleted) {++h;
+						continue
+					}
+					ae(this.tbody, this.getRow(f))
+				}
+			}
+		}
+		this.mainContainer.style.display = "";
+		this.noData.style.display = "none"
+	},
+	showNoData: function () {
+		var b = this.noData;
+		ee(b);
+		var a = -1;
 		if (this.template.onNoData) {
-			A = (this.template.onNoData.bind(this, B))()
+			a = (this.template.onNoData.bind(this, b))()
 		}
-		if (A == -1) {
-			ae(B, ct(LANG.lvnodata))
+		if (a == -1) {
+			ae(this.noData, ct(this.filtered ? LANG.lvnodata2: LANG.lvnodata))
 		}
-		ae(this.container, B)
 	},
-	getDiv: function(B) {
-		var A = this.data[B];
-		if (A.__div == null) {
-			this.createDiv(A, B)
+	getDiv: function (a) {
+		var b = this.data[a];
+		if (b.__div == null) {
+			this.createDiv(b, a)
 		}
-		return A.__div
+		return b.__div
 	},
-	createDiv: function(A, B) {
-		var C = ce("div");
-		A.__div = C; (this.template.compute.bind(this, A, C, B))()
+	createDiv: function (b, a) {
+		var c = ce("div");
+		b.__div = c;
+		(this.template.compute.bind(this, b, c, a))()
 	},
-	getCell: function(B) {
-		var A = this.data[B];
-		if (A.__div == null) {
-			this.createCell(A, B)
+	getCell: function (a) {
+		var b = this.data[a];
+		if (b.__div == null) {
+			this.createCell(b, a)
 		}
-		return A.__td
+		return b.__td
 	},
-	createCell: function(A, B) {
-		var C = ce("td");
-		A.__td = C; (this.template.compute.bind(this, A, C, B))();
+	createCell: function (b, a) {
+		var c = ce("td");
+		b.__td = c;
+		(this.template.compute.bind(this, b, c, a))();
 		if (this.template.getItemLink) {
-			C.onclick = this.itemClick.bind(this, A)
+			c.onclick = this.itemClick.bind(this, b)
 		}
 		if (Browser.ie6) {
-			C.onmouseover = Listview.itemOver;
-			C.onmouseout = Listview.itemOut
+			c.onmouseover = Listview.itemOver;
+			c.onmouseout = Listview.itemOut
 		}
 	},
-	getRow: function(A) {
-		var B = this.data[A];
-		if (B.__tr == null) {
-			this.createRow(B)
+	getRow: function (a) {
+		var b = this.data[a];
+		if (b.__tr == null) {
+			this.createRow(b)
 		}
-		return B.__tr
+		return b.__tr
 	},
-	createRow: function(I) {
-		var F = ce("tr");
-		I.__tr = F;
-		if (this.mode == 1) {
-			var B = ce("td");
-			B.className = "listview-cb";
-			B.onclick = Listview.cbCellClick;
-			var C = ce("input");
-			ns(C);
-			C.type = "checkbox";
-			C.onclick = Listview.cbClick;
-			if (I.__chk) {
-				C.checked = true;
-				if (Browser.ie) {
-					C.defaultChecked = true
+	createRow: function (j) {
+		var g = ce("tr");
+		j.__tr = g;
+		if (this.mode == Listview.MODE_CHECKBOX) {
+			var c = ce("td");
+			if (!j.__nochk) {
+				c.className = "listview-cb";
+				c.onclick = Listview.cbCellClick;
+				var b = ce("input");
+				ns(b);
+				b.type = "checkbox";
+				b.onclick = Listview.cbClick;
+				if (j.__chk) {
+					b.checked = true;
+					if (Browser.ie) {
+						b.defaultChecked = true
+					}
 				}
+				j.__cb = b;
+				ae(c, b)
 			}
-			I.__cb = C;
-			ae(B, C);
-			ae(F, B)
+			ae(g, c)
 		}
-		for (var D = 0, E = this.visibility.length; D < E; ++D) {
-			var G = this.visibility[D];
-			var A = this.columns[G];
-			var B = ce("td");
-			if (A.align != null) {
-				B.style.textAlign = A.align
+		for (var d = 0, e = this.visibility.length; d < e; ++d) {
+			var f = this.visibility[d],
+			a = this.columns[f],
+			c = ce("td"),
+			h;
+			if (a.align != null) {
+				c.style.textAlign = a.align
 			}
-			var H = null;
-			if (A.compute) {
-				H = (A.compute.bind(this, I, B, F, G))()
+			if (a.compute) {
+				h = (a.compute.bind(this, j, c, g, f))()
 			} else {
-				if (I[A.value] != null) {
-					ae(B, ct(I[A.value]))
+				if (j[a.value] != null) {
+					h = j[a.value]
 				} else {
-					H = -1
+					h = -1
 				}
 			}
-			if (H != -1 && H != null) {
-				B.insertBefore(ct(H), B.firstChild)
+			if (h != -1 && h != null) {
+				c.insertBefore(ct(h), c.firstChild)
 			}
-			ae(F, B)
+			ae(g, c)
 		}
-		if (this.mode == 1 && I.__chk) {
-			F.className = "checked"
+		if (this.mode == Listview.MODE_CHECKBOX && j.__chk) {
+			g.className = "checked"
 		}
 		if (this.template.getItemLink) {
-			F.onclick = this.itemClick.bind(this, I)
+			g.onclick = this.itemClick.bind(this, j)
 		}
 		if (Browser.ie6) {
-			F.onmouseover = Listview.itemOver;
-			F.onmouseout = Listview.itemOut
+			g.onmouseover = Listview.itemOver;
+			g.onmouseout = Listview.itemOut
 		}
 	},
-	itemClick: function(A, D) {
-		D = $E(D);
-		var B = 0,
-		C = D._target;
-		while (C && B < 3) {
-			if (C.nodeName == "A") {
+	itemClick: function (d, c) {
+		c = $E(c);
+		var a = 0,
+		b = c._target;
+		while (b && a < 3) {
+			if (b.nodeName == "A") {
 				return
 			}
-			C = C.parentNode
+			b = b.parentNode
 		}
-		location.href = this.template.getItemLink(A)
+		location.href = this.template.getItemLink(d)
 	},
-	validatePage: function() {
-		var C = this.nItemsPerPage,
-		B = this.rowOffset,
-		A = this.data.length;
-		if (B < 0) {
+	validatePage: function () {
+		var c = this.nItemsPerPage,
+		b = this.rowOffset,
+		a = this.nRowsVisible;
+		if (b < 0) {
 			this.rowOffset = 0
 		} else {
-			this.rowOffset = this.getRowOffset(B + C > A ? A - 1: B)
+			this.rowOffset = this.getRowOffset(b + c > a ? a - 1 : b)
 		}
 	},
-	getRowOffset: function(B) {
-		var A = this.nItemsPerPage;
-		return (A > 0 && B > 0 ? Math.floor(B / A) * A: 0)
+	getRowOffset: function (b) {
+		var a = this.nItemsPerPage;
+		return (a > 0 && b > 0 ? Math.floor(b / a) * a: 0)
 	},
-	changePage: function() {
+	resetRowVisibility: function () {
+		for (var b = 0, a = this.data.length; b < a; ++b) {
+			this.data[b].__hidden = false
+		}
+		this.filtered = false;
+		this.rowOffset = 0;
+		this.nRowsVisible = this.data.length
+	},
+	getColText: function (b, a) {
+		if (a.getVisibleText) {
+			return a.getVisibleText(b)
+		}
+		if (a.getValue) {
+			return a.getValue(b)
+		}
+		if (a.value) {
+			return b[a.value]
+		}
+		if (a.compute) {
+			return a.compute(b)
+		}
+		return ""
+	},
+	updateFilters: function (d) {
+		Tooltip.hide();
+		this.resetRowVisibility();
+		var w, q, c;
+		if (this.searchable) {
+			w = trim(this.quickSearchBox.value);
+			if (w) {
+				this.quickSearchGlass.style.display = "none";
+				this.quickSearchClear.style.display = "";
+				w = w.toLowerCase().replace(/\s+/g, " ");
+				q = w.split(" ");
+				c = q.length
+			} else {
+				this.quickSearchGlass.style.display = "";
+				this.quickSearchClear.style.display = "none"
+			}
+		}
+		if (!w && this.nFilters == 0 && this.customFilter == null) {
+			if (d) {
+				this.updateNav();
+				this.refreshRows()
+			}
+			return
+		}
+		var z = {
+			1 : function (i, j) {
+				return i > j
+			},
+			2 : function (i, j) {
+				return i == j
+			},
+			3 : function (i, j) {
+				return i < j
+			},
+			4 : function (i, j) {
+				return i >= j
+			},
+			5 : function (i, j) {
+				return i <= j
+			},
+			6 : function (i, k, j) {
+				return k <= i && i <= j
+			}
+		};
+		var p = {
+			1 : function (j, i, k) {
+				return i > k
+			},
+			2 : function (j, i, k) {
+				return j <= k && k <= i
+			},
+			3 : function (j, i, k) {
+				return j < k
+			},
+			4 : function (j, i, k) {
+				return i >= k
+			},
+			5 : function (j, i, k) {
+				return j <= k
+			},
+			6 : function (j, i, B, k) {
+				return B <= i && j <= k
+			}
+		};
+		var o = 0;
+		for (var u = 0, v = this.data.length; u < v; ++u) {
+			var g = this.data[u],
+			m = 0;
+			nSearchMatches = 0,
+			matches = [];
+			g.__hidden = true;
+			if (this.customFilter && !this.customFilter(g)) {
+				continue
+			}
+			for (var t = 0, h = this.visibility.length; t < h; ++t) {
+				var n = this.visibility[t];
+				var e = this.columns[n];
+				if (e.__filter) {
+					var a = e.__filter,
+					b = false;
+					if (e.type == null || e.type == "num") {
+						var r = null;
+						if (e.getValue) {
+							r = e.getValue(g)
+						} else {
+							if (e.value) {
+								r = parseFloat(g[e.value])
+							}
+						}
+						if (!r) {
+							r = 0
+						}
+						b = (z[a.type])(r, a.value, a.value2)
+					} else {
+						if (e.type == "range") {
+							var A = e.getMinValue(g),
+							y = e.getMaxValue(g);
+							b = (p[a.type])(A, y, a.value, a.value2)
+						} else {
+							var l = this.getColText(g, e);
+							if (l) {
+								l = l.toString().toLowerCase();
+								if (a.invert) {
+									b = l.match(a.regex) != null
+								} else {
+									var x = 0;
+									for (var s = 0, f = a.words.length; s < f; ++s) {
+										if (l.indexOf(a.words[s]) != -1) {++x
+										} else {
+											break
+										}
+									}
+									b = (x == a.words.length)
+								}
+							}
+						}
+					}
+					if (a.invert) {
+						b = !b
+					}
+					if (b) {++m
+					} else {
+						break
+					}
+				}
+				if (w) {
+					var l = this.getColText(g, e);
+					if (l) {
+						l = l.toString().toLowerCase();
+						for (var s = 0, f = q.length; s < f; ++s) {
+							if (!matches[s]) {
+								if (l.indexOf(q[s]) != -1) {
+									matches[s] = 1; ++nSearchMatches
+								}
+							}
+						}
+					}
+				}
+			}
+			if ((this.nFilters == 0 || m == this.nFilters) && (!w || nSearchMatches == c)) {
+				g.__hidden = false; ++o
+			}
+		}
+		this.filtered = (o < this.data.length);
+		this.nRowsVisible = o;
+		if (d) {
+			this.updateNav();
+			this.refreshRows()
+		}
+	},
+	changePage: function () {
 		this.validatePage();
 		this.refreshRows();
 		this.updateNav();
 		this.updatePound();
-		var A = g_getScroll(),
-		B = ac(this.container);
-		if (A.y > B[1]) {
-			scrollTo(A.x, B[1])
+		var a = g_getScroll(),
+		b = ac(this.container);
+		if (a.y > b[1]) {
+			scrollTo(a.x, b[1])
 		}
 	},
-	firstPage: function() {
+	firstPage: function () {
 		this.rowOffset = 0;
 		this.changePage();
 		return false
 	},
-	previousPage: function() {
+	previousPage: function () {
 		this.rowOffset -= this.nItemsPerPage;
 		this.changePage();
 		return false
 	},
-	nextPage: function() {
+	nextPage: function () {
 		this.rowOffset += this.nItemsPerPage;
 		this.changePage();
 		return false
 	},
-	lastPage: function() {
+	lastPage: function () {
 		this.rowOffset = 99999999;
 		this.changePage();
 		return false
 	},
-	addSort: function(A, C) {
-		var B = in_array(A, C,
-		function(D) {
-			return Math.abs(D)
+	addSort: function (a, c) {
+		var b = in_array(a, Math.abs(c), function (d) {
+			return Math.abs(d)
 		});
-		if (B != -1) {
-			C = A[B];
-			A.splice(B, 1)
+		if (b != -1) {
+			c = a[b];
+			a.splice(b, 1)
 		}
-		A.splice(0, 0, C)
+		a.splice(0, 0, c)
 	},
-	sortBy: function(A) {
-		if (this.poundable == 2 || A <= 0 || A > this.columns.length) {
+	sortBy: function (a) {
+		if (a <= 0 || a > this.columns.length) {
 			return
 		}
-		if (Math.abs(this.sort[0]) == A) {
+		if (Math.abs(this.sort[0]) == a) {
 			this.sort[0] = -this.sort[0]
 		} else {
-			this.addSort(this.sort, A)
+			var b = -1;
+			if (this.columns[a - 1].type == "text") {
+				b = 1
+			}
+			this.addSort(this.sort, b * a)
 		}
 		this.applySort();
-		if (this.template.onSort) { (this.template.onSort.bind(this))()
-		}
 		this.refreshRows();
-		if (this.mode != 2) {
-			this.updateSortArrow()
-		}
+		this.updateSortArrow();
 		this.updatePound()
 	},
-	applySort: function() {
+	applySort: function () {
+		if (this.sort.length == 0) {
+			return
+		}
 		Listview.sort = this.sort;
 		Listview.columns = this.columns;
 		if (this.indexCreated) {
@@ -2647,47 +3824,47 @@ Listview.prototype = {
 		}
 		this.updateSortIndex()
 	},
-	setSort: function(B, A, C) {
-		if (this.sort.toString() != B.toString()) {
-			this.sort = B;
+	setSort: function (b, c, a) {
+		if (this.sort.toString() != b.toString()) {
+			this.sort = b;
 			this.applySort();
-			if (A) {
+			if (c) {
 				this.refreshRows()
 			}
-			if (C) {
+			if (a) {
 				this.updatePound()
 			}
 		}
 	},
-	readPound: function() {
+	readPound: function () {
 		if (!this.poundable || !location.hash.length) {
 			return
 		}
-		var B = location.hash.substr(1);
+		var b = location.hash.substr(1);
 		if (this.tabs) {
-			var G = B.indexOf(":");
-			if (G == -1) {
+			var g = b.indexOf(":");
+			if (g == -1) {
 				return
 			}
-			B = B.substr(G + 1)
+			b = b.substr(g + 1)
 		}
-		var A = parseInt(B);
-		if (!isNaN(A)) {
-			this.rowOffset = A;
+		var a = parseInt(b);
+		if (!isNaN(a)) {
+			this.rowOffset = a;
 			this.validatePage();
 			if (this.poundable != 2) {
-				var D = [];
-				var F = B.match(/(\+|\-)[0-9]+/g);
-				if (F != null) {
-					for (var C = F.length - 1; C >= 0; --C) {
-						var E = parseInt(F[C]) | 0;
-						var B = Math.abs(E);
-						if (B <= 0 || B > this.columns.length) {
+				var d = [];
+				var f = b.match(/(\+|\-)[0-9]+/g);
+				if (f != null) {
+					for (var c = f.length - 1; c >= 0; --c) {
+						var e = parseInt(f[c]) | 0;
+						var b = Math.abs(e);
+						if (b <= 0 || b > this.columns.length) {
 							break
 						}
-						this.addSort(D, E)
+						this.addSort(d, e)
 					}
-					this.setSort(D, false, false)
+					this.setSort(d, false, false)
 				}
 			}
 			if (this.tabs) {
@@ -2695,277 +3872,426 @@ Listview.prototype = {
 			}
 		}
 	},
-	updateSortArrow: function() {
-		if (!this.sort.length) {
+	updateSortArrow: function () {
+		if (!this.sort.length || !this.thead) {
 			return
 		}
-		var A = in_array(this.visibility, Math.abs(this.sort[0]) - 1);
-		if (A == -1) {
+		var a = in_array(this.visibility, Math.abs(this.sort[0]) - 1);
+		if (a == -1) {
 			return
 		}
-		if (this.mode == 1) {++A
+		if (this.mode == Listview.MODE_CHECKBOX) {
+			a += 1
 		}
-		var B = this.thead.firstChild.childNodes[A].firstChild.firstChild.firstChild;
-		if (this.lsa && this.lsa != B) {
+		var b = this.thead.firstChild.childNodes[a].firstChild.firstChild.firstChild;
+		if (this.lsa && this.lsa != b) {
 			this.lsa.className = ""
 		}
-		B.className = (this.sort[0] < 0 ? "sortdesc": "sortasc");
-		this.lsa = B
+		b.className = (this.sort[0] < 0 ? "sortdesc": "sortasc");
+		this.lsa = b
 	},
-	updateSortIndex: function() {
-		var B = this.data;
-		for (var C = 0, A = B.length; C < A; ++C) {
-			B[C].__si = C
+	updateSortIndex: function () {
+		var b = this.data;
+		for (var c = 0, a = b.length; c < a; ++c) {
+			b[c].__si = c
 		}
 		this.indexCreated = true
 	},
-	updateTabName: function() {
-		if (this.tabIndex != null) {
+	updateTabName: function () {
+		if (this.tabs && this.tabIndex != null) {
 			this.tabs.setTabName(this.tabIndex, this.getTabName())
 		}
 	},
-	updatePound: function() {
+	updatePound: function () {
 		if (!this.poundable) {
 			return
 		}
-		var A = this.getTabPound();
+		var a = this.getTabPound();
 		if (this.tabs) {
-			this.tabs.setTabPound(this.tabIndex, A);
-			location.replace("#" + this.id + ":" + A)
+			this.tabs.setTabPound(this.tabIndex, a);
+			location.replace("#" + this.id + ":" + a)
 		} else {
-			location.replace("#" + A)
+			location.replace("#" + a)
 		}
 	},
-	updateNav: function() {
-		var J = this.nItemsPerPage,
-		H = this.rowOffset,
-		D = this.data.length;
-		var B = 0,
-		F = 0,
-		C = 0,
-		I = 0;
-		if (J) {
-			if (H > 0) {
-				F = 1;
-				if (H >= J + J) {
-					B = 1
+	updateNav: function () {
+		var e = [this.navTop, this.navBot],
+		j = this.nItemsPerPage,
+		h = this.rowOffset,
+		d = this.nRowsVisible,
+		g = 0,
+		b = 0,
+		f = 0,
+		k = 0;
+		if (d > 0) {
+			if (! (this.hideNav & 1)) {
+				e[0].style.display = ""
+			}
+			if (! (this.hideNav & 2)) {
+				e[1].style.display = ""
+			}
+		} else {
+			e[0].style.display = e[1].style.display = "none"
+		}
+		if (j) {
+			if (h > 0) {
+				b = 1;
+				if (h >= j + j) {
+					g = 1
 				}
 			}
-			if (H + J < D) {
-				C = 1;
-				if (H + J + J < D) {
-					I = 1
+			if (h + j < d) {
+				f = 1;
+				if (h + j + j < d) {
+					k = 1
 				}
 			}
 		}
-		var E = [this.navTop, this.navBot];
-		for (var A = 0; A < 2; ++A) {
-			var G = E[A].childNodes;
-			G[0].style.display = (B ? "": "none");
-			G[1].style.display = (F ? "": "none");
-			G[3].style.display = (C ? "": "none");
-			G[4].style.display = (I ? "": "none");
-			G = G[2].childNodes;
-			G[0].firstChild.nodeValue = H + 1;
-			G[2].firstChild.nodeValue = J ? Math.min(H + J, D) : D;
-			G[4].firstChild.nodeValue = D
+		for (var c = 0; c < 2; ++c) {
+			var a = e[c].childNodes;
+			a[0].style.display = (g ? "": "none");
+			a[1].style.display = (b ? "": "none");
+			a[3].style.display = (f ? "": "none");
+			a[4].style.display = (k ? "": "none");
+			a = a[2].childNodes;
+			a[0].firstChild.nodeValue = h + 1;
+			a[2].firstChild.nodeValue = j ? Math.min(h + j, d) : d;
+			a[4].firstChild.nodeValue = d
 		}
 	},
-	getTabName: function() {
-		var A = this.name;
-		var B = this.data.length;
-		if (B > 0) {
-			A += sprintf(LANG.qty, B)
+	getTabName: function () {
+		var a = this.name,
+		b = this.data.length;
+		if (b > 0 && !this.hideCount) {
+			a += sprintf(LANG.qty, b)
 		}
-		return A
+		return a
 	},
-	getTabPound: function() {
-		var A = "";
-		A += this.rowOffset;
+	getTabPound: function () {
+		var a = "";
+		a += this.rowOffset;
 		if (this.poundable != 2 && this.sort.length) {
-			A += ("+" + this.sort.join("+")).replace(/\+\-/g, "-")
+			a += ("+" + this.sort.join("+")).replace(/\+\-/g, "-")
 		}
-		return A
+		return a
 	},
-	getCheckedRows: function() {
-		var D = [];
-		for (var C = 0, A = this.data.length; C < A; ++C) {
-			var B = this.data[C];
-			if ((B.__cb && B.__cb.checked) || (!B.__cb && B.__chk)) {
-				D.push(B)
+	getCheckedRows: function () {
+		var d = [];
+		for (var c = 0, a = this.data.length; c < a; ++c) {
+			var b = this.data[c];
+			if ((b.__cb && b.__cb.checked) || (!b.__cb && b.__chk)) {
+				d.push(b)
 			}
 		}
-		return D
+		return d
 	},
-	deleteRows: function(M) {
-		if (!M.length) {
+	deleteRows: function (c) {
+		if (!c || !c.length) {
 			return
 		}
-		var C = 0;
-		var H = 0;
-		for (var E = M.length - 1; E >= 0; --E) {
-			var L = M[E];
-			var G = -1;
-			if (L.__tr && L.__tr.rowIndex > 0) {
-				G = this.rowOffset + L.__tr.rowIndex - 1
-			} else {
-				G = in_array(this.data, L);
-				H = 1
+		for (var b = 0, a = c.length; b < a; ++b) {
+			var d = c[b];
+			if (!d.__hidden && !d.__hidden) {
+				this.nRowsVisible -= 1
 			}
-			if (G == -1) {
-				continue
-			}++C;
-			var K = this.nItemsPerPage;
-			var F = this.rowOffset;
-			var J = F + (K > 0 ? K: this.data.length) - 1;
-			if (G >= F && G <= J) {
-				if (this.mode == 2) {
-					de(L.__div)
-				} else {
-					de(L.__tr)
-				}
-			}
-			this.data.splice(G, 1)
-		}
-		if (C == 0) {
-			return
+			d.__deleted = true
 		}
 		this.updateTabName();
-		if (this.rowOffset >= this.data.length) {
+		if (this.rowOffset >= this.nRowsVisible) {
 			this.previousPage()
 		} else {
-			if (this.data.length == 0 || H) {
-				this.refreshRows()
-			}
-			this.updateNav();
-			var K = this.nItemsPerPage;
-			var A = (this.mode == 2 ? this.mainDiv: this.tbody);
-			var B = (this.mode == 2 ? this.getDiv: this.getRow);
-			var I = A.childNodes.length;
-			if (K > 0 && this.rowOffset + I < this.data.length) {
-				for (var E = this.rowOffset + I, D = E + K - I; E < D; ++E) {
-					ae(A, B(E))
-				}
-			}
+			this.refreshRows();
+			this.updateNav()
 		}
+	},
+	setData: function (a) {
+		this.data = a;
+		this.indexCreated = false;
+		this.resetRowVisibility();
+		if (this.tabs) {
+			this.pounded = (this.tabs.poundedTab == this.tabIndex);
+			if (this.pounded) {
+				this.readPound()
+			}
+		} else {
+			this.readPound()
+		}
+		this.applySort();
+		this.updateSortArrow();
+		if (this.customFilter != null) {
+			this.updateFilters()
+		}
+		this.updateNav();
+		this.refreshRows()
+	},
+	getClipDiv: function () {
+		return this.clipDiv
+	},
+	getNoteTopDiv: function () {
+		return this.noteTop
+	},
+	focusSearch: function () {
+		this.quickSearchBox.focus()
+	},
+	clearSearch: function () {
+		this.quickSearchBox.value = ""
 	}
 };
-Listview.sortRows = function(C, B) {
-	var G = Listview.sort,
-	H = Listview.columns;
-	for (var F = 0, A = G.length; F < A; ++F) {
-		var E,
-		D = H[Math.abs(G[F]) - 1];
-		if (D.sortFunc) {
-			E = D.sortFunc(C, B, G[F])
+Listview.sortRows = function (e, d) {
+	var j = Listview.sort,
+	k = Listview.columns;
+	for (var h = 0, c = j.length; h < c; ++h) {
+		var g, f = k[Math.abs(j[h]) - 1];
+		if (f.sortFunc) {
+			g = f.sortFunc(e, d, j[h])
 		} else {
-			E = strcmp(C[D.value], B[D.value])
+			g = strcmp(e[f.value], d[f.value])
 		}
-		if (E != 0) {
-			return E * G[F]
+		if (g != 0) {
+			return g * j[h]
 		}
 	}
 	return 0
 },
-Listview.sortIndexedRows = function(B, A) {
-	var E = Listview.sort,
-	F = Listview.columns;
-	var D,
-	C = F[Math.abs(E[0]) - 1];
-	if (C.sortFunc) {
-		D = C.sortFunc(B, A, E[0])
+Listview.sortIndexedRows = function (d, c) {
+	var g = Listview.sort,
+	h = Listview.columns,
+	e = h[Math.abs(g[0]) - 1],
+	f;
+	if (e.sortFunc) {
+		f = e.sortFunc(d, c, g[0])
 	} else {
-		D = strcmp(B[C.value], A[C.value])
+		f = strcmp(d[e.value], c[e.value])
 	}
-	if (D != 0) {
-		return D * E[0]
+	if (f != 0) {
+		return f * g[0]
 	}
-	return B.__si - A.__si
+	return (d.__si - c.__si)
 },
-Listview.cbSelect = function(B) {
-	for (var D = 0, A = this.data.length; D < A; ++D) {
-		var C = this.data[D];
-		var F = B;
-		if (C.__tr) {
-			var E = C.__tr.firstChild.firstChild;
-			if (F == null) {
-				F = !E.checked
+Listview.cbSelect = function (b) {
+	for (var d = 0, a = this.data.length; d < a; ++d) {
+		var c = this.data[d];
+		var f = b;
+		if (!c.__nochk && c.__tr) {
+			var e = c.__tr.firstChild.firstChild;
+			if (f == null) {
+				f = !e.checked
 			}
-			if (E.checked != F) {
-				E.checked = F;
-				C.__tr.className = (E.checked ? "checked": "");
+			if (e.checked != f) {
+				e.checked = f;
+				c.__tr.className = (e.checked ? "checked": "");
 				if (Browser.ie) {
-					E.defaultChecked = F;
-					if (Browser.ie6) { (Listview.itemOut.bind(C.__tr))()
+					e.defaultChecked = f;
+					if (Browser.ie6) { (Listview.itemOut.bind(c.__tr))()
 					}
 				}
 			}
 		} else {
-			if (F == null) {
-				F = true
+			if (f == null) {
+				f = true
 			}
 		}
-		C.__chk = F
+		c.__chk = f
 	}
 };
-Listview.cbClick = function(A) {
+Listview.cbClick = function (a) {
 	setTimeout(Listview.cbUpdate.bind(0, 0, this, this.parentNode.parentNode), 1);
-	sp(A)
+	sp(a)
 };
-Listview.cbCellClick = function(A) {
+Listview.cbCellClick = function (a) {
 	setTimeout(Listview.cbUpdate.bind(0, 1, this.firstChild, this.parentNode), 1);
-	sp(A)
+	sp(a)
 };
-Listview.cbIeFix = function() {
-	var D = gE(this.tbody, "tr");
-	for (var C = 0, A = D.length; C < A; ++C) {
-		var B = D[C].firstChild.firstChild;
-		B.checked = B.defaultChecked = false
-	}
-};
-Listview.cbUpdate = function(B, A, C) {
-	if (B) {
-		A.checked = !A.checked
-	}
-	C.className = (A.checked ? "checked": "");
-	if (Browser.ie) {
-		A.defaultChecked = A.checked;
-		if (Browser.ie6) { (Listview.itemOver.bind(C))()
+Listview.cbIeFix = function () {
+	var d = gE(this.tbody, "tr");
+	for (var c = 0, a = d.length; c < a; ++c) {
+		var b = d[c].firstChild.firstChild;
+		if (b) {
+			b.checked = b.defaultChecked = false
 		}
 	}
 };
-Listview.itemOver = function() {
+Listview.cbUpdate = function (c, a, b) {
+	if (c) {
+		a.checked = !a.checked
+	}
+	b.className = (a.checked ? "checked": "");
+	if (Browser.ie) {
+		a.defaultChecked = a.checked;
+		if (Browser.ie6) { (Listview.itemOver.bind(b))()
+		}
+	}
+};
+Listview.itemOver = function () {
 	this.style.backgroundColor = (this.className == "checked" ? "#2C2C2C": "#202020")
 };
-Listview.itemOut = function() {
+Listview.itemOut = function () {
 	this.style.backgroundColor = (this.className == "checked" ? "#242424": "transparent")
 };
-Listview.headerOver = function(B, A) {
-	Tooltip.showAtCursor(A, B, 0, 0, "q")
+Listview.headerClick = function (a, b, c) {
+	c = $E(c);
+	if (c._button == 3 || c.shiftKey || c.ctrlKey) {
+		Tooltip.hide();
+		setTimeout(Listview.headerFilter.bind(this, a, null), 1)
+	} else {
+		this.sortBy(b + 1)
+	}
+	return false
+};
+Listview.headerFilter = function (c, f) {
+	var j = "";
+	if (c.__filter) {
+		if (c.__filter.invert) {
+			j += "!"
+		}
+		j += c.__filter.text
+	}
+	if (f == null) {
+		var f = prompt(sprintf(LANG.prompt_colfilter1 + (c.type == "text" ? LANG.prompt_colfilter2: LANG.prompt_colfilter3), c.name), j)
+	}
+	if (f != null) {
+		var e = {
+			text: "",
+			type: -1
+		};
+		f = trim(f.replace(/\s+/g, " "));
+		if (f) {
+			if (f.charAt(0) == "!" || f.charAt(0) == "-") {
+				e.invert = 1;
+				f = f.substr(1)
+			}
+			if (c.type == "text") {
+				e.type = 0;
+				e.text = f;
+				if (e.invert) {
+					e.regex = g_createOrRegex(f)
+				} else {
+					e.words = f.toLowerCase().split(" ")
+				}
+			} else {
+				var i, b;
+				if (f.match(/(>|=|<|>=|<=)\s*([0-9\.]+)/)) {
+					i = parseFloat(RegExp.$2);
+					if (!isNaN(i)) {
+						switch (RegExp.$1) {
+						case ">":
+							e.type = 1;
+							break;
+						case "=":
+							e.type = 2;
+							break;
+						case "<":
+							e.type = 3;
+							break;
+						case ">=":
+							e.type = 4;
+							break;
+						case "<=":
+							e.type = 5;
+							break
+						}
+						e.value = i;
+						e.text = RegExp.$1 + " " + i
+					}
+				} else {
+					if (f.match(/([0-9\.]+)\s*\-\s*([0-9\.]+)/)) {
+						i = parseFloat(RegExp.$1);
+						b = parseFloat(RegExp.$2);
+						if (!isNaN(i) && !isNaN(b)) {
+							if (i > b) {
+								var g = i;
+								i = b;
+								b = g
+							}
+							if (i == b) {
+								e.type = 2;
+								e.value = i;
+								e.text = "= " + i
+							} else {
+								e.type = 6;
+								e.value = i;
+								e.value2 = b;
+								e.text = i + " - " + b
+							}
+						}
+					} else {
+						var d = f.toLowerCase().split(" ");
+						if (d.length == 1 && !isNaN(i = parseFloat(d[0]))) {
+							e.type = 2;
+							e.value = i;
+							e.text = "= " + i
+						} else {
+							if (c.type == "text") {
+								e.type = 0;
+								e.text = f;
+								if (e.invert) {
+									e.regex = g_createOrRegex(f)
+								} else {
+									e.words = d
+								}
+							}
+						}
+					}
+				}
+			}
+			if (e.type == -1) {
+				alert(LANG.message_invalidfilter);
+				return
+			}
+		}
+		if (!c.__filter || e.text != c.__filter.text || e.invert != c.__filter.invert) {
+			var h = c.__th.firstChild.firstChild;
+			if (f && e.text) {
+				if (!c.__filter) {
+					h.className = "q5"; ++(this.nFilters)
+				}
+				c.__filter = e
+			} else {
+				if (c.__filter) {
+					h.className = ""; --(this.nFilters)
+				}
+				c.__filter = null
+			}
+			this.updateFilters(1)
+		}
+	}
+};
+Listview.headerOver = function (b, c, f) {
+	var d = "";
+	d += '<b class="q1">' + (c.tooltip ? c.tooltip: c.name) + "</b>";
+	if (c.__filter) {
+		d += "<br />" + sprintf((c.__filter.invert ? LANG.tooltip_colfilter2: LANG.tooltip_colfilter1), c.__filter.text)
+	}
+	d += '<br /><span class="q2">' + LANG.tooltip_lvheader1 + "</span>";
+	if (this.filtrable && (c.filtrable == null || c.filtrable)) {
+		d += '<br /><span class="q2">' + (Browser.opera ? LANG.tooltip_lvheader3: LANG.tooltip_lvheader2) + "</span>"
+	}
+	Tooltip.show(b, d, 0, 0, "q")
 };
 Listview.extraCols = {
 	cost: {
 		id: "cost",
 		name: LANG.cost,
-		compute: function(A, B) {
-			Listview.funcBox.appendMoney(B, A.cost[0], null, A.cost[1], A.cost[2], A.cost[3])
+		getValue: function (a) {
+			return (a.cost[3] ? a.cost[3][0][1] : 0) || a.cost[2] || a.cost[1] || a.cost[0]
 		},
-		sortFunc: function(B, A, C) {
-			var E = 0,
-			D = 0;
-			if (B.cost[3] != null) {
-				array_walk(B.cost[3],
-				function(F, G, G, H) {
-					E += Math.pow(10, H) + F[1]
+		compute: function (a, b) {
+			Listview.funcBox.appendMoney(b, a.cost[0], null, a.cost[1], a.cost[2], a.cost[3])
+		},
+		sortFunc: function (d, c, e) {
+			var g = 0,
+			f = 0;
+			if (d.cost[3] != null) {
+				array_walk(d.cost[3], function (a, b, j, h) {
+					g += Math.pow(10, h) + a[1]
 				})
 			}
-			if (A.cost[3] != null) {
-				array_walk(A.cost[3],
-				function(F, G, G, H) {
-					D += Math.pow(10, H) + F[1]
+			if (c.cost[3] != null) {
+				array_walk(c.cost[3], function (a, b, j, h) {
+					f += Math.pow(10, h) + a[1]
 				})
 			}
-			return strcmp(E, D) || strcmp(B.cost[2], A.cost[2]) || strcmp(B.cost[1], A.cost[1]) || strcmp(B.cost[0], A.cost[0])
+			return strcmp(g, f) || strcmp(d.cost[2], c.cost[2]) || strcmp(d.cost[1], c.cost[1]) || strcmp(d.cost[0], c.cost[0])
 		}
 	},
 	count: {
@@ -2973,14 +4299,24 @@ Listview.extraCols = {
 		name: LANG.count,
 		width: "11%",
 		value: "count",
-		compute: function(B, C) {
-			if (B.outof) {
-				var A = ce("div");
-				A.className = "small q0";
-				ae(A, ct(sprintf(LANG.lvdrop_outof, B.outof)));
-				ae(C, A)
+		compute: function (b, c) {
+			if (! (this._totalCount > 0 || b.outof > 0)) {
+				return
 			}
-			return B.count
+			if (b.outof) {
+				var a = ce("div");
+				a.className = "small q0";
+				ae(a, ct(sprintf(LANG.lvdrop_outof, b.outof)));
+				ae(c, a)
+			}
+			return b.count
+		},
+		getVisibleText: function (a) {
+			var b = a.count;
+			if (a.outof) {
+				b += " " + a.outof
+			}
+			return b
 		}
 	},
 	percent: {
@@ -2988,13 +4324,24 @@ Listview.extraCols = {
 		name: "%",
 		width: "10%",
 		value: "percent",
-		compute: function(A, B) {
-			if (A.percent >= 1.95) {
-				return A.percent.toFixed(0)
-			} else if (A.percent < 0){
-				return ((-1*A.percent) + ' (' + LANG.types[5][0] + ')')
+		compute: function (a, b) {
+			if (a.count == -1) {
+				return "??"
+			}
+			if (a.percent >= 1.95) {
+				return a.percent.toFixed(0)
 			} else {
-				return parseFloat(A.percent.toFixed(4))
+				return parseFloat(a.percent.toFixed(1))
+			}
+		},
+		getVisibleText: function (a) {
+			if (a.count == -1) {
+				return "??"
+			}
+			if (a.percent >= 1.95) {
+				return a.percent.toFixed(0)
+			} else {
+				return parseFloat(a.percent.toFixed(1))
 			}
 		}
 	},
@@ -3003,467 +4350,523 @@ Listview.extraCols = {
 		name: LANG.stock,
 		width: "10%",
 		value: "stock",
-		compute: function(A, B) {
-			if (A.stock > 0) {
-				return A.stock
+		compute: function (a, b) {
+			if (a.stock > 0) {
+				return a.stock
 			} else {
-				B.style.fontFamily = "Verdana, sans-serif";
+				b.style.fontFamily = "Verdana, sans-serif";
 				return String.fromCharCode(8734)
+			}
+		},
+		getVisibleText: function (a) {
+			if (a.stock > 0) {
+				return a.stock
+			} else {
+				return String.fromCharCode(8734) + " infinity"
 			}
 		}
 	}
 };
 Listview.funcBox = {
-	createSimpleCol: function(C, D, A, B) {
+	createSimpleCol: function (c, d, a, b) {
 		return {
-			id: C,
-			name: LANG[D],
-			width: A,
-			value: B
+			id: c,
+			name: LANG[d],
+			width: a,
+			value: b
 		}
 	},
-	initLootTable: function(A) {
+	initLootTable: function (b) {
+		var a;
 		if (this._totalCount != null) {
-			A.percent = A.count / this._totalCount
+			a = this._totalCount
 		} else {
-			A.percent = A.count / A.outof
+			a = b.outof
 		}
-		A.percent *= 100
-	},
-	beforeUserComments: function() {
-		if ((g_user.roles & 26) != 0) {
-			this.mode = 1;
-			this.createCbControls = function(B) {
-				var A = ce("input");
-				A.type = "button";
-				A.value = "Delete";
-				A.onclick = (function() {
-					var E = this.getCheckedRows();
-					if (!E.length) {
-						alert("No comments selected.")
-					} else {
-						if (confirm("Are you sure that you want to delete " + (E.length == 1 ? "this comment": "these " + E.length + " comments") + "?")) {
-							var C = "";
-							var D = 0;
-							array_walk(E,
-							function(F) {
-								if (F.purged == 0 && F.deleted == 0) {
-									F.deleted = 1;
-									if (F.__tr != null) {
-										F.__tr.childNodes[2].lastChild.lastChild.firstChild.nodeValue = " (Deleted)"
-									}
-									C += F.id + ","
-								} else {
-									if (F.purged == 1) {++D
-									}
-								}
-							});
-							C = rtrim(C, ",");
-							if (C != "")
-							{
-								new Ajax("?comment=delete&id=" + C + "&username=" + g_pageInfo.username)
-							}
-							(Listview.cbSelect.bind(this, false))();
-							if (D > 0) {
-								alert("Purged comments cannot be deleted.\n\nA purged comment is a comment that has been\nautomatically removed from the site due to a negative rating.")
-							}
-						}
-					}
-				}).bind(this);
-				ae(B, A);
-				if (g_user.roles & 26) {
-					var A = ce("input");
-					A.type = "button";
-					A.value = "Undelete";
-					A.onclick = (function() {
-						var D = this.getCheckedRows();
-						if (!D.length) {
-							alert("No comments selected.")
-						} else {
-							var C = "";
-							array_walk(D,
-							function(E) {
-								if (E.deleted == 1) {
-									E.deleted = 0;
-									if (E.__tr != null) {
-										E.__tr.childNodes[2].lastChild.lastChild.firstChild.nodeValue = ""
-									}
-									C += E.id + ","
-								}
-							});
-							C = rtrim(C, ",");
-							if (C != "") {
-								new Ajax("?comment=undelete&id=" + C + "&username=" + g_pageInfo.username)
-							} (Listview.cbSelect.bind(this, false))()
-						}
-					}).bind(this);
-					ae(B, A)
-				}
+		if (a == 0) {
+			if (b.count != -1) {
+				b.percent = b.count
+			} else {
+				b.percent = 0
 			}
+		} else {
+			b.percent = b.count / a * 100
 		}
 	},
-	assocArrCmp: function(C, B, A) {
-		if (C == null) {
+	assocArrCmp: function (e, d, c) {
+		if (e == null) {
 			return - 1
 		} else {
-			if (B == null) {
+			if (d == null) {
 				return 1
 			}
 		}
-		var F = Math.max(C.length, B.length);
-		for (var E = 0; E < F; ++E) {
-			if (C[E] == null) {
+		var h = Math.max(e.length, d.length);
+		for (var g = 0; g < h; ++g) {
+			if (e[g] == null) {
 				return - 1
 			} else {
-				if (B[E] == null) {
+				if (d[g] == null) {
 					return 1
 				}
 			}
-			var D = strcmp(A[C[E]], A[B[E]]);
-			if (D != 0) {
-				return D
+			var f = strcmp(c[e[g]], c[d[g]]);
+			if (f != 0) {
+				return f
 			}
 		}
 		return 0
 	},
-	location: function(E, F) {
-		if (E.location == null) {
+	location: function (f, g) {
+		if (f.location == null) {
 			return - 1
 		}
-		for (var D = 0, B = E.location.length; D < B; ++D) {
-			if (D > 0) {
-				ae(F, ct(LANG.comma))
+		for (var d = 0, b = f.location.length; d < b; ++d) {
+			if (d > 0) {
+				ae(g, ct(LANG.comma))
 			}
-			var A = E.location[D];
-			if (A == -1) {
-				ae(F, ct(LANG.ellipsis))
+			var e = f.location[d];
+			if (e == -1) {
+				ae(g, ct(LANG.ellipsis))
 			} else {
-				var C = ce("a");
-				C.className = "q1";
-				C.href = "?zone=" + A;
-				ae(C, ct(g_zones[A]));
-				ae(F, C)
+				var c = ce("a");
+				c.className = "q1";
+				c.href = "?zone=" + e;
+				ae(c, ct(g_zones[e]));
+				ae(g, c)
 			}
 		}
 	},
-	createCenteredIcons: function(I, C, L) {
-		if (I != null) {
-			var H = ce("div"),
-			A = ce("div");
-			if (L) {
-				var G = ce("div");
-				G.style.position = "relative";
-				G.style.width = "1px";
-				var J = ce("div");
-				J.className = "q0";
-				J.style.position = "absolute";
-				J.style.right = "2px";
-				J.style.lineHeight = "26px";
-				J.style.fontSize = "11px";
-				J.style.whiteSpace = "nowrap";
-				ae(J, ct(L));
-				ae(G, J);
-				ae(H, G)
+	arrayText: function (b, e) {
+		if (b == null) {
+			return
+		}
+		var d = "";
+		for (var c = 0, a = b.length; c < a; ++c) {
+			if (c > 0) {
+				d += " "
 			}
-			for (var D = 0, F = I.length; D < F; ++D) {
-				var B,
-				E;
-				if (typeof I[D] == "object") {
-					B = I[D][0];
-					E = I[D][1]
+			if (!e[b[c]]) {
+				continue
+			}
+			d += e[b[c]]
+		}
+		return d
+	},
+	createCenteredIcons: function (h, c, p, m) {
+		if (h != null) {
+			var l = ce("div"),
+			a = ce("div");
+			if (p) {
+				var k = ce("div");
+				k.style.position = "relative";
+				k.style.width = "1px";
+				var n = ce("div");
+				n.className = "q0";
+				n.style.position = "absolute";
+				n.style.right = "2px";
+				n.style.lineHeight = "26px";
+				n.style.fontSize = "11px";
+				n.style.whiteSpace = "nowrap";
+				ae(n, ct(p));
+				ae(k, n);
+				ae(l, k)
+			}
+			var g = g_items;
+			if (m == 1) {
+				g = g_spells
+			}
+			for (var e = 0, j = h.length; e < j; ++e) {
+				var o;
+				if (h[e] == null) {
+					o = ce("div");
+					o.style.width = o.style.height = "26px"
 				} else {
-					B = I[D]
+					var b, f;
+					if (typeof h[e] == "object") {
+						b = h[e][0];
+						f = h[e][1]
+					} else {
+						b = h[e]
+					}
+					if (b) {
+						o = g.createIcon(b, 0, f)
+					} else {
+						o = Icon.create("inventoryslot_empty", 0, null, "javascript:;")
+					}
 				}
-				var K = g_items.createIcon(B, 0, E);
-				K.style.cssFloat = K.style.styleFloat = "left";
-				ae(H, K)
+				o.style.cssFloat = o.style.styleFloat = "left";
+				ae(l, o)
 			}
-			H.style.margin = "0 auto";
-			H.style.textAlign = "left";
-			H.style.width = (26 * I.length) + "px";
-			A.className = "clear";
-			ae(C, H);
-			ae(C, A);
+			l.style.margin = "0 auto";
+			l.style.textAlign = "left";
+			l.style.width = (26 * h.length) + "px";
+			a.className = "clear";
+			ae(c, l);
+			ae(c, a);
 			return true
 		}
 	},
-	getItemType: function(C, B, A) {
-		if (A != null && g_item_subsubclasses[C] != null && g_item_subsubclasses[C][B] != null) {
-			return g_item_subsubclasses[C][B][A]
-		}
-		if (g_item_subclasses[C] != null) {
-			return g_item_subclasses[C][B]
-		} else {
-			return g_item_classes[C]
-		}
-	},
-	getQuestCategory: function(A) {
-		if (A > 0) {
-			return g_zones[A]
-		} else {
-			return g_quest_sorts[ - A]
-		}
-	},
-	createTextRange: function(B, A) {
-		B |= 0;
-		A |= 0;
-		if (B > 1 || A > 1) {
-			if (B != A && A > 0) {
-				return B + "-" + A
+	createSocketedIcons: function (b, e, c, g, n) {
+		var m = 0,
+		k = ce("div"),
+		a = ce("div");
+		for (var f = 0, h = b.length; f < h; ++f) {
+			var l, j = c[f];
+			if (!c || !j) {
+				l = Icon.create(null, 0, null, "javascript:;")
 			} else {
-				return B + ""
+				if (g_items[j]) {
+					l = g_items.createIcon(j, 0)
+				} else {
+					l = Icon.create(g_gems[j].icon, 0, null, "?item=" + j)
+				}
+			}
+			l.className += " iconsmall-socket-" + g_file_gems[b[f]] + (!c || !j ? "-empty": "");
+			l.style.cssFloat = l.style.styleFloat = "left";
+			if (g && g[f]) {
+				l.insertBefore(ce("var"), l.childNodes[1]); ++m
+			}
+			ae(k, l)
+		}
+		k.style.margin = "0 auto";
+		k.style.textAlign = "left";
+		k.style.width = (26 * b.length) + "px";
+		a.className = "clear";
+		ae(e, k);
+		ae(e, a);
+		if (n && m == b.length) {
+			k = ce("div");
+			k.style.paddingTop = "4px";
+			ae(k, ct(n));
+			ae(e, k)
+		}
+	},
+	getItemType: function (c, a, b) {
+		if (b != null && g_item_subsubclasses[c] != null && g_item_subsubclasses[c][a] != null) {
+			return {
+				url: "?items=" + c + "." + a + "." + b,
+				text: g_item_subsubclasses[c][a][b]
+			}
+		}
+		if (g_item_subclasses[c] != null) {
+			return {
+				url: "?items=" + c + "." + a,
+				text: g_item_subclasses[c][a]
+			}
+		} else {
+			return {
+				url: "?items=" + c,
+				text: g_item_classes[c]
+			}
+		}
+	},
+	getQuestCategory: function (a) {
+		if (a > 0) {
+			return g_zones[a]
+		} else {
+			return g_quest_sorts[ - a]
+		}
+	},
+	getFactionCategory: function (b, a) {
+		if (b) {
+			return g_faction_categories[b]
+		} else {
+			return g_faction_categories[a]
+		}
+	},
+	createTextRange: function (b, a) {
+		b |= 0;
+		a |= 0;
+		if (b > 1 || a > 1) {
+			if (b != a && a > 0) {
+				return b + "-" + a
+			} else {
+				return b + ""
 			}
 		}
 		return null
 	},
-	coGetColor: function(C, A) {
-		if (C.user && g_customColors[C.user]) {
-			return " comment-" + g_customColors[C.user]
+	coReport: function (c, d, f) {
+		if (!g_user.id || !g_report_reasons[f]) {
+			return
 		}
-		switch (A) {
-		case - 1: var B = C.divPost.childNodes[1].className.match(/comment-([a-z]+)/);
-			if (B != null) {
-				return " comment-" + B[1]
+		var a = "";
+		if (f == 4) {
+			a = prompt(LANG.prompt_details, "")
+		} else {
+			if (!confirm(sprintf((c == 0 ? LANG.confirm_report: LANG.confirm_report2), g_report_reasons[f]))) {
+				return
+			}
+		}
+		if (a != null) {
+			var e = "?report&type=" + c + "&typeid=" + d.id + "&reason=" + f;
+			if (a) {
+				e += "&reasonmore=" + urlencode(a)
+			}
+			new Ajax(e);
+			var b = ce("span");
+			ae(b, ct(LANG.lvcomment_reported));
+			this.parentNode.replaceChild(b, this)
+		}
+	},
+	coReportClick: function (b, a, c) {
+		this.menu = [[2, g_report_reasons[2], Listview.funcBox.coReport.bind(this, a, b, 2)], [1, g_report_reasons[1], Listview.funcBox.coReport.bind(this, a, b, 1)], [3, g_report_reasons[3], Listview.funcBox.coReport.bind(this, a, b, 3)], [4, g_report_reasons[4], Listview.funcBox.coReport.bind(this, a, b, 4)]];
+		if (a == 1 && b.op && typeof g_pageInfo != "undefined" && !g_pageInfo.sticky) {
+			this.menu.splice(3, 0, [0, g_report_reasons[0], Listview.funcBox.coReport.bind(this, a, b, 0)])
+		} (Menu.showAtCursor.bind(this, c))()
+	},
+	coGetColor: function (c, a) {
+		if (c.user && g_customColors[c.user]) {
+			return " comment-" + g_customColors[c.user]
+		}
+		switch (a) {
+		case - 1 : var b = c.divPost.childNodes[1].className.match(/comment-([a-z]+)/);
+			if (b != null) {
+				return " comment-" + b[1]
 			}
 			break;
 		case 3:
 		case 4:
-			if (C.roles & 24) {
+			if (c.roles & 56) {
 				return " comment-green"
+			} else {
+				if (c.roles & 64) {
+					return " comment-gold"
+				}
 			}
 			break
 		}
-		if (C.roles & 2) {
+		if (c.roles & 2) {
 			return " comment-blue"
 		} else {
-			if (C.rating >= 10) {
+			if (c.rating >= 10) {
 				return " comment-green"
 			} else {
-				if (C.rating < 0) {
+				if (c.rating < 0) {
 					return " comment-bt"
 				}
 			}
 		}
 		return ""
 	},
-	coToggleVis: function(A) {
-		this.firstChild.nodeValue = (g_toggleDisplay(A.divBody) ? LANG.lvcomment_hide: LANG.lvcomment_show);
-		if (A.ratable) {
-			A.divHeader.firstChild.lastChild.style.display = ""
+	coToggleVis: function (b) {
+		this.firstChild.nodeValue = (g_toggleDisplay(b.divBody) ? LANG.lvcomment_hide: LANG.lvcomment_show);
+		var a = b.divHeader.firstChild.lastChild;
+		if (b.ratable) {
+			a.style.display = ""
+		} else {
+			if (b.deleted || b.purged) {
+				a.style.fontWeight = "normal";
+				a.className = "q10";
+				a.innerHTML = (b.deleted ? LANG.lvcomment_deleted: LANG.lvcomment_purged);
+				a.style.display = ""
+			}
 		}
-		g_toggleDisplay(A.divLinks);
-		if (A.lastEdit != null) {
-			g_toggleDisplay(A.divLastEdit)
+		g_toggleDisplay(b.divLinks);
+		if (b.lastEdit != null) {
+			g_toggleDisplay(b.divLastEdit)
 		}
 	},
-	coRate: function(D, B) {
-		if (B == 0) {
-			var A = 5;
+	coRate: function (e, a) {
+		if (a == 0) {
+			var c = 5;
 			if (g_user.roles & 2) {
-				A = 25
+				c = 25
 			} else {
 				if (g_user.roles & 16) {
-					A = 15
+					c = 15
 				}
 			}
-			var C = prompt(sprintf(LANG.prompt_customrating, A, A), 0);
-			if (C == null) {
+			var d = prompt(sprintf(LANG.prompt_customrating, c, c), 0);
+			if (d == null) {
 				return
 			} else {
-				C |= 0;
-				if (C != 0 && Math.abs(C) <= A) {
-					B = C
+				d |= 0;
+				if (d != 0 && Math.abs(d) <= c) {
+					a = d
 				}
 			}
-			if (B == 0) {
+			if (a == 0) {
 				return
 			}
 		} else {
 			if (g_user.roles & 26) {
-				B *= 5
+				a *= 5
 			}
 		}
-		new Ajax("?comment=rate&id=" + D.id + "&rating=" + B);
-		D.rating += B;
-		_ = D.divHeader.firstChild;
-		_ = _.childNodes[_.childNodes.length - 3];
-		_.lastChild.firstChild.nodeValue = (D.rating > 0 ? "+": "") + D.rating;
+		new Ajax("?comment=rate&id=" + e.id + "&rating=" + a);
+		e.rating += a;
+		var b = e.divHeader.firstChild;
+		b = b.childNodes[b.childNodes.length - 3];
+		b.lastChild.firstChild.nodeValue = (e.rating > 0 ? "+": "") + e.rating;
 		Tooltip.hide();
-		de(_.nextSibling);
-		de(_.nextSibling)
+		de(b.nextSibling);
+		de(b.nextSibling)
 	},
-	coDelete: function(A) {
-		if (A.purged) {
+	coDelete: function (a) {
+		if (a.purged) {
 			alert(LANG.message_cantdeletecomment)
 		} else {
 			if (confirm(LANG.confirm_deletecomment)) {
-				new Ajax("?comment=delete&id=" + A.id);
-				this.deleteRows([A])
+				new Ajax("?comment=delete&id=" + a.id);
+				this.deleteRows([a])
 			}
 		}
 	},
-	coDetach: function(A) {
-		if (A.replyTo == 0) {
+	coDetach: function (a) {
+		if (a.replyTo == 0) {
 			alert(LANG.message_cantdetachcomment)
 		} else {
 			if (confirm(LANG.confirm_detachcomment)) {
-				new Ajax("?comment=detach&id=" + A.id);
-				A.replyTo = 0;
+				new Ajax("?comment=detach&id=" + a.id);
+				a.replyTo = 0;
 				alert(LANG.message_commentdetached)
 			}
 		}
 	},
-	coEdit: function(G, E) {
-		G.divBody.style.display = "none";
-		G.divLinks.firstChild.style.display = "none";
-		var F = ce("div");
-		F.className = "comment-edit";
-		G.divEdit = F;
-		if (E == -1) {
-			if (g_users[G.user] != null) {
-				G.roles = g_users[G.user].roles
+	coEdit: function (g, e) {
+		g.divBody.style.display = "none";
+		g.divLinks.firstChild.style.display = "none";
+		var f = ce("div");
+		f.className = "comment-edit";
+		g.divEdit = f;
+		if (e == -1) {
+			if (g_users[g.user] != null) {
+				g.roles = g_users[g.user].roles
 			}
 		}
-		var C = Listview.funcBox.coEditAppend(F, G, E);
-		var B = ce("div");
-		B.className = "comment-edit-buttons";
-		var D = ce("input");
-		D.type = "button";
-		D.value = LANG.compose_save;
-		D.onclick = Listview.funcBox.coEditButton.bind(D, G, true, E);
-		ae(B, D);
-		ae(B, ct(" "));
-		D = ce("input");
-		D.type = "button";
-		D.value = LANG.compose_cancel;
-		D.onclick = Listview.funcBox.coEditButton.bind(D, G, false, E);
-		ae(B, D);
-		ae(F, B);
-		var A = F;
+		var a = Listview.funcBox.coEditAppend(f, g, e);
+		var b = ce("div");
+		b.className = "comment-edit-buttons";
+		var d = ce("input");
+		d.type = "button";
+		d.value = LANG.compose_save;
+		d.onclick = Listview.funcBox.coEditButton.bind(d, g, true, e);
+		ae(b, d);
+		ae(b, ct(" "));
+		d = ce("input");
+		d.type = "button";
+		d.value = LANG.compose_cancel;
+		d.onclick = Listview.funcBox.coEditButton.bind(d, g, false, e);
+		ae(b, d);
+		ae(f, b);
+		var c = f;
 		if (Browser.ie6) {
-			A = ce("div");
-			A.style.width = "99%";
-			ae(A, F)
+			c = ce("div");
+			c.style.width = "99%";
+			ae(c, f)
 		}
-		if (E == -1) {
-			G.divPost.insertBefore(A, G.divBody.nextSibling)
+		if (e == -1) {
+			g.divPost.insertBefore(c, g.divBody.nextSibling)
 		} else {
-			G.__div.insertBefore(A, G.divBody.nextSibling)
+			g.__div.insertBefore(c, g.divBody.nextSibling)
 		}
-		C.focus()
+		a.focus()
 	},
-	coEditAppend: function(L, C, K) {
-		var F = Listview.funcBox.coGetCharLimit(K);
-		if (K == 1 || K == 3 || K == 4) {
-			C.user = g_user.name;
-			C.roles = g_user.roles;
-			C.rating = 1
+	coEditAppend: function (m, b, l) {
+		var f = Listview.funcBox.coGetCharLimit(l);
+		if (l == 1 || l == 3 || l == 4) {
+			b.user = g_user.name;
+			b.roles = g_user.roles;
+			b.rating = 1
 		} else {
-			if (K >= 1) {
-				C.roles = 0;
-				C.rating = 1
+			if (l == 2) {
+				b.roles = g_user.roles;
+				b.rating = 1
 			}
 		}
-		if (K == -1 || K == 0) {
-			var J = ce("div");
-			J.className = "comment-edit-modes";
-			ae(J, ct(LANG.compose_mode));
-			var P = ce("a");
-			P.className = "selected";
-			P.onclick = Listview.funcBox.coModeLink.bind(P, 1, K);
-			P.href = "javascript:;";
-			ae(P, ct(LANG.compose_edit));
-			ae(J, P);
-			ae(J, ct("|"));
-			var N = ce("a");
-			N.onclick = Listview.funcBox.coModeLink.bind(N, 2, K);
-			N.href = "javascript:;";
-			ae(N, ct(LANG.compose_preview));
-			ae(J, N);
-			ae(L, J)
+		if (l == -1 || l == 0) {
+			var j = ce("div");
+			j.className = "comment-edit-modes";
+			ae(j, ct(LANG.compose_mode));
+			var o = ce("a");
+			o.className = "selected";
+			o.onclick = Listview.funcBox.coModeLink.bind(o, 1, l, b);
+			o.href = "javascript:;";
+			ae(o, ct(LANG.compose_edit));
+			ae(j, o);
+			ae(j, ct("|"));
+			var u = ce("a");
+			u.onclick = Listview.funcBox.coModeLink.bind(u, 2, l, b);
+			u.href = "javascript:;";
+			ae(u, ct(LANG.compose_preview));
+			ae(j, u);
+			ae(m, j)
 		}
-		var A = ce("div");
-		A.style.display = "none";
-		A.className = "comment-body" + Listview.funcBox.coGetColor(C, K);
-		ae(L, A);
-		var H = ce("div");
-		H.className = "comment-edit-body";
-		var G = ce("div");
-		G.className = "toolbar";
-		var I = ce("textarea");
-		I.className = "comment-editbox";
-		I.rows = 10;
-		I.value = C.body;
-		switch (K) {
+		var a = ce("div");
+		a.style.display = "none";
+		a.className = "comment-body" + Listview.funcBox.coGetColor(b, l);
+		ae(m, a);
+		var h = ce("div");
+		h.className = "comment-edit-body";
+		var e = ce("div");
+		e.className = "toolbar";
+		var g = ce("textarea");
+		g.className = "comment-editbox";
+		g.rows = 10;
+		g.value = b.body;
+		switch (l) {
 		case 1:
-			I.name = "commentbody";
+			g.name = "commentbody";
+			g.onfocus = g_revealCaptcha;
 			break;
 		case 2:
-			I.name = "desc";
-			I.originalValue = C.body;
+			g.name = "desc";
+			g.originalValue = b.body;
 			break;
 		case 3:
-			I.name = "body";
+			g.name = "body";
+			g.onfocus = g_revealCaptcha;
 			break;
 		case 4:
-			I.name = "sig";
-			I.originalValue = C.body;
-			I.rows = (Browser.gecko ? 2: 3);
-			I.style.height = "auto";
+			g.name = "sig";
+			g.originalValue = b.body;
+			g.rows = (Browser.gecko ? 2 : 3);
+			g.style.height = "auto";
 			break
 		}
-		if (K != -1 && K != 0) {
-			var E = ce("h3"),
-			W = ce("a"),
-			O = ce("div"),
-			V = ce("div");
-			var D = Listview.funcBox.coLivePreview.bind(I, C, K, O);
-			if (C.body) {
-				W.className = "disclosure-off";
-				O.style.display = "none"
+		if (l != -1 && l != 0) {
+			var d = ce("h3"),
+			v = ce("a"),
+			t = ce("div"),
+			s = ce("div");
+			var c = Listview.funcBox.coLivePreview.bind(g, b, l, t);
+			if (b.body) {
+				v.className = "disclosure-off";
+				t.style.display = "none"
 			} else {
-				W.className = "disclosure-on"
+				v.className = "disclosure-on"
 			}
-			ae(W, ct(LANG.compose_livepreview));
-			ae(E, W);
-			W.href = "javascript:;";
-			W.onclick = function() {
-				D(1);
-				W.className = "disclosure-" + (g_toggleDisplay(O) ? "on": "off")
+			ae(v, ct(LANG.compose_livepreview));
+			ae(d, v);
+			v.href = "javascript:;";
+			v.onclick = function () {
+				c(1);
+				v.className = "disclosure-" + (g_toggleDisplay(t) ? "on": "off")
 			};
-			ns(W);
-			E.className = "first";
-			V.className = "pad";
-			ae(A, E);
-			ae(A, O);
-			ae(A, V);
-			var U;
-			var T = function() {
-				if (U) {
-					clearTimeout(U);
-					U = null
-				}
-				U = setTimeout(D, 50)
-			};
-			I.onchange = T;
-			I.onkeyup = T;
-			aE(I, "focus",
-			function() {
-				D();
-				A.style.display = "";
-				if (K != 4) {
-					I.style.height = "22em"
+			ns(v);
+			d.className = "first";
+			s.className = "pad";
+			ae(a, d);
+			ae(a, t);
+			ae(a, s);
+			g_onAfterTyping(g, c, 50);
+			aE(g, "focus", function () {
+				c();
+				a.style.display = "";
+				if (l != 4) {
+					g.style.height = "22em"
 				}
 			})
 		} else {
-			if (K != 4) {
-				aE(I, "focus",
-				function() {
-					I.style.height = "22em"
+			if (l != 4) {
+				aE(g, "focus", function () {
+					g.style.height = "22em"
 				})
 			}
 		}
-		var S = [{
+		var r = [{
 			id: "b",
 			title: LANG.markup_b,
 			pre: "[b]",
@@ -3496,10 +4899,10 @@ Listview.funcBox = {
 		{
 			id: "url",
 			title: LANG.markup_url,
-			onclick: function() {
-				var Y = prompt(LANG.prompt_linkurl, "http://");
-				if (Y) {
-					g_insertTag(I, "[url=" + Y + "]", "[/url]")
+			onclick: function () {
+				var i = prompt(LANG.prompt_linkurl, "http://");
+				if (i) {
+					g_insertTag(g, "[url=" + i + "]", "[/url]")
 				}
 			}
 		},
@@ -3520,8 +4923,8 @@ Listview.funcBox = {
 			title: LANG.markup_ul,
 			pre: "[ul]\n[li]",
 			post: "[/li]\n[/ul]",
-			rep: function(Y) {
-				return Y.replace(/\n/g, "[/li]\n[li]")
+			rep: function (i) {
+				return i.replace(/\n/g, "[/li]\n[li]")
 			}
 		},
 		{
@@ -3529,8 +4932,8 @@ Listview.funcBox = {
 			title: LANG.markup_ol,
 			pre: "[ol]\n[li]",
 			post: "[/li]\n[/ol]",
-			rep: function(Y) {
-				return Y.replace(/\n/g, "[/li]\n[li]")
+			rep: function (i) {
+				return i.replace(/\n/g, "[/li]\n[li]")
 			}
 		},
 		{
@@ -3539,341 +4942,435 @@ Listview.funcBox = {
 			pre: "[li]",
 			post: "[/li]"
 		}];
-		for (var Q = 0, R = S.length; Q < R; ++Q) {
-			var B = S[Q];
-			if (K == 4 && B.id == "quote") {
+		for (var p = 0, q = r.length; p < q; ++p) {
+			var k = r[p];
+			if (l == 4 && k.id == "quote") {
 				break
 			}
-			var M = ce("button");
-			var X = ce("img");
-			M.setAttribute("type", "button");
-			M.title = B.title;
-			if (B.onclick != null) {
-				M.onclick = B.onclick
+			var n = ce("button");
+			var w = ce("img");
+			n.setAttribute("type", "button");
+			n.title = k.title;
+			if (k.onclick != null) {
+				n.onclick = k.onclick
 			} else {
-				M.onclick = g_insertTag.bind(0, I, B.pre, B.post, B.rep)
+				n.onclick = g_insertTag.bind(0, g, k.pre, k.post, k.rep)
 			}
-			X.src = "templates/wowhead/images/pixel.gif";
-			X.className = "toolbar-" + B.id;
-			ae(M, X);
-			ae(G, M)
+			w.src = "templates/wowhead/images/pixel.gif";
+			w.className = "toolbar-" + k.id;
+			ae(n, w);
+			ae(e, n)
 		}
-		ae(H, G);
-		ae(H, I);
-		ae(H, ce("br"));
-		if (K == 4) {
-			ae(H, ct(sprintf(LANG.compose_limit2, F)))
+		ae(h, e);
+		ae(h, g);
+		ae(h, ce("br"));
+		if (l == 4) {
+			ae(h, ct(sprintf(LANG.compose_limit2, f, 3)))
 		} else {
-			ae(H, ct(sprintf(LANG.compose_limit, F)))
+			ae(h, ct(sprintf(LANG.compose_limit, f)))
 		}
-		ae(L, H);
-		return I
+		ae(m, h);
+		return g
 	},
-	coLivePreview: function(E, F, A, B) {
-		if (B != 1 && A.style.display == "none") {
+	coLivePreview: function (f, e, a, b) {
+		if (b != 1 && a.style.display == "none") {
 			return
 		}
-		var C = this,
-		I = Listview.funcBox.coGetCharLimit(F),
-		G = (C.value.length > I ? C.value.substring(0, I) : C.value);
-		if (F == 4) {
-			var H;
-			if ((H = G.indexOf("\n")) != -1 && (H = G.indexOf("\n", H + 1)) != -1 && (H = G.indexOf("\n", H + 1)) != -1) {
-				G = G.substring(0, H)
+		var c = this,
+		i = Listview.funcBox.coGetCharLimit(e),
+		g = (c.value.length > i ? c.value.substring(0, i) : c.value);
+		if (e == 4) {
+			var h;
+			if ((h = g.indexOf("\n")) != -1 && (h = g.indexOf("\n", h + 1)) != -1 && (h = g.indexOf("\n", h + 1)) != -1) {
+				g = g.substring(0, h)
 			}
 		}
-		var D = Markup.toHtml(G, {
-			mode: Markup.MODE_COMMENT
+		var d = Markup.toHtml(g, {
+			mode: Markup.MODE_COMMENT,
+			roles: f.roles
 		});
-		if (D) {
-			A.innerHTML = D
+		if (d) {
+			a.innerHTML = d
 		} else {
-			A.innerHTML = '<span class="q6">...</span>'
+			a.innerHTML = '<span class="q6">...</span>'
 		}
 	},
-	coEditButton: function(E, D, B) {
-		if (D) {
-			var A = gE(E.divEdit, "textarea")[0];
-			if (!Listview.funcBox.coValidate(A, B)) {
+	coEditButton: function (f, d, e) {
+		if (d) {
+			var a = gE(f.divEdit, "textarea")[0];
+			if (!Listview.funcBox.coValidate(a, e)) {
 				return
 			}
-			if (A.value != E.body) {
-				var C = 0;
-				if (E.lastEdit != null) {
-					C = E.lastEdit[1]
-				}++C;
-				E.lastEdit = [g_serverTime, C, g_user.name];
-				Listview.funcBox.coUpdateLastEdit(E);
-				E.divBody.innerHTML = Markup.toHtml((A.value.length > 7500 ? A.value.substring(0, 7500) : A.value), {
-					mode: Markup.MODE_COMMENT
+			if (a.value != f.body) {
+				var c = 0;
+				if (f.lastEdit != null) {
+					c = f.lastEdit[1]
+				}++c;
+				f.lastEdit = [g_serverTime, c, g_user.name];
+				Listview.funcBox.coUpdateLastEdit(f);
+				var b = Listview.funcBox.coGetCharLimit(e);
+				f.divBody.innerHTML = Markup.toHtml((a.value.length > b ? a.value.substring(0, b) : a.value), {
+					mode: Markup.MODE_COMMENT,
+					roles: f.roles
 				});
-				E.body = A.value;
-				if (B == -1) {
-					new Ajax("?forums=editpost&id=" + E.id, {
+				f.body = a.value;
+				if (e == -1) {
+					new Ajax("?forums=editpost&id=" + f.id, {
 						method: "POST",
-						params: "body=" + urlencode(E.body)
+						params: "body=" + urlencode(f.body)
 					})
 				} else {
-					new Ajax("?comment=edit&id=" + E.id, {
+					new Ajax("?comment=edit&id=" + f.id, {
 						method: "POST",
-						params: "body=" + urlencode(E.body)
+						params: "body=" + urlencode(f.body)
 					})
 				}
 			}
 		}
-		E.divBody.style.display = "";
-		E.divLinks.firstChild.style.display = "";
-		de(E.divEdit);
-		E.divEdit = null
+		f.divBody.style.display = "";
+		f.divLinks.firstChild.style.display = "";
+		de(f.divEdit);
+		f.divEdit = null
 	},
-	coGetCharLimit: function(A) {
-		if (A == 4) {
-			return 250
-		} else {
-			return 7500
+	coGetCharLimit: function (a) {
+		switch (a) {
+		case 0:
+		case 1:
+		case 2:
+			return 7500;
+		case 4:
+			return 250;
+		default:
+			return 15000
 		}
 	},
-	coModeLink: function(D, A) {
-		var I = Listview.funcBox.coGetCharLimit(D);
-		var B = Markup.MODE_COMMENT;
-		array_walk(gE(this.parentNode, "a"),
-		function(J) {
-			J.className = ""
+	coModeLink: function (e, b, f) {
+		var j = Listview.funcBox.coGetCharLimit(e);
+		var c = Markup.MODE_COMMENT;
+		array_walk(gE(this.parentNode, "a"), function (k) {
+			k.className = ""
 		});
 		this.className = "selected";
-		var C = gE(this.parentNode.parentNode, "textarea")[0],
-		H = C.parentNode,
-		E = H.previousSibling;
-		if (A == 4) {
-			B = Markup.MODE_SIGNATURE
+		var d = gE(this.parentNode.parentNode, "textarea")[0],
+		i = d.parentNode,
+		a = i.previousSibling;
+		if (b == 4) {
+			c = Markup.MODE_SIGNATURE
 		}
-		switch (D) {
+		switch (e) {
 		case 1:
-			H.style.display = "";
-			E.style.display = "none";
-			H.firstChild.focus();
+			i.style.display = "";
+			a.style.display = "none";
+			i.firstChild.focus();
 			break;
 		case 2:
-			H.style.display = "none";
-			var F = (C.value.length > I ? C.value.substring(0, I) : C.value);
-			if (A == 4) {
-				var G;
-				if ((G = F.indexOf("\n")) != -1 && (G = F.indexOf("\n", G + 1)) != -1 && (G = F.indexOf("\n", G + 1)) != -1) {
-					F = F.substring(0, G)
+			i.style.display = "none";
+			var g = (d.value.length > j ? d.value.substring(0, j) : d.value);
+			if (b == 4) {
+				var h;
+				if ((h = g.indexOf("\n")) != -1 && (h = g.indexOf("\n", h + 1)) != -1 && (h = g.indexOf("\n", h + 1)) != -1) {
+					g = g.substring(0, h)
 				}
 			}
-			E.innerHTML = Markup.toHtml(F, {
-				mode: B
+			a.innerHTML = Markup.toHtml(g, {
+				mode: c,
+				roles: f.roles
 			});
-			E.style.display = "";
+			a.style.display = "";
 			break
 		}
 	},
-	coReply: function(B) {
-		document.forms.addcomment.elements.replyto.value = B.replyTo;
-		var A = ge("replybox-generic");
-		gE(A, "span")[0].innerHTML = B.user;
-		A.style.display = "";
+	coReply: function (b) {
+		document.forms.addcomment.elements.replyto.value = b.replyTo;
+		var a = ge("gjkdlfgkjh436");
+		gE(a, "span")[0].innerHTML = b.user;
+		a.style.display = "";
 		co_addYourComment()
 	},
-	coValidate: function(A, B) {
-		B |= 0;
-		if (B == 1 || B == -1) {
-			if (trim(A.value).length < 1) {
+	coValidate: function (a, c) {
+		c |= 0;
+		if (c == 1 || c == -1) {
+			if (trim(a.value).length < 1) {
 				alert(LANG.message_forumposttooshort);
 				return false
 			}
 		} else {
-			if (trim(A.value).length < 10) {
+			if (trim(a.value).length < 10) {
 				alert(LANG.message_commenttooshort);
 				return false
 			}
 		}
-		if (A.value.length > 7500) {
-			if (!confirm(sprintf((B == 1 ? LANG.confirm_forumposttoolong: LANG.confirm_commenttoolong), A.value.substring(7470, 7500)))) {
+		var b = Listview.funcBox.coGetCharLimit(c);
+		if (a.value.length > b) {
+			if (!confirm(sprintf(c == 1 ? LANG.confirm_forumposttoolong: LANG.confirm_commenttoolong, b, a.value.substring(b - 30, b)))) {
 				return false
 			}
 		}
 		return true
 	},
-	coCustomRatingOver: function(A) {
-		Tooltip.showAtCursor(A, LANG.tooltip_customrating, 0, 0, "q")
+	coCustomRatingOver: function (a) {
+		Tooltip.showAtCursor(a, LANG.tooltip_customrating, 0, 0, "q")
 	},
-	coPlusRatingOver: function(A) {
-		Tooltip.showAtCursor(A, LANG.tooltip_uprate, 0, 0, "q2")
+	coPlusRatingOver: function (a) {
+		Tooltip.showAtCursor(a, LANG.tooltip_uprate, 0, 0, "q2")
 	},
-	coMinusRatingOver: function(A) {
-		Tooltip.showAtCursor(A, LANG.tooltip_downrate, 0, 0, "q7")
+	coMinusRatingOver: function (a) {
+		Tooltip.showAtCursor(a, LANG.tooltip_downrate, 0, 0, "q10")
 	},
-	coSortDate: function(A) {
-		A.nextSibling.nextSibling.className = "";
-		A.className = "selected";
-		this.mainDiv.className = "listview-aci";
+	coSortDate: function (a) {
+		a.nextSibling.nextSibling.className = "";
+		a.className = "selected";
+		this.mainDiv.className += " listview-aci";
 		this.setSort([1], true, false)
 	},
-	coSortHighestRatedFirst: function(A) {
-		A.previousSibling.previousSibling.className = "";
-		A.className = "selected";
-		this.mainDiv.className = "";
+	coSortHighestRatedFirst: function (a) {
+		a.previousSibling.previousSibling.className = "";
+		a.className = "selected";
+		this.mainDiv.className = this.mainDiv.className.replace("listview-aci", "");
 		this.setSort([ - 3, 2], true, false)
 	},
-	coUpdateLastEdit: function(F) {
-		var B = F.divLastEdit;
-		if (!B) {
+	coUpdateLastEdit: function (f) {
+		var b = f.divLastEdit;
+		if (!b) {
 			return
 		}
-		if (F.lastEdit != null) {
-			var E = F.lastEdit;
-			B.childNodes[1].firstChild.nodeValue = E[2];
-			B.childNodes[1].href = "?user=" + E[2];
-			var D = new Date(E[0]);
-			var A = (g_serverTime - D) / 1000;
-			if (B.childNodes[3].firstChild) {
-				de(B.childNodes[3].firstChild)
+		if (f.lastEdit != null) {
+			var e = f.lastEdit;
+			b.childNodes[1].firstChild.nodeValue = e[2];
+			b.childNodes[1].href = "?user=" + e[2];
+			var c = new Date(e[0]);
+			var d = (g_serverTime - c) / 1000;
+			if (b.childNodes[3].firstChild) {
+				de(b.childNodes[3].firstChild)
 			}
-			Listview.funcBox.coFormatDate(B.childNodes[3], A, D);
-			var C = "";
-			if (F.rating != null) {
-				C += LANG.lvcomment_patch1 + g_getPatchVersion(D) + LANG.lvcomment_patch2
+			Listview.funcBox.coFormatDate(b.childNodes[3], d, c);
+			var a = "";
+			if (f.rating != null) {
+				a += LANG.lvcomment_patch1 + g_getPatchVersion(c) + LANG.lvcomment_patch2
 			}
-			if (E[1] > 1) {
-				C += LANG.dash + sprintf(LANG.lvcomment_nedits, E[1])
+			if (e[1] > 1) {
+				a += LANG.dash + sprintf(LANG.lvcomment_nedits, e[1])
 			}
-			B.childNodes[4].nodeValue = C;
-			B.style.display = ""
+			b.childNodes[4].nodeValue = a;
+			b.style.display = ""
 		} else {
-			B.style.display = "none"
+			b.style.display = "none"
 		}
 	},
-	coFormatDate: function(E, A, D, F, G) {
-		var C;
-		if (A < 2592000) {
-			txt = sprintf(LANG.date_ago, g_formatTimeElapsed(A));
-			var B = D;
-			B.setTime(B.getTime() + (g_localTime - g_serverTime));
-			E.style.cursor = "help";
-			E.title = B.toLocaleString()
+	coFormatDate: function (f, e, b, g, h) {
+		var d;
+		if (e < 2592000) {
+			var a = sprintf(LANG.date_ago, g_formatTimeElapsed(e));
+			var c = new Date();
+			c.setTime(b.getTime() + (g_localTime - g_serverTime));
+			f.style.cursor = "help";
+			f.title = c.toLocaleString()
 		} else {
-			txt = LANG.date_on + g_formatDateSimple(D, F);
-			E.style.cursor = E.title = ""
+			a = LANG.date_on + g_formatDateSimple(b, g)
 		}
-		if (G == 1) {
-			txt = txt.substr(0, 1).toUpperCase() + txt.substr(1)
+		if (h == 1) {
+			a = a.substr(0, 1).toUpperCase() + a.substr(1)
 		}
-		C = ct(txt);
-		ae(E, C)
+		d = ct(a);
+		ae(f, d)
 	},
-	ssCellOver: function() {
+	ssCellOver: function () {
 		this.className = "screenshot-caption-over"
 	},
-	ssCellOut: function() {
+	ssCellOut: function () {
 		this.className = "screenshot-caption"
 	},
-	ssCellClick: function(B, D) {
-		D = $E(D);
-		if (D.shiftKey || D.ctrlKey) {
+	ssCellClick: function (b, d) {
+		d = $E(d);
+		if (d.shiftKey || d.ctrlKey) {
 			return
 		}
-		var A = 0,
-		C = D._target;
-		while (C && A < 3) {
-			if (C.nodeName == "A") {
+		var a = 0,
+		c = d._target;
+		while (c && a < 3) {
+			if (c.nodeName == "A") {
 				return
 			}
-			if (C.nodeName == "IMG") {
+			if (c.nodeName == "IMG") {
 				break
 			}
-			C = C.parentNode
+			c = c.parentNode
 		}
 		ScreenshotViewer.show({
 			screenshots: this.data,
-			pos: B
+			pos: b
 		})
 	},
-	moneyHonorOver: function(A) {
-		Tooltip.showAtCursor(A, "<b>" + LANG.tooltip_honorpoints + "</b>", 0, 0, "q")
+	moneyHonorOver: function (a) {
+		Tooltip.showAtCursor(a, LANG.tooltip_honorpoints, 0, 0, "q")
 	},
-	moneyArenaOver: function(A) {
-		Tooltip.showAtCursor(A, "<b>" + LANG.tooltip_arenapoints + "</b>", 0, 0, "q")
+	moneyArenaOver: function (a) {
+		Tooltip.showAtCursor(a, LANG.tooltip_arenapoints, 0, 0, "q")
 	},
-	appendMoney: function(E, A, F, J, K, B) {
-		var I,
-		H = 0;
-		if (A >= 10000) {
-			H = 1;
-			I = ce("span");
-			I.className = "moneygold";
-			ae(I, ct(Math.floor(A / 10000)));
-			ae(E, I);
-			A %= 10000
+	moneyAchievementOver: function (a) {
+		Tooltip.showAtCursor(a, LANG.tooltip_achievementpoints, 0, 0, "q")
+	},
+	appendMoney: function (g, a, f, m, j, c, l) {
+		var k, h = 0;
+		if (a >= 10000) {
+			h = 1;
+			k = ce("span");
+			k.className = "moneygold";
+			ae(k, ct(Math.floor(a / 10000)));
+			ae(g, k);
+			a %= 10000
 		}
-		if (A >= 100) {
-			if (H) {
-				ae(E, ct(" "))
+		if (a >= 100) {
+			if (h) {
+				ae(g, ct(" "))
 			} else {
-				H = 1
+				h = 1
 			}
-			I = ce("span");
-			I.className = "moneysilver";
-			ae(I, ct(Math.floor(A / 100)));
-			ae(E, I);
-			A %= 100
+			k = ce("span");
+			k.className = "moneysilver";
+			ae(k, ct(Math.floor(a / 100)));
+			ae(g, k);
+			a %= 100
 		}
-		if (A >= 1 || F != null) {
-			if (H) {
-				ae(E, ct(" "))
+		if (a >= 1 || f != null) {
+			if (h) {
+				ae(g, ct(" "))
 			} else {
-				H = 1
+				h = 1
 			}
-			I = ce("span");
-			I.className = "moneycopper";
-			ae(I, ct(A));
-			ae(E, I)
+			k = ce("span");
+			k.className = "moneycopper";
+			ae(k, ct(a));
+			ae(g, k)
 		}
-		if (J != null && J != 0) {
-			if (H) {
-				ae(E, ct(" "))
+		if (m != null && m != 0) {
+			if (h) {
+				ae(g, ct(" "))
 			} else {
-				H = 1
+				h = 1
 			}
-			I = ce("span");
-			I.className = "money" + (J < 0 ? "horde": "alliance") + " tip";
-			I.onmouseover = Listview.funcBox.moneyHonorOver;
-			I.onmousemove = Tooltip.cursorUpdate;
-			I.onmouseout = Tooltip.hide;
-			ae(I, ct(number_format(Math.abs(J))));
-			ae(E, I)
+			k = ce("span");
+			k.className = "money" + (m < 0 ? "horde": "alliance") + " tip";
+			k.onmouseover = Listview.funcBox.moneyHonorOver;
+			k.onmousemove = Tooltip.cursorUpdate;
+			k.onmouseout = Tooltip.hide;
+			ae(k, ct(number_format(Math.abs(m))));
+			ae(g, k)
 		}
-		if (K >= 1) {
-			if (H) {
-				ae(E, ct(" "))
+		if (j >= 1) {
+			if (h) {
+				ae(g, ct(" "))
 			} else {
-				H = 1
+				h = 1
 			}
-			I = ce("span");
-			I.className = "moneyarena tip";
-			I.onmouseover = Listview.funcBox.moneyArenaOver;
-			I.onmousemove = Tooltip.cursorUpdate;
-			I.onmouseout = Tooltip.hide;
-			ae(I, ct(number_format(K)));
-			ae(E, I)
+			k = ce("span");
+			k.className = "moneyarena tip";
+			k.onmouseover = Listview.funcBox.moneyArenaOver;
+			k.onmousemove = Tooltip.cursorUpdate;
+			k.onmouseout = Tooltip.hide;
+			ae(k, ct(number_format(j)));
+			ae(g, k)
 		}
-		if (B != null) {
-			for (var C = 0; C < B.length; ++C) {
-				if (H) {
-					ae(E, ct(" "))
+		if (c != null) {
+			for (var b = 0; b < c.length; ++b) {
+				if (h) {
+					ae(g, ct(" "))
 				} else {
-					H = 1
+					h = 1
 				}
-				var G = B[C][0];
-				var D = B[C][1];
-				I = ce("a");
-				I.href = "?item=" + G;
-				I.className = "moneyitem";
-				I.style.backgroundImage = "url(images/icons/small/" + g_items.getIcon(G).toLowerCase() + ".jpg)";
-				ae(I, ct(D));
-				ae(E, I)
+				var n = c[b][0];
+				var e = c[b][1];
+				k = ce("a");
+				k.href = "?item=" + n;
+				k.className = "moneyitem";
+				k.style.backgroundImage = "url(images/icons/tiny/" + g_items.getIcon(n).toLowerCase() + ".gif)";
+				ae(k, ct(e));
+				ae(g, k)
 			}
+		}
+		if (l != null) {
+			if (h) {
+				ae(g, ct(" "))
+			} else {
+				h = 1
+			}
+			k = ce("span");
+			k.className = "moneyachievement tip";
+			k.onmouseover = Listview.funcBox.moneyAchievementOver;
+			k.onmousemove = Tooltip.cursorUpdate;
+			k.onmouseout = Tooltip.hide;
+			ae(k, ct(number_format(l)));
+			ae(g, k)
+		}
+	},
+	getUpperSource: function (a, b) {
+		switch (a) {
+		case 2:
+			if (b.z) {
+				return LANG.source_zonedrop
+			}
+			break;
+		case 4:
+			return LANG.source_quests;
+		case 5:
+			return LANG.source_vendors
+		}
+		return g_sources[a]
+	},
+	getLowerSource: function (a, d, c) {
+		switch (a) {
+		case 3:
+			if (d.p && g_sources_pvp[d.p]) {
+				return {
+					text: g_sources_pvp[d.p]
+				}
+			}
+			break
+		}
+		switch (c) {
+		case 0:
+		case 1:
+		case 2:
+			if (d.z) {
+				var b = {
+					url: "?zone=" + d.z,
+					text: g_zones[d.z]
+				};
+				if (d.t && a == 5) {
+					b.pretext = LANG.lvitem_vendorin
+				}
+				if (d.dd) {
+					if (d.dd == 1) {
+						b.posttext = LANG.lvitem_normal
+					} else {
+						if (d.dd == 2) {
+							b.posttext = LANG.lvitem_heroic
+						}
+					}
+				}
+				return b
+			}
+			break;
+		case 5:
+			return {
+				url:
+				"?quests=" + d.c2 + "." + d.c,
+				text: Listview.funcBox.getQuestCategory(d.c)
+			};
+			break;
+		case 6:
+			if (d.c && d.s) {
+				return {
+					url: "?spells=" + d.c + "." + d.s,
+					text: g_spell_skills[d.s]
+				}
+			} else {
+				return {
+					url: "?spells=0",
+					text: "??"
+				}
+			}
+			break
 		}
 	}
 };
@@ -3881,140 +5378,245 @@ Listview.templates = {
 	faction: {
 		sort: [1],
 		nItemsPerPage: -1,
+		searchable: 1,
+		filtrable: 1,
 		columns: [{
 			id: "name",
 			name: LANG.name,
+			type: "text",
 			align: "left",
 			value: "name",
-			compute: function(C, D) {
-				var A = ce("a");
-				A.style.fontFamily = "Verdana, sans-serif";
-				A.href = this.template.getItemLink(C);
-				ae(A, ct(C.name));
-				if (C.expansion == 1) {
-					var B = ce("span");
-					B.className = "bc-icon";
-					ae(B, A);
-					ae(D, B)
+			compute: function (d, e) {
+				var b = ce("a");
+				b.style.fontFamily = "Verdana, sans-serif";
+				b.href = this.template.getItemLink(d);
+				ae(b, ct(d.name));
+				if (d.expansion) {
+					var c = ce("span");
+					c.className = (d.expansion == 1 ? "bc-icon": "wotlk-icon");
+					ae(c, b);
+					ae(e, c)
 				} else {
-					ae(D, A)
+					ae(e, b)
 				}
-			}
-		},
-		{
-			id: "group",
-			name: LANG.group,
-			value: "group",
-			compute: function(A, B) {
-				if (A.group != null) {
-					return A.group
+			},
+			getVisibleText: function (a) {
+				var b = a.name;
+				if (a.expansion == 1) {
+					b += " bc"
+				} else {
+					if (a.expansion == 2) {
+						b += "wotlk wrath"
+					}
 				}
+				return b
 			}
 		},
 		{
 			id: "side",
 			name: LANG.side,
+			type: "text",
 			width: "10%",
-			compute: function(B, C) {
-				if (B.side) {
-					var A = ce("span");
-					A.className = (B.side == 1 ? "alliance-icon": "horde-icon");
-					ae(A, ct(g_sides[B.side]));
-					ae(C, A)
+			compute: function (b, c) {
+				if (b.side) {
+					var a = ce("span");
+					a.className = (b.side == 1 ? "alliance-icon": "horde-icon");
+					ae(a, ct(g_sides[b.side]));
+					ae(c, a)
 				}
 			},
-			sortFunc: function(B, A, C) {
-				return strcmp(g_sides[B.side], g_sides[A.side])
+			getVisibleText: function (a) {
+				if (a.side) {
+					return g_sides[a.side]
+				}
+			},
+			sortFunc: function (d, c, e) {
+				return strcmp(g_sides[d.side], g_sides[c.side])
+			}
+		},
+		{
+			id: "category",
+			name: LANG.category,
+			type: "text",
+			width: "16%",
+			compute: function (d, e) {
+				if (d.category2 != null) {
+					e.className = "small q1";
+					var b = ce("a"),
+					c = "?factions=" + d.category2;
+					if (d.category) {
+						c += "." + d.category
+					}
+					b.href = c;
+					ae(b, ct(Listview.funcBox.getFactionCategory(d.category, d.category2)));
+					ae(e, b)
+				}
+			},
+			getVisibleText: function (a) {
+				return Listview.funcBox.getFactionCategory(a.category, a.category2)
+			},
+			sortFunc: function (d, c, f) {
+				var e = Listview.funcBox.getFactionCategory;
+				return strcmp(e(d.category, d.category2), e(c.category, c.category2))
 			}
 		}],
-		getItemLink: function(A) {
-			return "?faction=" + A.id
+		getItemLink: function (a) {
+			return "?faction=" + a.id
 		}
 	},
 	item: {
 		sort: [1],
+		searchable: 1,
+		filtrable: 1,
 		columns: [{
 			id: "name",
 			name: LANG.name,
+			type: "text",
 			align: "left",
 			span: 2,
 			value: "name",
-			compute: function(D, G, E) {
-				var C = ce("td");
-				C.style.width = "1px";
-				C.style.padding = "0";
-				C.style.borderRight = "none";
-				var B = null,
-				F = null;
-				if (D.stack != null) {
-					B = Listview.funcBox.createTextRange(D.stack[0], D.stack[1])
+			compute: function (m, c, k) {
+				var f = ce("td");
+				f.style.width = "1px";
+				f.style.padding = "0";
+				f.style.borderRight = "none";
+				var g = null,
+				n = null;
+				if (m.stack != null) {
+					g = Listview.funcBox.createTextRange(m.stack[0], m.stack[1])
 				}
-				if (D.avail != null) {
-					F = D.avail
+				if (m.avail != null) {
+					n = m.avail
 				}
-				ae(C, g_items.createIcon(D.id, 1, B, F));
-				ae(E, C);
-				G.style.borderLeft = "none";
-				var A = ce("a");
-				A.className = "q" + (6 - parseInt(D.name.charAt(0)));
-				A.style.fontFamily = "Verdana, sans-serif";
-				A.href = this.template.getItemLink(D);
-				ae(A, ct(D.name.substring(1)));
-				ae(G, A)
+				ae(f, g_items.createIcon(m.id, (this.iconSize == null ? 1 : this.iconSize), g, n));
+				ae(k, f);
+				c.style.borderLeft = "none";
+				var l = ce("a");
+				l.className = "q" + (7 - parseInt(m.name.charAt(0)));
+				l.style.fontFamily = "Verdana, sans-serif";
+				l.href = this.template.getItemLink(m);
+				if (m.rel) {
+					Icon.getLink(f.firstChild).rel = m.rel;
+					l.rel = m.rel
+				}
+				ae(l, ct(m.name.substring(1)));
+				ae(c, l);
+				if (typeof fi_nExtraCols == "number" && fi_nExtraCols >= 5) {
+					if (m.source != null && m.source.length == 1) {
+						var h = ce("div");
+						h.className = "small2";
+						var b = (m.sourcemore ? m.sourcemore[0] : {});
+						var j = 0;
+						if (b.t) {
+							j = b.t;
+							var l = ce("a");
+							if (b.q != null) {
+								l.className = "q" + b.q
+							} else {
+								l.className = "q1"
+							}
+							l.href = "?" + g_types[b.t] + "=" + b.ti;
+							if (b.n.length <= 30) {
+								ae(l, ct(b.n))
+							} else {
+								l.title = b.n;
+								ae(l, ct(trim(b.n.substr(0, 27)) + "..."))
+							}
+							ae(h, l)
+						} else {
+							ae(h, ct(Listview.funcBox.getUpperSource(m.source[0], b)))
+						}
+						var e = Listview.funcBox.getLowerSource(m.source[0], b, j);
+						if (e != null) {
+							ae(h, ct(LANG.hyphen));
+							if (e.pretext) {
+								ae(h, ct(e.pretext))
+							}
+							if (e.url) {
+								var l = ce("a");
+								l.className = "q1";
+								l.href = e.url;
+								ae(l, ct(e.text));
+								ae(h, l)
+							} else {
+								ae(h, ct(e.text))
+							}
+							if (e.posttext) {
+								ae(h, ct(e.posttext))
+							}
+						}
+						ae(c, h)
+					}
+				}
+			},
+			getVisibleText: function (c) {
+				var e = c.name.substring(1);
+				if (typeof fi_nExtraCols == "number" && fi_nExtraCols >= 5) {
+					if (c.source != null && c.source.length == 1) {
+						var d = (c.sourcemore ? c.sourcemore[0] : {});
+						var b = 0;
+						if (d.t) {
+							b = d.t;
+							e += " " + d.n
+						} else {
+							e += " " + Listview.funcBox.getUpperSource(c.source[0], d)
+						}
+						var a = Listview.funcBox.getLowerSource(c.source[0], d, b);
+						if (a != null) {
+							if (a.pretext) {
+								e += " " + a.pretext
+							}
+							e += " " + a.text;
+							if (a.posttext) {
+								e += " " + a.posttext
+							}
+						}
+					}
+				}
+				return e
 			}
 		},
 		{
 			id: "level",
 			name: LANG.level,
-			width: "7%",
-			value: "level",
-			sortFunc: function(B, A, C) {
-				return strcmp(B.level, A.level) || strcmp(B.reqlevel, A.reqlevel)
-			}
+			value: "level"
 		},
 		{
 			id: "reqlevel",
 			name: LANG.req,
 			tooltip: LANG.tooltip_reqlevel,
-			width: "7%",
 			value: "reqlevel",
-			compute: function(A, B) {
-				if (A.reqlevel > 1) {
-					return A.reqlevel
+			compute: function (a, b) {
+				if (a.reqlevel > 1) {
+					return a.reqlevel
 				}
-			},
-			sortFunc: function(B, A, C) {
-				return strcmp(B.reqlevel, A.reqlevel) || strcmp(B.level, A.level)
 			}
 		},
 		{
 			id: "dps",
 			name: LANG.dps,
-			width: "10%",
 			value: "dps",
-			compute: function(A, B) {
-				return (A.dps || 0).toFixed(1)
+			compute: function (a, b) {
+				return (a.dps || 0).toFixed(1)
 			},
 			hidden: true
 		},
 		{
 			id: "speed",
 			name: LANG.speed,
-			width: "10%",
 			value: "speed",
-			compute: function(A, B) {
-				return (A.speed || 0).toFixed(2)
+			compute: function (a, b) {
+				return (a.speed || 0).toFixed(2)
 			},
 			hidden: true
 		},
 		{
 			id: "armor",
 			name: LANG.armor,
-			width: "10%",
 			value: "armor",
-			compute: function(A, B) {
-				if (A.armor > 0) {
-					return A.armor
+			compute: function (a, b) {
+				if (a.armor > 0) {
+					return a.armor
 				}
 			},
 			hidden: true
@@ -4022,310 +5624,544 @@ Listview.templates = {
 		{
 			id: "slot",
 			name: LANG.slot,
-			width: "10%",
-			compute: function(A, B) {
-				return g_item_slots[A.slot]
+			type: "text",
+			compute: function (a, b) {
+				nw(b);
+				return g_item_slots[a.slot]
 			},
-			sortFunc: function(B, A, C) {
-				return strcmp(g_item_slots[B.slot], g_item_slots[A.slot])
+			getVisibleText: function (a) {
+				return g_item_slots[a.slot]
+			},
+			sortFunc: function (d, c, e) {
+				return strcmp(g_item_slots[d.slot], g_item_slots[c.slot])
 			},
 			hidden: true
 		},
 		{
 			id: "slots",
 			name: LANG.slots,
-			width: "10%",
 			value: "nslots",
 			hidden: true
 		},
 		{
 			id: "skill",
 			name: LANG.skill,
-			width: "10%",
 			value: "skill",
+			hidden: true
+		},
+		{
+			id: "glyph",
+			name: LANG.glyphtype,
+			type: "text",
+			value: "glyph",
+			compute: function (a, b) {
+				if (a.glyph) {
+					return g_item_glyphs[a.glyph]
+				}
+			},
+			getVisibleText: function (a) {
+				return g_item_glyphs[a.glyph]
+			},
+			sortFunc: function (d, c, e) {
+				return strcmp(g_item_glyphs[d.glyph], g_item_glyphs[c.glyph])
+			},
 			hidden: true
 		},
 		{
 			id: "source",
 			name: LANG.source,
-			width: "12%",
-			compute: function(C, D) {
-				if (C.source != null) {
-					for (var B = 0, A = C.source.length; B < A; ++B) {
-						if (B > 0) {
-							ae(D, ct(LANG.comma))
+			type: "text",
+			compute: function (k, d) {
+				if (this.iconSize == 0) {
+					d.className = "small"
+				}
+				if (k.source != null) {
+					if (k.source.length == 1) {
+						nw(d);
+						var c = (k.sourcemore ? k.sourcemore[0] : {});
+						var h = 0;
+						if (c.t) {
+							h = c.t;
+							var j = ce("a");
+							if (c.q != null) {
+								j.className = "q" + c.q
+							} else {
+								j.className = "q1"
+							}
+							j.href = "?" + g_types[c.t] + "=" + c.ti;
+							if (this.iconSize == 0 || c.n.length <= 20) {
+								ae(j, ct(c.n))
+							} else {
+								j.title = c.n;
+								ae(j, ct(trim(c.n.substr(0, 17)) + "..."))
+							}
+							ae(d, j)
+						} else {
+							ae(d, ct(Listview.funcBox.getUpperSource(k.source[0], c)))
 						}
-						ae(D, ct(g_sources[C.source[B]]))
+						var f = Listview.funcBox.getLowerSource(k.source[0], c, h);
+						if (this.iconSize != 0 && f != null) {
+							var b = ce("div");
+							b.className = "small2";
+							if (f.pretext) {
+								ae(b, ct(f.pretext))
+							}
+							if (f.url) {
+								var j = ce("a");
+								j.className = "q1";
+								j.href = f.url;
+								ae(j, ct(f.text));
+								ae(b, j)
+							} else {
+								ae(b, ct(f.text))
+							}
+							if (f.posttext) {
+								ae(b, ct(f.posttext))
+							}
+							ae(d, b)
+						}
+					} else {
+						var l = "";
+						for (var e = 0, g = k.source.length; e < g; ++e) {
+							if (e > 0) {
+								l += LANG.comma
+							}
+							l += g_sources[k.source[e]]
+						}
+						return l
 					}
 				}
 			},
-			sortFunc: function(B, A, C) {
-				return Listview.funcBox.assocArrCmp(B.source, A.source, g_sources)
+			getVisibleText: function (c) {
+				if (c.source != null) {
+					if (c.source.length == 1) {
+						var e = "";
+						var d = (c.sourcemore ? c.sourcemore[0] : {});
+						var b = 0;
+						if (d.t) {
+							b = d.t;
+							e += " " + d.n
+						} else {
+							e += " " + Listview.funcBox.getUpperSource(c.source[0], d)
+						}
+						var a = Listview.funcBox.getLowerSource(c.source[0], d, b);
+						if (a != null) {
+							if (a.pretext) {
+								e += " " + a.pretext
+							}
+							e += " " + a.text;
+							if (a.posttext) {
+								e += " " + a.posttext
+							}
+						}
+						return e
+					} else {
+						return Listview.funcBox.arrayText(c.source, g_sources)
+					}
+				}
+			},
+			sortFunc: function (f, d) {
+				var g = Listview.funcBox.assocArrCmp(f.source, d.source, g_sources);
+				if (g != 0) {
+					return g
+				}
+				var e = (f.sourcemore && f.source.length == 1 ? f.sourcemore[0].n: null),
+				c = (d.sourcemore && d.source.length == 1 ? d.sourcemore[0].n: null);
+				return strcmp(e, c)
 			}
 		},
 		{
 			id: "type",
 			name: LANG.type,
-			width: "14%",
-			compute: function(C, D) {
-				D.className = "small q1";
-				var A = ce("a");
-				var B = "?items=" + C.classs;
-				if (g_item_subclasses[C.classs] != null) {
-					B += "." + C.subclass
-				}
-				if (C.subsubclass != null && g_item_subsubclasses[C.classs][C.subclass] != null) {
-					B += "." + C.subsubclass
-				}
-				A.href = B;
-				ae(A, ct(Listview.funcBox.getItemType(C.classs, C.subclass, C.subsubclass)));
-				ae(D, A)
+			type: "text",
+			compute: function (d, e) {
+				e.className = "small q1";
+				nw(e);
+				var b = ce("a");
+				var c = Listview.funcBox.getItemType(d.classs, d.subclass, d.subsubclass);
+				b.href = c.url;
+				ae(b, ct(c.text));
+				ae(e, b)
 			},
-			sortFunc: function(B, A, D) {
-				var C = Listview.funcBox.getItemType;
-				return strcmp(C(B.classs, B.subclass, B.subsubclass), C(A.classs, A.subclass, A.subsubclass))
+			getVisibleText: function (a) {
+				return Listview.funcBox.getItemType(a.classs, a.subclass, a.subsubclass).text
+			},
+			sortFunc: function (d, c, f) {
+				var e = Listview.funcBox.getItemType;
+				return strcmp(e(d.classs, d.subclass, d.subsubclass).text, e(c.classs, c.subclass, c.subsubclass).text)
 			}
 		}],
-		getItemLink: function(A) {
-			return "?item=" + A.id
+		getItemLink: function (a) {
+			return "?item=" + a.id
+		},
+		onBeforeCreate: function () {
+			var b = false;
+			for (var c = 0, a = this.data.length; c < a; ++c) {
+				var d = this.data[c];
+				if (d.slot > 0 && d.slot != 18) {++b
+				} else {
+					d.__nochk = 1
+				}
+			}
+			if (b > 0) {
+				this.mode = 1;
+				this._nComparable = b
+			}
+		},
+		createCbControls: function (d, c) {
+			if (!c && this._nComparable < 15) {
+				return
+			}
+			var b = ce("input"),
+			a = ce("input");
+			b.type = a.type = "button";
+			b.value = LANG.button_compare;
+			a.value = LANG.button_deselect;
+			b.onclick = this.template.compareItems.bind(this);
+			a.onclick = Listview.cbSelect.bind(this, false);
+			ae(d, b);
+			ae(d, a)
+		},
+		compareItems: function () {
+			var b = this.getCheckedRows();
+			if (!b.length) {
+				return
+			}
+			var a = "";
+			array_walk(b, function (c) {
+				a += c.id + ";"
+			});
+			su_addToSaved(rtrim(a, ";"))
 		}
 	},
 	itemset: {
 		sort: [1],
 		nItemsPerPage: 75,
+		searchable: 1,
+		filtrable: 1,
 		columns: [{
 			id: "name",
 			name: LANG.name,
+			type: "text",
 			align: "left",
 			value: "name",
-			compute: function(B, D) {
-				var A = ce("a");
-				A.className = "q" + (6 - parseInt(B.name.charAt(0)));
-				A.style.fontFamily = "Verdana, sans-serif";
-				A.href = this.template.getItemLink(B);
-				ae(A, ct(B.name.substring(1)));
-				ae(D, A);
-				if (B.note) {
-					var C = ce("div");
-					C.className = "small";
-					ae(C, ct(g_itemset_notes[B.note]));
-					ae(D, C)
+			compute: function (c, f) {
+				var b = ce("a");
+				b.className = "q" + (7 - parseInt(c.name.charAt(0)));
+				b.style.fontFamily = "Verdana, sans-serif";
+				b.href = this.template.getItemLink(c);
+				ae(b, ct(c.name.substring(1)));
+				ae(f, b);
+				if (c.note) {
+					var e = ce("div");
+					e.className = "small";
+					ae(e, ct(g_itemset_notes[c.note]));
+					ae(f, e)
 				}
+			},
+			getVisibleText: function (a) {
+				var b = a.name.substring(1);
+				if (a.note) {
+					b += " " + g_itemset_notes[a.note]
+				}
+				return b
 			}
 		},
 		{
 			id: "level",
 			name: LANG.level,
-			compute: function(A, B) {
-				if (A.minlevel > 0 && A.maxlevel > 0) {
-					if (A.minlevel != A.maxlevel) {
-						return A.minlevel + LANG.hyphen + A.maxlevel
+			type: "range",
+			getMinValue: function (a) {
+				return a.minlevel
+			},
+			getMaxValue: function (a) {
+				return a.maxlevel
+			},
+			compute: function (a, b) {
+				if (a.minlevel > 0 && a.maxlevel > 0) {
+					if (a.minlevel != a.maxlevel) {
+						return a.minlevel + LANG.hyphen + a.maxlevel
 					} else {
-						return A.minlevel
+						return a.minlevel
 					}
 				} else {
 					return - 1
 				}
 			},
-			sortFunc: function(B, A, C) {
-				if (C > 0) {
-					return strcmp(B.minlevel, A.minlevel) || strcmp(B.maxlevel, A.maxlevel)
+			sortFunc: function (d, c, e) {
+				if (e > 0) {
+					return strcmp(d.minlevel, c.minlevel) || strcmp(d.maxlevel, c.maxlevel)
 				} else {
-					return strcmp(B.maxlevel, A.maxlevel) || strcmp(B.minlevel, A.minlevel)
+					return strcmp(d.maxlevel, c.maxlevel) || strcmp(d.minlevel, c.minlevel)
 				}
 			}
 		},
 		{
 			id: "pieces",
 			name: LANG.pieces,
-			compute: function(A, B) {
-				B.style.padding = "0";
-				Listview.funcBox.createCenteredIcons(A.pieces, B)
+			getValue: function (a) {
+				return a.pieces.length
 			},
-			sortFunc: function(B, A) {
-				var D = (B.pieces != null ? B.pieces.length: 0);
-				var C = (A.pieces != null ? A.pieces.length: 0);
-				return strcmp(D, C)
+			compute: function (a, b) {
+				b.style.padding = "0";
+				Listview.funcBox.createCenteredIcons(a.pieces, b)
+			},
+			sortFunc: function (d, c) {
+				var f = (d.pieces != null ? d.pieces.length: 0);
+				var e = (c.pieces != null ? c.pieces.length: 0);
+				return strcmp(f, e)
 			}
 		},
 		{
 			id: "type",
 			name: LANG.type,
-			compute: function(A, B) {
-				return g_itemset_types[A.type]
+			type: "text",
+			compute: function (a, b) {
+				return g_itemset_types[a.type]
 			},
-			sortFunc: function(B, A, C) {
-				return strcmp(g_itemset_types[B.type], g_itemset_types[A.type])
+			sortFunc: function (d, c, e) {
+				return strcmp(g_itemset_types[d.type], g_itemset_types[c.type])
 			}
 		},
 		{
 			id: "classes",
 			name: LANG.classes,
-			compute: function(C, D) {
-				if (C.classes != null) {
-					for (var B = 0, A = C.classes.length; B < A; ++B) {
-						if (B > 0) {
-							ae(D, ct(LANG.comma))
+			type: "text",
+			compute: function (c, e) {
+				if (c.classes != null) {
+					var d = "";
+					for (var b = 0, a = c.classes.length; b < a; ++b) {
+						if (b > 0) {
+							d += LANG.comma
 						}
-						ae(D, ct(g_chr_classes[C.classes[B]]))
+						d += g_chr_classes[c.classes[b]]
 					}
+					return d
 				}
 			},
-			sortFunc: function(B, A, C) {
-				return Listview.funcBox.assocArrCmp(B.classes, A.classes, g_chr_classes)
+			sortFunc: function (d, c, e) {
+				return Listview.funcBox.assocArrCmp(d.classes, c.classes, g_chr_classes)
 			}
 		}],
-		getItemLink: function(A) {
-			return "?itemset=" + A.id
+		getItemLink: function (a) {
+			return "?itemset=" + a.id
 		}
 	},
 	npc: {
 		sort: [1],
 		nItemsPerPage: 100,
+		searchable: 1,
+		filtrable: 1,
 		columns: [{
 			id: "name",
 			name: LANG.name,
+			type: "text",
 			align: "left",
 			value: "name",
-			compute: function(B, D) {
-				var A = ce("a");
-				A.style.fontFamily = "Verdana, sans-serif";
-				A.href = this.template.getItemLink(B);
-				ae(A, ct(B.name));
-				ae(D, A);
-				if (B.tag != null) {
-					var C = ce("div");
-					C.className = "small";
-					ae(C, ct("<" + B.tag + ">"));
-					ae(D, C)
+			compute: function (c, f) {
+				var b = ce("a");
+				b.style.fontFamily = "Verdana, sans-serif";
+				b.href = this.template.getItemLink(c);
+				ae(b, ct(c.name));
+				ae(f, b);
+				if (c.tag != null) {
+					var e = ce("div");
+					e.className = "small";
+					ae(e, ct("<" + c.tag + ">"));
+					ae(f, e)
 				}
+			},
+			getVisibleText: function (a) {
+				var b = a.name;
+				if (a.tag) {
+					b += " <" + a.tag + ">"
+				}
+				return b
 			}
 		},
 		{
 			id: "level",
 			name: LANG.level,
+			type: "range",
 			width: "10%",
-			compute: function(A, C) {
-				if (A.classification) {
-					var B = ce("div");
-					B.className = "small";
-					ae(B, ct(g_npc_classifications[A.classification]));
-					ae(C, B)
+			getMinValue: function (a) {
+				return a.minlevel
+			},
+			getMaxValue: function (a) {
+				return a.maxlevel
+			},
+			compute: function (a, c) {
+				if (a.classification) {
+					var b = ce("div");
+					b.className = "small";
+					ae(b, ct(g_npc_classifications[a.classification]));
+					ae(c, b)
 				}
-				if (A.classification == 3) {
+				if (a.classification == 3) {
 					return "??"
 				}
-				if (A.minlevel > 0 && A.maxlevel > 0) {
-					if (A.minlevel != A.maxlevel) {
-						return A.minlevel + LANG.hyphen + A.maxlevel
+				if (a.minlevel > 0 && a.maxlevel > 0) {
+					if (a.minlevel != a.maxlevel) {
+						return a.minlevel + LANG.hyphen + a.maxlevel
 					} else {
-						return A.minlevel
+						return a.minlevel
 					}
 				}
 				return - 1
 			},
-			sortFunc: function(B, A, C) {
-				if (C > 0) {
-					return strcmp(B.minlevel, A.minlevel) || strcmp(B.maxlevel, A.maxlevel) || strcmp(B.classification, A.classification)
+			getVisibleText: function (a) {
+				var b = "";
+				if (a.classification) {
+					b += " " + g_npc_classifications[a.classification]
+				}
+				if (a.minlevel > 0 && a.maxlevel > 0) {
+					b += " ";
+					if (a.minlevel != a.maxlevel) {
+						b += a.minlevel + LANG.hyphen + a.maxlevel
+					} else {
+						b += a.minlevel
+					}
+				}
+				return b
+			},
+			sortFunc: function (d, c, e) {
+				if (e > 0) {
+					return strcmp(d.minlevel, c.minlevel) || strcmp(d.maxlevel, c.maxlevel) || strcmp(d.classification, c.classification)
 				} else {
-					return strcmp(B.maxlevel, A.maxlevel) || strcmp(B.minlevel, A.minlevel) || strcmp(B.classification, A.classification)
+					return strcmp(d.maxlevel, c.maxlevel) || strcmp(d.minlevel, c.minlevel) || strcmp(d.classification, c.classification)
 				}
 			}
 		},
 		{
 			id: "location",
 			name: LANG.location,
-			compute: function(A, B) {
-				return Listview.funcBox.location(A, B)
+			type: "text",
+			compute: function (a, b) {
+				return Listview.funcBox.location(a, b)
 			},
-			sortFunc: function(B, A, C) {
-				return Listview.funcBox.assocArrCmp(B.location, A.location, g_zones)
+			getVisibleText: function (a) {
+				return Listview.funcBox.arrayText(a.location, g_zones)
+			},
+			sortFunc: function (d, c, e) {
+				return Listview.funcBox.assocArrCmp(d.location, c.location, g_zones)
 			}
 		},
 		{
 			id: "react",
 			name: LANG.react,
+			type: "text",
 			width: "10%",
 			value: "react",
-			compute: function(B, G) {
-				if (B.react == null) {
+			filtrable: 0,
+			compute: function (b, g) {
+				if (b.react == null) {
 					return - 1
 				}
-				var D = [LANG.lvnpc_alliance, LANG.lvnpc_horde];
-				var C = "";
-				var F = 0;
-				for (var A = 0; A < 2; ++A) {
-					if (B.react[A] != null) {
-						if (F++>0) {
-							ae(G, ct(" "))
+				var d = [LANG.lvnpc_alliance, LANG.lvnpc_horde];
+				var f = 0;
+				for (var a = 0; a < 2; ++a) {
+					if (b.react[a] != null) {
+						if (f++>0) {
+							ae(g, ct(" "))
 						}
-						var E = ce("span");
-						E.className = (B.react[A] < 0 ? "q7": (B.react[A] > 0 ? "q2": "q"));
-						ae(E, ct(D[A]));
-						ae(G, E)
+						var e = ce("span");
+						e.className = (b.react[a] < 0 ? "q10": (b.react[a] > 0 ? "q2": "q"));
+						ae(e, ct(d[a]));
+						ae(g, e)
 					}
 				}
 			}
 		},
 		{
+			id: "skin",
+			name: LANG.skin,
+			type: "text",
+			value: "skin",
+			compute: function (c, d) {
+				if (c.skin) {
+					var b = ce("a");
+					b.className = "q1";
+					b.href = "?npcs&filter=cr=35;crs=0;crv=" + c.skin;
+					ae(b, ct(c.skin));
+					ae(d, b)
+				}
+			},
+			hidden: 1
+		},
+		{
 			id: "petfamily",
 			name: LANG.petfamily,
+			type: "text",
 			width: "12%",
-			compute: function(B, C) {
-				C.className = "q1";
-				var A = ce("a");
-				A.href = "?spells=-3." + B.family;
-				ae(A, ct(g_spell_skills[B.family]));
-				ae(C, A)
+			compute: function (c, d) {
+				d.className = "q1";
+				var b = ce("a");
+				b.href = "?pet=" + c.family;
+				ae(b, ct(g_pet_families[c.family]));
+				ae(d, b)
 			},
-			sortFunc: function(B, A, C) {
-				return strcmp(g_spell_skills[B.family], g_spell_skills[A.family])
+			getVisibleText: function (a) {
+				return g_pet_families[a.family]
+			},
+			sortFunc: function (d, c, e) {
+				return strcmp(g_pet_families[d.family], g_pet_families[c.family])
 			},
 			hidden: 1
 		},
 		{
 			id: "type",
 			name: LANG.type,
+			type: "text",
 			width: "12%",
-			compute: function(B, C) {
-				C.className = "small q1";
-				var A = ce("a");
-				A.href = "?npcs=" + B.type;
-				ae(A, ct(g_npc_types[B.type]));
-				ae(C, A)
+			compute: function (c, d) {
+				d.className = "small q1";
+				var b = ce("a");
+				b.href = "?npcs=" + c.type;
+				ae(b, ct(g_npc_types[c.type]));
+				ae(d, b)
 			},
-			sortFunc: function(B, A, C) {
-				return strcmp(g_npc_types[B.type], g_npc_types[A.type])
+			getVisibleText: function (a) {
+				return g_npc_types[a.type]
+			},
+			sortFunc: function (d, c, e) {
+				return strcmp(g_npc_types[d.type], g_npc_types[c.type])
 			}
 		}],
-		getItemLink: function(A) {
-			return "?npc=" + A.id
+		getItemLink: function (a) {
+			return "?npc=" + a.id
 		}
 	},
 	object: {
 		sort: [1],
 		nItemsPerPage: 100,
+		searchable: 1,
+		filtrable: 1,
 		columns: [{
 			id: "name",
 			name: LANG.name,
+			type: "text",
 			align: "left",
 			value: "name",
-			compute: function(B, C) {
-				var A = ce("a");
-				A.style.fontFamily = "Verdana, sans-serif";
-				A.href = this.template.getItemLink(B);
-				ae(A, ct(B.name));
-				ae(C, A)
+			compute: function (c, d) {
+				var b = ce("a");
+				b.style.fontFamily = "Verdana, sans-serif";
+				b.href = this.template.getItemLink(c);
+				ae(b, ct(c.name));
+				ae(d, b)
 			}
 		},
 		{
 			id: "location",
 			name: LANG.location,
-			compute: function(A, B) {
-				return Listview.funcBox.location(A, B)
+			type: "text",
+			compute: function (a, b) {
+				return Listview.funcBox.location(a, b)
 			},
-			sortFunc: function(B, A, C) {
-				return Listview.funcBox.assocArrCmp(B.location, A.location, g_zones)
+			getVisibleText: function (a) {
+				return Listview.funcBox.arrayText(a.location, g_zones)
+			},
+			sortFunc: function (d, c, e) {
+				return Listview.funcBox.assocArrCmp(d.location, c.location, g_zones)
 			}
 		},
 		{
@@ -4338,64 +6174,85 @@ Listview.templates = {
 		{
 			id: "type",
 			name: LANG.type,
+			type: "text",
 			width: "12%",
-			compute: function(B, C) {
-				C.className = "small q1";
-				var A = ce("a");
-				A.href = "?objects=" + B.type;
-				ae(A, ct(g_object_types[B.type]));
-				ae(C, A)
+			compute: function (c, d) {
+				d.className = "small q1";
+				var b = ce("a");
+				b.href = "?objects=" + c.type;
+				ae(b, ct(g_object_types[c.type]));
+				ae(d, b)
 			},
-			sortFunc: function(B, A, C) {
-				return strcmp(g_object_types[B.type], g_object_types[A.type])
+			getVisibleText: function (a) {
+				return g_object_types[a.type]
+			},
+			sortFunc: function (d, c, e) {
+				return strcmp(g_object_types[d.type], g_object_types[c.type])
 			}
 		}],
-		getItemLink: function(A) {
-			return "?object=" + A.id
+		getItemLink: function (a) {
+			return "?object=" + a.id
 		}
 	},
 	quest: {
 		sort: [1, 2],
 		nItemsPerPage: 100,
+		searchable: 1,
+		filtrable: 1,
 		columns: [{
 			id: "name",
 			name: LANG.name,
+			type: "text",
 			align: "left",
 			value: "name",
-			compute: function(B, C) {
-				var A = ce("a");
-				A.style.fontFamily = "Verdana, sans-serif";
-				A.href = this.template.getItemLink(B);
-				ae(A, ct(B.name));
-				ae(C, A)
+			compute: function (c, d) {
+				var b = ce("a");
+				b.style.fontFamily = "Verdana, sans-serif";
+				b.href = this.template.getItemLink(c);
+				ae(b, ct(c.name));
+				ae(d, b)
 			}
 		},
 		{
 			id: "level",
 			name: LANG.level,
 			width: "7%",
-			compute: function(A, C) {
-				if (A.type || A.daily) {
-					var B = ce("div");
-					B.className = "small";
-					B.style.whiteSpace = "nowrap";
-					if (A.type && A.daily) {
-						ae(B, ct(sprintf(LANG.lvquest_daily, g_quest_types[A.type])))
+			value: "level",
+			compute: function (a, c) {
+				if (a.type || a.daily) {
+					var b = ce("div");
+					b.className = "small";
+					nw(b);
+					if (a.type && a.daily) {
+						ae(b, ct(sprintf(LANG.lvquest_daily, g_quest_types[a.type])))
 					} else {
-						if (A.daily) {
-							ae(B, ct(LANG.daily))
+						if (a.daily) {
+							ae(b, ct(LANG.daily))
 						} else {
-							if (A.type) {
-								ae(B, ct(g_quest_types[A.type]))
+							if (a.type) {
+								ae(b, ct(g_quest_types[a.type]))
 							}
 						}
 					}
-					ae(C, B)
+					ae(c, b)
 				}
-				return A.level
+				return a.level
 			},
-			sortFunc: function(B, A, C) {
-				return strcmp(B.level, A.level) || strcmp(B.type, A.type) || strcmp(B.reqlevel, A.reqlevel)
+			getVisibleText: function (a) {
+				var b = "";
+				if (a.type) {
+					b += " " + g_quest_types[a.type]
+				}
+				if (a.daily) {
+					b += " " + LANG.daily
+				}
+				if (a.level) {
+					b += " " + a.level
+				}
+				return b
+			},
+			sortFunc: function (d, c, e) {
+				return strcmp(d.level, c.level) || strcmp(d.type, c.type)
 			}
 		},
 		{
@@ -4403,72 +6260,88 @@ Listview.templates = {
 			name: LANG.req,
 			tooltip: LANG.tooltip_reqlevel,
 			width: "7%",
-			value: "reqlevel",
-			sortFunc: function(B, A, C) {
-				return strcmp(B.reqlevel, A.reqlevel) || strcmp(B.level, A.level)
-			}
+			value: "reqlevel"
 		},
 		{
 			id: "side",
 			name: LANG.side,
+			type: "text",
 			width: "10%",
-			compute: function(A, C) {
-				if (A.side) {
-					var B = ce("span");
-					if (A.side == 1) {
-						B.className = "alliance-icon"
+			compute: function (a, c) {
+				if (a.side) {
+					var b = ce("span");
+					if (a.side == 1) {
+						b.className = "alliance-icon"
 					} else {
-						if (A.side == 2) {
-							B.className = "horde-icon"
+						if (a.side == 2) {
+							b.className = "horde-icon"
 						}
 					}
-					ae(B, ct(g_sides[A.side]));
-					ae(C, B)
+					ae(b, ct(g_sides[a.side]));
+					ae(c, b)
 				} else {
 					return - 1
 				}
 			},
-			sortFunc: function(B, A, C) {
-				return strcmp(g_sides[B.side], g_sides[A.side])
+			getVisibleText: function (a) {
+				if (a.side) {
+					return g_sides[a.side]
+				}
+			},
+			sortFunc: function (d, c, e) {
+				return strcmp(g_sides[d.side], g_sides[c.side])
 			}
 		},
 		{
 			id: "rewards",
 			name: LANG.rewards,
+			filtrable: 0,
 			width: "25%",
-			compute: function(B, F) {
-				var A = (B.itemchoices != null || B.itemrewards != null);
-				if (A) {
-					F.style.padding = "0";
-					var E,
-					D;
-					if (B.itemchoices && B.itemchoices.length > 1) {
-						E = LANG.lvquest_pickone;
-						if (B.itemrewards && B.itemrewards.length > 0) {
-							D = LANG.lvquest_alsoget
+			compute: function (b, g) {
+				var a = (b.itemchoices != null || b.itemrewards != null);
+				if (a) {
+					g.style.padding = "0";
+					var f, e;
+					if (b.itemchoices && b.itemchoices.length > 1) {
+						f = LANG.lvquest_pickone;
+						if (b.itemrewards && b.itemrewards.length > 0) {
+							e = LANG.lvquest_alsoget
 						}
 					}
-					Listview.funcBox.createCenteredIcons(B.itemchoices, F, E);
-					Listview.funcBox.createCenteredIcons(B.itemrewards, F, D)
+					Listview.funcBox.createCenteredIcons(b.itemchoices, g, f);
+					Listview.funcBox.createCenteredIcons(b.itemrewards, g, e)
 				}
-				if (B.xp > 0 || B.money > 0) {
-					var C = ce("div");
-					if (A) {
-						C.style.padding = "4px"
+				if (b.xp > 0 || b.money > 0) {
+					var c = ce("div");
+					if (a) {
+						c.style.padding = "4px"
 					}
-					if (B.xp > 0) {
-						ae(C, ct(sprintf(LANG.lvquest_xp, B.xp) + (B.money > 0 ? " + ": "")))
+					if (b.xp > 0) {
+						ae(c, ct(sprintf(LANG.lvquest_xp, b.xp) + (b.money > 0 ? " + ": "")))
 					}
-					if (B.money > 0) {
-						Listview.funcBox.appendMoney(C, B.money)
+					if (b.money > 0) {
+						Listview.funcBox.appendMoney(c, b.money)
 					}
-					ae(F, C)
+					ae(g, c)
 				}
 			},
-			sortFunc: function(B, A, C) {
-				var E = (B.itemchoices != null ? B.itemchoices.length: 0) + (B.itemrewards != null ? B.itemrewards.length: 0);
-				var D = (A.itemchoices != null ? A.itemchoices.length: 0) + (A.itemrewards != null ? A.itemrewards.length: 0);
-				return strcmp(E, D) || strcmp((B.xp | 0) + (B.money | 0), (A.xp | 0) + (A.money | 0))
+			getVisibleText: function (a) {
+				var b = "";
+				if (a.itemchoices && a.itemchoices.length) {
+					b += " " + LANG.lvquest_pickone;
+					if (a.itemrewards && a.itemrewards.length) {
+						b += " " + LANG.lvquest_alsoget
+					}
+				}
+				if (a.xp > 0) {
+					b += " " + sprintf(LANG.lvquest_xp, a.xp)
+				}
+				return b
+			},
+			sortFunc: function (d, c, e) {
+				var g = (d.itemchoices != null ? d.itemchoices.length: 0) + (d.itemrewards != null ? d.itemrewards.length: 0);
+				var f = (c.itemchoices != null ? c.itemchoices.length: 0) + (c.itemrewards != null ? c.itemrewards.length: 0);
+				return strcmp(g, f) || strcmp((d.xp | 0) + (d.money | 0), (c.xp | 0) + (c.money | 0))
 			}
 		},
 		{
@@ -4481,100 +6354,106 @@ Listview.templates = {
 		{
 			id: "category",
 			name: LANG.category,
+			type: "text",
 			width: "16%",
-			compute: function(B, C) {
-				if (B.category != 0) {
-					C.className = "small q1";
-					var A = ce("a");
-					A.href = "?quests=" + B.category2 + "." + B.category;
-					ae(A, ct(Listview.funcBox.getQuestCategory(B.category)));
-					ae(C, A)
+			compute: function (c, d) {
+				if (c.category != 0) {
+					d.className = "small q1";
+					var b = ce("a");
+					b.href = "?quests=" + c.category2 + "." + c.category;
+					ae(b, ct(Listview.funcBox.getQuestCategory(c.category)));
+					ae(d, b)
 				}
 			},
-			sortFunc: function(B, A, D) {
-				var C = Listview.funcBox.getQuestCategory;
-				return strcmp(C(B.category), C(A.category))
+			getVisibleText: function (a) {
+				return Listview.funcBox.getQuestCategory(a.category)
+			},
+			sortFunc: function (d, c, f) {
+				var e = Listview.funcBox.getQuestCategory;
+				return strcmp(e(d.category), e(c.category))
 			}
 		}],
-		getItemLink: function(A) {
-			return "?quest=" + A.id
+		getItemLink: function (a) {
+			return "?quest=" + a.id
 		}
 	},
 	spell: {
 		sort: [1, 2],
+		searchable: 1,
+		filtrable: 1,
 		columns: [{
 			id: "name",
 			name: LANG.name,
+			type: "text",
 			align: "left",
 			span: 2,
 			value: "name",
-			compute: function(F, C, J) {
-				var E = ce("td"),
-				M;
-				E.style.width = "44px";
-				E.style.padding = "0";
-				E.style.borderRight = "none";
-				if (F.creates != null) {
-					M = g_items.createIcon(F.creates[0], 1, Listview.funcBox.createTextRange(F.creates[1], F.creates[2]))
+			compute: function (g, e, k) {
+				var f = ce("td"),
+				o;
+				f.style.width = "44px";
+				f.style.padding = "0";
+				f.style.borderRight = "none";
+				if (g.creates != null) {
+					o = g_items.createIcon(g.creates[0], 1, Listview.funcBox.createTextRange(g.creates[1], g.creates[2]))
 				} else {
-					M = g_spells.createIcon(F.id, 1)
+					o = g_spells.createIcon(g.id, 1)
 				}
-				M.style.cssFloat = M.style.styleFloat = "left";
-				ae(E, M);
-				ae(J, E);
-				C.style.borderLeft = "none";
-				var A = ce("div");
-				var L = ce("a");
-				var I = F.name.charAt(0);
-				if (I != "@") {
-					L.className = "q" + (6 - parseInt(I))
+				o.style.cssFloat = o.style.styleFloat = "left";
+				ae(f, o);
+				ae(k, f);
+				e.style.borderLeft = "none";
+				var b = ce("div");
+				var n = ce("a");
+				var l = g.name.charAt(0);
+				if (l != "@") {
+					n.className = "q" + (7 - parseInt(l))
 				}
-				L.style.fontFamily = "Verdana, sans-serif";
-				L.href = this.template.getItemLink(F);
-				ae(L, ct(F.name.substring(1)));
-				ae(A, L);
-				var B = F.talent != null;
-				if (F.rank != null || B) {
-					var H = ce("div");
-					H.className = "small2";
-					var D = "";
-					if (F.rank != null) {
-						D += F.rank;
-						if (B) {
-							D += " "
-						}
-					}
-					if (B) {
-						D += "(" + LANG.talent + ")"
-					}
-					ae(H, ct(D));
-					ae(A, H)
+				n.style.fontFamily = "Verdana, sans-serif";
+				n.href = this.template.getItemLink(g);
+				ae(n, ct(g.name.substring(1)));
+				ae(b, n);
+				if (g.rank) {
+					var j = ce("div");
+					j.className = "small2";
+					ae(j, ct(g.rank));
+					ae(b, j)
 				}
-				if (F.races != null) {
-					A.style.position = "relative";
-					var H = ce("div");
-					H.className = "small";
-					H.style.fontStyle = "italic";
-					H.style.position = "absolute";
-					H.style.right = H.style.bottom = "3px";
-					var K = F.races.toString();
-					if (K == "1,3,4,7,11") {
-						ae(H, ct(g_sides[1]))
+				if (g.races != null) {
+					b.style.position = "relative";
+					var j = ce("div");
+					j.className = "small";
+					j.style.fontStyle = "italic";
+					j.style.position = "absolute";
+					j.style.right = j.style.bottom = "3px";
+					var m = g.races.toString();
+					if (m == "1,3,4,7,11") {
+						ae(j, ct(g_sides[1]))
 					} else {
-						if (K == "2,5,6,8,10") {
-							ae(H, ct(g_sides[2]))
+						if (m == "2,5,6,8,10") {
+							ae(j, ct(g_sides[2]))
 						} else {
-							for (var E = 0, G = F.races.length; E < G; ++E) {
-								if (E > 0) {
-									ae(H, ct(LANG.comma))
+							for (var f = 0, h = g.races.length; f < h; ++f) {
+								if (f > 0) {
+									ae(j, ct(LANG.comma))
 								}
-								ae(H, ct(g_chr_races[F.races[E]]))
+								ae(j, ct(g_chr_races[g.races[f]]))
 							}
 						}
 					}
-					ae(A, H)
+					ae(b, j)
 				}
-				ae(C, A)
+				ae(e, b)
+			},
+			getVisibleText: function (a) {
+				var b = a.name;
+				if (a.rank) {
+					b += " " + a.rank
+				}
+				if (a.races) {
+					b += " " + Listview.funcBox.arrayText(a.races, g_chr_races)
+				}
+				return b
 			}
 		},
 		{
@@ -4582,9 +6461,9 @@ Listview.templates = {
 			name: LANG.level,
 			width: "10%",
 			value: "level",
-			compute: function(A, B) {
-				if (A.level > 0) {
-					return A.level
+			compute: function (a, b) {
+				if (a.level > 0) {
+					return a.level
 				}
 			},
 			hidden: true
@@ -4592,44 +6471,48 @@ Listview.templates = {
 		{
 			id: "school",
 			name: LANG.school,
+			type: "text",
 			width: "10%",
 			hidden: true,
-			compute: function(A, B) {
-				return g_spell_resistances[A.school]
+			compute: function (a, b) {
+				return g_spell_resistances[a.school]
 			},
-			sortFunc: function(B, A, C) {
-				return strcmp(g_spell_resistances[B.school], g_spell_resistances[A.school])
+			sortFunc: function (d, c, e) {
+				return strcmp(g_spell_resistances[d.school], g_spell_resistances[c.school])
 			}
 		},
 		{
 			id: "reagents",
 			name: LANG.reagents,
 			align: "left",
-			width: "15%",
-			compute: function(F, C) {
-				var A = (F.reagents != null);
-				if (A) {
-					C.style.padding = "0";
-					var H = ce("div");
-					var I = F.reagents;
-					H.style.width = (44 * I.length) + "px";
-					for (var D = 0, G = I.length; D < G; ++D) {
-						var B = I[D][0];
-						var E = I[D][1];
-						var J = g_items.createIcon(B, 1, E);
-						J.style.cssFloat = J.style.styleFloat = "left";
-						ae(H, J)
+			width: "9%",
+			getValue: function (a) {
+				return (a.reagents ? a.reagents.length: 0)
+			},
+			compute: function (g, c) {
+				var a = (g.reagents != null);
+				if (a) {
+					c.style.padding = "0";
+					var k = ce("div");
+					var j = g.reagents;
+					k.style.width = (44 * j.length) + "px";
+					for (var e = 0, h = j.length; e < h; ++e) {
+						var b = j[e][0];
+						var f = j[e][1];
+						var l = g_items.createIcon(b, 1, f);
+						l.style.cssFloat = l.style.styleFloat = "left";
+						ae(k, l)
 					}
-					ae(C, H)
+					ae(c, k)
 				}
 			},
-			sortFunc: function(B, A) {
-				var D = (B.reagents != null ? B.reagents.length: 0);
-				var C = (A.reagents != null ? A.reagents.length: 0);
-				if (D > 0 && D == C) {
-					return strcmp(B.reagents.toString(), A.reagents.toString())
+			sortFunc: function (d, c) {
+				var f = (d.reagents != null ? d.reagents.length: 0);
+				var e = (c.reagents != null ? c.reagents.length: 0);
+				if (f > 0 && f == e) {
+					return strcmp(d.reagents.toString(), c.reagents.toString())
 				} else {
-					return strcmp(D, C)
+					return strcmp(f, e)
 				}
 			}
 		},
@@ -4640,234 +6523,299 @@ Listview.templates = {
 			width: "7%",
 			hidden: true,
 			value: "tp",
-			compute: function(A, B) {
-				if (A.tp > 0) {
-					return A.tp
+			compute: function (a, b) {
+				if (a.tp > 0) {
+					return a.tp
 				}
 			}
 		},
 		{
 			id: "source",
 			name: LANG.source,
+			type: "text",
 			width: "12%",
 			hidden: true,
-			compute: function(B, D) {
-				if (B.source != null) {
-					for (var C = 0, A = B.source.length; C < A; ++C) {
-						if (C > 0) {
-							ae(D, ct(LANG.comma))
+			compute: function (b, e) {
+				if (b.source != null) {
+					var d = "";
+					for (var c = 0, a = b.source.length; c < a; ++c) {
+						if (c > 0) {
+							d += LANG.comma
 						}
-						ae(D, ct(g_sources[B.source[C]]))
+						d += g_sources[b.source[c]]
 					}
+					return d
 				}
 			},
-			sortFunc: function(B, A, C) {
-				return Listview.funcBox.assocArrCmp(B.source, A.source, g_sources)
+			sortFunc: function (d, c, e) {
+				return Listview.funcBox.assocArrCmp(d.source, c.source, g_sources)
 			}
 		},
 		{
 			id: "skill",
 			name: LANG.skill,
+			type: "text",
 			width: "16%",
-			compute: function(E, C) {
-				if (E.skill != null) {
-					var B = ce("div");
-					B.className = "small";
-					for (var D = 0, G = E.skill.length; D < G; ++D) {
-						if (D > 0) {
-							ae(B, ct(LANG.comma))
+			getValue: function (a) {
+				return a.learnedat
+			},
+			compute: function (f, d, j, n) {
+				if (f.skill != null) {
+					var b = ce("div");
+					b.className = "small";
+					for (var e = 0, g = f.skill.length; e < g; ++e) {
+						if (e > 0) {
+							ae(b, ct(LANG.comma))
 						}
-						if (E.skill[D] == -1) {
-							ae(B, ct(LANG.ellipsis))
+						if (f.skill[e] == -1) {
+							ae(b, ct(LANG.ellipsis))
 						} else {
-							if (in_array([7, -2, -3, 11, 9], E.cat) != -1) {
-								var H = ce("a");
-								H.className = "q1";
-								H.href = "?spells=" + E.cat + "." + (E.chrclass ? E.chrclass + ".": "") + E.skill[D];
-								ae(H, ct(g_spell_skills[E.skill[D]]));
-								ae(B, H)
+							if (in_array([7, -2, -3, -5, -6, -7, 11, 9], f.cat) != -1) {
+								var l = ce("a");
+								l.className = "q1";
+								if (in_array([ - 5, -6, -7], f.cat) != -1) {
+									l.href = "?spells=" + f.cat
+								} else {
+									l.href = "?spells=" + f.cat + "." + (f.chrclass ? f.chrclass + ".": "") + f.skill[e]
+								}
+								ae(l, ct(g_spell_skills[f.skill[e]]));
+								ae(b, l)
 							} else {
-								ae(B, ct(g_spell_skills[E.skill[D]]))
+								ae(b, ct(g_spell_skills[f.skill[e]]))
 							}
 						}
 					}
-					if (E.learnedat > 0) {
-						ae(B, ct(" ("));
-						var F = ce("span");
-						if (E.learnedat == 9999) {
-							F.className = "q0";
-							ae(F, ct("??"))
+					if (f.learnedat > 0) {
+						ae(b, ct(" ("));
+						var c = ce("span");
+						if (f.learnedat == 9999) {
+							c.className = "q0";
+							ae(c, ct("??"))
 						} else {
-							if (E.learnedat > 0) {
-								ae(F, ct(E.learnedat));
-								F.style.fontWeight = "bold"
+							if (f.learnedat > 0) {
+								ae(c, ct(f.learnedat));
+								c.style.fontWeight = "bold"
 							}
 						}
-						ae(B, F);
-						ae(B, ct(")"))
+						ae(b, c);
+						ae(b, ct(")"))
 					}
-					ae(C, B);
-					if (E.colors != null) {
-						var A = E.colors,
-						I = 0;
-						for (var D = 0; D < A.length; ++D) {
-							if (A[D] > 0) {++I;
+					ae(d, b);
+					if (f.colors != null) {
+						this.template.columns[n].type = null;
+						var h = f.colors,
+						m = 0;
+						for (var e = 0; e < h.length; ++e) {
+							if (h[e] > 0) {++m;
 								break
 							}
 						}
-						if (I > 0) {
-							I = 0;
-							B = ce("div");
-							B.className = "small";
-							B.style.fontWeight = "bold";
-							for (var D = 0; D < A.length; ++D) {
-								if (A[D] > 0) {
-									if (I++>0) {
-										ae(B, ct(" "))
+						if (m > 0) {
+							m = 0;
+							b = ce("div");
+							b.className = "small";
+							b.style.fontWeight = "bold";
+							for (var e = 0; e < h.length; ++e) {
+								if (h[e] > 0) {
+									if (m++>0) {
+										ae(b, ct(" "))
 									}
-									var J = ce("span");
-									J.className = "r" + (D + 1);
-									ae(J, ct(A[D]));
-									ae(B, J)
+									var k = ce("span");
+									k.className = "r" + (e + 1);
+									ae(k, ct(h[e]));
+									ae(b, k)
 								}
 							}
-							ae(C, B)
+							ae(d, b)
 						}
 					}
 				}
 			},
-			sortFunc: function(B, A) {
-				var D = strcmp(B.learnedat, A.learnedat);
-				if (D != 0) {
-					return D
+			getVisibleText: function (a) {
+				var b = Listview.funcBox.arrayText(a.skill, g_spell_skills);
+				if (a.learnedat > 0) {
+					b += " " + (a.learnedat == 9999 ? "??": a.learnedat)
 				}
-				if (B.colors != null && A.colors != null) {
-					for (var C = 0; C < 4; ++C) {
-						D = strcmp(B.colors[C], A.colors[C]);
-						if (D != 0) {
-							return D
+				return b
+			},
+			sortFunc: function (d, c) {
+				var f = strcmp(d.learnedat, c.learnedat);
+				if (f != 0) {
+					return f
+				}
+				if (d.colors != null && c.colors != null) {
+					for (var e = 0; e < 4; ++e) {
+						f = strcmp(d.colors[e], c.colors[e]);
+						if (f != 0) {
+							return f
 						}
 					}
 				}
-				return Listview.funcBox.assocArrCmp(B.skill, A.skill, g_spell_skills)
+				return Listview.funcBox.assocArrCmp(d.skill, c.skill, g_spell_skills)
 			}
 		}],
-		getItemLink: function(A) {
-			return "?spell=" + A.id
+		getItemLink: function (a) {
+			return "?spell=" + a.id
 		}
 	},
 	zone: {
 		sort: [1],
 		nItemsPerPage: -1,
+		searchable: 1,
+		filtrable: 1,
 		columns: [{
 			id: "name",
 			name: LANG.name,
+			type: "text",
 			align: "left",
 			value: "name",
-			compute: function(B, D) {
-				var A = ce("a");
-				A.style.fontFamily = "Verdana, sans-serif";
-				A.href = this.template.getItemLink(B);
-				ae(A, ct(B.name));
-				if (B.expansion == 1) {
-					var C = ce("span");
-					C.className = "bc-icon";
-					ae(C, A);
-					ae(D, C)
+			compute: function (c, e) {
+				var b = ce("a");
+				b.style.fontFamily = "Verdana, sans-serif";
+				b.href = this.template.getItemLink(c);
+				ae(b, ct(c.name));
+				if (c.expansion) {
+					var d = ce("span");
+					d.className = (c.expansion == 1 ? "bc-icon": "wotlk-icon");
+					ae(d, b);
+					ae(e, d)
 				} else {
-					ae(D, A)
+					ae(e, b)
 				}
+			},
+			getVisibleText: function (a) {
+				var b = a.name;
+				if (a.expansion == 1) {
+					b += " bc"
+				} else {
+					if (a.expansion == 2) {
+						b += "wotlk wrath"
+					}
+				}
+				return b
 			}
 		},
 		{
 			id: "level",
 			name: LANG.level,
+			type: "range",
 			width: "10%",
-			compute: function(A, B) {
-				if (A.minlevel > 0 && A.maxlevel > 0) {
-					if (A.minlevel != A.maxlevel) {
-						return A.minlevel + LANG.hyphen + A.maxlevel
+			getMinValue: function (a) {
+				return a.minlevel
+			},
+			getMaxValue: function (a) {
+				return a.maxlevel
+			},
+			compute: function (a, b) {
+				if (a.minlevel > 0 && a.maxlevel > 0) {
+					if (a.minlevel != a.maxlevel) {
+						return a.minlevel + LANG.hyphen + a.maxlevel
 					} else {
-						return A.minlevel
+						return a.minlevel
 					}
 				}
 			},
-			sortFunc: function(B, A, C) {
-				if (C > 0) {
-					return strcmp(B.minlevel, A.minlevel) || strcmp(B.maxlevel, A.maxlevel)
+			sortFunc: function (d, c, e) {
+				if (e > 0) {
+					return strcmp(d.minlevel, c.minlevel) || strcmp(d.maxlevel, c.maxlevel)
 				} else {
-					return strcmp(B.maxlevel, A.maxlevel) || strcmp(B.minlevel, A.minlevel)
+					return strcmp(d.maxlevel, c.maxlevel) || strcmp(d.minlevel, c.minlevel)
 				}
 			}
 		},
 		{
 			id: "territory",
 			name: LANG.territory,
+			type: "text",
 			width: "13%",
-			compute: function(A, C) {
-				var B = ce("span");
-				switch (A.territory) {
+			compute: function (a, c) {
+				var b = ce("span");
+				switch (a.territory) {
 				case 0:
-					B.className = "alliance-icon";
+					b.className = "alliance-icon";
 					break;
 				case 1:
-					B.className = "horde-icon";
+					b.className = "horde-icon";
 					break;
 				case 4:
-					B.className = "ffapvp-icon";
+					b.className = "ffapvp-icon";
 					break
 				}
-				ae(B, ct(g_zone_territories[A.territory]));
-				ae(C, B)
+				ae(b, ct(g_zone_territories[a.territory]));
+				ae(c, b)
 			},
-			sortFunc: function(B, A, C) {
-				return strcmp(g_zone_territories[B.territory], g_zone_territories[A.territory])
+			getVisibleText: function (a) {
+				return g_zone_territories[a.territory]
+			},
+			sortFunc: function (d, c, e) {
+				return strcmp(g_zone_territories[d.territory], g_zone_territories[c.territory])
 			}
 		},
 		{
 			id: "instancetype",
 			name: LANG.instancetype,
-			compute: function(A, D) {
-				if (A.instance > 0) {
-					var B = ce("span");
-					if (A.instance >= 1 && A.instance <= 5) {
-						B.className = "instance-icon" + A.instance
+			type: "text",
+			compute: function (a, d) {
+				if (a.instance > 0) {
+					var b = ce("span");
+					if ((a.instance >= 1 && a.instance <= 5) || a.instance == 7) {
+						b.className = "instance-icon" + a.instance
 					}
-					var C = g_zone_instancetypes[A.instance];
-					if (A.nplayers > 0 && ((A.instance != 2 && A.instance != 5) || A.nplayers > 5)) {
-						C += " (";
-						if (A.instance == 4) {
-							C += sprintf(LANG.lvzone_xvx, A.nplayers, A.nplayers)
+					if (a.nplayers == -2) {
+						a.nplayers = "10/25"
+					}
+					var c = g_zone_instancetypes[a.instance];
+					if (a.nplayers && ((a.instance != 2 && a.instance != 5) || a.nplayers > 5)) {
+						c += " (";
+						if (a.instance == 4) {
+							c += sprintf(LANG.lvzone_xvx, a.nplayers, a.nplayers)
 						} else {
-							C += sprintf(LANG.lvzone_xman, A.nplayers)
+							c += sprintf(LANG.lvzone_xman, a.nplayers)
 						}
-						C += ")"
+						c += ")"
 					}
-					ae(B, ct(C));
-					ae(D, B)
+					ae(b, ct(c));
+					ae(d, b)
 				}
 			},
-			sortFunc: function(B, A, C) {
-				return strcmp(g_zone_instancetypes[B.instance], g_zone_instancetypes[A.instance]) || strcmp(B.instance, A.instance) || strcmp(B.nplayers, A.nplayers)
+			getVisibleText: function (a) {
+				if (a.instance > 0) {
+					var b = g_zone_instancetypes[a.instance];
+					if (a.nplayers && ((a.instance != 2 && a.instance != 5) || a.nplayers > 5)) {
+						if (a.instance == 4) {
+							b += " " + sprintf(LANG.lvzone_xvx, a.nplayers, a.nplayers)
+						} else {
+							b += " " + sprintf(LANG.lvzone_xman, a.nplayers)
+						}
+					}
+					return b
+				}
+			},
+			sortFunc: function (d, c, e) {
+				return strcmp(g_zone_instancetypes[d.instance], g_zone_instancetypes[c.instance]) || strcmp(d.instance, c.instance) || strcmp(d.nplayers, c.nplayers)
 			}
 		},
 		{
 			id: "category",
 			name: LANG.category,
+			type: "text",
 			width: "15%",
-			compute: function(B, C) {
-				C.className = "small q1";
-				var A = ce("a");
-				A.href = "?zones=" + B.category;
-				ae(A, ct(g_zone_categories[B.category]));
-				ae(C, A)
+			compute: function (c, d) {
+				d.className = "small q1";
+				var b = ce("a");
+				b.href = "?zones=" + c.category;
+				ae(b, ct(g_zone_categories[c.category]));
+				ae(d, b)
 			},
-			sortFunc: function(B, A, C) {
-				return strcmp(g_zone_categories[B.category], g_zone_categories[A.category])
+			getVisibleText: function (a) {
+				return g_zone_categories[a.category]
+			},
+			sortFunc: function (d, c, e) {
+				return strcmp(g_zone_categories[d.category], g_zone_categories[c.category])
 			}
 		}],
-		getItemLink: function(A) {
-			return "?zone=" + A.id
+		getItemLink: function (a) {
+			return "?zone=" + a.id
 		}
 	},
 	comment: {
@@ -4884,236 +6832,250 @@ Listview.templates = {
 		{
 			value: "rating"
 		}],
-		compute: function(A, R) {
-			var l,
-			h = new Date(A.date),
-			F = (g_serverTime - h) / 1000,
-			j = (g_user.roles & 26) != 0,
-			I = A.rating < 0 || A.purged || A.deleted,
-			X = j || A.user.toLowerCase() == g_user.name.toLowerCase(),
-			K = X && A.deleted == 0,
-			G = X && A.replyTo != A.id,
-			g = A.purged == 0 && A.deleted == 0 && g_user.id && A.user.toLowerCase() != g_user.name.toLowerCase() && in_array(A.raters, g_user.id,
-			function(n) {
-				return n[0]
+		compute: function (t, H) {
+			var L, s = new Date(t.date),
+			F = (g_serverTime - s) / 1000,
+			d = (g_user.roles & 26) != 0,
+			I = t.rating < 0 || t.purged || t.deleted,
+			C = d || t.user.toLowerCase() == g_user.name.toLowerCase(),
+			v = C && t.deleted == 0,
+			c = C && t.replyTo != t.id,
+			J = ((t.roles & 190) == 0),
+			D = t.purged == 0 && t.deleted == 0 && g_user.id && t.user.toLowerCase() != g_user.name.toLowerCase() && in_array(t.raters, g_user.id, function (M) {
+				return M[0]
 			}) == -1,
-			m = A.rating >= 0 && (g_user.id == 0 || g);
-			A.ratable = g;
-			R.className = "comment";
-			if (A.indent) {
-				R.className += " comment-indent"
+			i = t.rating >= 0 && (g_user.id == 0 || D);
+			t.ratable = D;
+			H.className = "comment";
+			if (t.indent) {
+				H.className += " comment-indent"
 			}
-			var V = ce("div");
-			var N = ce("div");
-			var Q = ce("div");
-			A.divHeader = V;
-			A.divBody = N;
-			A.divLinks = Q;
-			V.className = (I ? "comment-header-bt": "comment-header");
-			var L = ce("div");
-			L.className = "comment-rating";
+			var w = ce("div");
+			var m = ce("div");
+			var k = ce("div");
+			t.divHeader = w;
+			t.divBody = m;
+			t.divLinks = k;
+			w.className = (I ? "comment-header-bt": "comment-header");
+			var g = ce("div");
+			g.className = "comment-rating";
 			if (I) {
-				var J = ce("a");
-				J.href = "javascript:;";
-				J.onclick = Listview.funcBox.coToggleVis.bind(J, A);
-				ae(J, ct(LANG.lvcomment_show));
-				ae(L, J);
-				ae(L, ct(" " + String.fromCharCode(160) + " "))
+				var p = ce("a");
+				p.href = "javascript:;";
+				p.onclick = Listview.funcBox.coToggleVis.bind(p, t);
+				ae(p, ct(LANG.lvcomment_show));
+				ae(g, p);
+				ae(g, ct(" " + String.fromCharCode(160) + " "))
 			}
-			var C = ce("b");
-			ae(C, ct(LANG.lvcomment_rating));
-			var U = ce("span");
-			ae(U, ct((A.rating > 0 ? "+": "") + A.rating));
-			ae(C, U);
-			ae(L, C);
-			ae(L, ct(" "));
-			var O = ce("span");
-			var i = ce("a"),
-			H = ce("a");
-			if (g) {
-				i.href = H.href = "javascript:;";
-				i.onclick = Listview.funcBox.coRate.bind(i, A, 1);
-				H.onclick = Listview.funcBox.coRate.bind(H, A, -1);
-				if (j) {
-					var W = ce("a");
-					W.href = "javascript:;";
-					W.onclick = Listview.funcBox.coRate.bind(W, A, 0);
-					W.onmouseover = Listview.funcBox.coCustomRatingOver;
-					W.onmousemove = Tooltip.cursorUpdate;
-					W.onmouseout = Tooltip.hide;
-					ae(W, ct("[~]"));
-					ae(O, W);
-					ae(O, ct(" "))
+			var n = ce("b");
+			ae(n, ct(LANG.lvcomment_rating));
+			var q = ce("span");
+			ae(q, ct((t.rating > 0 ? "+": "") + t.rating));
+			ae(n, q);
+			ae(g, n);
+			ae(g, ct(" "));
+			var B = ce("span");
+			var j = ce("a"),
+			K = ce("a");
+			if (D) {
+				j.href = K.href = "javascript:;";
+				j.onclick = Listview.funcBox.coRate.bind(j, t, 1);
+				K.onclick = Listview.funcBox.coRate.bind(K, t, -1);
+				if (d) {
+					var A = ce("a");
+					A.href = "javascript:;";
+					A.onclick = Listview.funcBox.coRate.bind(A, t, 0);
+					A.onmouseover = Listview.funcBox.coCustomRatingOver;
+					A.onmousemove = Tooltip.cursorUpdate;
+					A.onmouseout = Tooltip.hide;
+					ae(A, ct("[~]"));
+					ae(B, A);
+					ae(B, ct(" "))
 				}
 			} else {
-				i.href = H.href = "?account=signin"
+				j.href = K.href = "?account=signin"
 			}
-			ae(i, ct("[+]"));
-			i.onmouseover = Listview.funcBox.coPlusRatingOver;
-			H.onmouseover = Listview.funcBox.coMinusRatingOver;
-			i.onmousemove = H.onmousemove = Tooltip.cursorUpdate;
-			i.onmouseout = H.onmouseout = Tooltip.hide;
-			ae(H, ct("[-]"));
-			ae(O, H);
-			ae(O, ct(" "));
-			ae(O, i);
-			ae(L, O);
-			if (!m) {
-				O.style.display = "none"
+			ae(j, ct("[+]"));
+			j.onmouseover = Listview.funcBox.coPlusRatingOver;
+			K.onmouseover = Listview.funcBox.coMinusRatingOver;
+			j.onmousemove = K.onmousemove = Tooltip.cursorUpdate;
+			j.onmouseout = K.onmouseout = Tooltip.hide;
+			ae(K, ct("[-]"));
+			ae(B, K);
+			ae(B, ct(" "));
+			ae(B, j);
+			ae(g, B);
+			if (!i) {
+				B.style.display = "none"
 			}
-			ae(V, L);
-			ae(V, ct(LANG.lvcomment_by));
-			var B = ce("a");
-			B.href = "?user=" + A.user;
-			ae(B, ct(A.user));
-			ae(V, B);
-			ae(V, ct(" "));
-			var M = ce("a");
-			M.className = "q0";
-			M.href = "#comments:id=" + A.id;
-			Listview.funcBox.coFormatDate(M, F, h);
-			M.style.cursor = "pointer";
-			ae(V, M);
-			ae(V, ct(LANG.lvcomment_patch1 + g_getPatchVersion(h) + LANG.lvcomment_patch2));
-			ae(R, V);
-			N.className = "comment-body" + Listview.funcBox.coGetColor(A);
-			if (A.indent) {
-				N.className += " comment-body-indent"
+			ae(w, g);
+			ae(w, ct(LANG.lvcomment_by));
+			var G = ce("a");
+			G.href = "?user=" + t.user;
+			ae(G, ct(t.user));
+			ae(w, G);
+			ae(w, ct(" "));
+			var a = ce("a");
+			a.className = "q0";
+			a.id = "comments:id=" + t.id;
+			a.href = "#" + a.id;
+			Listview.funcBox.coFormatDate(a, F, s);
+			a.style.cursor = "pointer";
+			ae(w, a);
+			ae(w, ct(LANG.lvcomment_patch1 + g_getPatchVersion(s) + LANG.lvcomment_patch2));
+			ae(H, w);
+			m.className = "comment-body" + Listview.funcBox.coGetColor(t);
+			if (t.indent) {
+				m.className += " comment-body-indent"
 			}
-			N.innerHTML = Markup.toHtml(A.body, {
-				mode: Markup.MODE_COMMENT
+			m.innerHTML = Markup.toHtml(t.body, {
+				mode: Markup.MODE_COMMENT,
+				roles: t.roles
 			});
-			ae(R, N);
-			if ((A.roles & 26) == 0 || g_user.roles & 26) {
-				var e = ce("div");
-				A.divLastEdit = e;
-				e.className = "comment-lastedit";
-				ae(e, ct(LANG.lvcomment_lastedit));
-				var Z = ce("a");
-				ae(Z, ct(" "));
-				ae(e, Z);
-				ae(e, ct(" "));
-				var a = ce("span");
-				ae(e, a);
-				ae(e, ct(" "));
-				Listview.funcBox.coUpdateLastEdit(A);
+			ae(H, m);
+			if ((t.roles & 26) == 0 || g_user.roles & 26) {
+				var E = ce("div");
+				t.divLastEdit = E;
+				E.className = "comment-lastedit";
+				ae(E, ct(LANG.lvcomment_lastedit));
+				var o = ce("a");
+				ae(o, ct(" "));
+				ae(E, o);
+				ae(E, ct(" "));
+				var z = ce("span");
+				ae(E, z);
+				ae(E, ct(" "));
+				Listview.funcBox.coUpdateLastEdit(t);
 				if (I) {
-					e.style.display = "none"
+					E.style.display = "none"
 				}
-				ae(R, e)
+				ae(H, E)
 			}
-			Q.className = "comment-links";
-			if (X) {
-				var E = ce("span");
-				var Y = ce("a");
-				ae(Y, ct(LANG.lvcomment_edit));
-				Y.onclick = Listview.funcBox.coEdit.bind(this, A, 0);
-				ns(Y);
-				Y.href = "javascript:;";
-				ae(E, Y);
-				ae(E, ct("|"));
-				ae(Q, E)
+			k.className = "comment-links";
+			if (C) {
+				var b = ce("span");
+				var y = ce("a");
+				ae(y, ct(LANG.lvcomment_edit));
+				y.onclick = Listview.funcBox.coEdit.bind(this, t, 0);
+				ns(y);
+				y.href = "javascript:;";
+				ae(b, y);
+				ae(b, ct("|"));
+				ae(k, b)
 			}
-			if (K) {
-				var k = ce("span");
-				var P = ce("a");
-				ae(P, ct(LANG.lvcomment_delete));
-				P.onclick = Listview.funcBox.coDelete.bind(this, A);
-				ns(P);
-				P.href = "javascript:;";
-				ae(k, P);
-				ae(k, ct("|"));
-				ae(Q, k)
+			if (v) {
+				var l = ce("span");
+				var r = ce("a");
+				ae(r, ct(LANG.lvcomment_delete));
+				r.onclick = Listview.funcBox.coDelete.bind(this, t);
+				ns(r);
+				r.href = "javascript:;";
+				ae(l, r);
+				ae(l, ct("|"));
+				ae(k, l)
 			}
-			if (G) {
-				var D = ce("span");
-				var T = ce("a");
-				ae(T, ct(LANG.lvcomment_detach));
-				T.onclick = Listview.funcBox.coDetach.bind(this, A);
-				ns(T);
-				T.href = "javascript:;";
-				ae(D, T);
-				ae(D, ct("|"));
-				ae(Q, D)
+			if (c) {
+				var x = ce("span");
+				var e = ce("a");
+				ae(e, ct(LANG.lvcomment_detach));
+				e.onclick = Listview.funcBox.coDetach.bind(this, t);
+				ns(e);
+				e.href = "javascript:;";
+				ae(x, e);
+				ae(x, ct("|"));
+				ae(k, x)
 			}
-			var S = ce("a");
-			ae(S, ct(LANG.lvcomment_reply));
-			if (g_user.id > 0) {
-				S.onclick = Listview.funcBox.coReply.bind(this, A);
-				S.href = "javascript:;"
-			} else {
-				S.href = "?account=signin"
-			}
-			ae(Q, S);
-			if (I) {
-				N.style.display = "none";
-				Q.style.display = "none"
-			}
-			ae(R, Q)
-		},
-		createNote: function(F) {
-			var E = ce("small");
-			var A = ce("a");
-			if (g_user.id > 0) {
-				A.href = "javascript:;";
-				A.onclick = co_addYourComment
-			} else {
-				A.href = "?account=signin"
-			}
-			ae(A, ct(LANG.lvcomment_add));
-			ae(E, A);
-			var D = ce("span");
-			D.style.padding = "0 5px";
-			D.style.color = "white";
-			ae(D, ct("|"));
-			ae(E, D);
-			ae(E, ct(LANG.lvcomment_sort));
-			var C = ce("a");
-			C.href = "javascript:;";
-			ae(C, ct(LANG.lvcomment_sortdate));
-			C.onclick = Listview.funcBox.coSortDate.bind(this, C);
-			ae(E, C);
-			ae(E, ct(LANG.comma));
-			var B = ce("a");
-			B.href = "javascript:;";
-			ae(B, ct(LANG.lvcomment_sortrating));
-			B.onclick = Listview.funcBox.coSortHighestRatedFirst.bind(this, B);
-			ae(E, B);
-			C.onclick();
-			ae(F, E)
-		},
-		onNoData: function(C) {
-			if (typeof g_pageInfo == "object" && g_pageInfo.type > 0) {
-				var A = "<b>" + LANG.lvnodata_co1 + "</b><br /><br />";
+			if (J) {
+				var u = ce("span");
+				var f = ce("a");
+				ae(f, ct(LANG.lvcomment_report));
 				if (g_user.id > 0) {
-					var B = LANG.lvnodata_co2;
-					B = B.replace("<a>", '<a href="javascript:;" onclick="co_addYourComment()" onmousedown="return false">');
-					A += B
+					f.onclick = Listview.funcBox.coReportClick.bind(f, t, 0);
+					f.href = "javascript:;"
 				} else {
-					var B = LANG.lvnodata_co3;
-					B = B.replace("<a>", '<a href="?account=signin">');
-					B = B.replace("<a>", '<a href="?account=signup">');
-					A += B
+					f.href = "?account=signin"
 				}
-				C.style.padding = "1.5em 0";
-				C.innerHTML = A
+				ae(u, f);
+				ae(u, ct("|"));
+				ae(k, u)
+			}
+			var h = ce("a");
+			ae(h, ct(LANG.lvcomment_reply));
+			if (g_user.id > 0) {
+				h.onclick = Listview.funcBox.coReply.bind(this, t);
+				h.href = "javascript:;"
+			} else {
+				h.href = "?account=signin"
+			}
+			ae(k, h);
+			if (I) {
+				m.style.display = "none";
+				k.style.display = "none"
+			}
+			ae(H, k)
+		},
+		createNote: function (g) {
+			var f = ce("small");
+			var b = ce("a");
+			if (g_user.id > 0) {
+				b.href = "javascript:;";
+				b.onclick = co_addYourComment
+			} else {
+				b.href = "?account=signin"
+			}
+			ae(b, ct(LANG.lvcomment_add));
+			ae(f, b);
+			var e = ce("span");
+			e.style.padding = "0 5px";
+			e.style.color = "white";
+			ae(e, ct("|"));
+			ae(f, e);
+			ae(f, ct(LANG.lvcomment_sort));
+			var c = ce("a");
+			c.href = "javascript:;";
+			ae(c, ct(LANG.lvcomment_sortdate));
+			c.onclick = Listview.funcBox.coSortDate.bind(this, c);
+			ae(f, c);
+			ae(f, ct(LANG.comma));
+			var d = ce("a");
+			d.href = "javascript:;";
+			ae(d, ct(LANG.lvcomment_sortrating));
+			d.onclick = Listview.funcBox.coSortHighestRatedFirst.bind(this, d);
+			ae(f, d);
+			c.onclick();
+			ae(g, f)
+		},
+		onNoData: function (c) {
+			if (typeof g_pageInfo == "object" && g_pageInfo.type > 0) {
+				var a = "<b>" + LANG.lvnodata_co1 + '</b><div class="pad2"></div>';
+				if (g_user.id > 0) {
+					var b = LANG.lvnodata_co2;
+					b = b.replace("<a>", '<a href="javascript:;" onclick="co_addYourComment()" onmousedown="return false">');
+					a += b
+				} else {
+					var b = LANG.lvnodata_co3;
+					b = b.replace("<a>", '<a href="?account=signin">');
+					b = b.replace("<a>", '<a href="?account=signup">');
+					a += b
+				}
+				c.style.padding = "1.5em 0";
+				c.innerHTML = a
 			}
 		},
-		onBeforeCreate: function() {
-			if (location.hash.match(/:id=([0-9]+)/) != null) {
-				var A = in_array(this.data, parseInt(RegExp.$1),
-				function(B) {
-					return B.id
+		onBeforeCreate: function () {
+			if (location.hash && location.hash.match(/:id=([0-9]+)/) != null) {
+				var a = in_array(this.data, parseInt(RegExp.$1), function (b) {
+					return b.id
 				});
-				this.rowOffset = this.getRowOffset(A);
-				return this.data[A]
+				this.rowOffset = this.getRowOffset(a);
+				return this.data[a]
 			}
 		},
-		onAfterCreate: function(A) {
-			if (A != null) {
-				var B = A.__div;
-				this.tabs.__st = B;
-				B.firstChild.style.border = "1px solid #505050"
+		onAfterCreate: function (a) {
+			if (a != null) {
+				var b = a.__div;
+				this.tabs.__st = b;
+				b.firstChild.style.border = "1px solid #505050"
 			}
 		}
 	},
@@ -5125,16 +7087,16 @@ Listview.templates = {
 			name: LANG.subject,
 			align: "left",
 			value: "subject",
-			compute: function(D, C) {
-				var A = ce("a");
-				A.style.fontFamily = "Verdana, sans-serif";
-				A.href = this.template.getItemLink(D);
-				ae(A, ct(D.subject));
-				ae(C, A);
-				var B = ce("div");
-				B.className = "small";
-				ae(B, ct(LANG.types[D.type][0]));
-				ae(C, B)
+			compute: function (f, e) {
+				var b = ce("a");
+				b.style.fontFamily = "Verdana, sans-serif";
+				b.href = this.template.getItemLink(f);
+				ae(b, ct(f.subject));
+				ae(e, b);
+				var c = ce("div");
+				c.className = "small";
+				ae(c, ct(LANG.types[f.type][0]));
+				ae(e, c)
 			}
 		},
 		{
@@ -5143,47 +7105,47 @@ Listview.templates = {
 			align: "left",
 			width: "50%",
 			value: "preview",
-			compute: function(H, G) {
-				var E = ce("div");
-				E.className = "crop";
-				if (H.rating >= 10) {
-					E.className += " comment-green"
+			compute: function (j, i) {
+				var g = ce("div");
+				g.className = "crop";
+				if (j.rating >= 10) {
+					g.className += " comment-green"
 				}
-				ae(E, ct(Markup.removeTags(H.preview, {
-					mode: (H.rating != null ? Markup.MODE_COMMENT: Markup.MODE_ARTICLE)
+				ae(g, ct(Markup.removeTags(j.preview, {
+					mode: (j.rating != null ? Markup.MODE_COMMENT: Markup.MODE_ARTICLE)
 				})));
-				ae(G, E);
-				var A = H.rating != null;
-				var D = H.user != null;
-				if (A || D) {
-					E = ce("div");
-					E.className = "small3";
-					if (D) {
-						ae(E, ct(LANG.lvcomment_by));
-						var B = ce("a");
-						B.href = "?user=" + H.user;
-						ae(B, ct(H.user));
-						ae(E, B);
-						if (A) {
-							ae(E, ct(LANG.hyphen))
+				ae(i, g);
+				var e = j.rating != null;
+				var f = j.user != null;
+				if (e || f) {
+					g = ce("div");
+					g.className = "small3";
+					if (f) {
+						ae(g, ct(LANG.lvcomment_by));
+						var b = ce("a");
+						b.href = "?user=" + j.user;
+						ae(b, ct(j.user));
+						ae(g, b);
+						if (e) {
+							ae(g, ct(LANG.hyphen))
 						}
 					}
-					if (A) {
-						ae(E, ct(LANG.lvcomment_rating + (H.rating > 0 ? "+": "") + H.rating));
-						var C = ce("span"),
-						F = "";
-						C.className = "q7";
-						if (H.deleted) {
-							F = " (Deleted)"
+					if (e) {
+						ae(g, ct(LANG.lvcomment_rating + (j.rating > 0 ? "+": "") + j.rating));
+						var c = ce("span"),
+						h = "";
+						c.className = "q10";
+						if (j.deleted) {
+							h = LANG.lvcomment_deleted
 						} else {
-							if (H.purged) {
-								F = " (Purged)"
+							if (j.purged) {
+								h = LANG.lvcomment_purged
 							}
 						}
-						ae(C, ct(F));
-						ae(E, C)
+						ae(c, ct(h));
+						ae(g, c)
 					}
-					ae(G, E)
+					ae(i, g)
 				}
 			}
 		},
@@ -5192,16 +7154,16 @@ Listview.templates = {
 			name: LANG.posted,
 			width: "16%",
 			value: "elapsed",
-			compute: function(E, D) {
-				var B = new Date(E.date),
-				A = (g_serverTime - B) / 1000;
-				var C = ce("span");
-				Listview.funcBox.coFormatDate(C, A, B, 0, 1);
-				ae(D, C)
+			compute: function (e, d) {
+				var a = new Date(e.date),
+				c = (g_serverTime - a) / 1000;
+				var b = ce("span");
+				Listview.funcBox.coFormatDate(b, c, a, 0, 1);
+				ae(d, b)
 			}
 		}],
-		getItemLink: function(A) {
-			return "?" + g_types[A.type] + "=" + A.typeId + (A.id != null ? "#comments:id=" + A.id: "")
+		getItemLink: function (a) {
+			return "?" + g_types[a.type] + "=" + a.typeId + (a.id != null ? "#comments:id=" + a.id: "")
 		}
 	},
 	screenshot: {
@@ -5211,140 +7173,976 @@ Listview.templates = {
 		nItemsPerRow: 4,
 		poundable: 2,
 		columns: [],
-		compute: function(J, C, E) {
-			var N,
-			G = new Date(J.date),
-			O = (g_serverTime - G) / 1000;
-			C.className = "screenshot-cell";
-			C.vAlign = "bottom";
-			var M = ce("a");
-			M.href = "#screenshots:id=" + J.id;
-			M.onclick = rf2;
-			var F = ce("img"),
-			B = Math.min(150 / J.width, 150 / J.height);
-			F.src = "http://upload.wowhead.com/images/screenshots/thumb/" + J.id + ".jpg";
-			F.width = parseInt(B * J.width);
-			F.height = parseInt(B * J.height);
-			ae(M, F);
-			ae(C, M);
-			var I = ce("div");
-			I.className = "screenshot-cell-user";
-			var P = (J.user != null && J.user.length);
-			if (P) {
-				M = ce("a");
-				M.href = "?user=" + J.user;
-				ae(M, ct(J.user));
-				ae(I, ct(LANG.lvscreenshot_from));
-				ae(I, M);
-				ae(I, ct(" "))
+		compute: function (k, e, l) {
+			var u, o = new Date(k.date),
+			f = (g_serverTime - o) / 1000;
+			e.className = "screenshot-cell";
+			e.vAlign = "bottom";
+			var q = ce("a");
+			q.href = "#screenshots:id=" + k.id;
+			q.onclick = rf2;
+			var v = ce("img"),
+			t = Math.min(150 / k.width, 150 / k.height);
+			v.src = "http://static.wowhead.com/uploads/screenshots/thumb/" + k.id + ".jpg";
+			ae(q, v);
+			ae(e, q);
+			var p = ce("div");
+			p.className = "screenshot-cell-user";
+			var m = (k.user != null && k.user.length);
+			if (m) {
+				q = ce("a");
+				q.href = "?user=" + k.user;
+				ae(q, ct(k.user));
+				ae(p, ct(LANG.lvscreenshot_from));
+				ae(p, q);
+				ae(p, ct(" "))
 			}
-			var Q = ce("span");
-			if (P) {
-				Listview.funcBox.coFormatDate(Q, O, G)
+			var j = ce("span");
+			if (m) {
+				Listview.funcBox.coFormatDate(j, f, o)
 			} else {
-				Listview.funcBox.coFormatDate(Q, O, G, 0, 1)
+				Listview.funcBox.coFormatDate(j, f, o, 0, 1)
 			}
-			ae(I, Q);
-			ae(C, I);
-			I = ce("div");
-			I.style.position = "relative";
-			I.style.height = "1em";
-			if (g_locale.id != 0 && g_locale.id != 25 && J.caption) {
-				J.caption = ""
+			ae(p, j);
+			ae(e, p);
+			p = ce("div");
+			p.style.position = "relative";
+			p.style.height = "1em";
+			if (g_getLocale(true) != 0 && k.caption) {
+				k.caption = ""
 			}
-			var H = (J.caption != null && J.caption.length);
-			var D = (J.subject != null && J.subject.length);
-			if (H || D) {
-				var A = ce("div");
-				A.className = "screenshot-caption";
-				if (D) {
-					var L = ce("small");
-					ae(L, ct(LANG.types[J.type][0] + LANG.colon));
-					var K = ce("a");
-					ae(K, ct(J.subject));
-					K.href = "?" + g_types[J.type] + "=" + J.typeId;
-					ae(L, K);
-					ae(A, L);
-					if (H && J.caption.length) {
-						ae(L, ct(" (...)"))
+			var h = (k.caption != null && k.caption.length);
+			var g = (k.subject != null && k.subject.length);
+			if (h || g) {
+				var r = ce("div");
+				r.className = "screenshot-caption";
+				if (g) {
+					var c = ce("small");
+					ae(c, ct(LANG.types[k.type][0] + LANG.colon));
+					var b = ce("a");
+					ae(b, ct(k.subject));
+					b.href = "?" + g_types[k.type] + "=" + k.typeId;
+					ae(c, b);
+					ae(r, c);
+					if (h && k.caption.length) {
+						ae(c, ct(" (...)"))
 					}
-					ae(L, ce("br"))
+					ae(c, ce("br"))
 				}
-				if (H) {
-					aE(C, "mouseover", Listview.funcBox.ssCellOver.bind(A));
-					aE(C, "mouseout", Listview.funcBox.ssCellOut.bind(A));
-					ae(A, ct('"' + J.caption + '"'))
+				if (h) {
+					aE(e, "mouseover", Listview.funcBox.ssCellOver.bind(r));
+					aE(e, "mouseout", Listview.funcBox.ssCellOut.bind(r));
+					var n = ce("span");
+					n.innerHTML = k.caption;
+					ae(r, n)
 				}
-				ae(I, A)
+				ae(p, r)
 			}
-			aE(C, "click", Listview.funcBox.ssCellClick.bind(this, E));
-			ae(C, I)
+			aE(e, "click", Listview.funcBox.ssCellClick.bind(this, l));
+			ae(e, p)
 		},
-		createNote: function(C) {
+		createNote: function (d) {
 			if (typeof g_pageInfo == "object" && g_pageInfo.type > 0) {
-				var B = ce("small");
-				var A = ce("a");
+				var c = ce("small");
+				var b = ce("a");
 				if (g_user.id > 0) {
-					A.href = "javascript:;";
-					A.onclick = ss_submitAScreenshot
+					b.href = "javascript:;";
+					b.onclick = ss_submitAScreenshot
 				} else {
-					A.href = "?account=signin"
+					b.href = "?account=signin"
 				}
-				ae(A, ct(LANG.lvscreenshot_submit));
-				ae(B, A);
-				ae(C, B)
+				ae(b, ct(LANG.lvscreenshot_submit));
+				ae(c, b);
+				ae(d, c)
 			}
 		},
-		onNoData: function(C) {
+		onNoData: function (c) {
 			if (typeof g_pageInfo == "object" && g_pageInfo.type > 0) {
-				var A = "<b>" + LANG.lvnodata_ss1 + "</b><br /><br />";
+				var a = "<b>" + LANG.lvnodata_ss1 + '</b><div class="pad2"></div>';
 				if (g_user.id > 0) {
-					var B = LANG.lvnodata_ss2;
-					B = B.replace("<a>", '<a href="javascript:;" onclick="ss_submitAScreenshot()" onmousedown="return false">');
-					A += B
+					var b = LANG.lvnodata_ss2;
+					b = b.replace("<a>", '<a href="javascript:;" onclick="ss_submitAScreenshot()" onmousedown="return false">');
+					a += b
 				} else {
-					var B = LANG.lvnodata_ss3;
-					B = B.replace("<a>", '<a href="?account=signin">');
-					B = B.replace("<a>", '<a href="?account=signup">');
-					A += B
+					var b = LANG.lvnodata_ss3;
+					b = b.replace("<a>", '<a href="?account=signin">');
+					b = b.replace("<a>", '<a href="?account=signup">');
+					a += b
 				}
-				C.style.padding = "1.5em 0";
-				C.innerHTML = A
+				c.style.padding = "1.5em 0";
+				c.innerHTML = a
 			} else {
 				return - 1
 			}
 		},
-		onBeforeCreate: function() {
-			if (location.hash.match(/:id=([0-9]+)/) != null) {
-				var A = in_array(this.data, parseInt(RegExp.$1),
-				function(B) {
-					return B.id
+		onBeforeCreate: function () {
+			if (location.hash && location.hash.match(/:id=([0-9]+)/) != null) {
+				var a = in_array(this.data, parseInt(RegExp.$1), function (b) {
+					return b.id
 				});
-				this.rowOffset = this.getRowOffset(A);
-				return A
+				this.rowOffset = this.getRowOffset(a);
+				return a
 			}
 		},
-		onAfterCreate: function(A) {
-			if (A != null) {
-				setTimeout((function() {
+		onAfterCreate: function (a) {
+			if (a != null) {
+				setTimeout((function () {
 					ScreenshotViewer.show({
 						screenshots: this.data,
-						pos: A
+						pos: a
 					})
 				}).bind(this), 1)
 			}
 		}
+	},
+	pet: {
+		sort: [1],
+		nItemsPerPage: -1,
+		searchable: 1,
+		filtrable: 1,
+		columns: [{
+			id: "name",
+			name: LANG.name,
+			type: "text",
+			align: "left",
+			value: "name",
+			span: 2,
+			compute: function (b, k, g) {
+				var e = ce("td");
+				e.style.width = "1px";
+				e.style.padding = "0";
+				e.style.borderRight = "none";
+				ae(e, Icon.create(b.icon, 0));
+				ae(g, e);
+				k.style.borderLeft = "none";
+				var j = ce("div");
+				var c = ce("a");
+				c.style.fontFamily = "Verdana, sans-serif";
+				c.href = this.template.getItemLink(b);
+				ae(c, ct(b.name));
+				if (b.expansion) {
+					var f = ce("span");
+					f.className = (b.expansion == 1 ? "bc-icon": "wotlk-icon");
+					ae(f, c);
+					ae(j, f)
+				} else {
+					ae(j, c)
+				}
+				if (b.exotic) {
+					j.style.position = "relative";
+					var h = ce("div");
+					h.className = "small";
+					h.style.fontStyle = "italic";
+					h.style.position = "absolute";
+					h.style.right = "3px";
+					h.style.bottom = "0px";
+					ae(h, ct(LANG.lvpet_exotic));
+					ae(j, h)
+				}
+				ae(k, j)
+			},
+			getVisibleText: function (a) {
+				var b = a.name;
+				if (a.expansion == 1) {
+					b += " bc"
+				} else {
+					if (a.expansion == 2) {
+						b += "wotlk wrath"
+					}
+				}
+				if (a.exotic) {
+					b += " " + LANG.lvpet_exotic
+				}
+				return b
+			}
+		},
+		{
+			id: "level",
+			name: LANG.level,
+			type: "range",
+			getMinValue: function (a) {
+				return a.minlevel
+			},
+			getMaxValue: function (a) {
+				return a.maxlevel
+			},
+			compute: function (a, b) {
+				if (a.minlevel > 0 && a.maxlevel > 0) {
+					if (a.minlevel != a.maxlevel) {
+						return a.minlevel + LANG.hyphen + a.maxlevel
+					} else {
+						return a.minlevel
+					}
+				} else {
+					return - 1
+				}
+			},
+			sortFunc: function (d, c, e) {
+				if (e > 0) {
+					return strcmp(d.minlevel, c.minlevel) || strcmp(d.maxlevel, c.maxlevel)
+				} else {
+					return strcmp(d.maxlevel, c.maxlevel) || strcmp(d.minlevel, c.minlevel)
+				}
+			}
+		},
+		{
+			id: "damage",
+			name: LANG.damage,
+			value: "damage",
+			compute: function (a, b) {
+				ae(b, this.template.getStatPct(a.damage))
+			}
+		},
+		{
+			id: "armor",
+			name: LANG.armor,
+			value: "armor",
+			compute: function (a, b) {
+				ae(b, this.template.getStatPct(a.armor))
+			}
+		},
+		{
+			id: "health",
+			name: LANG.health,
+			value: "health",
+			compute: function (a, b) {
+				ae(b, this.template.getStatPct(a.health))
+			}
+		},
+		{
+			id: "abilities",
+			name: LANG.abilities,
+			type: "text",
+			getValue: function (b) {
+				if (!b.spells) {
+					return ""
+				}
+				if (b.spells.length > 0) {
+					var d = "";
+					for (var c = 0, a = b.spells.length; c < a; ++c) {
+						if (b.spells[c]) {
+							d += g_spells[b.spells[c]]["name_" + g_locale.name]
+						}
+					}
+					return d
+				}
+			},
+			compute: function (a, b) {
+				if (!a.spells) {
+					return ""
+				}
+				if (a.spells.length > 0) {
+					b.style.padding = "0";
+					Listview.funcBox.createCenteredIcons(a.spells, b, "", 1)
+				}
+			},
+			sortFunc: function (d, c) {
+				if (!d.spells || !c.spells) {
+					return 0
+				}
+				return strcmp(d.spellCount, c.spellCount) || strcmp(d.spells, c.spells)
+			},
+			hidden: true
+		},
+		{
+			id: "diet",
+			name: LANG.diet,
+			type: "text",
+			compute: function (a, e) {
+				if (e) {
+					e.className = "small"
+				}
+				var b = 0,
+				c = "";
+				for (var d in g_pet_foods) {
+					if (a.diet & d) {
+						if (b++>0) {
+							c += LANG.comma
+						}
+						c += g_pet_foods[d]
+					}
+				}
+				return c
+			},
+			sortFunc: function (d, c) {
+				return strcmp(c.foodCount, d.foodCount) || Listview.funcBox.assocArrCmp(d.diet, c.diet, g_pet_foods)
+			}
+		},
+		{
+			id: "type",
+			name: LANG.type,
+			type: "text",
+			compute: function (b, d) {
+				if (b.type != null) {
+					d.className = "small q1";
+					var c = ce("a");
+					c.href = "?pets=" + b.type;
+					ae(c, ct(g_pet_types[b.type]));
+					ae(d, c)
+				}
+			},
+			getVisibleText: function (a) {
+				if (a.type != null) {
+					return g_pet_types[a.type]
+				}
+			},
+			sortFunc: function (d, c, e) {
+				return strcmp(g_pet_types[d.type], g_pet_types[c.type])
+			}
+		}],
+		getItemLink: function (a) {
+			return "?pet=" + a.id
+		},
+		getStatPct: function (b) {
+			var a = ce("span");
+			if (!isNaN(b) && b > 0) {
+				a.className = "q2";
+				ae(a, ct("+" + b + "%"))
+			} else {
+				if (!isNaN(b) && b < 0) {
+					a.className = "q10";
+					ae(a, ct(b + "%"))
+				}
+			}
+			return a
+		}
+	},
+	achievement: {
+		sort: [1, 2],
+		nItemsPerPage: 100,
+		searchable: 1,
+		filtrable: 1,
+		columns: [{
+			id: "name",
+			name: LANG.name,
+			type: "text",
+			align: "left",
+			value: "name",
+			span: 2,
+			compute: function (c, j, g) {
+				var b = null;
+				if (c.who && c.completed) {
+					b = "who=" + c.who + "&when=" + c.completed.getTime()
+				}
+				var f = ce("td");
+				f.style.width = "1px";
+				f.style.padding = "0";
+				f.style.borderRight = "none";
+				ae(f, g_achievements.createIcon(c.id, 1));
+				Icon.getLink(f.firstChild).rel = b;
+				ae(g, f);
+				j.style.borderLeft = "none";
+				var e = ce("a");
+				e.style.fontFamily = "Verdana, sans-serif";
+				e.href = this.template.getItemLink(c);
+				e.rel = b;
+				ae(e, ct(c.name));
+				ae(j, e);
+				if (c.description != null) {
+					var h = ce("div");
+					h.className = "small";
+					ae(h, ct(c.description));
+					ae(j, h)
+				}
+			},
+			getVisibleText: function (a) {
+				var b = a.name;
+				if (a.description) {
+					b += " " + a.description
+				}
+				return b
+			}
+		},
+		{
+			id: "location",
+			name: LANG.location,
+			type: "text",
+			width: "15%",
+			compute: function (b, d) {
+				if (b.zone) {
+					var c = ce("a");
+					c.className = "q1";
+					c.href = "?zone=" + b.zone;
+					ae(c, ct(g_zones[b.zone]));
+					ae(d, c)
+				}
+			},
+			getVisibleText: function (a) {
+				return Listview.funcBox.arrayText(a.zone, g_zones)
+			},
+			sortFunc: function (d, c, e) {
+				return Listview.funcBox.assocArrCmp(d.zone, c.zone, g_zones)
+			}
+		},
+		{
+			id: "side",
+			name: LANG.side,
+			type: "text",
+			width: "10%",
+			compute: function (a, c) {
+				if (a.side) {
+					var b = ce("span");
+					if (a.side == 1) {
+						b.className = "alliance-icon"
+					} else {
+						if (a.side == 2) {
+							b.className = "horde-icon"
+						}
+					}
+					ae(b, ct(g_sides[a.side]));
+					ae(c, b)
+				} else {
+					return - 1
+				}
+			},
+			getVisibleText: function (a) {
+				if (a.side) {
+					return g_sides[a.side]
+				}
+			},
+			sortFunc: function (d, c, e) {
+				return strcmp(g_sides[d.side], g_sides[c.side])
+			}
+		},
+		{
+			id: "points",
+			name: LANG.points,
+			type: "number",
+			width: "10%",
+			value: "points",
+			compute: function (a, b) {
+				if (a.points) {
+					Listview.funcBox.appendMoney(b, 0, null, 0, 0, 0, a.points)
+				}
+			}
+		},
+		{
+			id: "category",
+			name: LANG.category,
+			type: "text",
+			width: "15%",
+			compute: function (b, d) {
+				d.className = "small q1";
+				var c = ce("a");
+				c.href = "?achievements=" + b.category;
+				ae(c, ct(g_achievement_categories[b.category]));
+				ae(d, c)
+			},
+			getVisibleText: function (a) {
+				return g_achievement_categories[a.category]
+			},
+			sortFunc: function (d, c, e) {
+				return strcmp(g_achievement_categories[d.category], g_achievement_categories[c.category])
+			},
+			hidden: true
+		}],
+		getItemLink: function (a) {
+			return "?achievement=" + a.id
+		}
+	},
+	profile: {
+		sort: [],
+		nItemsPerPage: 50,
+		searchable: 1,
+		filtrable: 1,
+		columns: [{
+			id: "name",
+			name: LANG.name,
+			value: "name",
+			type: "text",
+			align: "left",
+			span: 2,
+			compute: function (f, c, h) {
+				if (f.level) {
+					var e = ce("td");
+					e.style.width = "1px";
+					e.style.padding = "0";
+					e.style.borderRight = "none";
+					ae(e, Icon.create(f.icon ? f.icon: "chr_" + g_file_races[f.race] + "_" + g_file_genders[f.gender] + "_" + g_file_classes[f.classs] + "0" + (f.level > 59 ? (Math.floor((f.level - 60) / 10) + 2) : 1), 1));
+					ae(h, e);
+					c.style.borderLeft = "none"
+				} else {
+					c.colSpan = 2
+				}
+				var b = ce("div");
+				b.style.position = "relative";
+				var k = ce("a");
+				k.style.fontFamily = "Verdana, sans-serif";
+				k.href = this.template.getItemLink(f);
+				ae(k, ct(f.name));
+				ae(b, k);
+				var g = ce("div");
+				g.className = "small";
+				if (f.guild) {
+					var k = ce("a");
+					k.className = "q1";
+					k.href = "?profiles=" + f.region + "." + f.realm + "&filter=cr=9;crs=0;crv=" + str_replace(urlencode(f.guild), "%20", "+") + "&roster=1";
+					ae(k, ct(f.guild));
+					ae(g, ct("<"));
+					ae(g, k);
+					ae(g, ct(">"))
+				} else {
+					if (f.description) {
+						ae(g, ct(f.description))
+					}
+				}
+				var l = ce("span"),
+				j = "";
+				l.className = "q10";
+				if (f.deleted) {
+					j = LANG.lvcomment_deleted
+				}
+				ae(l, ct(j));
+				ae(g, l);
+				ae(b, g);
+				var g = ce("div");
+				g.className = "small";
+				g.style.fontStyle = "italic";
+				g.style.position = "absolute";
+				g.style.right = "3px";
+				g.style.bottom = "0px";
+				if (!f.published && !f.region && !f.realm) {
+					ae(g, ct(LANG.privateprofile))
+				}
+				ae(b, g);
+				ae(c, b)
+			},
+			getVisibleText: function (a) {
+				var b = a.name;
+				if (a.guild) {
+					b += " " + a.guild
+				}
+				return b
+			}
+		},
+		{
+			id: "faction",
+			name: LANG.faction,
+			type: "text",
+			compute: function (a, f) {
+				if (!a.size && !a.members && !a.level) {
+					return
+				}
+				var e = ce("div"),
+				c = ce("div"),
+				b;
+				b = Icon.create("faction_" + g_file_factions[a.faction + 1], 0);
+				b.onmouseover = function (d) {
+					Tooltip.showAtCursor(d, g_sides[a.faction + 1], 0, 0, "q")
+				};
+				b.onmousemove = Tooltip.cursorUpdate;
+				b.onmouseout = Tooltip.hide;
+				b.style.cssFloat = b.style.syleFloat = "left";
+				e.style.margin = "0 auto";
+				e.style.textAlign = "left";
+				e.style.width = "26px";
+				c.className = "clear";
+				ae(e, b);
+				ae(f, e);
+				ae(f, c)
+			},
+			getVisibleText: function (a) {
+				return g_sides[a.faction + 1]
+			},
+			sortFunc: function (d, c, e) {
+				return strcmp(this.getVisibleText(d), this.getVisibleText(c))
+			}
+		},
+		{
+			id: "members",
+			name: LANG.members,
+			value: "members",
+			hidden: 1
+		},
+		{
+			id: "size",
+			name: "Size",
+			value: "size",
+			hidden: 1
+		},
+		{
+			id: "rank",
+			name: "Rank",
+			value: "rank",
+			hidden: 1
+		},
+		{
+			id: "race",
+			name: LANG.race,
+			type: "text",
+			compute: function (a, f) {
+				if (a.race) {
+					var e = ce("div"),
+					c = ce("div"),
+					b;
+					b = Icon.create("race_" + g_file_races[a.race] + "_" + g_file_genders[a.gender], 0);
+					b.onmouseover = function (d) {
+						Tooltip.showAtCursor(d, g_chr_races[a.race], 0, 0, "q")
+					};
+					b.onmousemove = Tooltip.cursorUpdate;
+					b.onmouseout = Tooltip.hide;
+					b.style.cssFloat = b.style.syleFloat = "left";
+					e.style.margin = "0 auto";
+					e.style.textAlign = "left";
+					e.style.width = "26px";
+					c.className = "clear";
+					ae(e, b);
+					ae(f, e);
+					ae(f, c)
+				}
+			},
+			getVisibleText: function (a) {
+				return g_file_genders[a.gender] + " " + g_chr_races[a.race]
+			},
+			sortFunc: function (d, c, e) {
+				return strcmp(g_chr_races[d.race], g_chr_races[c.race])
+			},
+			hidden: 1
+		},
+		{
+			id: "classs",
+			name: LANG.classs,
+			type: "text",
+			compute: function (a, f) {
+				if (a.classs) {
+					var e = ce("div"),
+					c = ce("div"),
+					b;
+					b = Icon.create("class_" + g_file_classes[a.classs], 0);
+					b.onmouseover = function (d) {
+						Tooltip.showAtCursor(d, g_chr_classes[a.classs], 0, 0, "q")
+					};
+					b.onmousemove = Tooltip.cursorUpdate;
+					b.onmouseout = Tooltip.hide;
+					b.style.cssFloat = b.style.syleFloat = "left";
+					e.style.margin = "0 auto";
+					e.style.textAlign = "left";
+					e.style.width = "26px";
+					c.className = "clear";
+					ae(e, b);
+					ae(f, e);
+					ae(f, c)
+				} else {
+					return - 1
+				}
+			},
+			getVisibleText: function (a) {
+				if (a.classs) {
+					return g_chr_classes[a.classs]
+				}
+			},
+			sortFunc: function (d, c, e) {
+				return strcmp(this.getVisibleText(d), this.getVisibleText(c))
+			},
+			hidden: 1
+		},
+		{
+			id: "level",
+			name: LANG.level,
+			value: "level",
+			hidden: 1
+		},
+		{
+			id: "talents",
+			name: LANG.talents,
+			type: "text",
+			compute: function (e, j) {
+				if (!e.level) {
+					return
+				}
+				var i = [e.talenttree1, e.talenttree2, e.talenttree3],
+				f = pr_getSpecFromTalents(e.classs, i),
+				c,
+				g,
+				b = ce("a");
+				var h = ce("div");
+				h.style.width = "82px";
+				h.style.height = "23px";
+				h.style.margin = "0 auto";
+				h.style.lineHeight = "23px";
+				h.style.backgroundImage = "url(" + f.icon + ")";
+				h.style.backgroundRepeat = "no-repeat";
+				h.style.backgroundPosition = "left";
+				var b = ce("a");
+				b.className = "small q1";
+				b.style.padding = "7px 0 7px 28px";
+				b.style.fontWeight = "bold";
+				b.rel = "np";
+				b.href = this.template.getItemLink(e) + "#talents";
+				b.onmouseover = function (a) {
+					Tooltip.showAtCursor(a, f.name, 0, 0, "q")
+				};
+				b.onmousemove = Tooltip.cursorUpdate;
+				b.onmouseout = Tooltip.hide;
+				ae(b, ct(e.talenttree1 + " / " + e.talenttree2 + " / " + e.talenttree3));
+				ae(h, b);
+				ae(j, h)
+			},
+			getVisibleText: function (a) {
+				if (a.talenttree1 || a.talenttree2 || a.talenttree3) {
+					if (a.talentspec > 0) {
+						return g_chr_specs[a.classs][a.talentspec - 1]
+					} else {
+						return g_chr_specs[0]
+					}
+				} else {
+					return g_chr_specs["-1"]
+				}
+			},
+			sortFunc: function (d, c, e) {
+				return strcmp(this.getVisibleText(d), this.getVisibleText(c))
+			},
+			hidden: 1
+		},
+		{
+			id: "gearscore",
+			name: LANG.gearscore,
+			value: "gearscore",
+			compute: function (a, c) {
+				var b = (a.level ? a.level: (a.members ? 80 : 0));
+				if (isNaN(a.gearscore) || !b) {
+					return
+				}
+				c.className = "q" + pr_getGearScoreQuality(b, a.gearscore, (in_array([2, 6, 7, 11], a.classs) != -1));
+				return (a.gearscore ? number_format(a.gearscore) : 0)
+			},
+			hidden: 1
+		},
+		{
+			id: "achievementpoints",
+			name: LANG.points,
+			value: "achievementpoints",
+			compute: function (a, b) {
+				if (a.achievementpoints) {
+					Listview.funcBox.appendMoney(b, 0, null, 0, 0, 0, a.achievementpoints)
+				}
+			},
+			hidden: 1
+		},
+		{
+			id: "wins",
+			name: LANG.wins,
+			value: "wins",
+			hidden: 1
+		},
+		{
+			id: "losses",
+			name: LANG.losses,
+			compute: function (a, b) {
+				return a.games - a.wins
+			},
+			hidden: 1
+		},
+		{
+			id: "guildrank",
+			name: LANG.guildrank,
+			value: "guildrank",
+			compute: function (c, d) {
+				if (c.guildrank > 0) {
+					return sprintf(LANG.rankno, c.guildrank)
+				} else {
+					if (c.guildrank == 0) {
+						var a = ce("b");
+						ae(a, ct(LANG.guildleader));
+						ae(d, a)
+					}
+				}
+			},
+			sortFunc: function (d, c, e) {
+				return strcmp((d.guildrank >= 0 ? d.guildrank: 11), (c.guildrank >= 0 ? c.guildrank: 11))
+			},
+			hidden: 1
+		},
+		{
+			id: "rating",
+			name: LANG.rating,
+			value: "rating",
+			compute: function (a, b) {
+				if (a.roster) {
+					return a.arenateam[a.roster].rating
+				}
+				return a.rating
+			},
+			sortFunc: function (d, c, e) {
+				if (d.roster && c.roster) {
+					return strcmp(d.arenateam[d.roster].rating, c.arenateam[c.roster].rating)
+				}
+				return strcmp(d.rating, c.rating)
+			},
+			hidden: 1
+		},
+		{
+			id: "location",
+			name: LANG.location,
+			type: "text",
+			compute: function (c, e) {
+				var b;
+				if (c.region) {
+					if (c.realm) {
+						b = ce("a");
+						b.className = "q1";
+						b.href = "?profiles=" + c.region + "." + c.realm;
+						ae(b, ct(c.realmname));
+						ae(e, b);
+						ae(e, ce("br"))
+					}
+					var d = ce("small");
+					b = ce("a");
+					b.className = "q1";
+					b.href = "?profiles=" + c.region;
+					ae(b, ct(c.region.toUpperCase()));
+					ae(d, b);
+					if (c.battlegroup) {
+						ae(d, ct(LANG.hyphen));
+						b = ce("a");
+						b.className = "q1";
+						b.href = "?profiles=" + c.region + "." + c.battlegroup;
+						ae(b, ct(c.battlegroupname));
+						ae(d, b)
+					}
+					ae(e, d)
+				}
+			},
+			getVisibleText: function (a) {
+				var b = "";
+				if (a.region) {
+					b += " " + a.region
+				}
+				if (a.battlegroup) {
+					b += " " + a.battlegroup
+				}
+				if (a.realm) {
+					b += " " + a.realm
+				}
+				return trim(b)
+			},
+			sortFunc: function (d, c, e) {
+				if (d.region != c.region) {
+					return strcmp(d.region, c.region)
+				}
+				if (d.battlegroup != c.battlegroup) {
+					return strcmp(d.battlegroup, c.battlegroup)
+				}
+				return strcmp(d.realm, c.realm)
+			}
+		},
+		{
+			id: "guild",
+			name: LANG.guild,
+			value: "guild",
+			type: "text",
+			compute: function (c, d) {
+				if (!c.region || !c.battlegroup || !c.realm || !c.guild) {
+					return
+				}
+				var b = ce("a");
+				b.className = "q1";
+				b.href = "?profiles=" + c.region + "." + c.realm + "&filter=cr=9;crs=0;crv=" + str_replace(urlencode(c.guild), "%20", "+") + "&roster=1";
+				ae(b, ct(c.guild));
+				ae(d, b)
+			}
+		}],
+		getItemLink: function (a) {
+			if (a.size) {
+				return "?profiles=" + a.region + "." + a.realm + "&filter=cr=" + (a.size == 2 ? 12 : (a.size == 3 ? 15 : 18)) + ";crs=0;crv=" + str_replace(urlencode(a.name), "%20", "+") + "&roster=" + (a.size == 5 ? 4 : a.size)
+			} else {
+				if (a.members) {
+					return "?profiles=" + a.region + "." + a.realm + "&filter=cr=9;crs=0;crv=" + str_replace(urlencode(a.name), "%20", "+") + "&roster=1"
+				} else {
+					if (a.region && a.realm) {
+						return "?profile=" + a.region + "." + a.realm + "." + g_cleanCharacterName(a.name)
+					} else {
+						return "?profile=" + a.id
+					}
+				}
+			}
+		}
+	},
+	model: {
+		sort: [],
+		mode: 3,
+		nItemsPerPage: 40,
+		nItemsPerRow: 4,
+		poundable: 2,
+		columns: [],
+		compute: function (c, k, e) {
+			k.className = "screenshot-cell";
+			k.vAlign = "bottom";
+			var j = ce("div");
+			j.className = "pet-model";
+			var b = ce("a");
+			b.className = "pet-zoom";
+			b.href = "javascript:;";
+			b.onclick = this.template.modelShow.bind(this.template, c.npcId, c.displayId);
+			ae(j, b);
+			var g = ce("div");
+			g.id = "pm" + c.displayId;
+			ae(j, g);
+			ae(k, j);
+			j = ce("div");
+			j.className = "screenshot-cell-user";
+			b = ce("a");
+			b.href = this.template.getItemLink(c);
+			ae(b, ct(c.skin));
+			ae(j, b);
+			ae(j, ct(" (" + c.count + ")"));
+			ae(k, j);
+			j = ce("div");
+			j.style.position = "relative";
+			j.style.height = "1em";
+			var h = ce("div");
+			h.className = "screenshot-caption";
+			var f = ce("small");
+			ae(f, ct(LANG.level + ": "));
+			ae(f, ct(c.minLevel + (c.minLevel == c.maxLevel ? "": LANG.hyphen + (c.maxLevel == 9999 ? "??": c.maxLevel))));
+			ae(f, ce("br"));
+			ae(h, f);
+			ae(j, h);
+			ae(k, j);
+			setTimeout(this.template.appendFlash.bind(g, c), 1)
+		},
+		getItemLink: function (a) {
+			return "?npcs=1&filter=" + (a.family ? "fa=" + a.family + ";": "") + "minle=1;cr=35;crs=0;crv=" + a.skin
+		},
+		modelShow: function (b, a) {
+			ModelViewer.show({
+				type: 1,
+				typeId: b,
+				displayId: a,
+				noPound: 1
+			})
+		},
+		appendFlash: function (a) {
+			var c = {
+				model: a.displayId,
+				modelType: 8,
+				contentPath: "http://static.wowhead.com/modelviewer/",
+				blur: (OS.mac ? "0": "1")
+			};
+			var b = {
+				quality: "high",
+				allowscriptaccess: "always",
+				menu: false,
+				wmode: "opaque",
+				bgcolor: "#101010"
+			};
+			swfobject.embedSWF("http://static.wowhead.com/modelviewer/ModelView.swf", this.id, "100%", "100%", "10.0.0", "http://static.wowhead.com/modelviewer/expressInstall.swf", c, b)
+		}
 	}
 };
 Menu.fixUrls(mn_items, "?items=");
-Menu.fixUrls(mn_itemSets, "?itemsets&filter=cl=");
+Menu.fixUrls(mn_itemSets, "?itemsets&filter=cl=", "#0-2+1");
 Menu.fixUrls(mn_npcs, "?npcs=");
 Menu.fixUrls(mn_objects, "?objects=");
 Menu.fixUrls(mn_quests, "?quests=");
 Menu.fixUrls(mn_spells, "?spells=");
 Menu.fixUrls(mn_zones, "?zones=");
-Menu.fixUrls(mn_talentCalc, "?talent=");
-Menu.fixUrls(mn_forums, "?forums&board=", true);
+Menu.fixUrls(mn_pets, "?pets=");
+Menu.fixUrls(mn_factions, "?factions=");
+Menu.fixUrls(mn_achievements, "?achievements=", null, true);
+Menu.fixUrls(mn_petCalc, "?petcalc=");
+Menu.fixUrls(mn_forums, "?forums&board=", null, true);
+var g_dev = false;
 var g_locale = {
 	id: 0,
 	name: "enus"
@@ -5355,295 +8153,488 @@ var g_user = {
 	name: "",
 	roles: 0
 };
-var g_items = [];
-var g_quests = [];
-var g_spells = [];
-var g_users = [];
+var g_items = {};
+var g_quests = {};
+var g_spells = {};
+var g_achievements = {};
+var g_users = {};
 var g_types = {
-	1: "npc",
-	2: "object",
-	3: "item",
-	4: "itemset",
-	5: "quest",
-	6: "spell",
-	7: "zone",
-	8: "faction"
+	1 : "npc",
+	2 : "object",
+	3 : "item",
+	4 : "itemset",
+	5 : "quest",
+	6 : "spell",
+	7 : "zone",
+	8 : "faction",
+	9 : "pet",
+	10 : "achievement"
 };
 var g_locales = {
-	0: "enus",
-	2: "frfr",
-	3: "dede",
-	6: "eses",
-	25: "wotlk"
+	0 : "enus",
+	2 : "frfr",
+	3 : "dede",
+	6 : "eses",
+	8 : "ruru",
+	25 : "ptr"
+};
+var g_file_races = {
+	10 : "bloodelf",
+	11 : "draenei",
+	3 : "dwarf",
+	7 : "gnome",
+	1 : "human",
+	4 : "nightelf",
+	2 : "orc",
+	6 : "tauren",
+	8 : "troll",
+	5 : "scourge"
+};
+var g_file_classes = {
+	6 : "deathknight",
+	11 : "druid",
+	3 : "hunter",
+	8 : "mage",
+	2 : "paladin",
+	5 : "priest",
+	4 : "rogue",
+	7 : "shaman",
+	9 : "warlock",
+	1 : "warrior"
+};
+var g_file_genders = {
+	0 : "male",
+	1 : "female"
+};
+var g_file_factions = {
+	1 : "alliance",
+	2 : "horde"
+};
+var g_file_gems = {
+	1 : "meta",
+	2 : "red",
+	4 : "yellow",
+	6 : "orange",
+	8 : "blue",
+	10 : "purple",
+	12 : "green",
+	14 : "prismatic"
 };
 var g_customColors = {
 	Miyari: "pink"
 };
-g_items.getIcon = function(A) {
-	if (g_items[A] != null) {
-		return g_items[A].icon
+g_items.add = function (b, a) {
+	if (g_items[b] != null) {
+		cO(g_items[b], a)
 	} else {
-		return "temp"
+		g_items[b] = a
 	}
 };
-g_items.createIcon = function(D, B, A, C) {
-	return Icon.create(g_items.getIcon(D), B, null, "?item=" + D, A, C)
-};
-g_spells.getIcon = function(A) {
-	if (g_spells[A] != null) {
-		return g_spells[A].icon
+g_items.getIcon = function (a) {
+	if (g_items[a] != null) {
+		return g_items[a].icon
 	} else {
-		return "temp"
+		return "inv_misc_questionmark"
 	}
 };
-g_spells.createIcon = function(D, B, A, C) {
-	return Icon.create(g_spells.getIcon(D), B, null, "?spell=" + D, A, C)
+g_items.createIcon = function (d, b, a, c) {
+	return Icon.create(g_items.getIcon(d), b, null, "?item=" + d, a, c)
+};
+g_spells.getIcon = function (a) {
+	if (g_spells[a] != null) {
+		return g_spells[a].icon
+	} else {
+		return "inv_misc_questionmark"
+	}
+};
+g_spells.createIcon = function (d, b, a, c) {
+	return Icon.create(g_spells.getIcon(d), b, null, "?spell=" + d, a, c)
+};
+g_achievements.getIcon = function (a) {
+	if (g_achievements[a] != null) {
+		return g_achievements[a].icon
+	} else {
+		return "inv_misc_questionmark"
+	}
+};
+g_achievements.createIcon = function (d, b, a, c) {
+	return Icon.create(g_achievements.getIcon(d), b, null, "?achievement=" + d, a, c)
 };
 var $WowheadPower = new
-function() {
-	var V,
-	a,
-	L,	// language
-	T,
-	F,
-	J,
-	H,
-	R = 0,
-	i = 0,
-	K = 1,
-	E = 2,
-	M = 3,
-	N = 4,
-	G = 3,
-	O = 5,
-	g = 6,
-	j = 15,
-	W = 15,
-	S = {
-		3: [g_items, "item"],
-		5: [g_quests, "quest"],
-		6: [g_spells, "spell"]
+function () {
+	var e, D, H, q, J, B, z, g = 0,
+	C = {},
+	f = {},
+	c = {},
+	G = 0,
+	E = 1,
+	h = 2,
+	r = 3,
+	F = 4,
+	s = 1,
+	j = 2,
+	v = 3,
+	y = 5,
+	t = 6,
+	m = 10,
+	i = 100,
+	o = 15,
+	x = 15,
+	p = {
+		1 : [C, "npc"],
+		2 : [f, "object"],
+		3 : [g_items, "item"],
+		5 : [g_quests, "quest"],
+		6 : [g_spells, "spell"],
+		10 : [g_achievements, "achievement"],
+		100 : [c, "profile"]
 	};
-	function Z() {
-		aE(document, "mouseover", U)
+	function K() {
+		aE(document, "mouseover", u)
 	}
-	function A(k) {
-		var l = g_getCursorPos(k);
-		J = l.x;
-		H = l.y
+	function n(O) {
+		var P = g_getCursorPos(O);
+		B = P.x;
+		z = P.y
 	}
-	function e(u, q) {
-		if (u.nodeName != "A") {
+	function M(aa, W) {
+		if (aa.nodeName != "A" && aa.nodeName != "AREA") {
 			return - 2323
 		}
-		if (!u.href.length) {
+		if (!aa.href.length) {
 			return
 		}
-		var o,
-		n,
-		l,
-		k;
-		n = 2;
-		l = 3;
-//		if (u.href.indexOf("http://") == 0) {
-//			o = 1;
-//			k = u.href.match(/http:\/\/(www|dev|fr|es|de|wotlk)?\.?wowhead\.com\/\?(item|quest|spell)=([0-9]+)/)
-//		} else {
-			k = u.href.match(/()\?(item|quest|spell)=([0-9]+)/)
-//		}
-		if (k == null && u.rel) {
-			o = 0;
-			n = 1;
-			l = 2;
-			k = u.rel.match(/(item|quest|spell).?([0-9]+)/)
+		if (aa.rel.indexOf("np") != -1) {
+			return
 		}
-		if (k) {
-//			var s,
-//			p = "www";
-//			if (o && k[o]) {
-//				p = k[o]
-//			} else {
-//				var r = location.hostname.match(/(www|dev|fr|es|de|wotlk)\.?wowhead\.com/);
-//				if (r != null) {
-//					p = r[1]
-//				}
-//			}
-//			s = g_getLocaleFromDomain(p);
-//			T = p;
-			s = 0;
-			F = u;
-			if (u.href.indexOf("#") != -1 && document.location.href.indexOf(k[n] + "=" + k[l]) != -1) {
+		var T, S, Q, P, U = {};
+		q = U;
+		var O = function (ab, af, ad) {
+			if (af == "buff" || af == "sock") {
+				U[af] = true
+			} else {
+				if (af == "rand" || af == "ench" || af == "lvl" || af == "c") {
+					U[af] = parseInt(ad)
+				} else {
+					if (af == "gems" || af == "pcs") {
+						U[af] = ad.split(":")
+					} else {
+						if (af == "who" || af == "domain") {
+							U[af] = ad
+						} else {
+							if (af == "when") {
+								U[af] = new Date(parseInt(ad))
+							}
+						}
+					}
+				}
+			}
+		};
+		S = 2;
+		Q = 3;
+/*
+		if (aa.href.indexOf("http://") == 0) {
+			T = 1;
+			P = aa.href.match(/http:\/\/(.+?)?\.?wowhead\.com\/\?(item|quest|spell|achievement|npc|object|profile)=([^&#]+)/)
+		} else {
+			P = aa.href.match(/()\?(item|quest|spell|achievement|npc|object|profile)=([^&#]+)/)
+		}
+*/
+		P = aa.href.match(/()\?(item|quest|spell|achievement|npc|object|profile)=([^&#]+)/)
+		if (P == null && aa.rel) {
+			T = 0;
+			S = 1;
+			Q = 2;
+			P = aa.rel.match(/(item|quest|spell|achievement|npc|object|profile).?([^&#]+)/)
+		}
+		if (aa.rel) {
+			aa.rel.replace(/([a-zA-Z]+)=?([a-zA-Z0-9:-]*)/g, O);
+			if (U.gems && U.gems.length > 0) {
+				var V;
+				for (V = Math.min(3, U.gems.length - 1); V >= 0; --V) {
+					if (parseInt(U.gems[V])) {
+						break
+					}
+				}++V;
+				if (V == 0) {
+					delete U.gems
+				} else {
+					if (V < U.gems.length) {
+						U.gems = U.gems.slice(0, V)
+					}
+				}
+			}
+		}
+		if (P) {
+			var Z, R = "www";
+			J = aa;
+			if (U.domain) {
+				R = U.domain
+			} else {
+				if (T && P[T]) {
+					R = P[T]
+				}
+			}
+			Z = g_locale.id;//g_getLocaleFromDomain(R);
+			if (aa.href.indexOf("#") != -1 && document.location.href.indexOf(P[S] + "=" + P[Q]) != -1) {
 				return
 			}
-			R = (u.parentNode.className == "tile" ? 1: 0);
-			if (!u.onmouseout) {
-				if (R == 0) {
-					u.onmousemove = Q
+			g = (aa.parentNode.className.indexOf("icon") == 0 ? 1 : 0);
+			if (!aa.onmouseout) {
+				if (g == 0) {
+					aa.onmousemove = a
 				}
-				u.onmouseout = P
+				aa.onmouseout = L
 			}
-			A(q);
-			Y(g_getIdFromTypeName(k[n]), k[l], s)
+			n(W);
+			var Y = g_getIdFromTypeName(P[S]),
+			X = P[Q];
+			if (Y == i && !g_dev) {
+				Z = 0
+			}
+			w(Y, X, Z, U)
 		}
 	}
-	function U(m) {
-		m = $E(m);
-		var l = m._target;
-		var k = 0;
-		while (l != null && k < 3 && e(l, m) == -2323) {
-			l = l.parentNode; ++k
+	function u(Q) {
+		Q = $E(Q);
+		var P = Q._target;
+		var O = 0;
+		while (P != null && O < 3 && M(P, Q) == -2323) {
+			P = P.parentNode; ++O
 		}
 	}
-	function Q(k) {
-		k = $E(k);
-		A(k);
-		Tooltip.move(J, H, 0, 0, j, W)
+	function a(O) {
+		O = $E(O);
+		n(O);
+		Tooltip.move(B, z, 0, 0, o, x)
 	}
-	function P() {
-		V = null;
-		F = null;
+	function L() {
+		e = null;
+		J = null;
 		Tooltip.hide()
 	}
-	function X(k) {
-		return "tooltip"
+	function I(O) {
+		return (q.buff ? "buff_": "tooltip_") + g_locales[O]
 	}
-	function h(m, n, l) {
-		var k = S[m][0];
-		if (k[n] == null) {
-			k[n] = {}
+	function k(P, R, Q) {
+		var O = p[P][0];
+		if (O[R] == null) {
+			O[R] = {}
 		}
-		if (k[n].status == null) {
-			k[n].status = {}
+		if (O[R].status == null) {
+			O[R].status = {}
 		}
-		if (k[n].status[l] == null) {
-			k[n].status[l] = i
+		if (O[R].status[Q] == null) {
+			O[R].status[Q] = G
 		}
 	}
-	function Y(m, n, l) {
-		// m - type ('item', etc)
-		// n - id
-		// l - language
-		V = m;
-		a = n;
-		L = l;
-		h(m, n, l);
-		var k = S[m][0];
-		if (k[n].status[l] == N || k[n].status[l] == M) {
-			C(k[n][X(l)], k[n].icon)
+	function w(P, T, R, S) {
+		if (!S) {
+			S = {}
+		}
+		var Q = d(T, S);
+		e = P;
+		D = Q;
+		H = R;
+		q = S;
+		k(P, Q, R);
+		var O = p[P][0];
+		if (O[Q].status[R] == F || O[Q].status[R] == r) {
+			N(O[Q][I(R)], O[Q].icon)
 		} else {
-			if (k[n].status[l] == K) {
-				C(LANG.tooltip_loading)
+			if (O[Q].status[R] == E) {
+				N(LANG.tooltip_loading)
 			} else {
-				D(m, n, l)
+				b(P, T, R, null, S)
 			}
 		}
 	}
-	function D(n, o, l, m) {
-		var k = S[n][0];
-		if (k[o].status[l] != i && k[o].status[l] != E) {
+	function b(W, S, X, Q, T) {
+		var O = d(S, T);
+		var V = p[W][0];
+		if (V[O].status[X] != G && V[O].status[X] != h) {
 			return
 		}
-		k[o].status[l] = K;
-		if (!m) {
-			k[o].timer = setTimeout(function() {
-				B.apply(this, [n, o, l])
+		V[O].status[X] = E;
+		if (!Q) {
+			V[O].timer = setTimeout(function () {
+				l.apply(this, [W, O, X])
 			},
 			333)
 		}
-		g_ajaxIshRequest("ajax.php?" + S[n][1] + "=" + o)
-	}
-	function C(k, l) {
-		if (F._fixTooltip) {
-			k = F._fixTooltip(k, V, a, F)
+		var R = "";
+		for (var U in T) {
+			if (U != "rand" && U != "ench" && U != "gems" && U != "sock") {
+				continue
+			}
+			if (typeof T[U] == "object") {
+				R += "&" + U + "=" + T[U].join(":")
+			} else {
+				if (U == "sock") {
+					R += "&sock"
+				} else {
+					R += "&" + U + "=" + T[U]
+				}
+			}
 		}
-//		if (!k) {
-//			k = LANG["tooltip_" + g_types[V] + "notfound"];
-//			l = "Temp"
-//		}
-		if (R == 1) {
-			Tooltip.setIcon(null);
-			Tooltip.show(F, k, 0, 0)
+		/*
+		var P = "";
+		if (!g_dev) {
+			if (e == i) {
+				P += "http://profiler.wowhead.com"
+			} else {
+				P += "http://" + g_getDomainFromLocale(X) + ".wowhead.com"
+			}
+		}
+		P += "?" + p[W][1] + "=" + S + "&power" + R;
+		*/
+		var P = "ajax.php?" + p[W][1] + "=" + S + "&power" + R;
+		g_ajaxIshRequest(P)
+	}
+	function N(R, S) {
+		if (J._fixTooltip) {
+			R = J._fixTooltip(R, e, D, J)
+		}
+		if (!R) {
+			R = LANG["tooltip_" + g_types[e] + "notfound"];
+			S = "inv_misc_questionmark"
 		} else {
-			Tooltip.setIcon(l);
-			Tooltip.showAtXY(k, J, H, j, W)
+			if (q != null) {
+				if (q.pcs && q.pcs.length) {
+					var T = 0;
+					for (var Q = 0, P = q.pcs.length; Q < P; ++Q) {
+						var O;
+						if (O = R.match(new RegExp("<span><!--si([0-9]+:)*" + q.pcs[Q] + "(:[0-9]+)*-->"))) {
+							R = R.replace(O[0], '<span class="q8"><!--si' + q.pcs[Q] + "-->"); ++T
+						}
+					}
+					if (T > 0) {
+						R = R.replace("(0/", "(" + T + "/");
+						R = R.replace(new RegExp("<span>\\(([0-" + T + "])\\)", "g"), '<span class="q2">($1)')
+					}
+				}
+				if (q.c) {
+					R = R.replace(/<span class="c([0-9]+?)">(.+?)<\/span><br \/>/g, '<span class="c$1" style="display: none">$2</span>');
+					R = R.replace(new RegExp('<span class="c(' + q.c + ')" style="display: none">(.+?)</span>', "g"), '<span class="c$1">$2</span><br />')
+				}
+				if (q.lvl) {
+					R = R.replace(/\(<!--r([0-9]+):([0-9]+):([0-9]+)-->([0-9.%]+)(.+?)([0-9]+)\)/g, function (X, Z, Y, W, U, ab, V) {
+						var aa = g_convertRatingToPercent(q.lvl, Y, W);
+						aa = (Math.round(aa * 100) / 100);
+						if (Y != 12 && Y != 37) {
+							aa += "%"
+						}
+						return "(<!--r" + q.lvl + ":" + Y + ":" + W + "-->" + aa + ab + q.lvl + ")"
+					})
+				}
+				if (q.who && q.when) {
+					R = R.replace("<table><tr><td><br />", '<table><tr><td><br /><span class="q2">' + sprintf(LANG.tooltip_achievementcomplete, q.who, q.when.getMonth() + 1, q.when.getDate(), q.when.getFullYear()) + "</span><br /><br />");
+					R = R.replace(/class="q0"/g, 'class="r3"')
+				}
+			}
+		}
+		if (g == 1) {
+			Tooltip.setIcon(null);
+			Tooltip.show(J, R)
+		} else {
+			Tooltip.setIcon(S);
+			Tooltip.showAtXY(R, B, z, o, x)
 		}
 	}
-	function B(m, n, l) {
-		if (V == m && a == n && L == l) {
-			C(LANG.tooltip_loading);
-			var k = S[m][0];
-			k[n].timer = setTimeout(function() {
-				I.apply(this, [m, n, l])
+	function l(P, R, Q) {
+		if (e == P && D == R && H == Q) {
+			N(LANG.tooltip_loading);
+			var O = p[P][0];
+			O[R].timer = setTimeout(function () {
+				A.apply(this, [P, R, Q])
 			},
 			3850)
 		}
 	}
-	function I(m, n, l) {
-		var k = S[m][0];
-		k[n].status[l] = E;
-		if (V == m && a == n && L == l) {
-			C(LANG.tooltip_noresponse)
+	function A(P, R, Q) {
+		var O = p[P][0];
+		O[R].status[Q] = h;
+		if (e == P && D == R && H == Q) {
+			N(LANG.tooltip_noresponse)
 		}
 	}
-	this.register = function(n, o, l, m) {
-		var k = S[n][0];
-		clearTimeout(k[o].timer);
-		cO(k[o], m);
-		if (k[o][X(l)]) {
-			k[o].status[l] = N
+	function d(P, O) {
+		return P + (O.rand ? "r" + O.rand: "") + (O.ench ? "e" + O.ench: "") + (O.gems ? "g" + O.gems.join(",") : "") + (O.sock ? "s": "")
+	}
+	this.register = function (Q, S, R, P) {
+		var O = p[Q][0];
+		k(Q, S, R);
+		if (O[S].timer) {
+			clearTimeout(O[S].timer);
+			O[S].timer = null
+		}
+		cO(O[S], P);
+		if (O[S].status[R] == E) {
+			if (O[S][I(R)]) {
+				O[S].status[R] = F
+			} else {
+				O[S].status[R] = r
+			}
+		}
+		if (e == Q && S == D && H == R) {
+			N(O[S][I(R)], O[S].icon)
+		}
+	};
+	this.registerNpc = function (Q, P, O) {
+		this.register(s, Q, P, O)
+	};
+	this.registerObject = function (Q, P, O) {
+		this.register(j, Q, P, O)
+	};
+	this.registerItem = function (Q, P, O) {
+		this.register(v, Q, P, O)
+	};
+	this.registerQuest = function (Q, P, O) {
+		this.register(y, Q, P, O)
+	};
+	this.registerSpell = function (Q, P, O) {
+		this.register(t, Q, P, O)
+	};
+	this.registerAchievement = function (Q, P, O) {
+		this.register(m, Q, P, O)
+	};
+	this.registerProfile = function (Q, P, O) {
+		this.register(i, Q, P, O)
+	};
+	this.request = function (O, S, Q, R) {
+		if (!R) {
+			R = {}
+		}
+		var P = d(S, R);
+		k(O, P, Q);
+		b(O, S, Q, 1, R)
+	};
+	this.requestItem = function (P, O) {
+		this.request(v, P, g_locale.id, O)
+	};
+	this.requestSpell = function (O) {
+		this.request(t, O, g_locale.id)
+	};
+	this.getStatus = function (P, R, Q) {
+		var O = p[P][0];
+		if (O[R] != null) {
+			return O[R].status[Q]
 		} else {
-			k[o].status[l] = M
-		}
-		if (V == n && o == a && L == l) {
-			C(k[o][X(l)], k[o].icon)
+			return G
 		}
 	};
-	this.registerItem = function(m, k, l) {
-		this.register(G, m, k, l)
+	this.getItemStatus = function (P, O) {
+		this.getStatus(v, P, O)
 	};
-	this.registerQuest = function(m, k, l) {
-		this.register(O, m, k, l)
+	this.getSpellStatus = function (P, O) {
+		this.getStatus(t, P, O)
 	};
-	this.registerSpell = function(m, k, l) {
-		this.register(g, m, k, l)
-	};
-	this.request = function(l, m, k) {
-		h(l, m, k);
-		D(l, m, k, 1)
-	};
-	this.requestItem = function(k) {
-		this.request(G, g_locale.id, k)
-	};
-	this.requestSpell = function(k) {
-		this.request(g, g_locale.id, k)
-	};
-	this.getStatus = function(m, n, l) {
-		var k = S[m][0];
-		if (k[n] != null) {
-			return k[n].status[l]
-		} else {
-			return i
-		}
-	};
-	this.getItemStatus = function(l, k) {
-		this.getStatus(G, l, k)
-	};
-	this.requestSpell = function(l, k) {
-		this.getStatus(g, l, k)
-	};
-	Z()
+	K()
 };
-
-LiveSearch = new
-function() {
-	var currentTextbox,
-	lastSearch = {},
-	lastDiv,
-	timer,
-	prepared,
-	container,
-	cancelNext,
-	hasData;
+var LiveSearch = new
+function () {
+	var currentTextbox, lastSearch = {},
+	lastDiv, timer, prepared, container, cancelNext, hasData, summary, selection;
 	function setText(textbox, txt) {
 		textbox.value = txt;
 		textbox.selectionStart = textbox.selectionEnd = txt.length
@@ -5654,6 +8645,7 @@ function() {
 		}
 		lastDiv = div;
 		lastDiv.className += " live-search-selected";
+		selection = div.i;
 		if (!fromOver) {
 			show();
 			setTimeout(setText.bind(0, currentTextbox, g_getTextContent(div.firstChild.firstChild.childNodes[1])), 1);
@@ -5712,6 +8704,7 @@ function() {
 		show();
 		lastA = null;
 		hasData = 1;
+		selection = null;
 		while (container.firstChild) {
 			de(container.firstChild)
 		}
@@ -5720,17 +8713,9 @@ function() {
 			ae(container, ce("var"));
 			ae(container, ce("strong"))
 		}
-		search = search.replace(/[^a-z0-9'\-]/, " ");
+		search = search.replace(/[^a-z0-9\-]/i, " ");
 		search = trim(search.replace(/\s+/g, " "));
-		var parts = search.split(" "),
-		strRegex = "";
-		for (var j = 0, len = parts.length; j < len; ++j) {
-			if (j > 0) {
-				strRegex += "|"
-			}
-			strRegex += parts[j]
-		}
-		var regex = new RegExp("(" + strRegex + ")", "gi");
+		var regex = g_createOrRegex(search);
 		for (var i = 0, len = suggz.length; i < len; ++i) {
 			var pos = suggz[i].lastIndexOf("(");
 			if (pos != -1) {
@@ -5745,12 +8730,30 @@ function() {
 			sp2 = ce("span"),
 			div = ce("div"),
 			div2 = ce("div");
+			div.i = i;
 			a.onmouseover = aOver;
-			a.href = "?" + g_types[type] + "=" + typeId;
-			if (type == 3 && param2) {
+			if (textbox._summary) {
+				a.href = "javascript:;";
+				a.onmousedown = Summary.addGroupItem.bind(g_summaries[textbox._summary], textbox._type, typeId);
+				a.onclick = rf;
+				a.rel = g_types[type] + "=" + typeId
+			} else {
+				if (textbox._profileslots) {
+					a.href = "javascript:;";
+					a.onmousedown = $WowheadProfiler.equipItem.bind(null, typeId, textbox._profileslots);
+					a.onclick = rf;
+					a.rel = g_types[type] + "=" + typeId
+				} else {
+					a.href = "?" + g_types[type] + "=" + typeId
+				}
+			}
+			if (textbox._append) {
+				a.rel += textbox._append
+			}
+			if (type == 3 && param2 != null) {
 				a.className += " q" + param2
 			}
-			if ((type == 3 || type == 6) && param1) {
+			if ((type == 3 || type == 6 || type == 9 || type == 10) && param1) {
 				div.className += " live-search-icon";
 				div.style.backgroundImage = "url(images/icons/small/" + param1.toLowerCase() + ".jpg)"
 			} else {
@@ -5758,7 +8761,9 @@ function() {
 					div.className += " live-search-icon-quest-" + (param1 == 1 ? "alliance": "horde")
 				}
 			}
-			ae(sp, ct(LANG.types[type][0]));
+			if (!textbox._summary && !textbox._profileslots) {
+				ae(sp, ct(LANG.types[type][0]))
+			}
 			ae(a, sp);
 			var buffer = suggz[i];
 			buffer = buffer.replace(regex, boldify);
@@ -5780,6 +8785,33 @@ function() {
 		var a = eval(text);
 		var search = a[0];
 		if (search == opt.search) {
+			if ((opt.textbox._summary || opt.textbox._profileslots) && a.length == 9) {
+				for (var i = 0, len = a[8].length; i < len; ++i) {
+					if (opt.textbox._summary && in_array(g_summaries[opt.textbox._summary].data, a[8][i].id, function (x) {
+						return x.id
+					}) == -1) {
+						g_summaries[opt.textbox._summary].data.push(a[8][i]);
+						g_items.add(a[8][i].id, {
+							icon: a[8][i].icon
+						})
+					} else {
+						if (opt.textbox._profileslots) {
+							var _ = {};
+							_["name_" + g_locale.name] = a[8][i].name.substring(1);
+							cO(_, {
+								quality: parseInt(a[8][i].name.charAt(0)),
+								icon: a[8][i].icon,
+								displayid: a[8][i].displayid,
+								jsonequip: {},
+								itemset: 0
+							});
+							cO(_.jsonequip, a[8][i]);
+							g_items.add(a[8][i].id, _)
+						}
+					}
+				}
+				a.splice(8, 1)
+			}
 			if (a.length == 8) {
 				display(opt.textbox, search, a[1], a[7])
 			} else {
@@ -5788,7 +8820,15 @@ function() {
 		}
 	}
 	function fetch(textbox, search) {
-		new Ajax("opensearch.php?search=" + urlencode(search), {
+		//var url = "?search=" + urlencode(search) + "&opensearch";
+		var url = "opensearch.php?search=" + urlencode(search);
+		if (textbox._type) {
+			url += "&type=" + textbox._type
+		}
+		if (textbox._profileslots) {
+			url += "&slots=" + textbox._profileslots.join(":")
+		}
+		new Ajax(url, {
 			onSuccess: receive,
 			textbox: textbox,
 			search: search
@@ -5804,7 +8844,7 @@ function() {
 			clearTimeout(timer);
 			timer = 0
 		}
-		timer = setTimeout(fetch.bind(0, textbox, search), 500)
+		timer = setTimeout(fetch.bind(0, textbox, search), 333)
 	}
 	function cycle(dir) {
 		if (!isVisible()) {
@@ -5832,15 +8872,27 @@ function() {
 	function onKeyUp(e) {
 		e = $E(e);
 		var textbox = e._target;
-		if (Browser.gecko && e.ctrlKey) {
-			switch (e.keyCode) {
-			case 48:
-			case 96:
-			case 107:
-			case 109:
+		switch (e.keyCode) {
+		case 48:
+		case 96:
+		case 107:
+		case 109:
+			if (Browser.gecko && e.ctrlKey) {
 				adjust(textbox);
 				break
 			}
+			break;
+		case 13:
+			if ((textbox._summary || textbox._profileslots) && hasData && isVisible()) {
+				var div = container.childNodes[(Browser.ie6 ? 0 : 3) + (selection | 0)];
+				div.firstChild.firstChild.onmousedown();
+				hide();
+				if (textbox._summary) {
+					g_summaries.compare.toggleOptions()
+				}
+				return
+			}
+			break
 		}
 		var search = trim(textbox.value.replace(/\s+/g, " "));
 		if (search == lastSearch[textbox.id]) {
@@ -5875,146 +8927,1051 @@ function() {
 			currentTextbox = textbox
 		}
 	}
-	this.attach = function(textbox) {
+	this.attach = function (textbox) {
+		if (textbox.getAttribute("autocomplete") == "off") {
+			return
+		}
 		textbox.setAttribute("autocomplete", "off");
 		aE(textbox, "focus", onFocus);
 		aE(textbox, "keyup", onKeyUp);
 		aE(textbox, Browser.opera ? "keypress": "keydown", onKeyDown)
+	};
+	this.reset = function (textbox) {
+		lastSearch[textbox.id] = null;
+		textbox.value = "";
+		hasData = 0;
+		hide()
+	};
+	this.hide = function () {
+		hide()
 	}
 };
-
-Lightbox = new
-function() {
-	var F,
-	N,
-	Q,
-	J = {},
-	C = {},
-	P,
-	D,
-	E;
-	function O() {
-		aE(F, "click", G);
-		aE(N, "mousewheel", B);
-		aE(document, Browser.opera ? "keypress": "keydown", H);
-		aE(window, "resize", A);
+var Lightbox = new
+function () {
+	var d, m, n, h = {},
+	c = {},
+	i, f;
+	function o() {
+		aE(d, "click", e);
+		aE(document, Browser.opera ? "keypress": "keydown", g);
+		aE(window, "resize", a);
 		if (Browser.ie6) {
-			aE(window, "scroll", M)
+			aE(window, "scroll", j)
 		}
 	}
-	function K() {
-		dE(F, "click", G);
-		dE(N, "mousewheel", B);
-		dE(document, Browser.opera ? "keypress": "keydown", H);
-		dE(window, "resize", A);
+	function l() {
+		dE(d, "click", e);
+		dE(document, Browser.opera ? "keypress": "keydown", g);
+		dE(window, "resize", a);
 		if (Browser.ie6) {
-			dE(window, "scroll", M)
+			dE(window, "scroll", j)
 		}
 	}
-	function I() {
-		if (P) {
+	function b() {
+		if (i) {
 			return
 		}
-		P = 1;
-		var R = ge("layers");
-		F = ce("div");
-		F.className = "lightbox-overlay";
-		N = ce("div");
-		N.className = "lightbox-outer";
-		Q = ce("div");
-		Q.className = "lightbox-inner";
-		F.style.display = N.style.display = "none";
-		ae(R, F);
-		ae(N, Q);
-		ae(R, N)
+		i = 1;
+		var p = ge("layers");
+		d = ce("div");
+		d.className = "lightbox-overlay";
+		m = ce("div");
+		m.className = "lightbox-outer";
+		n = ce("div");
+		n.className = "lightbox-inner";
+		d.style.display = m.style.display = "none";
+		ae(p, d);
+		ae(m, n);
+		ae(p, m)
 	}
-	function B(R) {
-		R = $E(R);
-		R.returnValue = false
-	}
-	function H(R) {
-		R = $E(R);
-		switch (R.keyCode) {
+	function g(p) {
+		p = $E(p);
+		switch (p.keyCode) {
 		case 27:
-			G();
+			e();
 			break
 		}
 	}
-	function A(R) {
-		if (R != 1234) {
-			if (C.onResize) {
-				C.onResize()
+	function a(p) {
+		if (p != 1234) {
+			if (c.onResize) {
+				c.onResize()
 			}
 		}
-		F.style.height = document.body.offsetHeight + "px";
+		d.style.height = document.body.offsetHeight + "px";
 		if (Browser.ie6) {
-			M()
+			j()
 		}
 	}
-	function M() {
-		var S = g_getScroll().y,
-		R = g_getWindowSize().h;
-		N.style.top = (S + R / 2) + "px"
+	function j() {
+		var q = g_getScroll().y,
+		p = g_getWindowSize().h;
+		m.style.top = (q + p / 2) + "px"
 	}
-	function G() {
-		K();
-		if (C.onHide) {
-			C.onHide()
+	function e() {
+		l();
+		if (c.onHide) {
+			c.onHide()
 		}
-		E = 0;
-		F.style.display = N.style.display = "none";
-		array_apply(gE(document, "iframe"),
-		function(R) {
-			R.style.display = ""
-		})
+		d.style.display = m.style.display = "none";
+		Ads.restoreHidden();
+		g_enableScroll(true)
 	}
-	function L() {
-		F.style.display = N.style.display = J[D].style.display = ""
+	function k() {
+		d.style.display = m.style.display = h[f].style.display = ""
 	}
-	this.setSize = function(R, S) {
-		Q.style.visibility = "hidden";
-		Q.style.width = R + "px";
-		Q.style.height = S + "px";
-		Q.style.left = -parseInt(R / 2) + "px";
-		Q.style.top = -parseInt(S / 2) + "px";
-		Q.style.visibility = "visible"
+	this.setSize = function (p, q) {
+		n.style.visibility = "hidden";
+		n.style.width = p + "px";
+		n.style.height = q + "px";
+		n.style.left = -parseInt(p / 2) + "px";
+		n.style.top = -parseInt(q / 2) + "px";
+		n.style.visibility = "visible"
 	};
-	this.show = function(V, S, R) {
-		E = 1;
-		C = S || {};
-		array_apply(gE(document, "iframe"),
-		function(W) {
-			W.style.display = "none"
-		});
-		I();
-		O();
-		if (D != V && J[D] != null) {
-			J[D].style.display = "none"
+	this.show = function (t, s, p) {
+		c = s || {};
+		Ads.hideAll();
+		b();
+		o();
+		if (f != t && h[f] != null) {
+			h[f].style.display = "none"
 		}
-		D = V;
-		var U = 0,
-		T;
-		if (J[V] == null) {
-			U = 1;
-			T = ce("div");
-			ae(Q, T);
-			J[V] = T
+		f = t;
+		var r = 0,
+		q;
+		if (h[t] == null) {
+			r = 1;
+			q = ce("div");
+			ae(n, q);
+			h[t] = q
 		} else {
-			T = J[V]
+			q = h[t]
 		}
-		if (C.onShow) {
-			C.onShow(T, U, R)
+		if (c.onShow) {
+			c.onShow(q, r, p)
 		}
-		A(1234);
-		L()
+		a(1234);
+		k();
+		g_enableScroll(false)
 	};
-	this.reveal = function() {
-		L()
+	this.reveal = function () {
+		k()
 	};
-	this.hide = function() {
-		G()
+	this.hide = function () {
+		e()
 	};
-	this.isVisible = function() {
-		return E
+	this.isVisible = function () {
+		return (d && d.style.display != "none")
 	}
 };
+var ModelViewer = new
+function () {
+	var d, x, z = [],
+	h,
+	u,
+	n,
+	w,
+	g,
+	p,
+	q,
+	e,
+	m,
+	s,
+	l,
+	o = [{
+		id: 10,
+		name: g_chr_races[10],
+		model: "bloodelf"
+	},
+	{
+		id: 11,
+		name: g_chr_races[11],
+		model: "draenei"
+	},
+	{
+		id: 3,
+		name: g_chr_races[3],
+		model: "dwarf"
+	},
+	{
+		id: 7,
+		name: g_chr_races[7],
+		model: "gnome"
+	},
+	{
+		id: 1,
+		name: g_chr_races[1],
+		model: "human"
+	},
+	{
+		id: 4,
+		name: g_chr_races[4],
+		model: "nightelf"
+	},
+	{
+		id: 2,
+		name: g_chr_races[2],
+		model: "orc"
+	},
+	{
+		id: 6,
+		name: g_chr_races[6],
+		model: "tauren"
+	},
+	{
+		id: 8,
+		name: g_chr_races[8],
+		model: "troll"
+	},
+	{
+		id: 5,
+		name: g_chr_races[5],
+		model: "scourge"
+	}],
+	i = [{
+		id: 1,
+		name: LANG.female,
+		model: "female"
+	},
+	{
+		id: 0,
+		name: LANG.male,
+		model: "male"
+	}];
+	function v() {
+		u.style.display = "none";
+		n.style.display = "none";
+		w.style.display = "none"
+	}
+	function a() {
+		var A, B;
+		if (p.style.display == "") {
+			A = (p.selectedIndex >= 0 ? p.options[p.selectedIndex].value: "")
+		} else {
+			A = (q.selectedIndex >= 0 ? q.options[q.selectedIndex].value: "")
+		}
+		B = (e.selectedIndex >= 0 ? e.options[e.selectedIndex].value: 0);
+		return {
+			r: A,
+			s: B
+		}
+	}
+	function c(A, B) {
+		return (!isNaN(A) && A > 0 && in_array(o, A, function (C) {
+			return C.id
+		}) != -1 && !isNaN(B) && B >= 0 && B <= 1)
+	}
+	function t() {
+		if (s == 2 && !f()) {
+			s = 0
+		}
+		if (s == 2) {
+			var D = '<object id="3dviewer-plugin" type="application/x-zam-wowmodel" width="600" height="400"><param name="model" value="' + d + '" /><param name="modelType" value="' + x + '" /><param name="contentPath" value="http://static.wowhead.com/modelviewer/" />';
+			if (x == 16 && z.length) {
+				D += '<param name="equipList" value="' + z.join(",") + '" />'
+			}
+			D += '<param name="bgColor" value="#181818" /></object>';
+			w.innerHTML = D;
+			w.style.display = ""
+		} else {
+			if (s == 1) {
+				var D = '<applet id="3dviewer-java" code="org.jdesktop.applet.util.JNLPAppletLauncher" width="600" height="400" archive="http://static.wowhead.com/modelviewer/applet-launcher.jar,http://download.java.net/media/jogl/builds/archive/jsr-231-webstart-current/jogl.jar,http://download.java.net/media/gluegen/webstart/gluegen-rt.jar,http://download.java.net/media/java3d/webstart/release/vecmath/latest/vecmath.jar,http://static.wowhead.com/modelviewer/ModelView510.jar"><param name="jnlp_href" value="http://static.wowhead.com/modelviewer/ModelView.jnlp"><param name="codebase_lookup" value="false"><param name="cache_option" value="no"><param name="subapplet.classname" value="modelview.ModelViewerApplet"><param name="subapplet.displayname" value="Model Viewer Applet"><param name="progressbar" value="true"><param name="jnlpNumExtensions" value="1"><param name="jnlpExtension1" value="http://download.java.net/media/jogl/builds/archive/jsr-231-webstart-current/jogl.jnlp"><param name="contentPath" value="http://static.wowhead.com/modelviewer/"><param name="model" value="' + d + '"><param name="modelType" value="' + x + '">';
+				if (x == 16 && z.length) {
+					D += '<param name="equipList" value="' + z.join(",") + '">'
+				}
+				D += '<param name="bgColor" value="#181818"></applet>';
+				n.innerHTML = D;
+				n.style.display = ""
+			} else {
+				var G = {
+					model: d,
+					modelType: x,
+					contentPath: "http://static.wowhead.com/modelviewer/",
+					blur: (OS.mac ? "0": "1")
+				};
+				var F = {
+					quality: "high",
+					allowscriptaccess: "always",
+					menu: false,
+					bgcolor: "#181818"
+				};
+				var A = {};
+				if (x == 16 && z.length) {
+					G.equipList = z.join(",")
+				}
+				swfobject.embedSWF("http://static.wowhead.com/modelviewer/ModelView.swf", "dsjkgbdsg2346", "600", "400", "10.0.0", "http://static.wowhead.com/modelviewer/expressInstall.swf", G, F, A);
+				u.style.display = ""
+			}
+		}
+		var H = a(),
+		C = H.r,
+		E = H.s;
+		if (!h.noPound) {
+			var B = "#modelviewer";
+			if (C && E) {
+				B += ":" + C + "+" + E
+			} else {
+				B += ":"
+			}
+			if (h.extraPound != null) {
+				B += ":" + h.extraPound
+			}
+			location.replace(rtrim(B, ":"))
+		}
+	}
+	function b() {
+		var E = a(),
+		B = E.r,
+		C = E.s;
+		if (!B) {
+			if (e.style.display == "none") {
+				return
+			}
+			e.style.display = "none";
+			d = z[1];
+			switch (h.slot) {
+			case 1:
+				x = 2;
+				break;
+			case 3:
+				x = 4;
+				break;
+			default:
+				x = 1
+			}
+		} else {
+			if (e.style.display == "none") {
+				e.style.display = ""
+			}
+			if (q.style.display == "") {
+				sc("modelviewer_model_race", 7, B, "/", ".wowhead.com");
+				sc("modelviewer_model_sex", 7, C, "/", ".wowhead.com")
+			}
+			var E = function (F) {
+				return F.id
+			};
+			var D = in_array(o, B, E);
+			var A = in_array(i, C, E);
+			if (D != -1 && A != -1) {
+				d = o[D].model + i[A].model;
+				x = 16
+			}
+		}
+		v();
+		t()
+	}
+	function j(A) {
+		if (A == s) {
+			return
+		}
+		g_setSelectedLink(this, "modelviewer-mode");
+		v();
+		if (s == null) {
+			s = A;
+			setTimeout(t, 50)
+		} else {
+			s = A;
+			sc("modelviewer_mode", 7, A, "/", ".wowhead.com");
+			t()
+		}
+	}
+	function r(F, A) {
+		var H = -1,
+		I = -1,
+		B, E;
+		if (A.race != null && A.sex != null) {
+			H = A.race;
+			I = A.sex;
+			g.style.display = "none";
+			F = 0
+		} else {
+			g.style.display = ""
+		}
+		if (H == -1 && I == -1) {
+			if (location.hash) {
+				var G = location.hash.match(/modelviewer:([0-9]+)\+([0-9]+)/);
+				if (G != null) {
+					if (c(G[1], G[2])) {
+						H = G[1];
+						I = G[2];
+						e.style.display = ""
+					}
+				}
+			}
+		}
+		if (F) {
+			B = p;
+			E = 1;
+			p.style.display = "";
+			p.selectedIndex = -1;
+			q.style.display = "none";
+			if (I == -1) {
+				e.style.display = "none"
+			}
+		} else {
+			if (H == -1 && I == -1) {
+				var L = parseInt(gc("modelviewer_model_race")),
+				D = parseInt(gc("modelviewer_model_sex"));
+				if (c(L, D)) {
+					H = L;
+					I = D
+				} else {
+					H = 10;
+					I = 1
+				}
+			}
+			B = q;
+			E = 0;
+			p.style.display = "none";
+			q.style.display = "";
+			e.style.display = ""
+		}
+		if (I != -1) {
+			e.selectedIndex = I
+		}
+		if (H != -1 && I != -1) {
+			var K = function (M) {
+				return M.id
+			};
+			var J = in_array(o, H, K);
+			var C = in_array(i, I, K);
+			if (J != -1 && C != -1) {
+				d = o[J].model + i[C].model;
+				x = 16;
+				J += E;
+				if (Browser.opera) {
+					setTimeout(function () {
+						B.selectedIndex = J
+					},
+					1)
+				} else {
+					B.selectedIndex = J
+				}
+				e.selectedIndex = C
+			}
+		}
+	}
+	function f() {
+		var B = navigator.mimeTypes["application/x-zam-wowmodel"];
+		if (B) {
+			var A = B.enabledPlugin;
+			if (A) {
+				return true
+			}
+		}
+		return false
+	}
+	function k() {
+		if (!h.noPound) {
+			if (m && m.indexOf("modelviewer") == -1) {
+				location.replace(m)
+			} else {
+				location.replace("#.")
+			}
+		}
+		if (h.onHide) {
+			h.onHide()
+		}
+	}
+	function y(M, H, E) {
+		var D, B;
+		Lightbox.setSize(620, 452);
+		if (H) {
+			M.className = "modelviewer";
+			var L = ce("div");
+			u = ce("div");
+			n = ce("div");
+			w = ce("div");
+			var K = ce("div");
+			K.id = "dsjkgbdsg2346";
+			ae(u, K);
+			L.className = "modelviewer-screen";
+			u.style.display = n.style.display = w.style.display = "none";
+			ae(L, u);
+			ae(L, n);
+			ae(L, w);
+			ae(M, L);
+			D = ce("a"),
+			B = ce("a");
+			D.className = "modelviewer-help";
+			D.href = "?help=modelviewer";
+			D.target = "_blank";
+			ae(D, ce("span"));
+			B.className = "modelviewer-close";
+			B.href = "javascript:;";
+			B.onclick = Lightbox.hide;
+			ae(B, ce("span"));
+			ae(M, B);
+			ae(M, D);
+			var J = ce("div"),
+			C = ce("span"),
+			D = ce("a"),
+			B = ce("a");
+			J.className = "modelviewer-quality";
+			D.href = B.href = "javascript:;";
+			ae(D, ct("Flash"));
+			ae(B, ct("Java"));
+			D.onclick = j.bind(D, 0);
+			B.onclick = j.bind(B, 1);
+			ae(C, D);
+			ae(C, ct(" " + String.fromCharCode(160)));
+			ae(C, B);
+			if (f()) {
+				var A = ce("a");
+				A.href = "javascript:;";
+				ae(A, ct("Plugin"));
+				A.onclick = j.bind(A, 2);
+				ae(C, ct(" " + String.fromCharCode(160)));
+				ae(C, A)
+			}
+			ae(J, ce("div"));
+			ae(J, C);
+			ae(M, J);
+			g = ce("div");
+			g.className = "modelviewer-model";
+			var K = function (O, N) {
+				return strcmp(O.name, N.name)
+			};
+			o.sort(K);
+			i.sort(K);
+			p = ce("select");
+			q = ce("select");
+			e = ce("select");
+			p.onchange = q.onchange = e.onchange = b;
+			ae(p, ce("option"));
+			for (var G = 0, I = o.length; G < I; ++G) {
+				var F = ce("option");
+				F.value = o[G].id;
+				ae(F, ct(o[G].name));
+				ae(p, F)
+			}
+			for (var G = 0, I = o.length; G < I; ++G) {
+				var F = ce("option");
+				F.value = o[G].id;
+				ae(F, ct(o[G].name));
+				ae(q, F)
+			}
+			for (var G = 0, I = i.length; G < I; ++G) {
+				var F = ce("option");
+				F.value = i[G].id;
+				ae(F, ct(i[G].name));
+				ae(e, F)
+			}
+			e.style.display = "none";
+			ae(g, ce("div"));
+			ae(g, p);
+			ae(g, q);
+			ae(g, e);
+			ae(M, g);
+			J = ce("div");
+			J.className = "clear";
+			ae(M, J)
+		}
+		switch (E.type) {
+		case 1:
+			g.style.display = "none";
+			if (E.humanoid) {
+				x = 32
+			} else {
+				x = 8
+			}
+			d = E.displayId;
+			break;
+		case 2:
+			g.style.display = "none";
+			x = 64;
+			d = E.displayId;
+			break;
+		case 3:
+			z = [E.slot, E.displayId];
+			if (in_array([4, 5, 6, 7, 8, 9, 10, 16, 19, 20], E.slot) != -1) {
+				r(0, E)
+			} else {
+				switch (E.slot) {
+				case 1:
+					x = 2;
+					break;
+				case 3:
+					x = 4;
+					break;
+				default:
+					x = 1
+				}
+				d = E.displayId;
+				r(1, E)
+			}
+			break;
+		case 4:
+			z = E.equipList;
+			r(0, E)
+		}
+		if (H) {
+			if (gc("modelviewer_mode") == "2" && f()) {
+				A.onclick()
+			} else {
+				if (gc("modelviewer_mode") == "1") {
+					B.onclick()
+				} else {
+					D.onclick()
+				}
+			}
+		} else {
+			v();
+			setTimeout(t, 1)
+		}
+		m = location.hash
+	}
+	this.checkPound = function () {
+		if (location.hash && location.hash.indexOf("#modelviewer") == 0) {
+			if (l != null) {
+				var A = location.hash.split(":");
+				if (A.length == 3 && A[2]) {
+					l(A[2])
+				}
+			} else {
+				var B = ge("dsgndslgn464d");
+				if (B) {
+					B.onclick()
+				}
+			}
+		}
+	};
+	this.addExtraPound = function (A) {
+		l = A
+	};
+	this.show = function (A) {
+		h = A;
+		Lightbox.show("modelviewer", {
+			onShow: y,
+			onHide: k
+		},
+		A)
+	};
+	DomContentLoaded.addEvent(this.checkPound)
+};
+var g_screenshots = {};
+var ScreenshotViewer = new
+function () {
+	var z, k, e, y, B, c, o, q = 0,
+	u, b, n, i, w, x, t, h, v, j;
+	function g(C) {
+		var F = z[k];
+		var D = Math.max(50, Math.min(618, g_getWindowSize().h - 72 - C));
+		if (q != 1 || F.id || F.resize) {
+			c = Math.min(772 / F.width, 618 / F.height);
+			B = Math.min(772 / F.width, D / F.height)
+		} else {
+			c = B = 1
+		}
+		if (c > 1) {
+			c = 1
+		}
+		if (B > 1) {
+			B = 1
+		}
+		e = Math.round(B * F.width);
+		y = Math.round(B * F.height);
+		var E = Math.max(480, e);
+		Lightbox.setSize(E + 20, y + 52 + C);
+		if (Browser.ie6) {
+			n.style.width = E + "px";
+			if (z.length > 1) {
+				w.style.height = x.style.height = y + "px"
+			} else {
+				t.style.height = y + "px"
+			}
+		}
+		if (C) {
+			i.firstChild.width = e;
+			i.firstChild.height = y
+		}
+	}
+	function d(E) {
+		var D = z[E],
+		C = "#screenshots:";
+		if (q == 0) {
+			C += "id=" + D.id
+		} else {
+			C += u + ":" + (E + 1)
+		}
+		return C
+	}
+	function s(F) {
+		if (F && (B == c) && g_getWindowSize().h > b.offsetHeight) {
+			return
+		}
+		b.style.visibility = "hidden";
+		var C = z[k],
+		I = (C.width > 772 || C.height > 618);
+		g(0);
+		var E = (C.url ? C.url: "http://static.wowhead.com/uploads/screenshots/" + (I ? "resized/": "normal/") + C.id + ".jpg");
+		var J = '<img src="' + E + '" width="' + e + '" height="' + y + '"';
+		if (Browser.ie6) {
+			J += ' galleryimg="no"'
+		}
+		J += ">";
+		i.innerHTML = J;
+		if (!F) {
+			if (C.url) {
+				h.href = E
+			} else {
+				h.href = "http://static.wowhead.com/uploads/screenshots/normal/" + C.id + ".jpg"
+			}
+			if (!C.user && typeof g_pageInfo == "object") {
+				C.user = g_pageInfo.username
+			}
+			var L = (C.date && C.user),
+			K = (z.length > 1);
+			if (L) {
+				var H = new Date(C.date),
+				N = (g_serverTime - H) / 1000;
+				var M = v.firstChild.childNodes[1];
+				M.href = "?user=" + C.user;
+				M.innerHTML = C.user;
+				var P = v.firstChild.childNodes[3];
+				while (P.firstChild) {
+					de(P.firstChild)
+				}
+				Listview.funcBox.coFormatDate(P, N, H);
+				v.firstChild.style.display = ""
+			} else {
+				v.firstChild.style.display = "none"
+			}
+			var P = v.childNodes[1];
+			if (K) {
+				var O = "";
+				if (L) {
+					O += LANG.dash
+				}
+				O += (k + 1) + LANG.lvpage_of + z.length;
+				P.innerHTML = O;
+				P.style.display = ""
+			} else {
+				P.style.display = "none"
+			}
+			v.style.display = (L || K ? "": "none");
+			if (g_getLocale(true) != 0 && C.caption) {
+				C.caption = ""
+			}
+			var D = (C.caption != null && C.caption.length);
+			var G = (C.subject != null && C.subject.length && C.type && C.typeId);
+			if (D || G) {
+				var J = "";
+				if (G) {
+					J += LANG.types[C.type][0] + LANG.colon;
+					J += '<a href="?' + g_types[C.type] + "=" + C.typeId + '">';
+					J += C.subject;
+					J += "</a>"
+				}
+				if (D) {
+					if (G) {
+						J += LANG.dash
+					}
+					J += C.caption
+				}
+				j.innerHTML = J;
+				j.style.display = ""
+			} else {
+				j.style.display = "none"
+			}
+			if (z.length > 1) {
+				w.href = d(r( - 1));
+				x.href = d(r(1));
+				w.style.display = x.style.display = "";
+				t.style.display = "none"
+			} else {
+				w.style.display = x.style.display = "none";
+				t.style.display = ""
+			}
+			location.replace(d(k))
+		}
+		Lightbox.reveal();
+		if (j.offsetHeight > 18) {
+			g(j.offsetHeight - 18)
+		}
+		b.style.visibility = "visible"
+	}
+	function r(C) {
+		var D = k;
+		D += C;
+		if (D < 0) {
+			D = z.length - 1
+		} else {
+			if (D >= z.length) {
+				D = 0
+			}
+		}
+		return D
+	}
+	function a() {
+		k = r( - 1);
+		s();
+		return false
+	}
+	function p() {
+		k = r(1);
+		s();
+		return false
+	}
+	function m(C) {
+		C = $E(C);
+		switch (C.keyCode) {
+		case 37:
+			a();
+			break;
+		case 39:
+			p();
+			break
+		}
+	}
+	function f() {
+		s(1)
+	}
+	function l() {
+		if (z.length > 1) {
+			dE(document, "keyup", m)
+		}
+		if (o && q == 0) {
+			if (o.indexOf(":id=") != -1) {
+				o = "#screenshots"
+			}
+			location.replace(o)
+		} else {
+			location.replace("#.")
+		}
+	}
+	function A(C, G, D) {
+		if (typeof D.screenshots == "string") {
+			z = g_screenshots[D.screenshots];
+			q = 1;
+			u = D.screenshots
+		} else {
+			z = D.screenshots;
+			q = 0;
+			u = null
+		}
+		b = C;
+		k = 0;
+		if (D.pos && D.pos >= 0 && D.pos < z.length) {
+			k = D.pos
+		}
+		if (G) {
+			C.className = "screenshotviewer";
+			n = ce("div");
+			n.className = "screenshotviewer-screen";
+			w = ce("a");
+			x = ce("a");
+			w.className = "screenshotviewer-prev";
+			x.className = "screenshotviewer-next";
+			w.href = "javascript:;";
+			x.href = "javascript:;";
+			var I = ce("span");
+			ae(I, ce("b"));
+			ae(w, I);
+			var I = ce("span");
+			ae(I, ce("b"));
+			ae(x, I);
+			w.onclick = a;
+			x.onclick = p;
+			t = ce("a");
+			t.className = "screenshotviewer-cover";
+			t.href = "javascript:;";
+			t.onclick = Lightbox.hide;
+			var I = ce("span");
+			ae(I, ce("b"));
+			ae(t, I);
+			if (Browser.ie6) {
+				ns(w);
+				ns(x);
+				w.onmouseover = x.onmouseover = t.onmouseover = function () {
+					this.firstChild.style.display = "block"
+				};
+				w.onmouseout = x.onmouseout = t.onmouseout = function () {
+					this.firstChild.style.display = ""
+				}
+			}
+			ae(n, w);
+			ae(n, x);
+			ae(n, t);
+			i = ce("div");
+			ae(n, i);
+			ae(C, n);
+			var H = ce("a");
+			H.className = "screenshotviewer-close";
+			H.href = "javascript:;";
+			H.onclick = Lightbox.hide;
+			ae(H, ce("span"));
+			ae(C, H);
+			h = ce("a");
+			h.className = "screenshotviewer-original";
+			h.href = "javascript:;";
+			h.target = "_blank";
+			ae(h, ce("span"));
+			ae(C, h);
+			v = ce("div");
+			v.className = "screenshotviewer-from";
+			var E = ce("span");
+			ae(E, ct(LANG.lvscreenshot_from));
+			ae(E, ce("a"));
+			ae(E, ct(" "));
+			ae(E, ce("span"));
+			ae(v, E);
+			ae(v, ce("span"));
+			ae(C, v);
+			j = ce("div");
+			j.className = "screenshotviewer-caption";
+			ae(C, j);
+			var F = ce("div");
+			F.className = "clear";
+			ae(C, F)
+		}
+		o = location.hash;
+		if (z.length > 1) {
+			aE(document, "keyup", m)
+		}
+		s()
+	}
+	this.checkPound = function () {
+		if (location.hash && location.hash.indexOf("#screenshots") == 0) {
+			if (!g_listviews.screenshots) {
+				var D = location.hash.split(":");
+				if (D.length == 3) {
+					var E = g_screenshots[D[1]],
+					C = parseInt(D[2]);
+					if (E && C >= 1 && C <= E.length) {
+						ScreenshotViewer.show({
+							screenshots: D[1],
+							pos: C - 1
+						})
+					}
+				}
+			}
+		}
+	};
+	this.show = function (C) {
+		Lightbox.show("screenshotviewer", {
+			onShow: A,
+			onHide: l,
+			onResize: f
+		},
+		C)
+	};
+	DomContentLoaded.addEvent(this.checkPound)
+};
+var Ads = {
+	dimensions: {
+		leaderboard: [728, 90],
+		skyscraper: [160, 600],
+		medrect: [300, 250]
+	},
+	spots: {
+		leaderboard: ["header-ad"],
+		skyscraper: ["sidebar-ad"],
+		medrect: ["infobox-ad", "blog-sidebar-medrect", "talentcalc-sidebar-ad", "pl-rightbar-ad", "contribute-ad", "profiler-inventory-medrect", "profiler-reputation-medrect", "profiler-achievements-medrect"]
+	},
+	hidden: [],
+	removed: false,
+	install: function () {
+		for (var f in Ads.dimensions) {
+			var c = Ads.spots[f],
+			e = false;
+			for (var b = 0, a = c.length; b < a; ++b) {
+				if (f == "medrect" && location.href.indexOf("?profile") != -1) {
+					e = true
+				}
+				var d = ge(c[b]);
+				if (d) {
+					if (!e) {
+						Ads.fillSpot(f, d);
+						e = true
+					}
+				}
+			}
+		}
+	},
+	fillSpot: function (c, b) {
+		if (Ads.removed) {
+			de(b);
+			return
+		}
+		var a = ce("iframe");
+		a.width = Ads.dimensions[c][0];
+		a.height = Ads.dimensions[c][1];
+		a.frameBorder = 0;
+		a.scrolling = "no";
+		a.src = "http://static.wowhead.com/ads/dynamic/" + c + ".html?4";
+		ae(b, a)
+	},
+	removeAll: function () {
+		for (var e in Ads.dimensions) {
+			var c = Ads.spots[e];
+			for (var b = 0, a = c.length; b < a; ++b) {
+				var d = ge(c[b]);
+				if (d) {
+					de(d)
+				}
+			}
+		}
+		Ads.removed = true
+	},
+	hide: function (b) {
+		var a = gE(b, "iframe")[0];
+		if (a) {
+			a.style.display = "none";
+			Ads.hidden.push(b)
+		}
+	},
+	hideAll: function () {
+		for (var e in Ads.dimensions) {
+			var c = Ads.spots[e];
+			for (var b = 0, a = c.length; b < a; ++b) {
+				var d = ge(c[b]);
+				if (d && !Ads.isHidden(d)) {
+					Ads.hide(d)
+				}
+			}
+		}
+	},
+	isHidden: function (b) {
+		var a = gE(b, "iframe")[0];
+		if (a) {
+			return a.style.display == "none"
+		}
+		return false
+	},
+	intersect: function (g, e) {
+		var b;
+		for (var h in Ads.dimensions) {
+			var d = Ads.spots[h];
+			for (var c = 0, a = d.length; c < a; ++c) {
+				var f = ge(d[c]);
+				if (f) {
+					if (!Ads.isHidden(f)) {
+						coords = ac(f);
+						b = g_createRect(coords.x, coords.y, f.offsetWidth, f.offsetHeight);
+						if (g_intersectRect(g, b)) {
+							if (e) {
+								Ads.hide(f)
+							}
+							return true
+						}
+					}
+				}
+			}
+		}
+		return false
+	},
+	restoreHidden: function () {
+		if (Ads.hidden.length) {
+			for (var c = 0, a = Ads.hidden.length; c < a; ++c) {
+				var d = Ads.hidden[c],
+				b = gE(d, "iframe")[0];
+				if (b) {
+					b.style.display = ""
+				}
+			}
+			Ads.hidden = []
+		}
+	}
+};
+DomContentLoaded.addEvent(Ads.install);

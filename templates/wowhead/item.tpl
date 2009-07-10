@@ -43,7 +43,7 @@
 
 				<div class="text">
 
-					<a href="http://www.wowhead.com/?{$query}" class="button-red"><div><blockquote><i>Wowhead</i></blockquote><span>Wowhead</span></div></a>
+					<a href="http://www.wowhead.com/?{$query}" class="button-red"><em><b><i>Wowhead</i></b><span>Wowhead</span></em></a>
 					<h1>{$item.name}</h1>
 
 					<div id="icon{$item.entry}-generic" style="float: left"></div>

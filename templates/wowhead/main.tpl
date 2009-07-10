@@ -16,26 +16,20 @@
 </head>
 <body>
 	<div id="layers"></div>
-	<noscript><div id="noscript-bg"></div><div id="noscript-text"><b>{#js_err#}</div></noscript>
 	<div id="home">
 		<h1>{$title}</h1>
-		<span id="menu-buttons-generic" class="menu-buttons"></span>
+		<span id="h43jv6jk346" class="menu-buttons"></span>
 		<script type="text/javascript">
-			Menu.addButtons(ge('menu-buttons-generic'), mn_path);
+			Menu.addButtons(ge('h43jv6jk346'), mn_path);
 		</script>
+		
 		<div class="pad"></div>
 
-		<div id="toplinks" class="toplinks">
-	{if $user}<a href="?user={$user.name}">{$user.name}</a>|<a href="?account=signout">{#Sign_out#}</a>{else}<a href="?account=signin">{#Sign_in#}</a>{/if}|<a href="javascript:;" id="language-changer">{#Language#} <small>&#9660;</small></a>
-		</div>
-
-		<script type="text/javascript">g_initLanguageChanger()</script>
-
-		<div class="pad"></div>
-
-		<form method="get" action="?" onsubmit="if(trim(this.elements[0].value) == '') return false">
-			<input type="text" name="search" size="38" id="search-generic" /><input type="submit" value="{#search#}" />
+		<form method="get" action="." onsubmit="if(trim(this.elements[0].value) == '') return false">
+			<input type="text" name="search" size="38" id="kghjklvhj43v6" /><input type="submit" value="{#search#}" />
 		</form>
+		
+		<script type="text/javascript">var _ = ge('kghjklvhj43v6'); LiveSearch.attach(_); _.focus();</script>
 
 {if $news}
 		<div class="news">
@@ -48,11 +42,17 @@
 			</div>
 		</div>
 {/if}
-
-		<script type="text/javascript">
-			var _ = ge('search-generic');
-			LiveSearch.attach(_);
-			_.focus()
-		</script>
+		
+		<div id="toplinks" class="toplinks">
+			{if $user}<a href="?user={$user.name}">{$user.name}</a>|<a href="?account=signout">{#Sign_out#}</a>{else}<a href="?account=signin">{#Sign_in#}</a>{/if}
+			|<a href="javascript:;" id="toptabs-menu-language">{#Language#} <small>&#9660;</small></a>
+			<script type="text/javascript">g_initHeaderMenus()</script>
+		</div>
+	</div>
+	
+	<div id="footer">
+	</div>
+	<noscript><div id="noscript-bg"></div><div id="noscript-text"><b>{#js_err#}</div></noscript>
+	<script type="text/javascript">DomContentLoaded.now()</script>
 </body>
 </html>
