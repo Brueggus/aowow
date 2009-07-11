@@ -17,7 +17,7 @@ function checklocale()
 		$_SESSION['locale'] = $AoWoWconf['locale'];
 }
 checklocale();
-// Это должно быть ПОСЛЕ checklocale()
+// Р­С‚Рѕ РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ РџРћРЎР›Р• checklocale()
 require_once('includes/alllocales.php');
 
 function str_normalize($str)
@@ -35,7 +35,7 @@ function sign($val)
 	if($val < 0) return -1;
 	if($val == 0) return 0;
 }
-// Классы персонажей (битовые маски)
+// РљР»Р°СЃСЃС‹ РїРµСЂСЃРѕРЅР°Р¶РµР№ (Р±РёС‚РѕРІС‹Рµ РјР°СЃРєРё)
 define('CLASS_WARRIOR', 1);
 define('CLASS_PALADIN', 2);
 define('CLASS_HUNTER', 4);
@@ -46,7 +46,7 @@ define('CLASS_MAGE', 128);
 define('CLASS_WARLOCK', 256);
 define('CLASS_DRUID', 1024);
 
-// Классы персонажей (архив)
+// РљР»Р°СЃСЃС‹ РїРµСЂСЃРѕРЅР°Р¶РµР№ (Р°СЂС…РёРІ)
 $classes = array(
 	1 => LOCALE_WARRIOR,
 	2 => LOCALE_PALADIN,
@@ -71,7 +71,7 @@ define('RACE_TROLL', 128);
 define('RACE_BLOODELF', 512);
 define('RACE_DRAENEI', 1024);
 
-// Типы разделов
+// РўРёРїС‹ СЂР°Р·РґРµР»РѕРІ
 global $types;
 $types = array(
 	1 => 'npc',
@@ -84,7 +84,7 @@ $types = array(
 	8 => 'faction'
 );
 
-// Отношения со фракциями
+// РћС‚РЅРѕС€РµРЅРёСЏ СЃРѕ С„СЂР°РєС†РёСЏРјРё
 $reputations = array(
 	1 => LOCALE_NEUTRAL,
 	3000 => LOCALE_FRIENDLY,
@@ -92,7 +92,7 @@ $reputations = array(
 	21000 => LOCALE_REVERED,
 	42000 => LOCALE_EXALTED
 );
-// TODO: добавить форму преобразования секунд в строку времени
+// TODO: РґРѕР±Р°РІРёС‚СЊ С„РѕСЂРјСѓ РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёСЏ СЃРµРєСѓРЅРґ РІ СЃС‚СЂРѕРєСѓ РІСЂРµРјРµРЅРё
 function sec_to_time($secs)
 {
 	$time = array();
@@ -143,7 +143,7 @@ function divideThousand($val)
 
 	return implode(',', $thousands);
 }
-// Классы, для которых предназначена вещь
+// РљР»Р°СЃСЃС‹, РґР»СЏ РєРѕС‚РѕСЂС‹С… РїСЂРµРґРЅР°Р·РЅР°С‡РµРЅР° РІРµС‰СЊ
 function classes($class)
 {
 	$tmp = '';
@@ -173,7 +173,7 @@ function classes($class)
 }
 function races($race)
 {
-	// Простые варианты:
+	// РџСЂРѕСЃС‚С‹Рµ РІР°СЂРёР°РЅС‚С‹:
 	if($race == RACE_HUMAN|RACE_ORC|RACE_DWARF|RACE_NIGHTELF|RACE_UNDEAD|RACE_TAUREN|RACE_GNOME|RACE_TROLL|RACE_BLOODELF|RACE_DRAENEI || $race == 0)
 		return array('side' => 3, 'name' => LOCALE_BOTH);
 	elseif($race == RACE_ORC|RACE_UNDEAD|RACE_TAUREN|RACE_TROLL|RACE_BLOODELF)
@@ -243,9 +243,9 @@ function sum_subarrays_by_key( $tab, $key ) {
 	}
 	return $sum;
 }
-// КЕШИРОВАНИЕ // PRECACHING
+// РљР•РЁРР РћР’РђРќРР• // PRECACHING
 /*
-Содержание файла:
+РЎРѕРґРµСЂР¶Р°РЅРёРµ С„Р°Р№Р»Р°:
 =========================
 cache_delete_timestamp
 serialized data
@@ -306,7 +306,7 @@ function save_cache($type, $type_id, $data, $prefix = '')
 	if(!$file)
 		return false;
 
-	// записываем дату и ревизию в файл
+	// Р·Р°РїРёСЃС‹РІР°РµРј РґР°С‚Сѓ Рё СЂРµРІРёР·РёСЋ РІ С„Р°Р№Р»
 	$cache_data .= $time.' '.AOWOW_REVISION;
 	$cache_data .= "\n".serialize($data)."\n";
 
@@ -352,13 +352,13 @@ function SideByRace($race)
 	switch ($race)
 	{
 		case '0':
-			// Для всех?
+			// Р”Р»СЏ РІСЃРµС…?
 			return 3;
 		case '690':
-			// Орда?
+			// РћСЂРґР°?
 			return 2;
 		case '1101':
-			// Альянс?
+			// РђР»СЊСЏРЅСЃ?
 			return 1;
 		default:
 			return 0;
@@ -373,10 +373,10 @@ function php2js($data)
 {
 	if (is_array($data))
 	{
-		// Массив
+		// РњР°СЃСЃРёРІ
 		if (array_key_exists (0,$data))
 		{
-			// Простой массив []
+			// РџСЂРѕСЃС‚РѕР№ РјР°СЃСЃРёРІ []
 			$ret = "[";
 			$first = true;
 			foreach ($data as $key => $obj)
@@ -387,7 +387,7 @@ function php2js($data)
 			}			
 			$ret .= "]";
 		} else {
-			// Ассоциативный массив {}
+			// РђСЃСЃРѕС†РёР°С‚РёРІРЅС‹Р№ РјР°СЃСЃРёРІ {}
 			$ret = "{";
 			$first = true;
 			foreach ($data as $key => $obj)
@@ -399,7 +399,7 @@ function php2js($data)
 			$ret .= "}";
 		}
 	} else {
-		// Просто значение
+		// РџСЂРѕСЃС‚Рѕ Р·РЅР°С‡РµРЅРёРµ
 		$ret = is_string($data)? "'".str_replace("\n", "<br>", str_normalize($data))."'" : $data;
 	}
 	return $ret;
