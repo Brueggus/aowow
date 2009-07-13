@@ -1,5 +1,5 @@
 <?php
-define('AOWOW_REVISION', 3);
+define('AOWOW_REVISION', 4);
 
 error_reporting(2039);
 ini_set('serialize_precision', 4);
@@ -28,6 +28,15 @@ function point_delim(&$str, &$a, &$b)
 {
 	@list($a, $b) = explode('.', $str, 2);
 	return;
+}
+function d($d,$v)
+{
+	define($d,$v);
+}
+function mass_define($arr)
+{
+	foreach($arr as $name => $value)
+		define($name, $value);
 }
 function sign($val)
 {
@@ -92,6 +101,11 @@ $reputations = array(
 	21000 => LOCALE_REVERED,
 	42000 => LOCALE_EXALTED
 );
+$sides = array(
+	1 => LOCALE_ALLIANCE,
+	2 => LOCALE_HORDE,
+	3 => LOCALE_BOTH_FACTIONS
+);
 // TODO: добавить форму преобразования секунд в строку времени
 function sec_to_time($secs)
 {
@@ -137,8 +151,9 @@ function divideThousand($val)
 
 	do
 	{
-		array_unshift($thousands, $val % 1000);
-		$val = floor($val / 1000);
+		$next_val = floor($val / 1000);
+		array_unshift($thousands, $next_val ? str_pad($val % 1000, 3, '0', STR_PAD_LEFT) : $val % 1000);
+		$val = $next_val;
 	} while($val);
 
 	return implode(',', $thousands);
@@ -175,7 +190,7 @@ function races($race)
 {
 	// Простые варианты:
 	if($race == RACE_HUMAN|RACE_ORC|RACE_DWARF|RACE_NIGHTELF|RACE_UNDEAD|RACE_TAUREN|RACE_GNOME|RACE_TROLL|RACE_BLOODELF|RACE_DRAENEI || $race == 0)
-		return array('side' => 3, 'name' => LOCALE_BOTH);
+		return array('side' => 3, 'name' => LOCALE_BOTH_FACTIONS);
 	elseif($race == RACE_ORC|RACE_UNDEAD|RACE_TAUREN|RACE_TROLL|RACE_BLOODELF)
 		return array('side' => 2, 'name' => LOCALE_HORDE);
 	elseif($race == RACE_HUMAN|RACE_DWARF|RACE_NIGHTELF|RACE_GNOME|RACE_DRAENEI)
@@ -283,10 +298,14 @@ $cache_types = array(
 
 	20	=> 'talent_data',
 	21	=> 'talent_icon',
+
+	22	=> 'achievement_page',
+	23	=> 'achievement_tooltip',
+	24	=> 'achievement_listing',
 );
 function save_cache($type, $type_id, $data, $prefix = '')
 {
-	global $cache_types, $allitems, $allspells, $AoWoWconf, $exdata, $zonedata;
+	global $cache_types, $allitems, $allspells, $allachievements, $AoWoWconf;
 
 	if($AoWoWconf['debug'])
 		return;
@@ -313,6 +332,8 @@ function save_cache($type, $type_id, $data, $prefix = '')
 	$cache_data .= serialize($allitems);
 	$cache_data .= "\n";
 	$cache_data .= serialize($allspells);
+	$cache_data .= "\n";
+	$cache_data .= serialize($allachievements);
 
 	file_put_contents($file, $cache_data);
 	
@@ -320,7 +341,7 @@ function save_cache($type, $type_id, $data, $prefix = '')
 }
 function load_cache($type, $type_id, $prefix = '')
 {
-	global $cache_types, $smarty, $allitems, $allspells, $exdata, $zonedata, $AoWoWconf;
+	global $cache_types, $smarty, $allitems, $allspells, $allachievements, $AoWoWconf;
 
 	if($AoWoWconf['debug'])
 		return false;
@@ -344,6 +365,8 @@ function load_cache($type, $type_id, $prefix = '')
 		$allitems = unserialize($data[2]);
 	if($data[3])
 		$allspells = unserialize($data[3]);
+	if($data[4])
+		$allachievements = unserialize($data[4]);
 
 	return unserialize($data[1]);
 }

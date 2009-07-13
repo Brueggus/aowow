@@ -61,6 +61,12 @@ switch($razdel)
 		else
 			include 'main.php';
 		break;
+	case 'achievements':
+		include 'achievements.php';
+		break;
+	case 'achievement':
+		include 'achievement.php';
+		break;
 	case 'comment':
 		include 'comment.php';
 		break;

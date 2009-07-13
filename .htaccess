@@ -2,7 +2,7 @@ Order Deny,Allow
 <FilesMatch "\.(conf|php|tpl|in)$">
 	Deny from all
 </FilesMatch>
-<FilesMatch "(index|ajax|opensearch).php">
+<FilesMatch "^(index|ajax|opensearch).php$">
 	Allow from all
 </FilesMatch>
 # Запрет просмотра некоторых папок

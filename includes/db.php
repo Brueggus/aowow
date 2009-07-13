@@ -37,7 +37,7 @@ if($AoWoWconf['debug'])
 function myLogger($db, $sql)
 {
 	global $smarty;
-	$smarty->uDebug('!DbSimple', $sql,5000);
+	$smarty->uDebug('!DbSimple', $sql, 5000);
 }
 
 ?>

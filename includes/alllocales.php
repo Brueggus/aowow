@@ -1,8 +1,4 @@
 <?php
-function d($d,$v)
-{
-	define($d,$v);
-}
 function localizedName($arr, $key = 'name')
 {
 	if(!$_SESSION['locale'])
@@ -51,7 +47,7 @@ switch($_SESSION['locale'])
 		d('LOCALE_BLOOD_ELF',	'Эльф Крови');
 		d('LOCALE_DRAENEI',		'Дреней');
 		// side
-		d('LOCALE_BOTH',		'Обе');
+		d('LOCALE_BOTH_FACTIONS','Обе фракции');
 		d('LOCALE_HORDE',		'Орда');
 		d('LOCALE_ALLIANCE',	'Альянс');
 		// reputation
@@ -213,6 +209,7 @@ switch($_SESSION['locale'])
 		d('LOCALE_REAGENTS',			'Реагенты: ');
 		d('LOCALE_TOOLS',				'Инструменты: ');
 		d('LOCALE_HEROIC',				' (героич.)');
+		d('LOCALE_CRITERIA',			'Критерии');
 
 		break;
 	// --- ENGLISH default LOCALE ---
@@ -242,7 +239,7 @@ switch($_SESSION['locale'])
 		d('LOCALE_BLOOD_ELF',	'Blood Elf');
 		d('LOCALE_DRAENEI',		'Draenei');
 		// side
-		d('LOCALE_BOTH',		'Both');
+		d('LOCALE_BOTH_FACTIONS','Both');
 		d('LOCALE_HORDE',		'Horde');
 		d('LOCALE_ALLIANCE',	'Alliance');
 		// reputation
@@ -404,5 +401,6 @@ switch($_SESSION['locale'])
 		d('LOCALE_REAGENTS',			'Reagents: ');
 		d('LOCALE_TOOLS',				'Tools: ');
 		d('LOCALE_HEROIC',				' (Heroic)');
+		d('LOCALE_CRITERIA',			'Criteria');
 }
 ?>
