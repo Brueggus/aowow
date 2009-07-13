@@ -69,7 +69,7 @@ switch($_GET['data'])
 					}
 					$p_arr[$i]['t'][$j]['x'] = (integer) $talent['col'];
 					$p_arr[$i]['t'][$j]['y'] = (integer) $talent['row'];
-					if ($talent['dependsOn'] AND $talent['dependsOnRank'])
+					if ($talent['dependsOn'])
 						$p_arr[$i]['t'][$j]['r'] = array($t_nums[$talent['dependsOn']], $talent['dependsOnRank']+1);
 					// Spell icons
 					$p_arr[$i]['t'][$j]['iconname'] = (string) $talent['iconname'];
