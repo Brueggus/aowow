@@ -68,10 +68,10 @@ $page = array(
 );
 $smarty->assign('page', $page);
 
-// Ñòàòèñòèêà âûïîëíåíèÿ mysql çàïðîñîâ
+// Ð¡Ñ‚Ð°Ñ‚Ð¸ÑÑ‚Ð¸ÐºÐ° Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ñ mysql Ð·Ð°Ð¿Ñ€Ð¾ÑÐ¾Ð²
 $smarty->assign('mysql', $DB->getStatistics());
 $smarty->assign('allachievements', $allachievements);
 $smarty->assign('achievements', $achievements);
-// Çàãðóæàåì ñòðàíèöó
+// Ð—Ð°Ð³Ñ€ÑƒÐ¶Ð°ÐµÐ¼ ÑÑ‚Ñ€Ð°Ð½Ð¸Ñ†Ñƒ
 $smarty->display('achievements.tpl');
 ?>

@@ -35,7 +35,7 @@ if(!$achievement = load_cache(22, $id))
 		$achievement = achievementinfo2($row);
 		$achievement['side'] = $sides[$achievement['faction']];
 
-		// Категории
+		// РљР°С‚РµРіРѕСЂРёРё
 		if($row['category'])
 		{
 			$catrow = $DB->selectRow('
@@ -57,7 +57,7 @@ if(!$achievement = load_cache(22, $id))
 			}
 		}
 
-		// Дополнительные достижения
+		// Р”РѕРїРѕР»РЅРёС‚РµР»СЊРЅС‹Рµ РґРѕСЃС‚РёР¶РµРЅРёСЏ
 		$rows = $DB->select('
 				SELECT a.id, a.faction, a.name_loc?d AS name, a.description_loc?d AS description, a.category, a.points, s.iconname, z.areatableID
 				FROM ?_spellicons s, ?_achievement a
@@ -82,7 +82,7 @@ if(!$achievement = load_cache(22, $id))
 			foreach($rows as $row)
 				$achievement['see_also'][] = achievementinfo2($row);
 		}
-		// Достижения, у которых в критериях есть мы
+		// Р”РѕСЃС‚РёР¶РµРЅРёСЏ, Сѓ РєРѕС‚РѕСЂС‹С… РІ РєСЂРёС‚РµСЂРёСЏС… РµСЃС‚СЊ РјС‹
 		$rows = $DB->select('
 				SELECT a.id, a.faction, a.name_loc?d AS name, a.description_loc?d AS description, a.category, a.points, s.iconname, z.areatableID
 				FROM ?_spellicons s, ?_achievementcriteria c, ?_achievement a
@@ -108,7 +108,7 @@ if(!$achievement = load_cache(22, $id))
 				$achievement['criteria_of'][] = achievementinfo2($row);
 		}
 
-		/*************** КРИТЕРИИ ДОСТИЖЕНИЯ ***************/
+		/*************** РљР РРўР•Р РР Р”РћРЎРўРР–Р•РќРРЇ ***************/
 
 		$rows = $DB->select('
 				SELECT id, type, value1, value2, value3, value4, value5, value6, name_loc?d AS name
@@ -134,7 +134,7 @@ if(!$achievement = load_cache(22, $id))
 			);
 			switch($row['type'])
 			{
-				// Добавляем ссылку на НПС
+				// Р”РѕР±Р°РІР»СЏРµРј СЃСЃС‹Р»РєСѓ РЅР° РќРџРЎ
 				case ACHIEVEMENT_CRITERIA_TYPE_KILL_CREATURE:
 					$tmp['link'] = array(
 						'href'	=> '?npc='.$row['value1'],
@@ -142,7 +142,7 @@ if(!$achievement = load_cache(22, $id))
 					);
 					$tmp['extra_text'] = $smarty->get_config_vars('slain');
 					break;
-				// Добавляем ссылку на зону, находим по карте
+				// Р”РѕР±Р°РІР»СЏРµРј СЃСЃС‹Р»РєСѓ РЅР° Р·РѕРЅСѓ, РЅР°С…РѕРґРёРј РїРѕ РєР°СЂС‚Рµ
 				case ACHIEVEMENT_CRITERIA_TYPE_WIN_BG:
 				case ACHIEVEMENT_CRITERIA_TYPE_WIN_ARENA:
 					if($zoneId = $DB->selectCell('SELECT areatableID FROM ?_zones WHERE mapID = ? LIMIT 1', $row['value1']))
@@ -157,7 +157,7 @@ if(!$achievement = load_cache(22, $id))
 				/*ACHIEVEMENT_CRITERIA_TYPE_REACH_SKILL_LEVEL:
 				ACHIEVEMENT_CRITERIA_TYPE_LEARN_SKILL_LEVEL:
 					break;*/
-				// Добавляем иконку и ссылку на ачив
+				// Р”РѕР±Р°РІР»СЏРµРј РёРєРѕРЅРєСѓ Рё СЃСЃС‹Р»РєСѓ РЅР° Р°С‡РёРІ
 				case ACHIEVEMENT_CRITERIA_TYPE_COMPLETE_ACHIEVEMENT:
 					$tmp['link'] = array(
 						'href'	=> '?achievement='.$row['value1'],
@@ -171,7 +171,7 @@ if(!$achievement = load_cache(22, $id))
 					);
 					allachievementsinfo($row['value1']);
 					break;
-				// Добавляем ссылку на зону
+				// Р”РѕР±Р°РІР»СЏРµРј СЃСЃС‹Р»РєСѓ РЅР° Р·РѕРЅСѓ
 				case ACHIEVEMENT_CRITERIA_TYPE_COMPLETE_QUESTS_IN_ZONE:
 				case ACHIEVEMENT_CRITERIA_TYPE_HONORABLE_KILL_AT_AREA:
 					$tmp['link'] = array(
@@ -179,14 +179,14 @@ if(!$achievement = load_cache(22, $id))
 						'text'	=> $row['name'],
 					);
 					break;
-				// Добавляем ссылку на квест
+				// Р”РѕР±Р°РІР»СЏРµРј СЃСЃС‹Р»РєСѓ РЅР° РєРІРµСЃС‚
 				case ACHIEVEMENT_CRITERIA_TYPE_COMPLETE_QUEST:
 					$tmp['link'] = array(
 						'href'	=> '?quest='.$row['value1'],
 						'text'	=> $row['name'],
 					);
 					break;
-				// Добавляем иконку и ссылку на спелл
+				// Р”РѕР±Р°РІР»СЏРµРј РёРєРѕРЅРєСѓ Рё СЃСЃС‹Р»РєСѓ РЅР° СЃРїРµР»Р»
 				case ACHIEVEMENT_CRITERIA_TYPE_BE_SPELL_TARGET:
 				case ACHIEVEMENT_CRITERIA_TYPE_BE_SPELL_TARGET2:
 				case ACHIEVEMENT_CRITERIA_TYPE_CAST_SPELL:
@@ -204,7 +204,7 @@ if(!$achievement = load_cache(22, $id))
 					);
 					allspellsinfo($row['value1']);
 					break;
-				// Добавляем ссылку и иконку предмета
+				// Р”РѕР±Р°РІР»СЏРµРј СЃСЃС‹Р»РєСѓ Рё РёРєРѕРЅРєСѓ РїСЂРµРґРјРµС‚Р°
 				case ACHIEVEMENT_CRITERIA_TYPE_OWN_ITEM:
 				case ACHIEVEMENT_CRITERIA_TYPE_USE_ITEM:
 				case ACHIEVEMENT_CRITERIA_TYPE_LOOT_ITEM:
@@ -223,7 +223,7 @@ if(!$achievement = load_cache(22, $id))
 						'count'	=> $row['value2']
 					);
 					break;
-				// Добавляем ссылку на фракцию и требуемую репутацию
+				// Р”РѕР±Р°РІР»СЏРµРј СЃСЃС‹Р»РєСѓ РЅР° С„СЂР°РєС†РёСЋ Рё С‚СЂРµР±СѓРµРјСѓСЋ СЂРµРїСѓС‚Р°С†РёСЋ
 				case ACHIEVEMENT_CRITERIA_TYPE_GAIN_REPUTATION:
 					$tmp['link'] = array(
 						'href'	=> '?faction='.$row['value1'],
@@ -231,13 +231,13 @@ if(!$achievement = load_cache(22, $id))
 					);
 					$tmp['extra_text'] = ' ('.$reputations[$row['value2']].')';
 					break;
-				// Добавляем иконку золотой монетки
+				// Р”РѕР±Р°РІР»СЏРµРј РёРєРѕРЅРєСѓ Р·РѕР»РѕС‚РѕР№ РјРѕРЅРµС‚РєРё
 				case ACHIEVEMENT_CRITERIA_TYPE_MONEY_FROM_QUEST_REWARD:
 				case ACHIEVEMENT_CRITERIA_TYPE_LOOT_MONEY:
 					$tmp['standard'] = true;
 					$tmp['extra_text'] = '<span class="moneygold">'.divideThousand($row['value2' ] / 10000).'</span>';
 					break;
-				// Добавляем ссылку на ГО
+				// Р”РѕР±Р°РІР»СЏРµРј СЃСЃС‹Р»РєСѓ РЅР° Р“Рћ
 				case ACHIEVEMENT_CRITERIA_TYPE_USE_GAMEOBJECT:
 				case ACHIEVEMENT_CRITERIA_TYPE_FISH_IN_GAMEOBJECT:
 					$tmp['link'] = array(
@@ -250,19 +250,19 @@ if(!$achievement = load_cache(22, $id))
 					$tmp['extra_text'] = $row['name'];
 					break;
 			}
-			// Если столбик правый
+			// Р•СЃР»Рё СЃС‚РѕР»Р±РёРє РїСЂР°РІС‹Р№
 			if($i++ % 2)
 				$tmp_arr[] = $tmp;
 			else
 				$achievement['criterias'][] = $tmp;
 
 		}
-		// Если найден второй столбик - суем данные из него в конец основного массива
+		// Р•СЃР»Рё РЅР°Р№РґРµРЅ РІС‚РѕСЂРѕР№ СЃС‚РѕР»Р±РёРє - СЃСѓРµРј РґР°РЅРЅС‹Рµ РёР· РЅРµРіРѕ РІ РєРѕРЅРµС† РѕСЃРЅРѕРІРЅРѕРіРѕ РјР°СЃСЃРёРІР°
 		if($tmp_arr)
 			$achievement['criterias'] = array_merge($achievement['criterias'], $tmp_arr);
 
 
-		/*************** ЦЕПОЧКА ДОСТИЖЕНИЙ ***************/
+		/*************** Р¦Р•РџРћР§РљРђ Р”РћРЎРўРР–Р•РќРР™ ***************/
 
 		$achievement['series'] = array(array(
 			'id' => $achievement['id'],
@@ -316,14 +316,14 @@ $page = array(
 );
 $smarty->assign('page', $page);
 
-// Комментарии
+// РљРѕРјРјРµРЅС‚Р°СЂРёРё
 $smarty->assign('comments', getcomments($page['type'], $page['typeid']));
-// Статистика выполнения mysql запросов
+// РЎС‚Р°С‚РёСЃС‚РёРєР° РІС‹РїРѕР»РЅРµРЅРёСЏ mysql Р·Р°РїСЂРѕСЃРѕРІ
 $smarty->assign('mysql', $DB->getStatistics());
 $smarty->assign('allitems', $allitems);
 $smarty->assign('allspells', $allspells);
 $smarty->assign('allachievements', $allachievements);
 $smarty->assign('achievement', $achievement);
-// Загружаем страницу
+// Р—Р°РіСЂСѓР¶Р°РµРј СЃС‚СЂР°РЅРёС†Сѓ
 $smarty->display('achievement.tpl');
 ?>
