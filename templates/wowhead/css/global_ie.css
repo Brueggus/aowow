@@ -1,54 +1,42 @@
-#noscript-bg
-{
-	filter:alpha(opacity=70);
+/*
+ global_ie.css version 278
+*/
+#noscript-bg {
+filter:alpha(opacity=70);
 }
 
-#topbar-right input
-{
-	vertical-align:middle;
+.menu a {
+min-width:90%;
 }
 
-.menu a
-{
-	min-width:90%;
+.progressbar {
+width:99%;
 }
 
-.listview th a
-{
-	width:100%;
+.listview-band-top input,.listview-band-bottom input,.listview-band-top select,.listview-band-bottom select {
+vertical-align:middle;
 }
 
-.tabs-container
-{
-	width:100%;
+.listview-quicksearch a {
+padding:4px;
 }
 
-.reputation
-{
-	width:99%;
+.listview-quicksearch input {
+vertical-align:baseline;
 }
 
-.tooltip th
-{
-	height:8px;
+div.lightbox-overlay {
+filter:alpha(opacity=80);
 }
 
-#topbar-right a
-{
-	top:1px;
+div.screenshotviewer-screen a {
+background:url(../images/pixel.gif) no-repeat;
 }
 
-.comment-edit-body textarea
-{
-	width:98%;
+.dragged {
+filter:alpha(opacity=35);
 }
 
-div.lightbox-overlay
-{
-	filter:alpha(opacity=80);
-}
-
-div.screenshotviewer-screen a
-{
-	background:url(../images/pixel.gif) no-repeat;
+.listview th a,.tabs-container {
+width:100%;
 }

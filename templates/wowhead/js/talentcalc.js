@@ -1503,7 +1503,7 @@ function TalentCalc() {
 				bf.src = "http://static.wowhead.com/images/pet/petcalc" + (g_locale.id == 25 ? "-ptr": "") + "/icons_" + (bc + 1) + ".jpg"
 			} else {
 				bg.src = "images/talent/classes/backgrounds/" + g_file_classes[be] + "_" + (bc + 1) + ".jpg";
-				bf.src = "images/talent/classes/icons" + (g_locale.id == 25 ? "-ptr": "") + "/" + g_file_classes[be] + "_" + (bc + 1) + ".jpg"
+				//bf.src = "images/talent/classes/icons" + (g_locale.id == 25 ? "-ptr": "") + "/" + g_file_classes[be] + "_" + (bc + 1) + ".jpg"
 			}
 			ae(aK, bg);
 			ae(aK, bf)
