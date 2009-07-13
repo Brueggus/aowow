@@ -120,8 +120,8 @@
 				<div id="listview-generic" class="listview"></div>
 <script type="text/javascript">
 var tabsRelated = new Tabs({ldelim}parent: ge('tabs-generic'){rdelim});
-{if $achievement.see_also}{include		file='bricks/achievement_table.tpl'	id='see-also'		tabsid='tabsRelated'	data=$achievement.see_also		name='achievements'}{/if}
-{if $achievement.criteria_of}{include	file='bricks/achievement_table.tpl'	id='criteria-of'	tabsid='tabsRelated'	data=$achievement.criteria_of	name='achievements'}{/if}
+{if $achievement.see_also}{include		file='bricks/achievement_table.tpl'	id='see-also'		tabsid='tabsRelated'	data=$achievement.see_also		name='seealso'}{/if}
+{if $achievement.criteria_of}{include	file='bricks/achievement_table.tpl'	id='criteria-of'	tabsid='tabsRelated'	data=$achievement.criteria_of	name='criteriaof'}{/if}
 new Listview({ldelim}template: 'comment', id: 'comments', name: LANG.tab_comments, tabs: tabsRelated, parent: 'listview-generic', data: lv_comments{rdelim});
 tabsRelated.flush();
 </script>
