@@ -1,3 +1,6 @@
+/*
+ TalentCalc_ruru.js version 278
+*/
 cO(LANG, {
 	tc_rank: "Ранг $1/$2",
 	tc_tier: "Требуется $1 очк. в талантах $2",
