@@ -1,6 +1,6 @@
 <?php
 
-require_once('includes/game.php');
+require_once('includes/game.php'); // game.php is for factioninfo()
 require_once('includes/allspells.php');
 require_once('includes/allitemsets.php');
 require_once('includes/allobjects.php');

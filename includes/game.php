@@ -1,6 +1,5 @@
 <?php
 
-//require_once('includes/allitems.php');
 require_once('includes/alllocales.php');
 
 // Функция информации о фракции
