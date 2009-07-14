@@ -28,9 +28,6 @@
 					{if isset($data[i].rank)}
 						rank:'{$data[i].rank|escape:"javascript"}',
 					{/if}
-					{if isset($data[i].talent)}
-						talent:1,
-					{/if}
 					{if isset($data[i].skill)}
 						skill:[{$data[i].skill}],
 					{/if}

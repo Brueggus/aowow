@@ -966,7 +966,6 @@ function spellinfo2(&$row)
 		$spell['quality'] = '@';
 		$spell['name'] = $row['spellname_loc'.$_SESSION['locale']];
 		$spell['rank'] = $row['rank_loc'.$_SESSION['locale']];
-		$spell['talent'] = $row['talent'];
 		$spell['level'] = $row['levelspell'];
 		$spell['school'] = $row['resistancesID'];
 		// TODO: Что за cat?

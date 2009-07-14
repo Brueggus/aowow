@@ -130,55 +130,54 @@ if(!$spells = load_cache(15, $cache_str))
 		// Talents
 		$title = $smarty->get_config_vars('Talents');
 		$spells['sort'] = "'name'";
-		$spellids = $DB->selectCol('
-			SELECT rank1
-			FROM ?_talent t, ?_talenttab b
-			WHERE b.id = t.tab {AND classes & ?d}
-			GROUP BY rank1
-			{LIMIT ?d}
-			',
-			(isset($s2))? pow(2,$s2-1) : DBSIMPLE_SKIP,
-			($AoWoWconf['limit']!=0)? $AoWoWconf['limit']: DBSIMPLE_SKIP
-		);
-		$rows = $DB->select('
-			SELECT
-				?#, `s`.`spellID`, 1 AS `talent`
-			FROM ?_spell s, ?_spellicons i
-			WHERE
-				s.spellID IN (?a)
-				AND i.id=s.spellicon
-			',
-			$spell_cols[2],
-			$spellids
-		);
+
+		$rows = array();
+		for($i=1; $i<=5; $i++)
+		{
+			$rows = array_merge($rows, $DB->select('
+				SELECT DISTINCT ?#, `s`.`spellID`
+				FROM ?_talenttab b, ?_talent t, ?_spell s, ?_spellicons i {, ?_skill_line_ability ?# }
+				WHERE
+					b.classes & ?d
+					{ AND sla.spellID = s.spellID AND sla.skillID = ?d }
+					AND b.id = t.tab
+					AND t.rank?d = s.spellID
+					AND i.id=s.spellicon
+				{LIMIT ?d}
+				',
+				$spell_cols[2],
+				(isset($s3))? 'sla' : DBSIMPLE_SKIP,
+				(isset($s2))? pow(2,$s2-1) : -1,
+				(isset($s3))? $s3 : DBSIMPLE_SKIP,
+				$i,
+				($AoWoWconf['limit']!=0)? $AoWoWconf['limit']: DBSIMPLE_SKIP
+			));
+		}
 	}
 	elseif ($s1 == -7)
 	{
 		// Pet Talents
 		$title = $smarty->get_config_vars('Pet_talents');
 		$spells['sort'] = "'name'";
-		// for speed
-		$spellids = $DB->selectCol('
-			SELECT rank1
-			FROM ?_talent t, ?_talenttab b
-			WHERE b.id = t.tab AND classes = 0
-			GROUP BY rank1
-			{LIMIT ?d}
-			',
-			($AoWoWconf['limit']!=0)? $AoWoWconf['limit']: DBSIMPLE_SKIP
-		);
-		// skill_line_ability тут не поможет
-		$rows = $DB->select('
-			SELECT
-				?#, `s`.`spellID`, 1 AS `talent`
-			FROM ?_spell s, ?_spellicons i
-			WHERE
-				s.spellID IN (?a)
-				AND i.id=s.spellicon
-			',
-			$spell_cols[2],
-			$spellids
-		);
+
+		$rows = array();
+		for($i=1; $i<=5; $i++)
+		{
+			$rows = array_merge($rows, $DB->select('
+				SELECT DISTINCT ?#, `s`.`spellID`
+				FROM ?_talenttab b, ?_talent t, ?_spell s, ?_spellicons i
+				WHERE
+					b.classes = 0
+					AND b.id = t.tab
+					AND t.rank?d = s.spellID
+					AND i.id=s.spellicon
+				{LIMIT ?d}
+				',
+				$spell_cols[2],
+				$i,
+				($AoWoWconf['limit']!=0)? $AoWoWconf['limit']: DBSIMPLE_SKIP
+			));
+		}
 	}
 	else
 	{
