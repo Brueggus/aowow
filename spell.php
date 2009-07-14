@@ -119,10 +119,10 @@ if(!$spell = load_cache(13, intval($id)))
 		{
 			if($row['reagent'.$j])
 			{
-				$tool_row = allitemsinfo($row['reagent'.$j], 0);
+				$reagent_row = allitemsinfo($row['reagent'.$j], 0);
 				$spell['reagents'][$i] = array(
-					'name'		=> $tool_row['name'],
-					'quality'	=> $tool_row['quality'],
+					'name'		=> $reagent_row['name'],
+					'quality'	=> $reagent_row['quality'],
 					'entry'		=> $row['reagent'.$j],
 					'count'		=> $row['reagentcount'.$j],
 				);
