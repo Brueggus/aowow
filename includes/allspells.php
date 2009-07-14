@@ -710,7 +710,7 @@ function render_spell_tooltip(&$row)
 			$names = $DB->selectRow('
 				SELECT name{, l.name_loc?d as `name_loc`}
 				FROM item_template i
-				{ LEFT JOIN (locales_creature l) ON l.entry = i.entry AND ? }
+				{ LEFT JOIN (locales_item l) ON l.entry = i.entry AND ? }
 				WHERE i.entry = ?d',
 				($_SESSION['locale']>0)? $_SESSION['locale']: DBSIMPLE_SKIP,
 				($_SESSION['locale']>0)? 1: DBSIMPLE_SKIP,
@@ -736,7 +736,7 @@ function render_spell_tooltip(&$row)
 			$names = $DB->selectRow('
 				SELECT name{, l.name_loc?d as `name_loc`}
 				FROM item_template i
-				{ LEFT JOIN (locales_creature l) ON l.entry = i.entry AND ? }
+				{ LEFT JOIN (locales_item l) ON l.entry = i.entry AND ? }
 				WHERE i.entry = ?d',
 				($_SESSION['locale']>0)? $_SESSION['locale']: DBSIMPLE_SKIP,
 				($_SESSION['locale']>0)? 1: DBSIMPLE_SKIP,
