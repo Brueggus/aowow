@@ -331,8 +331,8 @@ function spell_desc2($spellRow, $type='tooltip')
 
 	allspellsinfo2($spellRow);
 
-	if(isset($spellRow['duration_base']))
-		$lastduration = array('duration_base' => $spellRow['duration_base']);
+	if(isset($spellRow['durationBase']))
+		$lastduration = array('durationBase' => $spellRow['durationBase']);
 	else
 		$lastduration = $DB->selectRow('SELECT * FROM ?_spellduration WHERE durationID = ? LIMIT 1', $spellRow['durationID']);
 
