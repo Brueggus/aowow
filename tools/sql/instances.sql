@@ -163,3 +163,18 @@ UPDATE aowow_zones SET areatableID=978, x_min=1200, y_min=370, x_max=2080, y_max
 
 -- Map 'Zul'Gurub'[309]  Area 'Zul'Gurub'[1977] => 'Zul'Gurub'[19]
 UPDATE aowow_zones SET areatableID=19, x_min=-12490, y_min=-2440, x_max=-11380, y_max=-780, type = 2 WHERE mapID=309 AND areatableID=1977;
+
+-- Map 'Scarlet Monastery'[189]  Area 'Scarlet Monastery'[796]
+-- (map image is the reason of these complex queries)
+UPDATE aowow_zones SET x_min=1 WHERE mapID=189 AND areatableID=796;
+UPDATE aowow_zones SET x_min=0 WHERE mapID=189 AND areatableID=796 LIMIT 1;
+DELETE FROM aowow_zones WHERE mapID=189 AND areatableID=796 AND x_min=1;
+INSERT INTO aowow_zones SELECT * FROM aowow_zones WHERE mapID=189 AND areatableID=796;
+INSERT INTO aowow_zones SELECT * FROM aowow_zones WHERE mapID=189 AND areatableID=796;
+UPDATE aowow_zones SET x_min=-68, y_min=-752, x_max=318, y_max=-175 WHERE mapID=189 AND areatableID=796 AND x_min=0 LIMIT 1;
+UPDATE aowow_zones SET x_min=1580, y_min=-510, x_max=2055, y_max=200 WHERE mapID=189 AND areatableID=796 AND x_min=0 LIMIT 1;
+UPDATE aowow_zones SET x_min=472, y_min=935, x_max=1277, y_max=2223 WHERE mapID=189 AND areatableID=796 AND x_min=0 LIMIT 1;
+UPDATE aowow_zones SET x_min=1620, y_min=660, x_max=2295, y_max=1575 WHERE mapID=189 AND areatableID=796 AND x_min=0 LIMIT 1;
+
+-- Map 'Wailing Caverns'[43]  Area 'Wailing Caverns'[718]
+UPDATE aowow_zones SET x_min=-413, y_min=-380, x_max=211, y_max=551 WHERE mapID=43 AND areatableID=718;
