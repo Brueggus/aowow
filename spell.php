@@ -71,7 +71,7 @@ if(!$spell = load_cache(13, intval($id)))
 		$spell['rangename'] = $RangeRow['name_loc'.$_SESSION['locale']];
 		// Время каста
 		if($row['basecasttime'] > 0)
-			$spell['casttime'] = ($casttime / 1000).' '.$smarty->get_config_vars('seconds');
+			$spell['casttime'] = ($row['basecasttime'] / 1000).' '.$smarty->get_config_vars('seconds');
 		else if($row['ChannelInterruptFlags'])
 			$spell['casttime'] = 'Channeled';
 		else
@@ -81,7 +81,7 @@ if(!$spell = load_cache(13, intval($id)))
 			$spell['cooldown'] = $row['cooldown'] / 1000;
 		// Время действия спелла
 		if($row['durationBase'] > 0)
-			$spell['duration'] = ($duration / 1000).' '.$smarty->get_config_vars('seconds');
+			$spell['duration'] = ($row['durationBase'] / 1000).' '.$smarty->get_config_vars('seconds');
 		else
 			$spell['duration'] ='<span class="q0">n/a</span>';
 
