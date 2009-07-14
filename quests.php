@@ -17,7 +17,7 @@ if(!$quests = load_cache(12, $cache_str))
 	global $DB, $quest_class, $quest_cols;
 
 	$rows = $DB->select('
-		SELECT ?#, q.entry
+		SELECT q.?#
 		{
 			, l.Title_loc?d 
 		}

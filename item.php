@@ -166,7 +166,7 @@ if(!$item = load_cache(5, $id))
 
 	// Поиск квестов, для выполнения которых нужен этот предмет
 	$rows_qr = $DB->select('
-		SELECT ?# {, l.Title_loc?d}
+		SELECT q.?# {, l.Title_loc?d}
 		FROM quest_template q
 		{ LEFT JOIN (locales_quest l) ON l.entry=q.entry AND ? }
 		WHERE
@@ -190,7 +190,7 @@ if(!$item = load_cache(5, $id))
 
 	// Поиск квестов, наградой за выполнение которых, является этот предмет
 	$rows_qrw = $DB->select('
-		SELECT ?# {, l.Title_loc?d}
+		SELECT q.?# {, l.Title_loc?d}
 		FROM quest_template q 
 		{ LEFT JOIN (locales_quest l) ON l.entry=q.entry AND ? }
 		WHERE
