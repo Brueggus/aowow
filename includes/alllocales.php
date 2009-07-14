@@ -181,7 +181,7 @@ switch($_SESSION['locale'])
 		d('LOCALE_GBONUS_ATTACKPOWER',			'Повышает силу атаки на %d.');
 		d('LOCALE_GBONUS_ARMORPENETRATION',		'Повышает рейтинг пробивания брони на %d.');
 		d('LOCALE_GBONUS_SPELLPOWER',			'Повышает силу заклинаний на %d.');
-		d('LOCALE_GBONUS_UNKNOWN',				'<span class="q7">Неизвестный Бонус #%d</span>');
+		d('LOCALE_GBONUS_UNKNOWN',				'<span class="q10">Неизвестный Бонус #%d</span>');
 		d('LOCALE_GBONUS_CHANCEONHIT',			'Вероятность попадания при ударе: ');
 		d('LOCALE_GBONUS_EQUIP',				'Если на персонаже: ');
 		d('LOCALE_GBONUS_USE',					'Использование: ');
