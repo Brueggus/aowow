@@ -1024,9 +1024,9 @@ function spellinfo2(&$row)
 					allitemsinfo($spell['creates'][$i]['entry'], 0);
 
 				if(!isset($allitems[$spell['creates'][$i]['entry']]))
-					$spell['quality'] = 6;
+					$spell['quality'] = 7;
 				else
-					$spell['quality'] = 6 - $allitems[$spell['creates'][$i]['entry']]['quality'];
+					$spell['quality'] = 7 - $allitems[$spell['creates'][$i]['entry']]['quality'];
 				$i++;
 			}
 
