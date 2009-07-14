@@ -1,3 +1,7 @@
+========== !!!WARNING!!! ==========
+THIS IS NOT A WORKING BRANCH. PLEASE USE master BRANCH INSTEAD.
+This branch is created for testing and developing of AoWoW based on OOP. Nothing is done yet.
+
 ========== AoWoW README ==========
 
 AoWoW is MaNGOS database web interface written in PHP.
