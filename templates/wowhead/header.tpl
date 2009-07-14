@@ -13,7 +13,6 @@
 			<a href="."></a>
 			<h1>{$page.Title|escape:"html"}</h1>
 		</div>
-		<div id="header-ad"></div>
 	</div>
 
 		<div id="wrapper" class="nosidebar">
