@@ -5,8 +5,9 @@ global $DB;
 
 @list($c1, $c2) = explode('.', $podrazdel);
 $category = $c2 ? $c2 : $c1;
+if ($c1 === "") unset($category);
 
-$cache_str = $category ? $category : 'x';
+$cache_str = isset($category) ? $category : 'x';
 
 if(!$factions = load_cache(19, $cache_str))
 {
@@ -20,16 +21,15 @@ if(!$factions = load_cache(19, $cache_str))
 				f1.reputationListID != -1
 				{ AND f1.team = f2.?# }
 				{ AND f1.team = ? }
-			ORDER BY f1.name_loc?d
+			ORDER BY name
 		',
 		$_SESSION['locale'],
-		!$category ? 'factionID' : DBSIMPLE_SKIP,
-		$category ? intval($c1) : DBSIMPLE_SKIP,
+		!isset($category) ? 'factionID' : DBSIMPLE_SKIP,
+		isset($category) ? intval($c1) : DBSIMPLE_SKIP,
 		intval($c2),
-		!$category ? 0 : DBSIMPLE_SKIP,
-		!$category ? 'factionID' : DBSIMPLE_SKIP,
-		$category ? $category : DBSIMPLE_SKIP,
-		$_SESSION['locale']
+		!isset($category) ? 0 : DBSIMPLE_SKIP,
+		!isset($category) ? 'factionID' : DBSIMPLE_SKIP,
+		isset($category) ? $category : DBSIMPLE_SKIP
 	);
 	if($c1 && !$c2)
 	{
@@ -78,7 +78,7 @@ $page = array(
 	'tab' => 0,
 	'type' => 0,
 	'typeid' => 0,
-	'path' => '[0, 7'.($c1?', '.$c1:'').($c2?', '.$c2:'').']'
+	'path' => '[0, 7'.($c1!==''?', '.$c1:'').($c2?', '.$c2:'').']'
 );
 $smarty->assign('page', $page);
 
