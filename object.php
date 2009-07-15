@@ -8,9 +8,11 @@ require_once('includes/allquests.php');
 $smarty->config_load($conf_file, 'object');
 
 // номер объекта;
-$id = $podrazdel;
+$id = intval($podrazdel);
 
-if(!$object = load_cache(3, intval($id)))
+$cache_key = cache_key($id);
+
+if(!$object = load_cache(3, $cache_key))
 {
 	unset($object);
 
@@ -62,7 +64,7 @@ if(!$object = load_cache(3, intval($id)))
 	// Положения объектофф:
 	$object['position'] = position($object['entry'], 'gameobject');
 
-	save_cache(3, $object['entry'], $object);
+	save_cache(3, $cache_key, $object);
 }
 
 global $page;
@@ -73,7 +75,7 @@ $page = array(
 	'tab' => 0,
 	'type' => 2,
 	'typeid' => $object['entry'],
-	'path' => '[0,5,'.$object['type'].']'
+	'path' => path(0, 5, $object['type'])
 );
 if($object['pagetext'])
 	$page['Book'] = true;

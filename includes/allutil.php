@@ -427,6 +427,7 @@ function php2js($data)
 	}
 	return $ret;
 }
+// from php.net
 function imagetograyscale($im)
 {
     if (imageistruecolor($im)) {
@@ -438,5 +439,53 @@ function imagetograyscale($im)
         $gray = round(0.299 * $col['red'] + 0.587 * $col['green'] + 0.114 * $col['blue']);
         imagecolorset($im, $c, $gray, $gray, $gray);
     }
+}
+function path($tab, $category)
+{
+	$arguments = array_slice(func_get_args(), 2);
+	$x = '';
+	$x .= '['.$tab.', '.$category;
+	$first = true;
+	for($i = count($arguments)-1; $i >= 0; $i--)
+	{
+		if(!isset($arguments[$i]))
+			continue;
+
+		$x .= ', '.$arguments[$i];
+	}
+	$x .= ']';
+	return $x;
+}
+function cache_key()
+{
+	$args = func_get_args();
+	$x = '';
+	foreach($args as $i => $arg)
+	{
+		if($i <> 0)
+			$x .= '_';
+
+		if(isset($arg))
+			$x .= $arg;
+		else
+			$x .= 'x';
+	}
+
+	if(!$x)
+		$x .= 'x';
+
+	return $x;
+}
+function extract_values($str)
+{
+	$arr = explode('.', $str);
+
+	foreach($arr as $i => $a)
+	{
+		if(!is_numeric($arr[$i]))
+			$arr[$i] = null;
+	}
+
+	return $arr;
 }
 ?>

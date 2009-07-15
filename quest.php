@@ -9,9 +9,11 @@ require_once('includes/allcomments.php');
 $smarty->config_load($conf_file, 'quest');
 
 // Номер квеста
-$id = $podrazdel;
+$id = intval($podrazdel);
 
-if(!$quest = load_cache(10, intval($id)))
+$cache_key = cache_key($id);
+
+if(!$quest = load_cache(10, $cache_key))
 {
 	unset($quest);
 
@@ -484,7 +486,7 @@ if(!$quest = load_cache(10, intval($id)))
 	}
 	unset($rows);
 
-	save_cache(10, $quest['entry'], $quest);
+	save_cache(10, $cache_key, $quest);
 }
 
 global $page;
@@ -495,7 +497,7 @@ $page = array(
 	'tab' => 0,
 	'type' => 5,
 	'typeid' => $quest['entry'],
-	'path' => '[]'
+	'path' => path(0, 5) // TODO
 );
 $smarty->assign('page', $page);
 

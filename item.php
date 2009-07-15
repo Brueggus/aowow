@@ -11,8 +11,11 @@ require_once('includes/allcomments.php');
 // Загружаем файл перевода для smarty
 $smarty->config_load($conf_file, 'item');
 
-$id = $podrazdel;
-if(!$item = load_cache(5, $id))
+$id = intval($podrazdel);
+
+$cache_key = cache_key($id);
+
+if(!$item = load_cache(5, $cache_key))
 {
 	unset($item);
 
@@ -25,7 +28,7 @@ if(!$item = load_cache(5, $id))
 	global $spell_cols;
 
 	// Информация о вещи...
-	$item = iteminfo($podrazdel, 1);
+	$item = iteminfo($id, 1);
 
 	// Поиск мобов с которых эта вещь лутится
 	$drops_cr = drop('creature_loot_template', $item['entry']);
@@ -37,8 +40,8 @@ if(!$item = load_cache(5, $id))
 			$rows = $DB->select('
 				SELECT c.?#, c.entry
 				{
-					, l.name_loc?d
-					, l.subname_loc?d
+					, l.name_loc?d AS name_loc
+					, l.subname_loc?d AS subname_loc
 				}
 				FROM ?_factiontemplate, creature_template c
 				{ LEFT JOIN (locales_creature l) ON l.entry=c.entry AND ? }
@@ -582,7 +585,7 @@ if(!$item = load_cache(5, $id))
 	}
 	unset($drops_mi);
 
-	save_cache(5, $item['entry'], $item);
+	save_cache(5, $cache_key, $item);
 }
 global $page;
 $page = array(
@@ -592,7 +595,7 @@ $page = array(
 	'tab' => 0,
 	'type' => 3,
 	'typeid' => $item['entry'],
-	'path' => '[0,0, '.$item['classs'].', '.$item['subclass'].']',
+	'path' => path(0, 0, $item['type'], $item['subclass'], $item['classs']),
 );
 $smarty->assign('page', $page);
 

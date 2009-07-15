@@ -8,15 +8,18 @@ require_once('includes/allcomments.php');
 // Настраиваем Smarty ;)
 $smarty->config_load($conf_file, 'npc');
 
-global $DB;
-global $spell_cols;
-global $npc_cols;
+$id = intval($podrazdel);
 
-// Заголовок страницы
-$id = $podrazdel;
-if(!$npc = load_cache(1, intval($id)))
+$cache_key = cache_key($id);
+
+if(!$npc = load_cache(1, $cache_key))
 {
 	unset($npc);
+
+	global $DB;
+	global $spell_cols;
+	global $npc_cols;
+
 	// Ищем NPC:
 	$npc = array();
 	$row = $DB->selectRow('
@@ -359,7 +362,7 @@ if(!$npc = load_cache(1, intval($id)))
 		// мы - нормал НПС или НПС без сложности
 		$npc['position'] = position($npc['entry'], 'creature', 1);
 
-	save_cache(1, $npc['entry'], $npc);
+	save_cache(1, $cache_key, $npc);
 }
 
 global $page;
@@ -370,7 +373,7 @@ $page = array(
 	'tab' => 0,
 	'type' => 1,
 	'typeid' => $npc['entry'],
-	'path' => '[0,4,'.$npc['type'].']'
+	'path' => path(0, 4, $npc['family'], $npc['type'])
 );
 
 $smarty->assign('page', $page);
@@ -382,7 +385,7 @@ $smarty->assign('comments', getcomments($page['type'], $page['typeid']));
 $smarty->assign('allitems',$allitems);
 $smarty->assign('allspells',$allspells);
 
-$smarty->assign('npc',$npc);
+$smarty->assign('npc', $npc);
 
 // Количество MySQL запросов
 $smarty->assign('mysql', $DB->getStatistics());

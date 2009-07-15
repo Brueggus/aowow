@@ -14,7 +14,9 @@ $smarty->config_load($conf_file, 'faction');
 // Номер фракции
 $id = $podrazdel;
 
-if(!$faction = load_cache(18, intval($id)))
+$cache_key = cache_key($id);
+
+if(!$faction = load_cache(18, $cache_key))
 {
 	unset($faction);
 
@@ -120,7 +122,7 @@ if(!$faction = load_cache(18, intval($id)))
 		}
 
 		// Faction cache
-		save_cache(18, $faction['entry'], $faction);
+		save_cache(18, $cache_key, $faction);
 	}
 }
 
@@ -131,7 +133,7 @@ $page = array(
 	'tab' => 0,
 	'type' => 8,
 	'typeid' => $faction['entry'],
-	'path' => '[0, 7'.($faction['category']?', '.$faction['category']:'').($faction['category2']?', '.$faction['category2']:'').']'
+	'path' => path(0, 8, $faction['category2'], $faction['category'])
 );
 $smarty->assign('page', $page);
 

@@ -8,11 +8,11 @@ global $DB;
 global $AoWoWconf;
 global $spell_cols;
 
-@list($s1, $s2, $s3) = explode('.', $podrazdel);
+@list($s1, $s2, $s3) = extract_values($podrazdel);
 
-$cache_str = (!isset($s1)?'x':intval($s1)).'_'.(!isset($s2)?'x':intval($s2)).'_'.(!isset($s3)?'x':intval($s3));
+$cache_key = cache_key($s1, $s2, $s3);
 
-if(!$spells = load_cache(15, $cache_str))
+if(!$spells = load_cache(15, $cache_key))
 {
 	unset($spells);
 
@@ -34,8 +34,8 @@ if(!$spells = load_cache(15, $cache_str))
 				{LIMIT ?d}
 			',
 			$spell_cols[2],
-			(isset($s2))? pow(2,$s2-1): DBSIMPLE_SKIP,
-			(isset($s3))? $s3: DBSIMPLE_SKIP,
+			isset($s2) ? pow(2, $s2-1) : DBSIMPLE_SKIP,
+			isset($s3) ? $s3 : DBSIMPLE_SKIP,
 			($AoWoWconf['limit']!=0)? $AoWoWconf['limit']: DBSIMPLE_SKIP
 		);
 	}
@@ -79,7 +79,7 @@ if(!$spells = load_cache(15, $cache_str))
 		',
 		$spell_cols[2],
 		$s1,
-		(isset($s2))? $s2: DBSIMPLE_SKIP,
+		isset($s2) ? $s2 : DBSIMPLE_SKIP,
 		($AoWoWconf['limit']!=0)? $AoWoWconf['limit']: DBSIMPLE_SKIP
 		);
 	}
@@ -146,9 +146,9 @@ if(!$spells = load_cache(15, $cache_str))
 				{LIMIT ?d}
 				',
 				$spell_cols[2],
-				(isset($s3))? 'sla' : DBSIMPLE_SKIP,
-				(isset($s2))? pow(2,$s2-1) : -1,
-				(isset($s3))? $s3 : DBSIMPLE_SKIP,
+				isset($s3) ? 'sla' : DBSIMPLE_SKIP,
+				isset($s2) ? pow(2, $s2-1) : -1,
+				isset($s3) ? $s3 : DBSIMPLE_SKIP,
 				$i,
 				($AoWoWconf['limit']!=0)? $AoWoWconf['limit']: DBSIMPLE_SKIP
 			));
@@ -199,7 +199,7 @@ if(!$spells = load_cache(15, $cache_str))
 	foreach($rows as $i => $row)
 		$spells['data'][] = spellinfo2($row);
 
-	save_cache(15, $cache_str, $spells);
+	save_cache(15, $cache_key, $spells);
 }
 global $page;
 $page = array(
@@ -209,7 +209,7 @@ $page = array(
 	'tab' => 0,
 	'type' => 6,
 	'typeid' => 0,
-	'path' => "[0, 1, ".intval($s1).", ".intval($s2).", ".intval($s3)."]",
+	'path' => path(0, 1, $s3, $s2, $s1),
 	'sort' => isset($spells['sort'])?$spells['sort']:"'level','name'"
 );
 $smarty->assign('page', $page);

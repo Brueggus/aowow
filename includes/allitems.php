@@ -198,8 +198,8 @@ function allitemsinfo($id, $level=0)
 		$row = $DB->selectRow('
 			SELECT i.?#
 			{
-				, l.name_loc?d
-				, l.description_loc?d
+				, l.name_loc?d AS name_loc
+				, l.description_loc?d AS description_loc
 				, ?
 			}
 			FROM ?_icons, item_template i
@@ -597,8 +597,8 @@ function iteminfo($id, $level = 0)
 	$row = $DB->selectRow('
 		SELECT i.?#, i.entry
 		{
-			, l.name_loc?d
-			, l.description_loc?d
+			, l.name_loc?d AS name_loc
+			, l.description_loc?d AS description_loc
 		}
 		FROM ?_icons, item_template i
 		{ LEFT JOIN (locales_item l) ON l.entry=i.entry AND ? }

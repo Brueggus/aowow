@@ -2,9 +2,11 @@
 
 $smarty->config_load($conf_file, 'objects');
 
-$type = $podrazdel;
+@list($type) = extract_values($podrazdel);
 
-if(!$data = load_cache(4, intval($type)))
+$cache_key = cache_key($type);
+
+if(!$data = load_cache(4, $cache_key))
 {
 	unset($data);
 
@@ -64,7 +66,7 @@ if(!$data = load_cache(4, intval($type)))
 		$data[$i]['type'] = isset($type) ? $type : $row['type'];
 		$i++;
 	}
-	save_cache(4, intval($type), $data);
+	save_cache(4, $cache_key, $data);
 }
 global $page;
 $page = array(
@@ -74,7 +76,7 @@ $page = array(
 	'tab' => 0,
 	'type' => 0,
 	'typeid' => 0,
-	'path' => '[0, 5,'.$podrazdel.']'
+	'path' => path(0, 5, $type)
 );
 $smarty->assign('page', $page);
 

@@ -8,9 +8,11 @@ require_once('includes/allcomments.php');
 $smarty->config_load($conf_file,'spell');
 
 // номер спелла;
-$id = $podrazdel;
+$id = intval($podrazdel);
 
-if(!$spell = load_cache(13, intval($id)))
+$cache_key = cache_key($id);
+
+if(!$spell = load_cache(13, $cache_key))
 {
 	unset($spell);
 
@@ -533,7 +535,7 @@ if(!$spell = load_cache(13, intval($id)))
 		if(!$spell['taughtbynpc'])
 			unset($spell['taughtbynpc']);
 
-		save_cache(13, $spell['entry'], $spell);
+		save_cache(13, $cache_key, $spell);
 	}
 }
 
@@ -545,7 +547,7 @@ $page = array(
 	'tab' => 0,
 	'type' => 6,
 	'typeid' => $spell['entry'],
-	'path' => '[0,1]'
+	'path' => path(0, 1)
 );
 $smarty->assign('page', $page);
 
