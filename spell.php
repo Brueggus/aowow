@@ -166,7 +166,7 @@ if(!$spell = load_cache(13, $cache_key))
 						// скиллы
 						case 118: // "Require Skill"
 						{
-							$spell['effect'][$i]['name'] .= ' ('.$DB->selectCell('SELECT name FROM ?_skill WHERE skillID = ? LIMIT 1', $row['effect'.$j.'MiscValue']).')';
+							$spell['effect'][$i]['name'] .= ' ('.$DB->selectCell('SELECT name_loc'.$_SESSION['locale'].' as name FROM ?_skill WHERE skillID = ? LIMIT 1', $row['effect'.$j.'MiscValue']).')';
 							break;
 						}
 						// ауры
