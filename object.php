@@ -16,9 +16,6 @@ if(!$object = load_cache(3, $cache_key))
 {
 	unset($object);
 
-	// БД
-	global $DB;
-
 	// Данные об объекте:
 	$object = array();
 	$object = objectinfo($id, 1);

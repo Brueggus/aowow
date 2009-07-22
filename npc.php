@@ -16,10 +16,6 @@ if(!$npc = load_cache(1, $cache_key))
 {
 	unset($npc);
 
-	global $DB;
-	global $spell_cols;
-	global $npc_cols;
-
 	// Ищем NPC:
 	$npc = array();
 	$row = $DB->selectRow('
@@ -39,6 +35,7 @@ if(!$npc = load_cache(1, $cache_key))
 		WHERE
 			c.entry = ?
 			AND ft.factiontemplateID = c.faction_A
+			AND f.factionID = ft.factionID
 		LIMIT 1
 			',
 		$npc_cols[1],

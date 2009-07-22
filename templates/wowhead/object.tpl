@@ -1,5 +1,3 @@
-{config_load file="$conf_file"}
-
 {include file='header.tpl'}
 
 	<div id="main">

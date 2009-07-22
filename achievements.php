@@ -4,7 +4,6 @@ require_once('includes/allachievements.php');
 $smarty->config_load($conf_file, 'achievement');
 
 @list($category) = extract_values($podrazdel);
-check_value($category);
 
 $cache_key = cache_key($category);
 

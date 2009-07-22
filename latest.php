@@ -1,6 +1,8 @@
 <?php
 
-require_once ('includes/game.php');
+require_once('includes/game.php');
+
+$smarty->config_load($conf_file);
 
 switch($_GET['latest'])
 {

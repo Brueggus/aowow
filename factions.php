@@ -1,8 +1,6 @@
 <?php
 $smarty->config_load($conf_file, 'factions');
 
-global $DB;
-
 @list($c1, $c2) = extract_values($podrazdel);
 
 $category = $c2 ? $c2 : $c1;

@@ -5,10 +5,6 @@ require_once('includes/allitems.php');
 require_once('includes/allquests.php');
 require_once('includes/allcomments.php');
 
-global $npc_cols;
-global $item_cols;
-global $quest_cols;
-
 $smarty->config_load($conf_file, 'faction');
 
 // Номер фракции
@@ -19,9 +15,6 @@ $cache_key = cache_key($id);
 if(!$faction = load_cache(18, $cache_key))
 {
 	unset($faction);
-
-	// Подключаемся к ДБ:
-	global $DB;
 
 	$row = $DB->selectRow('
 			SELECT

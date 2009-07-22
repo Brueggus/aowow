@@ -13,8 +13,6 @@ if(!$itemset = load_cache(8, $cache_key))
 {
 	unset($itemset);
 
-	global $DB;
-
 	$row = $DB->selectRow("SELECT * FROM ?_itemset WHERE itemsetID=? LIMIT 1", $id);
 	if($row)
 	{

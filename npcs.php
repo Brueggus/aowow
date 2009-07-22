@@ -13,10 +13,6 @@ if(!$npcs = load_cache(2, $cache_key))
 {
 	unset($npcs);
 
-	global $npc_cols;
-	global $AoWoWconf;
-	global $DB;
-
 	$rows = $DB->select('
 		SELECT c.?#, c.entry
 		{

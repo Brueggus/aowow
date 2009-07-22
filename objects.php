@@ -1,6 +1,6 @@
 <?php
 
-$smarty->config_load($conf_file, 'objects');
+$smarty->config_load($conf_file, 'object');
 
 @list($type) = extract_values($podrazdel);
 
@@ -9,10 +9,6 @@ $cache_key = cache_key($type);
 if(!$data = load_cache(4, $cache_key))
 {
 	unset($data);
-
-	// Подключаемся к ДБ:
-	global $DB;
-	global $AoWoWconf;
 
 	// Получаем данные по этому типу объектов
 	$rows = $DB->select('

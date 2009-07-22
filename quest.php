@@ -17,9 +17,6 @@ if(!$quest = load_cache(10, $cache_key))
 {
 	unset($quest);
 
-	// Подключаемся к ДБ:
-	global $DB;
-
 	// Основная инфа
 	$quest = GetDBQuestInfo($id, 0xFFFFFF);
 

@@ -4,10 +4,6 @@ require_once('includes/allspells.php');
 
 $smarty->config_load($conf_file, 'spell');
 
-global $DB;
-global $AoWoWconf;
-global $spell_cols;
-
 @list($s1, $s2, $s3) = extract_values($podrazdel);
 
 $cache_key = cache_key($s1, $s2, $s3);

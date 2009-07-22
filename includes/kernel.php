@@ -65,10 +65,10 @@ function CheckPwd($username, $shapass)
 		return -1;
 }
 
-function create_usersend_pass($user, $pass)
+function create_usersend_pass($username, $password)
 {
 	// Хеш-код в зависимости от имени аккаунта и пароля
-	return sha1(strtoupper($user).':'.strtoupper($pass));
+	return sha1(strtoupper($username).':'.strtoupper($password));
 }
 
 function del_user_cookie()

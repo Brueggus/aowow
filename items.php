@@ -14,8 +14,6 @@ if(!$items = load_cache(7, $cache_key))
 {
 	unset($items);
 
-	global $DB;
-
 	// Составляем запрос к БД, выполняющий поиск по заданным классу и подклассу
 	$rows = $DB->select('
 		SELECT ?#, i.entry, maxcount

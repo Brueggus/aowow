@@ -5,7 +5,7 @@ require_once('includes/allnpcs.php');
 require_once('includes/allquests.php');
 require_once('includes/allcomments.php');
 
-$smarty->config_load($conf_file,'spell');
+$smarty->config_load($conf_file, 'spell');
 
 // номер спелла;
 $id = intval($podrazdel);
@@ -15,15 +15,6 @@ $cache_key = cache_key($id);
 if(!$spell = load_cache(13, $cache_key))
 {
 	unset($spell);
-
-	// БД
-	global $DB;
-	// Таблица спеллов
-	global $allspells;
-	// Таблица вещей
-	global $allitems;
-
-	global $npc_cols;
 
 	// Данные об спелле:
 	$row = $DB->selectRow('
@@ -45,6 +36,7 @@ if(!$spell = load_cache(13, $cache_key))
 		$_SESSION['locale'], // mechanic
 		$id
 	);
+
 	if($row)
 	{
 		$spell = array();

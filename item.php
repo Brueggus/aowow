@@ -19,14 +19,6 @@ if(!$item = load_cache(5, $cache_key))
 {
 	unset($item);
 
-	global $DB;
-
-	global $allitems;
-	global $allspells;
-
-	global $item_cols;
-	global $spell_cols;
-
 	// Информация о вещи...
 	$item = iteminfo($id, 1);
 
@@ -75,13 +67,13 @@ if(!$item = load_cache(5, $cache_key))
 		{
 			// Сундуки
 			$rows = $DB->select('
-				SELECT g.entry, g.name, g.type, a.lockproperties1 {, l.name_loc?d}
-				FROM ?_lock a, gameobject_template g
-				{ LEFT JOIN (locales_gameobject l) ON l.entry=g.entry AND ? }
-				WHERE
-					g.data1=?d
-					AND g.type=?d
-					AND a.lockID=g.data0
+					SELECT g.entry, g.name, g.type, a.lockproperties1 {, l.name_loc?d AS name_loc}
+					FROM ?_lock a, gameobject_template g
+					{ LEFT JOIN (locales_gameobject l) ON l.entry=g.entry AND ? }
+					WHERE
+						g.data1=?d
+						AND g.type=?d
+						AND a.lockID=g.data0
 				',
 				($_SESSION['locale']>0)? $_SESSION['locale']: DBSIMPLE_SKIP,
 				($_SESSION['locale']>0)? 1: DBSIMPLE_SKIP,
@@ -117,18 +109,18 @@ if(!$item = load_cache(5, $cache_key))
 
 	// Поиск вендеров, которые эту вещь продают
 	$rows_soldby = $DB->select('
-		SELECT ?#, c.entry, v.ExtendedCost, v.maxcount AS stock
-		{
-			, l.name_loc?d
-			, l.subname_loc?d
-		}
-		FROM npc_vendor v, ?_factiontemplate, creature_template c
-		{ LEFT JOIN (locales_creature l) ON l.entry=c.entry AND ? }
-		WHERE
-			v.item=?d
-			AND c.entry=v.entry
-			AND factiontemplateID=faction_A
-		ORDER BY 1 DESC, 2 DESC
+			SELECT ?#, c.entry, v.ExtendedCost, v.maxcount AS stock
+			{
+				, l.name_loc?d AS name_loc
+				, l.subname_loc?d AS subname_loc
+			}
+			FROM npc_vendor v, ?_factiontemplate, creature_template c
+			{ LEFT JOIN (locales_creature l) ON l.entry=c.entry AND ? }
+			WHERE
+				v.item=?d
+				AND c.entry=v.entry
+				AND factiontemplateID=faction_A
+			ORDER BY 1 DESC, 2 DESC
 		',
 		$npc_cols['0'],
 		($_SESSION['locale']>0)? $_SESSION['locale']: DBSIMPLE_SKIP,
@@ -169,14 +161,14 @@ if(!$item = load_cache(5, $cache_key))
 
 	// Поиск квестов, для выполнения которых нужен этот предмет
 	$rows_qr = $DB->select('
-		SELECT q.?# {, l.Title_loc?d}
-		FROM quest_template q
-		{ LEFT JOIN (locales_quest l) ON l.entry=q.entry AND ? }
-		WHERE
-			ReqItemId1=?d
-			OR ReqItemId2=?d
-			OR ReqItemId3=?d
-			OR ReqItemId4=?d
+			SELECT q.?# {, l.Title_loc?d AS Title_loc}
+			FROM quest_template q
+			{ LEFT JOIN (locales_quest l) ON l.entry=q.entry AND ? }
+			WHERE
+				ReqItemId1=?d
+				OR ReqItemId2=?d
+				OR ReqItemId3=?d
+				OR ReqItemId4=?d
 		',
 		$quest_cols[2],
 		$_SESSION['locale'] > 0 ? $_SESSION['locale'] : DBSIMPLE_SKIP,
@@ -193,20 +185,20 @@ if(!$item = load_cache(5, $cache_key))
 
 	// Поиск квестов, наградой за выполнение которых, является этот предмет
 	$rows_qrw = $DB->select('
-		SELECT q.?# {, l.Title_loc?d}
-		FROM quest_template q 
-		{ LEFT JOIN (locales_quest l) ON l.entry=q.entry AND ? }
-		WHERE
-			RewItemId1=?d
-			OR RewItemId2=?d
-			OR RewItemId3=?d
-			OR RewItemId4=?d
-			OR RewChoiceItemId1=?d
-			OR RewChoiceItemId2=?d
-			OR RewChoiceItemId3=?d
-			OR RewChoiceItemId4=?d
-			OR RewChoiceItemId5=?d
-			OR RewChoiceItemId6=?d
+			SELECT q.?# {, l.Title_loc?d AS Title_loc}
+			FROM quest_template q 
+			{ LEFT JOIN (locales_quest l) ON l.entry=q.entry AND ? }
+			WHERE
+				RewItemId1=?d
+				OR RewItemId2=?d
+				OR RewItemId3=?d
+				OR RewItemId4=?d
+				OR RewChoiceItemId1=?d
+				OR RewChoiceItemId2=?d
+				OR RewChoiceItemId3=?d
+				OR RewChoiceItemId4=?d
+				OR RewChoiceItemId5=?d
+				OR RewChoiceItemId6=?d
 		',
 		$quest_cols[2],
 		($_SESSION['locale']>0)? $_SESSION['locale']: DBSIMPLE_SKIP,
@@ -230,13 +222,13 @@ if(!$item = load_cache(5, $cache_key))
 		foreach($drops_cii as $lootid => $drop)
 		{
 			$rows = $DB->select('
-				SELECT c.?#, c.entry, maxcount
-				{ , l.name_loc?d}
-				FROM ?_icons, item_template c
-				{ LEFT JOIN (locales_item l) ON l.entry=c.entry AND ? }
-				WHERE
-					c.entry=?d
-					AND id=displayid
+					SELECT c.?#, c.entry, maxcount
+					{ , l.name_loc?d AS name_loc }
+					FROM ?_icons, item_template c
+					{ LEFT JOIN (locales_item l) ON l.entry=c.entry AND ? }
+					WHERE
+						c.entry=?d
+						AND id=displayid
 				',
 				$item_cols[2],
 				($_SESSION['locale']>0)? $_SESSION['locale']: DBSIMPLE_SKIP,
@@ -264,16 +256,16 @@ if(!$item = load_cache(5, $cache_key))
 		foreach($drops_pp as $lootid => $drop)
 		{
 			$rows = $DB->select('
-				SELECT c.?#, c.entry
-				{
-					, l.name_loc?d
-					, l.subname_loc?d
-				}
-				FROM ?_factiontemplate, creature_template c
-				{ LEFT JOIN (locales_creature l) ON l.entry=c.entry AND ? }
-				WHERE
-					pickpocketloot=?d
-					AND factiontemplateID=faction_A
+					SELECT c.?#, c.entry
+					{
+						, l.name_loc?d AS name_loc
+						, l.subname_loc?d AS subname_loc
+					}
+					FROM ?_factiontemplate, creature_template c
+					{ LEFT JOIN (locales_creature l) ON l.entry=c.entry AND ? }
+					WHERE
+						pickpocketloot=?d
+						AND factiontemplateID=faction_A
 				',
 				$npc_cols[0],
 				($_SESSION['locale']>0)? $_SESSION['locale']: DBSIMPLE_SKIP,
@@ -298,16 +290,16 @@ if(!$item = load_cache(5, $cache_key))
 		foreach($drops_sk as $lootid => $drop)
 		{
 			$rows = $DB->select('
-				SELECT c.?#, c.entry
-				{
-					, l.name_loc?d
-					, l.subname_loc?d
-				}
-				FROM ?_factiontemplate, creature_template c
-				{ LEFT JOIN (locales_creature l) ON l.entry=c.entry AND ? }
-				WHERE
-					skinloot=?d
-					AND factiontemplateID=faction_A
+					SELECT c.?#, c.entry
+					{
+						, l.name_loc?d AS name_loc
+						, l.subname_loc?d AS subname_loc
+					}
+					FROM ?_factiontemplate, creature_template c
+					{ LEFT JOIN (locales_creature l) ON l.entry=c.entry AND ? }
+					WHERE
+						skinloot=?d
+						AND factiontemplateID=faction_A
 				',
 				$npc_cols[0],
 				($_SESSION['locale']>0)? $_SESSION['locale']: DBSIMPLE_SKIP,
@@ -332,15 +324,15 @@ if(!$item = load_cache(5, $cache_key))
 		foreach($drops_pr as $lootid => $drop)
 		{
 			$rows = $DB->select('
-				SELECT c.?#, c.entry, maxcount
-				{
-					, l.name_loc?d
-				}
-				FROM ?_icons, item_template c
-				{ LEFT JOIN (locales_items l) ON l.entry=c.entry AND ? }
-				WHERE
-					entry=?d
-					AND id=displayid
+					SELECT c.?#, c.entry, maxcount
+					{
+						, l.name_loc?d AS name_loc
+					}
+					FROM ?_icons, item_template c
+					{ LEFT JOIN (locales_item l) ON l.entry=c.entry AND ? }
+					WHERE
+						c.entry = ?d
+						AND id = displayid
 				',
 				$item_cols[2],
 				($_SESSION['locale']>0)? $_SESSION['locale']: DBSIMPLE_SKIP,
@@ -368,15 +360,15 @@ if(!$item = load_cache(5, $cache_key))
 		foreach($drops_de as $lootid => $drop)
 		{
 			$rows = $DB->select('
-				SELECT c.?#, c.entry, maxcount
-				{
-					, l.name_loc?d
-				}
-				FROM ?_icons, item_template c
-				{ LEFT JOIN (locales_item l) ON l.entry=c.entry AND ? }
-				WHERE
-					DisenchantID=?d
-					AND id=displayid
+					SELECT c.?#, c.entry, maxcount
+					{
+						, l.name_loc?d AS name_loc
+					}
+					FROM ?_icons, item_template c
+					{ LEFT JOIN (locales_item l) ON l.entry=c.entry AND ? }
+					WHERE
+						DisenchantID=?d
+						AND id=displayid
 				',
 				$item_cols[2],
 				($_SESSION['locale']>0)? $_SESSION['locale']: DBSIMPLE_SKIP,
@@ -397,18 +389,20 @@ if(!$item = load_cache(5, $cache_key))
 	{
 		// Если это ключ
 		$item['key'] = true;
-	} elseif($item['BagFamily'] > 0 and $item['ContainerSlots'] == 0) {
+	}
+	elseif($item['BagFamily'] > 0 and $item['ContainerSlots'] == 0)
+	{
 		$rows_cpi = $DB->select('
-			SELECT c.?#, c.entry, maxcount
-			{
-				, l.name_loc?d
-			}
-			FROM ?_icons, item_template c
-			{ LEFT JOIN (locales_item l) ON l.entry=c.entry AND ? }
-			WHERE
-				BagFamily=?d
-				AND ContainerSlots>0
-				AND id=displayid
+				SELECT c.?#, c.entry, maxcount
+				{
+					, l.name_loc?d AS name_loc
+				}
+				FROM ?_icons, item_template c
+				{ LEFT JOIN (locales_item l) ON l.entry=c.entry AND ? }
+				WHERE
+					BagFamily=?d
+					AND ContainerSlots>0
+					AND id=displayid
 			',
 			$item_cols[2],
 			($_SESSION['locale']>0)? $_SESSION['locale']: DBSIMPLE_SKIP,
@@ -426,18 +420,18 @@ if(!$item = load_cache(5, $cache_key))
 
 	// Реагент для...
 	$rows_r = $DB->select('
-		SELECT ?#, spellID
-		FROM ?_spell s, ?_spellicons i
-		WHERE
-			(( reagent1=?d
-			OR reagent2=?d
-			OR reagent3=?d
-			OR reagent4=?d
-			OR reagent5=?d
-			OR reagent6=?d
-			OR reagent7=?d
-			OR reagent8=?d
-			) AND ( i.id=s.spellicon))
+			SELECT ?#, spellID
+			FROM ?_spell s, ?_spellicons i
+			WHERE
+				(( reagent1=?d
+				OR reagent2=?d
+				OR reagent3=?d
+				OR reagent4=?d
+				OR reagent5=?d
+				OR reagent6=?d
+				OR reagent7=?d
+				OR reagent8=?d
+				) AND ( i.id=s.spellicon))
 		',
 		$spell_cols[2],
 		$item['entry'], $item['entry'], $item['entry'], $item['entry'],
@@ -479,13 +473,13 @@ if(!$item = load_cache(5, $cache_key))
 
 	// Создается из...
 	$rows_cf = $DB->select('
-		SELECT ?#, s.spellID
-		FROM ?_spell s, ?_spellicons i
-		WHERE
-			((s.effect1itemtype=?d
-			OR s.effect2itemtype=?d
-			OR s.effect3itemtype=?)
-			AND (i.id = s.spellicon))
+			SELECT ?#, s.spellID
+			FROM ?_spell s, ?_spellicons i
+			WHERE
+				((s.effect1itemtype=?d
+				OR s.effect2itemtype=?d
+				OR s.effect3itemtype=?)
+				AND (i.id = s.spellicon))
 		',
 		$spell_cols[2],
 		$item['entry'], $item['entry'], $item['entry']
@@ -496,10 +490,11 @@ if(!$item = load_cache(5, $cache_key))
 		foreach($rows_cf as $row)
 		{
 			$skillrow = $DB->selectRow('
-				SELECT skillID, min_value, max_value
-				FROM ?_skill_line_ability
-				WHERE spellID=?d
-				LIMIT 1',
+					SELECT skillID, min_value, max_value
+					FROM ?_skill_line_ability
+					WHERE spellID=?d
+					LIMIT 1
+				',
 				$row['spellID']
 			);
 			$item['createdfrom'][] = spellinfo2(array_merge($row, $skillrow));
@@ -517,26 +512,28 @@ if(!$item = load_cache(5, $cache_key))
 		{
 			// Обычные локации
 			$row = $DB->selectRow('
-				SELECT name_loc'.$_SESSION['locale'].' AS name, areatableID as id
-				FROM ?_zones
-				WHERE
-					areatableID=?d
-					AND (x_min!=0 AND x_max!=0 AND y_min!=0 AND y_max!=0)
-				LIMIT 1
+					SELECT name_loc'.$_SESSION['locale'].' AS name, areatableID as id
+					FROM ?_zones
+					WHERE
+						areatableID=?d
+						AND (x_min!=0 AND x_max!=0 AND y_min!=0 AND y_max!=0)
+					LIMIT 1
 				',
 				$lootid
 			);
 			if($row)
 			{
 				$item['fishedin'][] = array_merge($row, $drop);
-			} else {
+			}
+			else
+			{
 				// Инсты
 				$row = $DB->selectRow('
-					SELECT name_loc'.$_SESSION['locale'].' AS name, mapID as id
-					FROM ?_zones
-					WHERE
-						areatableID=?d
-					LIMIT 1
+						SELECT name_loc'.$_SESSION['locale'].' AS name, mapID as id
+						FROM ?_zones
+						WHERE
+							areatableID=?d
+						LIMIT 1
 					',
 					$lootid
 				);
@@ -561,15 +558,15 @@ if(!$item = load_cache(5, $cache_key))
 		foreach($drops_mi as $lootid => $drop)
 		{
 			$rows = $DB->select('
-				SELECT c.?#, c.entry, maxcount
-				{
-					, l.name_loc?d
-				}
-				FROM ?_icons, item_template c
-				{ LEFT JOIN (locales_item l) ON l.entry=c.entry AND ? }
-				WHERE
-					entry=?d
-					AND id=displayid
+					SELECT c.?#, c.entry, maxcount
+					{
+						, l.name_loc?d AS name_loc
+					}
+					FROM ?_icons, item_template c
+					{ LEFT JOIN (locales_item l) ON l.entry=c.entry AND ? }
+					WHERE
+						entry=?d
+						AND id=displayid
 				',
 				$item_cols[2],
 				($_SESSION['locale']>0)? $_SESSION['locale']: DBSIMPLE_SKIP,
