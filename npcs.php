@@ -1,36 +1,29 @@
 <?php
 
 // Необходима функция creatureinfo
-require('includes/allnpcs.php');
+require_once('includes/allnpcs.php');
 
 $smarty->config_load($conf_file, 'npc');
 
-global $npc_cols;
+@list($type) = extract_values($podrazdel);
 
-// Разделяем из запроса класс и подкласс вещей
-point_delim($podrazdel, $type, $family);
+$cache_key = cache_key($type);
 
-$cache_str = (empty($type)?'x':intval($type)).'_'.(empty($family)?'x':intval($family));
-
-if(!$npcs = load_cache(2, $cache_str))
+if(!$npcs = load_cache(2, $cache_key))
 {
 	unset($npcs);
-
-	global $AoWoWconf;
-	global $DB;
 
 	$rows = $DB->select('
 		SELECT c.?#, c.entry
 		{
-			, l.name_loc?d 
-			, l.subname_loc?d 
+			, l.name_loc?d AS name_loc
+			, l.subname_loc?d AS subname_loc
 		}
 		FROM ?_factiontemplate, creature_template c
 		{ LEFT JOIN (locales_creature l) ON l.entry=c.entry AND ? }
-		WHERE 1=1
+		WHERE
+			factiontemplateID=faction_A
 			{AND type=?}
-			{AND family=?}
-			AND factiontemplateID=faction_A
 		ORDER BY minlevel DESC, name
 		{LIMIT ?d}
 		',
@@ -38,17 +31,14 @@ if(!$npcs = load_cache(2, $cache_str))
 		($_SESSION['locale']>0)? $_SESSION['locale']: DBSIMPLE_SKIP,
 		($_SESSION['locale']>0)? $_SESSION['locale']: DBSIMPLE_SKIP,
 		($_SESSION['locale']>0)? 1: DBSIMPLE_SKIP,
-		($type!='')? $type: DBSIMPLE_SKIP,
-		(isset($family))? $family: DBSIMPLE_SKIP,
+		isset($type) ? $type : DBSIMPLE_SKIP,
 		($AoWoWconf['limit']!=0)? $AoWoWconf['limit']: DBSIMPLE_SKIP
 	);
 
-	//print_r($rows);
-	
 	$npcs = array();
 	foreach($rows as $row)
 		$npcs[] = creatureinfo2($row);
-	save_cache(5, $cache_str, $npcs);
+	save_cache(5, $cache_key, $npcs);
 }
 
 global $page;
@@ -59,7 +49,7 @@ $page = array(
 	'tab' => 0,
 	'type' => 0,
 	'typeid' => 0,
-	'path' => '[0, 4, '.$type.', '.$family.']'
+	'path' => path(0, 4, $family, $type)
 );
 $smarty->assign('page', $page);
 

@@ -1,15 +1,13 @@
 <?php
 $smarty->config_load($conf_file, 'factions');
 
-global $DB;
+@list($c1, $c2) = extract_values($podrazdel);
 
-@list($c1, $c2) = explode('.', $podrazdel);
 $category = $c2 ? $c2 : $c1;
-if ($c1 === "") unset($category);
 
-$cache_str = isset($category) ? $category : 'x';
+$cache_key = cache_key($category);
 
-if(!$factions = load_cache(19, $cache_str))
+if(!$factions = load_cache(19, $cache_key))
 {
 	unset($factions);
 
@@ -69,7 +67,7 @@ if(!$factions = load_cache(19, $cache_str))
 		} while($changed);
 	}
 
-	save_cache(19, $cache_str, $factions);
+	save_cache(19, $cache_key, $factions);
 }
 
 global $page;
@@ -78,7 +76,7 @@ $page = array(
 	'tab' => 0,
 	'type' => 0,
 	'typeid' => 0,
-	'path' => '[0, 7'.($c1!==''?', '.$c1:'').($c2?', '.$c2:'').']'
+	'path' => path(0, 7, $c2, $c1)
 );
 $smarty->assign('page', $page);
 

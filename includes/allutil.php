@@ -302,6 +302,8 @@ $cache_types = array(
 	22	=> 'achievement_page',
 	23	=> 'achievement_tooltip',
 	24	=> 'achievement_listing',
+
+	25	=> 'glyphs',
 );
 function save_cache($type, $type_id, $data, $prefix = '')
 {
@@ -318,7 +320,7 @@ function save_cache($type, $type_id, $data, $prefix = '')
 		return false;
 
 	// {$type_str}_{$type_id}.aww
-	$file = $prefix.'cache/mangos/'.$type_str.'_'.$type_id.'_'.$_SESSION['locale'].'.aww';
+	$file = $prefix.'cache/mangos/'.$type_str.'_'.$type_id.'_'.($type_id == 21 ? 0 : $_SESSION['locale']).'.aww';
 
 	$time = time()+$AoWoWconf['aowow']['cache_time'];
 
@@ -351,7 +353,7 @@ function load_cache($type, $type_id, $prefix = '')
 	if(empty($type_str))
 		return false;
 
-	$data = @file_get_contents($prefix.'cache/mangos/'.$type_str.'_'.$type_id.'_'.$_SESSION['locale'].'.aww');
+	$data = @file_get_contents($prefix.'cache/mangos/'.$type_str.'_'.$type_id.'_'.($type_id == 21 ? 0 : $_SESSION['locale']).'.aww');
 	if(!$data)
 		return false;
 
@@ -427,6 +429,7 @@ function php2js($data)
 	}
 	return $ret;
 }
+// from php.net
 function imagetograyscale($im)
 {
     if (imageistruecolor($im)) {
@@ -438,5 +441,53 @@ function imagetograyscale($im)
         $gray = round(0.299 * $col['red'] + 0.587 * $col['green'] + 0.114 * $col['blue']);
         imagecolorset($im, $c, $gray, $gray, $gray);
     }
+}
+function path($tab, $category)
+{
+	$arguments = array_slice(func_get_args(), 2);
+	$x = '';
+	$x .= '['.$tab.', '.$category;
+	$first = true;
+	for($i = count($arguments)-1; $i >= 0; $i--)
+	{
+		if(!isset($arguments[$i]))
+			continue;
+
+		$x .= ', '.$arguments[$i];
+	}
+	$x .= ']';
+	return $x;
+}
+function cache_key()
+{
+	$args = func_get_args();
+	$x = '';
+	foreach($args as $i => $arg)
+	{
+		if($i <> 0)
+			$x .= '_';
+
+		if(isset($arg))
+			$x .= $arg;
+		else
+			$x .= 'x';
+	}
+
+	if(!$x)
+		$x .= 'x';
+
+	return $x;
+}
+function extract_values($str)
+{
+	$arr = explode('.', $str);
+
+	foreach($arr as $i => $a)
+	{
+		if(!is_numeric($arr[$i]))
+			$arr[$i] = null;
+	}
+
+	return $arr;
 }
 ?>

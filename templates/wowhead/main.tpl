@@ -1,4 +1,3 @@
-{config_load file="$conf_file"}
 <html>
 <head>
 	{include file='head.tpl'}

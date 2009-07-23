@@ -1,5 +1,5 @@
 <?php
-
+header('Content-type: application/x-javascript');
 require_once('includes/allutil.php');
 
 switch($_GET['data'])
@@ -25,10 +25,10 @@ switch($_GET['data'])
 
 			// Все "Табы" талантов заданного класса
 			$tabs = $DB->select('
-					SELECT `id`, name_loc?d as `name`
+					SELECT `id`, name_loc?d AS `name`
 					FROM ?_talenttab
-					WHERE `classes`=?d
-					ORDER by `order`
+					WHERE classes = ?d
+					ORDER BY `order`
 				',
 				$_SESSION['locale'],
 				pow(2, $_GET['class']-1)
@@ -55,6 +55,8 @@ switch($_GET['data'])
 				);
 				$j = 0;
 				$p_arr[$i]['t'] = array();
+				// Массив ссылок на зависимости
+				$dep_links = array();
 				foreach($talents as $talent)
 				{
 					$t_nums[$talent['id']] = $j;
@@ -70,11 +72,23 @@ switch($_GET['data'])
 					$p_arr[$i]['t'][$j]['x'] = (integer) $talent['col'];
 					$p_arr[$i]['t'][$j]['y'] = (integer) $talent['row'];
 					if ($talent['dependsOn'])
+					{
+						// Если талант, от которого зависит текущий талант ещё не встречался, создадим ссылку в массив ссылок на зависимости
+						if (!isset($t_nums[$talent['dependsOn']])) $dep_links[$talent['dependsOn']] = $j;
 						$p_arr[$i]['t'][$j]['r'] = array($t_nums[$talent['dependsOn']], $talent['dependsOnRank']+1);
+					}
 					// Spell icons
 					$p_arr[$i]['t'][$j]['iconname'] = (string) $talent['iconname'];
+					// Если на этот талант есть ссылка, добавляем его в массив зависимого таланта
+					if (isset($dep_links[$talent['id']]))
+					{
+						$p_arr[$i]['t'][$dep_links[$talent['id']]]['r'][0] = $j;
+						unset ($dep_links[$talent['id']]);
+					}
 					$j++;
 				}
+				// Удаляем все зависимости, для которых талант так и не был найден
+				foreach ($dep_links as $dep_link) unset ($p_arr[$i]['t'][$dep_link]['r']);
 				$i++;
 			}
 
@@ -83,31 +97,54 @@ switch($_GET['data'])
 		echo '$WowheadTalentCalculator.registerClass('.$class.', '.php2js($p_arr).')';
 		break;
 	case 'glyphs':
-		/*
-			name - Имя вещи
-			description - Тултип спелла
-			icon - Иконка вещи
-		*/
-		$glyphs = array();
-		$glyphs = $DB->select('
-			SELECT it.`entry`, it.`name`, it.`spellid_1` as `spell`, it.`AllowableClass`, ic.`iconname`
-			FROM `item_template` it
-			LEFT JOIN (?_icons ic) ON ic.id=it.displayid
-			WHERE
-				it.`class` = 16
-		');
-		$g_glyphs = array();
-		foreach ($glyphs as $glyph)
+		if(!$g_glyphs = load_cache(25, 'x'))
 		{
-			$g_glyphs[$glyph['entry']] = array();
-			$g_glyphs[$glyph['entry']]['name'] = (string) $glyph['name'];
-			$g_glyphs[$glyph['entry']]['description'] = (string) 'Test';
-			$g_glyphs[$glyph['entry']]['icon'] = (string) 'Test';
-			$g_glyphs[$glyph['entry']]['type'] = (integer) 1;
-			$g_glyphs[$glyph['entry']]['classs'] = (integer) 1;
-			$g_glyphs[$glyph['entry']]['skill'] = (integer) 1;
+			/*
+				name - Имя вещи
+				description - Тултип спелла
+				icon - Иконка вещи
+			*/
+
+			require_once('includes/allspells.php');
+
+			$glyphs = array();
+
+			$glyphs = $DB->select('
+					SELECT it.entry, it.name, it.subclass, it.spellid_1 AS spellid, i.iconname, gp.typeflags
+					{, l.name_loc?d AS name_loc }
+					FROM ?_glyphproperties gp, ?_spell s, ?_icons i, item_template it
+					{ LEFT JOIN locales_item l ON (l.entry = it.entry AND ?) }
+					WHERE
+						it.class = 16
+						AND it.displayid = i.id
+						AND it.spellid_1 = s.spellid
+						AND s.effect1id = ?d
+						AND gp.id = s.effect1MiscValue
+				',
+				$_SESSION['locale'] > 0 ? $_SESSION['locale'] : DBSIMPLE_SKIP,
+				$_SESSION['locale'] > 0 ? 1 : DBSIMPLE_SKIP,
+				74 // SPELL_EFFECT_APPLY_GLYPH
+				
+			);
+			$g_glyphs = array();
+			foreach($glyphs as $glyph)
+			{
+				$name = localizedName($glyph);
+				if($_SESSION['locale'] == 0)
+					$name = str_replace(LOCALE_GLYPH_OF, '', $name);
+				$g_glyphs[$glyph['entry']] = array(
+					'name'			=> (string)$name,
+					'description'	=> (string)spell_desc($glyph['spellid']),
+					'icon'			=> (string)$glyph['iconname'],
+					'type'			=> (int)($glyph['typeflags']&1 ? 2 : 1),	// 1 - Большой символ, 2 - Малый символ
+					'classs'		=> (int)$glyph['subclass'],
+					'skill'			=> (int)2  // Skill???
+				);
+			}
+
+			save_cache(25, 'x', $g_glyphs);
 		}
-		echo('var g_glyphs='.php2js($g_glyphs));
+		echo 'var g_glyphs='.php2js($g_glyphs);
 		break;
 	case 'talent-icon':
 		$iconname = strtolower($_GET['icon']);

@@ -1,4 +1,3 @@
-{config_load file="$conf_file"}
 {include file='header.tpl'}
 
 <div id="main">
@@ -26,7 +25,7 @@
 					rating: {$comment.rating},
 					date:'{$comment.date|date_format:"%Y/%m/%d %H:%M:%S"}',
 					elapsed:{$comment.elapsed},
-					purged: {$comment.purged},
+					purged:{$comment.purged},
 					deleted:0
 				{rdelim}
 				{if $smarty.foreach.foo.last}{else},{/if}

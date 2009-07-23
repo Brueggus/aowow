@@ -3,10 +3,11 @@ require_once('includes/allachievements.php');
 
 $smarty->config_load($conf_file, 'achievement');
 
-$category = intval($podrazdel);
-$cache_str = $category ? $category : 'x';
+@list($category) = extract_values($podrazdel);
 
-if(!$achievements = load_cache(24, $cache_str))
+$cache_key = cache_key($category);
+
+if(!$achievements = load_cache(24, $cache_key))
 {
 	unset($achievements);
 
@@ -22,7 +23,7 @@ if(!$achievements = load_cache(24, $cache_str))
 		',
 		$_SESSION['locale'],
 		$_SESSION['locale'],
-		$category ? $category : DBSIMPLE_SKIP
+		isset($category) ? $category : DBSIMPLE_SKIP
 	);
 
 	if($rows)
@@ -32,7 +33,7 @@ if(!$achievements = load_cache(24, $cache_str))
 		foreach($rows as $row)
 			$achievements['data'][] = achievementinfo2($row);
 
-		if($category)
+		if(isset($category))
 		{
 			$catrow = $DB->selectRow('
 					SELECT c1.id, c1.name_loc?d AS name, c2.id AS id2
@@ -53,7 +54,7 @@ if(!$achievements = load_cache(24, $cache_str))
 			}
 		}
 
-		save_cache(24, $cache_str, $achievements);
+		save_cache(24, $cache_key, $achievements);
 	}
 }
 global $page;
@@ -64,7 +65,7 @@ $page = array(
 	'tab' => 0,
 	'type' => 9,
 	'typeid' => 0,
-	'path' => '[0, 9'.($achievements['category2']?(', '.$achievements['category2']):'').($achievements['category1']?(', '.$achievements['category1']):'').']',
+	'path' => path(0, 9, $achievements['category1'], $achievements['category2']),
 );
 $smarty->assign('page', $page);
 

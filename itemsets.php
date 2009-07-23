@@ -2,14 +2,11 @@
 
 require_once('includes/allitemsets.php');
 
-$smarty->config_load($conf_file);
+$smarty->config_load($conf_file, 'itemset');
 
-global $DB;
-global $allitems;
-global $itemset_col;
-global $AoWoWconf;
+$cache_key = cache_key();
 
-if(!$itemsets = load_cache(9, 'x'))
+if(!$itemsets = load_cache(9, $cache_key))
 {
 	unset($itemsets);
 
@@ -26,7 +23,7 @@ if(!$itemsets = load_cache(9, 'x'))
 	foreach($rows as $row)
 		$itemsets[] = itemsetinfo2($row);
 
-	save_cache(9, 'x', $itemsets);
+	save_cache(9, $cache_key, $itemsets);
 }
 $smarty->assign('itemsets', $itemsets);
 

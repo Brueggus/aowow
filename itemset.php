@@ -5,16 +5,17 @@ require_once('includes/allcomments.php');
 
 $smarty->config_load($conf_file, 'itemset');
 
-// БД
-global $DB;
-$id = $podrazdel;
+$id = intval($podrazdel);
 
-if(!$itemset = load_cache(8, intval($id)))
+$cache_key = cache_key($id);
+
+if(!$itemset = load_cache(8, $cache_key))
 {
 	unset($itemset);
 
 	$row = $DB->selectRow("SELECT * FROM ?_itemset WHERE itemsetID=? LIMIT 1", $id);
-	if($row) {
+	if($row)
+	{
 		$itemset = array();
 		$itemset['entry'] = $row['itemsetID'];
 		$itemset['name'] = $row['name_loc'.$_SESSION['locale']];

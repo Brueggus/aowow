@@ -5,23 +5,16 @@ require_once('includes/allnpcs.php');
 require_once('includes/allquests.php');
 require_once('includes/allcomments.php');
 
-$smarty->config_load($conf_file,'spell');
+$smarty->config_load($conf_file, 'spell');
 
 // номер спелла;
-$id = $podrazdel;
+$id = intval($podrazdel);
 
-if(!$spell = load_cache(13, intval($id)))
+$cache_key = cache_key($id);
+
+if(!$spell = load_cache(13, $cache_key))
 {
 	unset($spell);
-
-	// БД
-	global $DB;
-	// Таблица спеллов
-	global $allspells;
-	// Таблица вещей
-	global $allitems;
-
-	global $npc_cols;
 
 	// Данные об спелле:
 	$row = $DB->selectRow('
@@ -43,6 +36,7 @@ if(!$spell = load_cache(13, intval($id)))
 		$_SESSION['locale'], // mechanic
 		$id
 	);
+
 	if($row)
 	{
 		$spell = array();
@@ -164,7 +158,7 @@ if(!$spell = load_cache(13, intval($id)))
 						// скиллы
 						case 118: // "Require Skill"
 						{
-							$spell['effect'][$i]['name'] .= ' ('.$DB->selectCell('SELECT name FROM ?_skill WHERE skillID = ? LIMIT 1', $row['effect'.$j.'MiscValue']).')';
+							$spell['effect'][$i]['name'] .= ' ('.$DB->selectCell('SELECT name_loc'.$_SESSION['locale'].' as name FROM ?_skill WHERE skillID = ? LIMIT 1', $row['effect'.$j.'MiscValue']).')';
 							break;
 						}
 						// ауры
@@ -533,7 +527,7 @@ if(!$spell = load_cache(13, intval($id)))
 		if(!$spell['taughtbynpc'])
 			unset($spell['taughtbynpc']);
 
-		save_cache(13, $spell['entry'], $spell);
+		save_cache(13, $cache_key, $spell);
 	}
 }
 
@@ -545,7 +539,7 @@ $page = array(
 	'tab' => 0,
 	'type' => 6,
 	'typeid' => $spell['entry'],
-	'path' => '[0,1]'
+	'path' => path(0, 1)
 );
 $smarty->assign('page', $page);
 

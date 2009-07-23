@@ -47,7 +47,7 @@ define('QUEST_DATAFLAG_LOCALE',		8); // Специальный флаг, $questc
 define('QUEST_DATAFLAG_REWARDS',	16); // Содержит также Req's
 define('QUEST_DATAFLAG_PROPS',		32);
 define('QUEST_DATAFLAG_LISTINGS', (QUEST_DATAFLAG_MINIMUM | QUEST_DATAFLAG_REWARDS | QUEST_DATAFLAG_PROPS));
-define('QUEST_DATAFLAG_AJAXTOOLTIP', (QUEST_DATAFLAG_LISTINGS | QUEST_DATAFLAG_SERIES | QUEST_DATAFLAG_STRINGS));
+define('QUEST_DATAFLAG_AJAXTOOLTIP', (QUEST_DATAFLAG_LISTINGS | QUEST_DATAFLAG_SERIES | QUEST_DATAFLAG_STRINGS | QUEST_DATAFLAG_LOCALE));
 
 $questcols[QUEST_DATAFLAG_MINIMUM]	= array('entry', 'Title');
 $questcols[QUEST_DATAFLAG_STRINGS]	= array('Objectives', 'Details', 'RequestItemsText', 'OfferRewardText', 'EndText', 'ObjectiveText1', 'ObjectiveText2', 'ObjectiveText3', 'ObjectiveText4');
@@ -161,7 +161,7 @@ function GetQuestReq($id, $count, $type)
 		case 1:
 			$row = $DB->selectRow('
 					SELECT name
-						{, l.name_loc?d}
+						{, l.name_loc?d AS name_loc}
 					FROM creature_template c
 						{ LEFT JOIN (locales_creature l) ON l.entry=c.entry AND ? }
 					WHERE
@@ -178,7 +178,7 @@ function GetQuestReq($id, $count, $type)
 		case 2:
 			$row = $DB->selectRow('
 					SELECT name
-						{, l.name_loc?d}
+						{, l.name_loc?d AS name_loc}
 					FROM item_template c
 						{ LEFT JOIN (locales_item l) ON l.entry=c.entry AND ? }
 					WHERE
@@ -248,16 +248,16 @@ function GetQuestDBLocale($quest)
 	$loc = $_SESSION['locale'];
 	$row = $DB->selectRow('
 			SELECT
-				Title_loc?d,
-				Details_loc?d,
-				Objectives_loc?d,
-				OfferRewardText_loc?d,
-				RequestItemsText_loc?d,
-				EndText_loc?d,
-				ObjectiveText1_loc?d,
-				ObjectiveText2_loc?d,
-				ObjectiveText3_loc?d,
-				ObjectiveText4_loc?d
+				Title_loc?d AS Title_loc,
+				Details_loc?d AS Details_loc,
+				Objectives_loc?d AS Objectives_loc,
+				OfferRewardText_loc?d AS OfferRewardText_loc,
+				RequestItemsText_loc?d AS RequresItemsText_loc,
+				EndText_loc?d AS EndText_loc,
+				ObjectiveText1_loc?d AS ObjectiveText1_loc,
+				ObjectiveText2_loc?d AS ObjectiveText2_loc,
+				ObjectiveText3_loc?d AS ObjectiveText3_loc,
+				ObjectiveText4_loc?d AS ObjectiveText4_loc
 			FROM locales_quest
 			WHERE entry = ?d
 			LIMIT 1
@@ -337,16 +337,16 @@ function GetQuestInfo(&$data, $dataflag = QUEST_DATAFLAG_MINIMUM)
 	if($dataflag & QUEST_DATAFLAG_LOCALE && $_SESSION['locale'] > 0)
 		$data = array_merge($data, $DB->selectRow('
 				SELECT
-					Title_loc?d,
-					Details_loc?d,
-					Objectives_loc?d,
-					OfferRewardText_loc?d,
-					RequestItemsText_loc?d,
-					EndText_loc?d,
-					ObjectiveText1_loc?d,
-					ObjectiveText2_loc?d,
-					ObjectiveText3_loc?d,
-					ObjectiveText4_loc?d
+					Title_loc?d AS Title_loc,
+					Details_loc?d AS Details_loc,
+					Objectives_loc?d AS Objectives_loc,
+					OfferRewardText_loc?d AS OfferRewardText_loc,
+					RequestItemsText_loc?d AS RequresItemsText_loc,
+					EndText_loc?d AS EndText_loc,
+					ObjectiveText1_loc?d AS ObjectiveText1_loc,
+					ObjectiveText2_loc?d AS ObjectiveText2_loc,
+					ObjectiveText3_loc?d AS ObjectiveText3_loc,
+					ObjectiveText4_loc?d AS ObjectiveText4_loc
 				FROM locales_quest
 				WHERE entry = ?d
 				LIMIT 1

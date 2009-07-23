@@ -6,9 +6,11 @@ require_once('includes/allcomments.php');
 
 $smarty->config_load($conf_file, 'achievement');
 
-$id = intval($podrazdel);
+$id = $podrazdel;
 
-if(!$achievement = load_cache(22, $id))
+$cache_key = cache_key($id);
+
+if(!$achievement = load_cache(22, $cache_key))
 {
 	unset($achievement);
 
@@ -301,7 +303,7 @@ if(!$achievement = load_cache(22, $id))
 		if(count($achievement['series']) <= 1)
 			unset($achievement['series']);
 
-		save_cache(22, $id, $achievement);
+		save_cache(22, $cache_key, $achievement);
 	}
 }
 global $page;
@@ -312,7 +314,7 @@ $page = array(
 	'tab' => 0,
 	'type' => 9,
 	'typeid' => $achievement['id'],
-	'path' => '[0, 9'.($achievement['category2']?(', '.$achievement['category2']):'').($achievement['category1']?(', '.$achievement['category1']):'').']',
+	'path' => path(0, 9, $achievement['category1'], $achievement['category2']),
 );
 $smarty->assign('page', $page);
 

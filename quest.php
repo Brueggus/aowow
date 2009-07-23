@@ -9,14 +9,13 @@ require_once('includes/allcomments.php');
 $smarty->config_load($conf_file, 'quest');
 
 // Номер квеста
-$id = $podrazdel;
+$id = intval($podrazdel);
 
-if(!$quest = load_cache(10, intval($id)))
+$cache_key = cache_key($id);
+
+if(!$quest = load_cache(10, $cache_key))
 {
 	unset($quest);
-
-	// Подключаемся к ДБ:
-	global $DB;
 
 	// Основная инфа
 	$quest = GetDBQuestInfo($id, 0xFFFFFF);
@@ -37,7 +36,7 @@ if(!$quest = load_cache(10, intval($id)))
 	{
 		$tmp = $DB->selectRow('
 			SELECT q.entry, q.Title
-				{, l.Title_loc?d}
+				{, l.Title_loc?d as Title_loc}
 			FROM quest_template q
 				{LEFT JOIN (locales_quest l) ON l.entry=q.entry AND ?d}
 			WHERE q.NextQuestInChain=?d
@@ -59,7 +58,7 @@ if(!$quest = load_cache(10, intval($id)))
 	{
 		$tmp = $DB->selectRow('
 			SELECT q.entry, q.Title, q.NextQuestInChain
-				{, l.Title_loc?d}
+				{, l.Title_loc?d as Title_loc}
 			FROM quest_template q
 				{LEFT JOIN (locales_quest l) ON l.entry=q.entry AND ?}
 			WHERE q.entry=?d
@@ -87,7 +86,7 @@ if(!$quest = load_cache(10, intval($id)))
 	// Квесты, которые необходимо выполнить, что бы получить этот квест
 	if(!$quest['req'] = $DB->select('
 				SELECT q.entry, q.Title, q.NextQuestInChain
-					{, l.Title_loc?d}
+					{, l.Title_loc?d as Title_loc}
 				FROM quest_template q
 					{LEFT JOIN (locales_quest l) ON l.entry=q.entry AND ?}
 				WHERE
@@ -105,7 +104,7 @@ if(!$quest = load_cache(10, intval($id)))
 	// Квесты, которые становятся доступными, только после того как выполнен этот квест (необязательно только он)
 	if(!$quest['open'] = $DB->select('
 				SELECT q.entry, q.Title
-					{, l.Title_loc?d}
+					{, l.Title_loc?d as Title_loc}
 				FROM quest_template q
 					{LEFT JOIN (locales_quest l) ON l.entry=q.entry AND ?}
 				WHERE
@@ -124,7 +123,7 @@ if(!$quest = load_cache(10, intval($id)))
 	if($quest['ExclusiveGroup']>0)
 		if(!$quest['closes'] = $DB->select('
 				SELECT q.entry, q.Title
-					{, l.Title_loc?d}
+					{, l.Title_loc?d as Title_loc}
 				FROM quest_template q
 					{LEFT JOIN (locales_quest l) ON l.entry=q.entry AND ?}
 				WHERE
@@ -142,7 +141,7 @@ if(!$quest = load_cache(10, intval($id)))
 	// Требует выполнения одного из квестов, на выбор:
 	if(!$quest['reqone'] = $DB->select('
 				SELECT q.entry, q.Title
-					{, l.Title_loc?d}
+					{, l.Title_loc?d as Title_loc}
 				FROM quest_template q
 					{LEFT JOIN (locales_quest l) ON l.entry=q.entry AND ?}
 				WHERE
@@ -160,7 +159,7 @@ if(!$quest = load_cache(10, intval($id)))
 	// Квесты, которые доступны, только во время выполнения этого квеста
 	if(!$quest['enables'] = $DB->select('
 				SELECT q.entry, q.Title
-					{, l.Title_loc?d}
+					{, l.Title_loc?d as Title_loc}
 				FROM quest_template q
 					{LEFT JOIN (locales_quest l) ON l.entry=q.entry AND ?}
 				WHERE q.PrevQuestID=?d
@@ -178,7 +177,7 @@ if(!$quest = load_cache(10, intval($id)))
 	if($quest['PrevQuestID']<0)
 		if(!$quest['enabledby'] = $DB->select('
 				SELECT q.entry, q.Title
-					{, l.Title_loc?d}
+					{, l.Title_loc?d as Title_loc}
 				FROM quest_template q
 					{LEFT JOIN (locales_quest l) ON l.entry=q.entry AND ?}
 				WHERE q.entry=?d
@@ -356,7 +355,7 @@ if(!$quest = load_cache(10, intval($id)))
 	// НПС
 	$rows = $DB->select('
 		SELECT c.entry, c.name, A, H
-			{, l.name_loc?d}
+			{, l.name_loc?d AS name_loc}
 		FROM creature_questrelation q, ?_factiontemplate, creature_template c
 			{LEFT JOIN (locales_creature l) ON l.entry=c.entry AND ?}
 		WHERE
@@ -385,7 +384,7 @@ if(!$quest = load_cache(10, intval($id)))
 	// ГО
 	$rows = $DB->select('
 		SELECT g.entry, g.name
-			{, l.name_loc?d}
+			{, l.name_loc?d AS name_loc}
 		FROM gameobject_questrelation q, gameobject_template g
 			{LEFT JOIN (locales_gameobject l) ON l.entry = g.entry AND ?}
 		WHERE
@@ -409,7 +408,7 @@ if(!$quest = load_cache(10, intval($id)))
 	// итем
 	$rows = $DB->select('
 		SELECT i.name, i.entry, i.quality, LOWER(a.iconname) AS iconname
-			{, l.name_loc?d}
+			{, l.name_loc?d AS name_loc}
 		FROM ?_icons a, item_template i
 			{LEFT JOIN (locales_item l) ON l.entry=i.entry AND ?}
 		WHERE
@@ -434,7 +433,7 @@ if(!$quest = load_cache(10, intval($id)))
 	// НПС
 	$rows = $DB->select('
 		SELECT c.entry, c.name, A, H
-			{, l.name_loc?d}
+			{, l.name_loc?d AS name_loc}
 		FROM creature_involvedrelation q, ?_factiontemplate, creature_template c
 			{LEFT JOIN (locales_creature l) ON l.entry=c.entry AND ?}
 		WHERE
@@ -463,7 +462,7 @@ if(!$quest = load_cache(10, intval($id)))
 	// ГО
 	$rows = $DB->select('
 		SELECT g.entry, g.name
-			{, l.name_loc?d}
+			{, l.name_loc?d AS name_loc}
 		FROM gameobject_involvedrelation q, gameobject_template g
 			{LEFT JOIN (locales_gameobject l) ON l.entry = g.entry AND ?}
 		WHERE
@@ -484,7 +483,7 @@ if(!$quest = load_cache(10, intval($id)))
 	}
 	unset($rows);
 
-	save_cache(10, $quest['entry'], $quest);
+	save_cache(10, $cache_key, $quest);
 }
 
 global $page;
@@ -495,7 +494,7 @@ $page = array(
 	'tab' => 0,
 	'type' => 5,
 	'typeid' => $quest['entry'],
-	'path' => '[]'
+	'path' => path(0, 5) // TODO
 );
 $smarty->assign('page', $page);
 
