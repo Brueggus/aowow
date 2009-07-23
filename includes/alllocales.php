@@ -210,6 +210,7 @@ switch($_SESSION['locale'])
 		d('LOCALE_TOOLS',				'Инструменты: ');
 		d('LOCALE_HEROIC',				' (героич.)');
 		d('LOCALE_CRITERIA',			'Критерии');
+		d('LOCALE_GLYPH_OF',			'Символ ');
 
 		break;
 	// --- ENGLISH default LOCALE ---
@@ -402,5 +403,6 @@ switch($_SESSION['locale'])
 		d('LOCALE_TOOLS',				'Tools: ');
 		d('LOCALE_HEROIC',				' (Heroic)');
 		d('LOCALE_CRITERIA',			'Criteria');
+		d('LOCALE_GLYPH_OF',			'Glyph of ');
 }
 ?>

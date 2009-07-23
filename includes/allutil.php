@@ -302,6 +302,8 @@ $cache_types = array(
 	22	=> 'achievement_page',
 	23	=> 'achievement_tooltip',
 	24	=> 'achievement_listing',
+
+	25	=> 'glyphs',
 );
 function save_cache($type, $type_id, $data, $prefix = '')
 {
@@ -318,7 +320,7 @@ function save_cache($type, $type_id, $data, $prefix = '')
 		return false;
 
 	// {$type_str}_{$type_id}.aww
-	$file = $prefix.'cache/mangos/'.$type_str.'_'.$type_id.'_'.$_SESSION['locale'].'.aww';
+	$file = $prefix.'cache/mangos/'.$type_str.'_'.$type_id.'_'.($type_id == 21 ? 0 : $_SESSION['locale']).'.aww';
 
 	$time = time()+$AoWoWconf['aowow']['cache_time'];
 
@@ -351,7 +353,7 @@ function load_cache($type, $type_id, $prefix = '')
 	if(empty($type_str))
 		return false;
 
-	$data = @file_get_contents($prefix.'cache/mangos/'.$type_str.'_'.$type_id.'_'.$_SESSION['locale'].'.aww');
+	$data = @file_get_contents($prefix.'cache/mangos/'.$type_str.'_'.$type_id.'_'.($type_id == 21 ? 0 : $_SESSION['locale']).'.aww');
 	if(!$data)
 		return false;
 
