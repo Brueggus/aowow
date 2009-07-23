@@ -102,24 +102,31 @@ switch($_GET['data'])
 			description - Тултип спелла
 			icon - Иконка вещи
 		*/
+		
+		require_once('includes/allspells.php');
+		
 		$glyphs = array();
 		$glyphs = $DB->select('
-			SELECT it.`entry`, it.`name`, it.`spellid_1` as `spell`, it.`AllowableClass`, ic.`iconname`
+			SELECT it.`entry`, it.`name`, it.`subclass`, it.`spellid_1` as `spell`, ic.`iconname`
+				{, li.name_loc?d AS name_loc }
 			FROM `item_template` it
 			LEFT JOIN (?_icons ic) ON ic.id=it.displayid
+			{ LEFT JOIN `mangos`.locales_item li ON (li.entry=it.entry AND ?d)}
 			WHERE
-				it.`class` = 16
-		');
+				it.`class` = 16	
+		',
+		($_SESSION['locale']>0)? $_SESSION['locale']: DBSIMPLE_SKIP,
+		($_SESSION['locale']>0)? 1: DBSIMPLE_SKIP);
 		$g_glyphs = array();
 		foreach ($glyphs as $glyph)
 		{
 			$g_glyphs[$glyph['entry']] = array();
-			$g_glyphs[$glyph['entry']]['name'] = (string) $glyph['name'];
-			$g_glyphs[$glyph['entry']]['description'] = (string) 'Test';
-			$g_glyphs[$glyph['entry']]['icon'] = (string) 'Test';
-			$g_glyphs[$glyph['entry']]['type'] = (integer) 1;
-			$g_glyphs[$glyph['entry']]['classs'] = (integer) 1;
-			$g_glyphs[$glyph['entry']]['skill'] = (integer) 1;
+			$g_glyphs[$glyph['entry']]['name'] = (string) localizedName($glyph);
+			$g_glyphs[$glyph['entry']]['description'] = (string) spell_desc($glyph['spell']);
+			$g_glyphs[$glyph['entry']]['icon'] = (string) $glyph['iconname'];
+			$g_glyphs[$glyph['entry']]['type'] = (integer) 2;	// 1 - Большой символ, 2 - Малый символ
+			$g_glyphs[$glyph['entry']]['classs'] = (integer) $glyph['subclass'];
+			$g_glyphs[$glyph['entry']]['skill'] = (integer) 2;  // Skill???
 		}
 		echo('var g_glyphs='.php2js($g_glyphs));
 		break;
