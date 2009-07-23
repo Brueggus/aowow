@@ -55,6 +55,8 @@ switch($_GET['data'])
 				);
 				$j = 0;
 				$p_arr[$i]['t'] = array();
+				// Массив ссылок на зависимости
+				$dep_links = array();
 				foreach($talents as $talent)
 				{
 					$t_nums[$talent['id']] = $j;
@@ -70,11 +72,23 @@ switch($_GET['data'])
 					$p_arr[$i]['t'][$j]['x'] = (integer) $talent['col'];
 					$p_arr[$i]['t'][$j]['y'] = (integer) $talent['row'];
 					if ($talent['dependsOn'])
+					{
+						// Если талант, от которого зависит текущий талант ещё не встречался, создадим ссылку в массив ссылок на зависимости
+						if (!isset($t_nums[$talent['dependsOn']])) $dep_links[$talent['dependsOn']] = $j;
 						$p_arr[$i]['t'][$j]['r'] = array($t_nums[$talent['dependsOn']], $talent['dependsOnRank']+1);
+					}
 					// Spell icons
 					$p_arr[$i]['t'][$j]['iconname'] = (string) $talent['iconname'];
+					// Если на этот талант есть ссылка, добавляем его в массив зависимого таланта
+					if (isset($dep_links[$talent['id']]))
+					{
+						$p_arr[$i]['t'][$dep_links[$talent['id']]]['r'][0] = $j;
+						unset ($dep_links[$talent['id']]);
+					}
 					$j++;
 				}
+				// Удаляем все зависимости, для которых талант так и не был найден
+				foreach ($dep_links as $dep_link) unset ($p_arr[$i]['t'][$dep_link]['r']);
 				$i++;
 			}
 
