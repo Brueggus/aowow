@@ -25,10 +25,10 @@ switch($_GET['data'])
 
 			// Все "Табы" талантов заданного класса
 			$tabs = $DB->select('
-					SELECT `id`, name_loc?d as `name`
+					SELECT `id`, name_loc?d AS `name`
 					FROM ?_talenttab
-					WHERE `classes`=?d
-					ORDER by `order`
+					WHERE classes = ?d
+					ORDER BY `order`
 				',
 				$_SESSION['locale'],
 				pow(2, $_GET['class']-1)
@@ -111,7 +111,7 @@ switch($_GET['data'])
 				{, li.name_loc?d AS name_loc }
 			FROM `item_template` it
 			LEFT JOIN (?_icons ic) ON ic.id=it.displayid
-			{ LEFT JOIN `mangos`.locales_item li ON (li.entry=it.entry AND ?d)}
+			{ LEFT JOIN locales_item li ON (li.entry=it.entry AND ?d)}
 			WHERE
 				it.`class` = 16	
 		',
