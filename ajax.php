@@ -10,7 +10,6 @@ $AoWoWconf['debug'] = false;
 $AoWoWconf['realmd'] = false;
 // Настройка БД
 require_once('includes/db.php');
-global $languages;
 
 // Параметры передаваемые скрипту
 @list($what, $id) = explode("=", $_SERVER['QUERY_STRING']);
@@ -35,7 +34,7 @@ switch($what)
 		if ($item['icon'])
 			$x .= 'icon: \''.ajax_str_normalize($item['icon']).'\',';
 		if ($item['info'])
-			$x .= 'tooltip_'.$languages[$_SESSION['locale']].': \''.ajax_str_normalize($item['info']).'\'';
+			$x .= 'tooltip_'.$locales[$_SESSION['locale']].': \''.ajax_str_normalize($item['info']).'\'';
 		$x .= '});';
 		break;
 	case 'spell':
@@ -51,7 +50,7 @@ switch($what)
 		if ($spell['icon'])
 			$x .= 'icon: \''.ajax_str_normalize($spell['icon']).'\',';
 		if ($spell['info'])
-			$x .= 'tooltip_'.$languages[$_SESSION['locale']].': \''.ajax_str_normalize($spell['info']).'\'';
+			$x .= 'tooltip_'.$locales[$_SESSION['locale']].': \''.ajax_str_normalize($spell['info']).'\'';
 		$x .= '});';
 		break;
 	case 'quest':
@@ -66,7 +65,7 @@ switch($what)
 		if($quest['name'])
 			$x .= 'name: \''.ajax_str_normalize($quest['name']).'\',';
 		if($quest['tooltip'])
-			$x .= 'tooltip_'.$languages[$_SESSION['locale']].': \''.ajax_str_normalize($quest['tooltip']).'\'';
+			$x .= 'tooltip_'.$locales[$_SESSION['locale']].': \''.ajax_str_normalize($quest['tooltip']).'\'';
 		$x .= '});';
 		break;
 	case 'achievement':
@@ -77,9 +76,9 @@ switch($what)
 			save_cache(23, $id, $achievement);
 		}
 		$x .= '$WowheadPower.registerAchievement('.$id.', '.$_SESSION['locale'].',{';
-		$x .= 'name_'.$languages[$_SESSION['locale']].': \''.ajax_str_normalize($achievement['name']).'\',';
+		$x .= 'name_'.$locales[$_SESSION['locale']].': \''.ajax_str_normalize($achievement['name']).'\',';
 		$x .= 'icon:\''.$achievement['icon'].'\',';
-		$x .= 'tooltip_'.$languages[$_SESSION['locale']].':\''.ajax_str_normalize($achievement['tooltip']).'\'';
+		$x .= 'tooltip_'.$locales[$_SESSION['locale']].':\''.ajax_str_normalize($achievement['tooltip']).'\'';
 		$x .= '});';
 		break;
 	default:

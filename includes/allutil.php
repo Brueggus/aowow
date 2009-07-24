@@ -5,18 +5,21 @@ error_reporting(2039);
 ini_set('serialize_precision', 4);
 session_start();
 
-global $languages;
-$languages = array(
+// Префикс
+$tableprefix = $AoWoWconf['mangos']['aowow'];
+
+$locales = array(
 	0 => 'enus',
 	8 => 'ruru',
 );
 function checklocale()
 {
-	global $AoWoWconf, $languages;
-	if(!isset($_SESSION['locale']) || !in_array($_SESSION['locale'], array_keys($languages)))
+	global $AoWoWconf, $locales;
+	if(!isset($_SESSION['locale']) || !in_array($_SESSION['locale'], array_keys($locales)))
 		$_SESSION['locale'] = $AoWoWconf['locale'];
 }
 checklocale();
+
 // Это должно быть ПОСЛЕ checklocale()
 require_once('includes/alllocales.php');
 
@@ -81,16 +84,15 @@ define('RACE_BLOODELF', 512);
 define('RACE_DRAENEI', 1024);
 
 // Типы разделов
-global $types;
 $types = array(
-	1 => 'npc',
-	2 => 'object',
-	3 => 'item',
-	4 => 'itemset',
-	5 => 'quest',
-	6 => 'spell',
-	7 => 'zone',
-	8 => 'faction'
+	1 => array('npc',		'creature_template',	'entry'			),
+	2 => array('object',	'gameobject_template',	'entry'			),
+	3 => array('item',		'item_template',		'entry'			),
+	4 => array('itemset',	$tableprefix.'itemset',	'itemsetID'		),
+	5 => array('quest',		'quest_template',		'entry'			),
+	6 => array('spell',		$tableprefix.'spell',	'spellID'		),
+	7 => array('zone',		$tableprefix.'zones',	'areatableID'	),
+	8 => array('faction',	$tableprefix.'factions','factionID'		),
 );
 
 // Отношения со фракциями
@@ -489,5 +491,15 @@ function extract_values($str)
 	}
 
 	return $arr;
+}
+function redirect($url)
+{
+	echo "<html><head>\n";
+	echo "<meta http-equiv=\"Refresh\" content='\"0; URL=?".htmlspecialchars($url)."\">\n";
+	echo "<style type=\"text/css\">\n";
+	echo "body {background-color: black;}\n";
+	echo "</style>\n";
+	echo "</head></html>";
+	exit;
 }
 ?>

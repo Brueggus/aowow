@@ -13,7 +13,8 @@ switch($_GET['latest'])
 			FROM ?_comments
 			WHERE 1
 			ORDER BY post_date DESC
-			LIMIT 300');
+			LIMIT 300
+		');
 		foreach($rows as $i => $row)
 		{
 			$comments[$i] = array();
@@ -30,7 +31,7 @@ switch($_GET['latest'])
 					$comments[$i]['subject'] = $DB->selectCell('SELECT name FROM item_template WHERE entry=?d LIMIT 1', $row['typeID']);
 					break;
 				case 4: // Item Set
-					$comments[$i]['subject'] = $DB->selectCell('SELECT name FROM ?_itemset WHERE itemsetID=?d LIMIT 1', $row['typeID']);
+					$comments[$i]['subject'] = $DB->selectCell('SELECT name_loc'.$_SESSION['locale'].' FROM ?_itemset WHERE itemsetID=?d LIMIT 1', $row['typeID']);
 					break;
 				case 5: // Quest
 					$comments[$i]['subject'] = $DB->selectCell('SELECT Title FROM quest_template WHERE entry=?d LIMIT 1', $row['typeID']);
@@ -45,8 +46,8 @@ switch($_GET['latest'])
 					$comments[$i]['subject'] = $DB->selectCell('SELECT name_loc'.$_SESSION['locale'].' FROM ?_factions WHERE factionID=?d LIMIT 1', $row['typeID']);
 					break;
 				default:
-					$comments[$i]['subject'] = $DB->selectCell('SELECT name FROM '.$types[$row['type']].'_template WHERE entry=?d LIMIT 1', $row['typeID']);
-					break;
+					$comments[$i]['subject'] = 'Unknown';
+					break;;
 			}
 			$comments[$i]['user'] = $rDB->selectCell('SELECT username FROM account WHERE id=?d LIMIT 1', $row['user']);
 			if(empty($comments[$i]['user']))
