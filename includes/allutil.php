@@ -1,5 +1,5 @@
 <?php
-define('AOWOW_REVISION', 4);
+define('AOWOW_REVISION', 5);
 
 error_reporting(2039);
 ini_set('serialize_precision', 4);

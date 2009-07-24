@@ -1,11 +1,15 @@
-function Mapper(C, D) {
-	cO(this, C);
+/*
+ Mapper.js version 294
+ 
+*/
+function Mapper(d, e) {
+	cO(this, d);
 	if (this.parent) {
 		this.parent = $(this.parent)
 	} else {
 		return
 	}
-	var B;
+	var c;
 	this.mouseX = this.mouseY = 0;
 	this.editable = this.editable || false;
 	if (this.editable) {
@@ -21,226 +25,230 @@ function Mapper(C, D) {
 	if (location.href.indexOf("zone=") != -1) {
 		this.zoneLink = false
 	}
-	this.zoom = (this.zoom == null ? 0: this.zoom);
-	this.zone = (this.zone == null ? 0: this.zone);
-	this.locale = (this.locale == null ? "enus": this.locale);
+	this.zoom = (this.zoom == null ? 0 : this.zoom);
+	this.zone = (this.zone == null ? 0 : this.zone);
 	this.pins = [];
 	this.nCoords = 0;
 	this.parent.className = "mapper";
 	this.parent.appendChild(this.span = ce("span"));
-	B = this.span.style;
-	B.display = "block";
-	B.position = "relative";
+	c = this.span.style;
+	c.display = "block";
+	c.position = "relative";
 	ns(this.span);
 	if (this.editable) {
 		this.span.onmouseup = this.addPin.bind(this);
-		B = g_createGlow(LANG.mapper_tippin);
-		B.style.fontSize = "11px";
-		B.style.position = "absolute";
-		B.style.bottom = B.style.right = "0";
-		ns(B);
-		this.parent.appendChild(B)
+		c = g_createGlow(LANG.mapper_tippin);
+		c.style.fontSize = "11px";
+		c.style.position = "absolute";
+		c.style.bottom = c.style.right = "0";
+		ns(c);
+		this.parent.appendChild(c)
 	} else {
-		this.sToggle = B = g_createGlow(LANG.mapper_hidepins);
-		B.style.position = "absolute";
-		B.style.top = B.style.right = "0";
-		B.onclick = this.toggleShow.bind(this);
-		B.style.display = "none";
-		ns(B);
-		this.parent.appendChild(B)
+		this.sToggle = c = g_createGlow(LANG.mapper_hidepins);
+		c.style.position = "absolute";
+		c.style.top = c.style.right = "0";
+		c.onclick = this.toggleShow.bind(this);
+		c.style.display = "none";
+		ns(c);
+		this.parent.appendChild(c)
 	}
 	if (this.zoomable) {
 		this.span.onclick = this.toggleZoom.bind(this);
-		this.sZoom = B = g_createGlow(LANG.mapper_tipzoom);
-		B.style.fontSize = "11px";
-		B.style.position = "absolute";
-		B.style.bottom = B.style.right = "0";
-		ns(B);
-		this.span.appendChild(B)
+		this.sZoom = c = g_createGlow(LANG.mapper_tipzoom);
+		c.style.fontSize = "11px";
+		c.style.position = "absolute";
+		c.style.bottom = c.style.right = "0";
+		ns(c);
+		this.span.appendChild(c)
 	}
 	if (this.zoneLink) {
-		this.sZoneLink = B = g_createGlow("zone link");
-		var E = B.childNodes[4];
-		var A = ce("a");
-		A.href = "?zones";
-		ae(A, ct(E.firstChild.nodeValue));
-		de(E.firstChild);
-		ae(E, A);
-		B.style.display = "none";
-		B.style.position = "absolute";
-		B.style.top = B.style.left = "0";
-		this.parent.appendChild(B)
+		this.sZoneLink = c = g_createGlow("zone link");
+		var f = c.childNodes[4];
+		var b = ce("a");
+		b.href = "?zones";
+		ae(b, ct(f.firstChild.nodeValue));
+		de(f.firstChild);
+		ae(f, b);
+		c.style.display = "none";
+		c.style.position = "absolute";
+		c.style.top = c.style.left = "0";
+		this.parent.appendChild(c)
 	}
 	if (this.mouse) {
-		this.parent.onmouseout = (function() {
-			this.timeout = setTimeout((function() {
+		this.parent.onmouseout = (function () {
+			this.timeout = setTimeout((function () {
 				this.sMouse.style.display = "none"
 			}).bind(this), 1)
 		}).bind(this);
-		this.parent.onmouseover = (function() {
+		this.parent.onmouseover = (function () {
 			clearTimeout(this.timeout);
 			this.sMouse.style.display = ""
 		}).bind(this);
 		this.span.onmousemove = this.span.onmousedown = this.getMousePos.bind(this);
-		this.sMouse = B = g_createGlow("(0.0, 0.0)");
-		B.style.display = "none";
-		B.style.position = "absolute";
-		B.style.bottom = B.style.left = "0";
-		B.onmouseup = sp;
-		ns(B);
-		this.span.appendChild(B)
+		this.sMouse = c = g_createGlow("(0.0, 0.0)");
+		c.style.display = "none";
+		c.style.position = "absolute";
+		c.style.bottom = c.style.left = "0";
+		c.onmouseup = sp;
+		ns(c);
+		this.span.appendChild(c)
 	}
-	this.pinBag = B = ce("div");
+	this.pinBag = c = ce("div");
 	ae(this.span, this.pinBag);
-	if (C.coords != null) {
-		this.setCoords(C.coords)
+	if (d.coords != null) {
+		this.setCoords(d.coords)
 	} else {
-		if (C.link != null) {
-			this.setLink(C.link)
+		if (d.link != null) {
+			this.setLink(d.link)
 		}
 	}
-	this.updateMap(D)
+	this.updateMap(e)
 }
 Mapper.sizes = [[488, 325, "normal"], [772, 515, "zoom"]];
 Mapper.prototype = {
-	update: function(A, B) {
-		if (A.zoom != null) {
-			this.zoom = A.zoom
+	update: function (a, b) {
+		if (a.zoom != null) {
+			this.zoom = a.zoom
 		}
-		if (A.zone != null) {
-			this.zone = A.zone
+		if (a.zone != null) {
+			this.zone = a.zone
 		}
-		if (A.locale != null) {
-			this.locale = A.locale
+		if (a.show != null) {
+			this.show = a.show
 		}
-		if (A.show != null) {
-			this.show = A.show
-		}
-		if (A.coords != null) {
-			this.setCoords(A.coords)
+		if (a.coords != null) {
+			this.setCoords(a.coords)
 		} else {
-			if (A.link != null) {
-				this.setLink(A.link)
+			if (a.link != null) {
+				this.setLink(a.link)
 			}
 		}
-		this.updateMap(B)
+		this.updateMap(b)
 	},
-	getZone: function() {
+	getZone: function () {
 		return this.zone
 	},
-	setZone: function(A, B) {
-		this.zone = A;
-		this.updateMap(B);
+	setZone: function (a, b) {
+		this.zone = a;
+		this.updateMap(b);
 		return true
 	},
-	getLocale: function() {
-		return this.locale
-	},
-	setLocale: function(A, B) {
-		this.locale = A;
-		this.updateMap(B)
-	},
-	getZoom: function() {
+	getZoom: function () {
 		return this.zoom
 	},
-	setZoom: function(A, B) {
-		this.zoom = A;
-		this.updateMap(B)
+	setZoom: function (a, b) {
+		this.zoom = a;
+		this.updateMap(b)
 	},
-	toggleZoom: function(A) {
+	toggleZoom: function (a) {
 		this.zoom = 1 - this.zoom;
 		this.updateMap();
-		this.getMousePos(A);
+		this.getMousePos(a);
 		if (this.sZoom) {
 			this.sZoom.style.display = "none";
 			this.sZoom = null
 		}
 	},
-	getShow: function() {
+	getShow: function () {
 		return this.show
 	},
-	setShow: function(A) {
-		this.show = A;
-		var B = this.show ? "": "none";
-		this.pinBag.style.display = B;
+	setShow: function (a) {
+		this.show = a;
+		var b = this.show ? "": "none";
+		this.pinBag.style.display = b;
 		g_setTextNodes(this.sToggle, (this.show ? LANG.mapper_hidepins: LANG.mapper_showpins))
 	},
-	toggleShow: function() {
+	toggleShow: function () {
 		this.setShow(!this.show)
 	},
-	getCoords: function() {
-		var A = [];
-		for (var B in this.pins) {
-			if (!this.pins[B].free) {
-				A.push([this.pins[B].x, this.pins[B].y])
+	getCoords: function () {
+		var b = [];
+		for (var c in this.pins) {
+			if (!this.pins[c].free) {
+				b.push([this.pins[c].x, this.pins[c].y])
 			}
 		}
-		return A
+		return b
 	},
-	setCoords: function(D) {
-		var A;
-		for (var C in this.pins) {
-			this.pins[C].style.display = "none";
-			this.pins[C].free = true
+	setCoords: function (a) {
+		var b;
+		for (var d in this.pins) {
+			this.pins[d].style.display = "none";
+			this.pins[d].free = true
 		}
-		this.nCoords = D.length;
-		for (var C in D) {
-			var E = D[C];
-			var B = E[2];
-			A = this.getPin();
-			A.x = E[0];
-			A.y = E[1];
-			A.style.left = A.x + "%";
-			A.style.top = A.y + "%";
+		var f;
+		if (a.length) {
+			f = 0
+		} else {
+			for (var d in a) {
+				f = d;
+				break
+			}
+			if (f == null) {
+				return
+			}
+			a = a[f]
+		}
+		this.level = parseInt(f);
+		this.nCoords = a.length;
+		for (var d in a) {
+			var e = a[d],
+			c = e[2];
+			b = this.getPin();
+			b.x = e[0];
+			b.y = e[1];
+			b.style.left = b.x + "%";
+			b.style.top = b.y + "%";
 			if (this.editable) {
-				A.a.onmouseup = this.delPin.bind(this, A)
+				b.a.onmouseup = this.delPin.bind(this, b)
 			} else {
-				if (B && B.url) {
-					A.a.href = B.url;
-					A.a.style.cursor = "pointer"
+				if (c && c.url) {
+					b.a.href = c.url;
+					b.a.rel = "np";
+					b.a.style.cursor = "pointer"
 				}
 			}
-			if (B && B.label) {
-				A.a.tt = B.label
+			if (c && c.label) {
+				b.a.tt = c.label
 			} else {
-				A.a.tt = "$"
+				b.a.tt = "$"
 			}
-			if (B && B.type) {
-				A.className += " pin-" + B.type
+			if (c && c.type) {
+				b.className += " pin-" + c.type
 			}
-			A.a.tt = str_replace(A.a.tt, "$", A.x.toFixed(1) + ", " + A.y.toFixed(1))
+			b.a.tt = str_replace(b.a.tt, "$", b.x.toFixed(1) + ", " + b.y.toFixed(1))
 		}
 		this.onPinUpdate && this.onPinUpdate(this)
 	},
-	getLink: function() {
-		var B = "";
-		for (var A in this.pins) {
-			if (!this.pins[A].free) {
-				B += (this.pins[A].x < 10 ? "0": "") + (this.pins[A].x * 10).toFixed(0) + (this.pins[A].y < 10 ? "0": "") + (this.pins[A].y * 10).toFixed(0)
+	getLink: function () {
+		var b = "";
+		for (var a in this.pins) {
+			if (!this.pins[a].free) {
+				b += (this.pins[a].x < 10 ? "0": "") + (this.pins[a].x * 10).toFixed(0) + (this.pins[a].y < 10 ? "0": "") + (this.pins[a].y * 10).toFixed(0)
 			}
 		}
-		return (this.zone ? this.zone: "") + (B ? ":" + B: "")
+		return (this.zone ? this.zone: "") + (b ? ":" + b: "")
 	},
-	setLink: function(D) {
-		var B = [];
-		D = D.split(":");
-		if (!this.setZone(D[0])) {
+	setLink: function (e) {
+		var c = [];
+		e = e.split(":");
+		if (!this.setZone(e[0])) {
 			return false
 		}
-		if (D.length == 2) {
-			for (var C = 0; C < D[1].length; C += 6) {
-				var A = D[1].substr(C, 3) / 10;
-				var E = D[1].substr(C + 3, 3) / 10;
-				if (isNaN(A) || isNaN(E)) {
+		if (e.length == 2) {
+			for (var d = 0; d < e[1].length; d += 6) {
+				var b = e[1].substr(d, 3) / 10;
+				var f = e[1].substr(d + 3, 3) / 10;
+				if (isNaN(b) || isNaN(f)) {
 					break
 				}
-				B.push([A, E])
+				c.push([b, f])
 			}
 		}
-		this.setCoords(B);
+		this.setCoords(c);
 		return true
 	},
-	updateMap: function(C) {
+	updateMap: function (c) {
 		this.parent.style.width = this.span.style.width = Mapper.sizes[this.zoom][0] + "px";
 		this.parent.style.height = this.span.style.height = Mapper.sizes[this.zoom][1] + "px";
 		if (!this.editable) {
@@ -249,88 +257,92 @@ Mapper.prototype = {
 		if (this.zone == "0") {
 			this.span.style.background = "black"
 		} else {
-			this.span.style.background = "url(images/maps/" + this.locale + "/" + Mapper.sizes[this.zoom][2] + "/" + this.zone + ".jpg)"
+			var d = this.level;
+			if (this.zone == 4395 && d == 1) {
+				d = 0
+			}
+			this.span.style.background = "url(images/maps/enus/" + Mapper.sizes[this.zoom][2] + "/" + this.zone + (d ? "-" + d: "") + ".jpg)"
 		}
 		if (this.zoneLink) {
-			var A = parseInt(this.zone);
-			var B = g_zones[A] != null;
-			if (B) {
-				g_setTextNodes(this.sZoneLink, g_zones[A]);
-				this.sZoneLink.childNodes[4].firstChild.href = "?zone=" + A
+			var b = parseInt(this.zone);
+			var a = g_zones[b] != null;
+			if (a) {
+				g_setTextNodes(this.sZoneLink, g_zones[b]);
+				this.sZoneLink.childNodes[4].firstChild.href = "?zone=" + b
 			}
-			this.sZoneLink.style.display = B ? "": "none"
+			this.sZoneLink.style.display = a ? "": "none"
 		}
 		if (this.sToggle) {
 			this.sToggle.style.display = (this.toggle && this.nCoords ? "": "none")
 		}
-		if (!C) {
+		if (!c) {
 			g_scrollTo(this.parent, 3)
 		}
 		this.onMapUpdate && this.onMapUpdate(this)
 	},
-	cleanPin: function(B) {
-		var A = this.pins[B];
-		A.style.display = "";
-		A.free = false;
-		A.className = "pin";
-		A.a.onmousedown = rf;
-		A.a.onmouseup = rf;
-		A.a.href = "javascript:;";
-		A.a.style.cursor = "default";
-		return A
+	cleanPin: function (b) {
+		var a = this.pins[b];
+		a.style.display = "";
+		a.free = false;
+		a.className = "pin";
+		a.a.onmousedown = rf;
+		a.a.onmouseup = rf;
+		a.a.href = "javascript:;";
+		a.a.style.cursor = "default";
+		return a
 	},
-	getPin: function() {
-		for (var C = 0; C < this.pins.length; ++C) {
-			if (this.pins[C].free) {
-				return this.cleanPin(C)
+	getPin: function () {
+		for (var d = 0; d < this.pins.length; ++d) {
+			if (this.pins[d].free) {
+				return this.cleanPin(d)
 			}
 		}
-		var B = ce("div"),
-		A = ce("a");
-		B.className = "pin";
-		B.appendChild(A);
-		B.a = A;
-		A.onmouseover = this.pinOver;
-		A.onmouseout = Tooltip.hide;
-		A.onclick = sp;
-		this.pins.push(B);
+		var c = ce("div"),
+		b = ce("a");
+		c.className = "pin";
+		c.appendChild(b);
+		c.a = b;
+		b.onmouseover = this.pinOver;
+		b.onmouseout = Tooltip.hide;
+		b.onclick = sp;
+		this.pins.push(c);
 		this.cleanPin(this.pins.length - 1);
-		ae(this.pinBag, B);
-		return B
+		ae(this.pinBag, c);
+		return c
 	},
-	addPin: function(B) {
-		B = $E(B);
-		if (B._button >= 2) {
+	addPin: function (b) {
+		b = $E(b);
+		if (b._button >= 2) {
 			return
 		}
-		this.getMousePos(B);
-		var A = this.getPin();
-		A.x = this.mouseX;
-		A.y = this.mouseY;
-		A.style.left = A.x.toFixed(1) + "%";
-		A.style.top = A.y.toFixed(1) + "%";
-		A.a.onmouseup = this.delPin.bind(this, A);
-		A.a.tt = A.x.toFixed(1) + ", " + A.y.toFixed(1);
+		this.getMousePos(b);
+		var a = this.getPin();
+		a.x = this.mouseX;
+		a.y = this.mouseY;
+		a.style.left = a.x.toFixed(1) + "%";
+		a.style.top = a.y.toFixed(1) + "%";
+		a.a.onmouseup = this.delPin.bind(this, a);
+		a.a.tt = a.x.toFixed(1) + ", " + a.y.toFixed(1);
 		this.onPinUpdate && this.onPinUpdate(this);
 		return false
 	},
-	delPin: function(A, B) {
-		B = $E(B);
-		A.style.display = "none";
-		A.free = true;
-		sp(B);
+	delPin: function (a, b) {
+		b = $E(b);
+		a.style.display = "none";
+		a.free = true;
+		sp(b);
 		this.onPinUpdate && this.onPinUpdate(this);
 		return
 	},
-	pinOver: function() {
+	pinOver: function () {
 		Tooltip.show(this, this.tt, 4, 0)
 	},
-	getMousePos: function(B) {
-		B = $E(B);
-		var C = ac(this.parent);
-		var A = g_getScroll();
-		this.mouseX = Math.floor((B.clientX + A.x - C[0] - 3) / Mapper.sizes[this.zoom][0] * 1000) / 10;
-		this.mouseY = Math.floor((B.clientY + A.y - C[1] - 3) / Mapper.sizes[this.zoom][1] * 1000) / 10;
+	getMousePos: function (b) {
+		b = $E(b);
+		var d = ac(this.parent);
+		var a = g_getScroll();
+		this.mouseX = Math.floor((b.clientX + a.x - d[0] - 3) / Mapper.sizes[this.zoom][0] * 1000) / 10;
+		this.mouseY = Math.floor((b.clientY + a.y - d[1] - 3) / Mapper.sizes[this.zoom][1] * 1000) / 10;
 		if (this.mouseX < 0) {
 			this.mouseX = 0
 		} else {
@@ -351,37 +363,37 @@ Mapper.prototype = {
 	}
 };
 function ma_initShowOnMap() {
-	var D = ge("lenrlkn4");
-	var A = ce("select");
-	var C = ce("option");
-	C.value = "";
-	C.style.color = "#bbbbbb";
-	ae(C, ct(LANG.showonmap));
-	ae(A, C);
+	var e = ge("lenrlkn4");
+	var a = ce("select");
+	var c = ce("option");
+	c.value = "";
+	c.style.color = "#bbbbbb";
+	ae(c, ct(LANG.showonmap));
+	ae(a, c);
 	if (showOnMap.qg_alliance || showOnMap.qg_horde) {
-		var B = ce("optgroup", {
+		var b = ce("optgroup", {
 			label: LANG.som_questgivers
 		});
 		if (showOnMap.qg_alliance) {
-			ae(B, ce("option", {
+			ae(b, ce("option", {
 				value: "qg_alliance",
 				innerHTML: g_sides[1] + sprintf(LANG.qty, showOnMap.qg_alliance.count)
 			}))
 		}
 		if (showOnMap.qg_horde) {
-			ae(B, ce("option", {
+			ae(b, ce("option", {
 				value: "qg_horde",
 				innerHTML: g_sides[2] + sprintf(LANG.qty, showOnMap.qg_horde.count)
 			}))
 		}
-		ae(A, B)
+		ae(a, b)
 	}
-	A.onchange = A.onkeyup = function() {
-		var E = this.options[this.selectedIndex].value;
+	a.onchange = a.onkeyup = function () {
+		var d = this.options[this.selectedIndex].value;
 		myMapper.update({
 			zone: g_pageInfo.id,
-			coords: E ? showOnMap[E].coords: []
+			coords: d ? showOnMap[d].coords: []
 		})
 	};
-	ae(D, A)
+	ae(e, a)
 };
