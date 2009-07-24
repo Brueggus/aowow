@@ -18,8 +18,11 @@ switch($_REQUEST['comment'])
 
 		$url = $types[$type][0].'='.$id.'#comments';
 
+		if(strlen($text) < 10)
+			redirect($url);
+
 		// Нет такой категории или записи в категории
-		if(!$types[$type] || !$DB->selectCell('SELECT 1 FROM ?# WHERE ?# = ?', $types[$type][1], $types[$type][2]))
+		if(!$types[$type] || !$DB->selectCell('SELECT 1 FROM ?# WHERE ?# = ?', $types[$type][1], $types[$type][2], $id))
 			redirect($url);
 
 		if($parent && !$DB->selectCell('SELECT 1 FROM ?_comments WHERE id = ?', $parent))
@@ -101,7 +104,7 @@ switch($_REQUEST['comment'])
 		* Номер пользователя: $_SESSION['userid']
 		*/
 		$id = intval($_GET['id']);
-		$rate = intval$_GET['rating']);
+		$rate = intval($_GET['rating']);
 
 		if(!$_SESSION['userid'] || !$id || !$rate)
 			exit;

@@ -495,7 +495,7 @@ function extract_values($str)
 function redirect($url)
 {
 	echo "<html><head>\n";
-	echo "<meta http-equiv=\"Refresh\" content='\"0; URL=?".htmlspecialchars($url)."\">\n";
+	echo "<meta http-equiv=\"Refresh\" content=\"0; URL=?".htmlspecialchars($url)."\">\n";
 	echo "<style type=\"text/css\">\n";
 	echo "body {background-color: black;}\n";
 	echo "</style>\n";
