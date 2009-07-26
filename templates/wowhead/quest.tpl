@@ -194,8 +194,8 @@
 						{#Additional_requirements_to_obtain_this_quest#}:<br>
 						{strip}
 							<ul>
-							{if isset($quest.RequiredMinRep)}<li><div>{#Your_reputation_with#} <a href="?faction={$quest.RequiredMinRep.entry}">{$quest.RequiredMinRep.name}</a> {#must_be#} {#higher_than#} {$quest.RequiredMinRep.value}</div></li><br>{/if}
-							{if isset($quest.RequiredMaxRep)}<li><div>{#Your_reputation_with#} <a href="?faction={$quest.RequiredMaxRep.entry}">{$quest.RequiredMaxRep.name}</a> {#must_be#} {#lower_than#} {$quest.RequiredMaxRep.value}</div></li><br>{/if}
+							{if isset($quest.RequiredMinRep)}<li><div>{#Your_reputation_with#} <a href="?faction={$quest.RequiredMinRep.entry}">{$quest.RequiredMinRep.name}</a> {#must_be#} {#higher_than#} {$quest.RequiredMinRep.value}</div></li>{/if}
+							{if isset($quest.RequiredMaxRep)}<li><div>{#Your_reputation_with#} <a href="?faction={$quest.RequiredMaxRep.entry}">{$quest.RequiredMaxRep.name}</a> {#must_be#} {#lower_than#} {$quest.RequiredMaxRep.value}</div></li>{/if}
 							</ul>
 							<div class="line"></div>
 						{/strip}
@@ -203,7 +203,7 @@
 
 					{if $quest.Objectives}
 						{$quest.Objectives}
-					{else}
+					{else $quest.RequestItemsText}
 						<h3>{#Progress#}</h3>
 						{$quest.RequestItemsText}
 					{/if}
