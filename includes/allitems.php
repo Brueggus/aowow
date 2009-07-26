@@ -469,7 +469,6 @@ function iteminfo2(&$Row, $level=0)
 	$item['name'] = localizedName($Row);
 	// Тип вещи
 	$item['type'] = $Row['InventoryType'];
-	$item['displayid'] = $Row['displayid'];
 	$item['icon'] = $Row['iconname'];
 	// Уровень вещи
 	$item['level'] = $Row['ItemLevel'];
