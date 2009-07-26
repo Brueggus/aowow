@@ -229,17 +229,17 @@ if(!$quest = load_cache(10, $cache_key))
 		$quest['reqclass'] = $classes[abs($quest['SkillOrClass'])];
 
 	// Требуемые отношения с фракциями, что бы начать квест
-	if($quest['RequiredMinRepFaction'] && $quest['RequiredMinRepValue'])
+	if($quest['RequiredMinRepFaction'])
 		$quest['RequiredMinRep'] = array(
 			'name' => $DB->selectCell('SELECT name_loc'.$_SESSION['locale'].' FROM ?_factions WHERE factionID=?d LIMIT 1', $quest['RequiredMinRepFaction']),
 			'entry' => $quest['RequiredMinRepFaction'],
-			'value' => $reputations[$quest['RequiredMinRepValue']]
+			'value' => reputations($quest['RequiredMinRepValue'])
 		);
-	if($quest['RequiredMaxRepFaction'] && $quest['RequiredMaxRepValue'])
+	if($quest['RequiredMaxRepFaction'])
 		$quest['RequiredMaxRep'] = array(
 			'name' => $DB->selectCell('SELECT name_loc'.$_SESSION['locale'].' FROM ?_factions WHERE factionID=?d LIMIT 1', $quest['RequiredMaxRepFaction']),
 			'entry' => $quest['RequiredMaxRepFaction'],
-			'value' => $reputations[$quest['RequiredMaxRepValue']]
+			'value' => reputations($quest['RequiredMaxRepValue'])
 		);
 
 	// Спеллы не требуют локализации, их инфа берется из базы
@@ -340,12 +340,12 @@ if(!$quest = load_cache(10, $cache_key))
 		unset($quest['itemreqs']);
 
 	// Фракции необходимые для квеста
-	if($quest['RepObjectiveFaction']>0 && $quest['RepObjectiveValue']>0)
+	if($quest['RepObjectiveFaction']>0)
 	{
 		$quest['factionreq'] = array(
 			'name' => $DB->selectCell('SELECT name_loc'.$_SESSION['locale'].' FROM ?_factions WHERE factionID=?d LIMIT 1', $quest['RepObjectiveFaction']),
 			'entry' => $quest['RepObjectiveFaction'],
-			'value' => $reputations[$quest['RepObjectiveValue']]
+			'value' => reputations($quest['RepObjectiveValue'])
 		);
 	}
 

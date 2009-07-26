@@ -97,13 +97,24 @@ $types = array(
 );
 
 // Отношения со фракциями
-$reputations = array(
-	1 => LOCALE_NEUTRAL,
-	3000 => LOCALE_FRIENDLY,
-	9000 => LOCALE_HONORED,
-	21000 => LOCALE_REVERED,
-	42000 => LOCALE_EXALTED
-);
+function reputations($value)
+{
+	switch ($value)
+	{
+		case 0: return LOCALE_NEUTRAL;
+		case 1: return LOCALE_NEUTRAL;
+		case 2999: return LOCALE_FRIENDLY;
+		case 3000: return LOCALE_FRIENDLY;
+		case 8999: return LOCALE_HONORED;
+		case 9000: return LOCALE_HONORED;
+		case 20999: return LOCALE_REVERED;
+		case 21000: return LOCALE_REVERED;
+		case 41999: return LOCALE_EXALTED;
+		case 42000: return LOCALE_EXALTED;
+		default: return $value;
+	}
+}
+
 $sides = array(
 	1 => LOCALE_ALLIANCE,
 	2 => LOCALE_HORDE,

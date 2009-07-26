@@ -231,7 +231,7 @@ if(!$achievement = load_cache(22, $cache_key))
 						'href'	=> '?faction='.$row['value1'],
 						'text'	=> $row['name'],
 					);
-					$tmp['extra_text'] = ' ('.$reputations[$row['value2']].')';
+					$tmp['extra_text'] = ' ('.reputations($row['value2']).')';
 					break;
 				// Добавляем иконку золотой монетки
 				case ACHIEVEMENT_CRITERIA_TYPE_MONEY_FROM_QUEST_REWARD:
