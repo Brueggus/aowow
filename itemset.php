@@ -60,7 +60,7 @@ if(!$itemset = load_cache(8, $cache_key))
 					$itemset['spells'][$j] = $tmp;
 				}
 	}
-	save_cache(8, $id, $itemset);
+	save_cache(8, $cache_key, $itemset);
 }
 $smarty->assign('itemset', $itemset);
 
