@@ -20,6 +20,7 @@
    - ?		->		?	(104)
  7. Changed LiveSearch
    - relocate ?search to opensearch.php?search
+ 8. Added this.applySort(); in Listview prototype. May be it unneeded in some case, but i can't find such examples.
 */
 function $(c) {
 	if (arguments.length > 1) {
@@ -3112,6 +3113,8 @@ Listview.prototype = {
 			this.updateFilters()
 		}
 		this.updateNav();
+		// Сортируем при загрузке, дабы снизить нагрузку с сервера
+		this.applySort();
 		this.refreshRows();
 		if (this.onAfterCreate != null) {
 			this.onAfterCreate(b)
