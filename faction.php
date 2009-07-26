@@ -8,7 +8,7 @@ require_once('includes/allcomments.php');
 $smarty->config_load($conf_file, 'faction');
 
 // Номер фракции
-$id = $podrazdel;
+$id = intval($podrazdel);
 
 $cache_key = cache_key($id);
 
