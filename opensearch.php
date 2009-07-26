@@ -50,20 +50,17 @@ foreach($rows as $i => $row)
 
 // Ищем объекты:
 $rows = $DB->select('
-	SELECT g.entry, ?# as name
-	FROM gameobject_template g {, ?# l}
-	WHERE
-		(?# LIKE ?)
-		{AND (g.entry=l.?#)}
+	SELECT entry, ?# as name
+	FROM ?#
+	WHERE ?# LIKE ?
 	ORDER BY ?#
 	LIMIT 3
 	',
-	$_SESSION['locale'] == 0 ? 'name' : 'name_loc'.$_SESSION['locale'],	// SELECT
-	$_SESSION['locale'] == 0 ? DBSIMPLE_SKIP : 'locales_gameobject',	// FROM
-	$_SESSION['locale'] == 0 ? 'name' : 'name_loc'.$_SESSION['locale'],	// WHERE1
+	$_SESSION['locale'] == 0 ? 'name' : 'name_loc'.$_SESSION['locale'],			// SELECT
+	$_SESSION['locale'] == 0 ? 'gameobject_template' : 'locales_gameobject',	// FROM
+	$_SESSION['locale'] == 0 ? 'name' : 'name_loc'.$_SESSION['locale'],			// WHERE1
 	$search_query,
-	$_SESSION['locale'] == 0 ? DBSIMPLE_SKIP : 'entry',					// WHERE2
-	$_SESSION['locale'] == 0 ? 'name' : 'name_loc'.$_SESSION['locale']	// ORDER
+	$_SESSION['locale'] == 0 ? 'name' : 'name_loc'.$_SESSION['locale']			// ORDER
 );
 
 foreach($rows as $i => $row)
@@ -99,20 +96,17 @@ foreach($rows as $i => $row)
 
 // Ищем creature:
 $rows = $DB->select('
-	SELECT c.entry, ?# as name
-	FROM creature_template c {, ?# l}
-	WHERE
-		(?# LIKE ?)
-		{AND (c.entry=l.?#)}
+	SELECT entry, ?# as name
+	FROM ?#
+	WHERE ?# LIKE ?
 	ORDER BY ?#
 	LIMIT 3
 	',
-	$_SESSION['locale'] == 0 ? 'name' : 'name_loc'.$_SESSION['locale'],	// SELECT
-	$_SESSION['locale'] == 0 ? DBSIMPLE_SKIP : 'locales_creature',		// FROM
-	$_SESSION['locale'] == 0 ? 'name' : 'name_loc'.$_SESSION['locale'],	// WHERE1
+	$_SESSION['locale'] == 0 ? 'name' : 'name_loc'.$_SESSION['locale'],		// SELECT
+	$_SESSION['locale'] == 0 ? 'creature_template' : 'locales_creature',	// FROM
+	$_SESSION['locale'] == 0 ? 'name' : 'name_loc'.$_SESSION['locale'],		// WHERE1
 	$search_query,
-	$_SESSION['locale'] == 0 ? DBSIMPLE_SKIP : 'entry',					// WHERE2
-	$_SESSION['locale'] == 0 ? 'name' : 'name_loc'.$_SESSION['locale']	// ORDER
+	$_SESSION['locale'] == 0 ? 'name' : 'name_loc'.$_SESSION['locale']		// ORDER
 );
 
 foreach($rows as $i => $row)
