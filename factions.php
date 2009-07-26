@@ -12,7 +12,7 @@ if(!$factions = load_cache(19, $cache_key))
 	unset($factions);
 
 	$factions = $DB->select('
-			SELECT f1.factionID AS entry, f1.team, f1.name_loc?d AS name, f1.side, { f2.?# }{ ?d } AS category2, ?d AS category
+			SELECT f1.factionID AS entry, f1.team, TRIM(f1.name_loc?d) AS name, f1.side, { f2.?# }{ ?d } AS category2, ?d AS category
 			FROM ?_factions f1
 			{ LEFT JOIN (?_factions f2) ON f1.team <> ?d }
 			WHERE
@@ -46,25 +46,6 @@ if(!$factions = load_cache(19, $cache_key))
 			intval($c2),
 			$entrys
 		));
-
-		// Сортируем массив
-		do
-		{
-			$changed = false;
-			for($i = 0; $i < count($factions); $i++)
-			{
-				// $l - предыдущий элемент массива
-				if(isset($l) && strcmp($factions[$l]['name'], $factions[$i]['name']) == 1)
-				{
-					$tmp = $factions[$l];
-					$factions[$l] = $factions[$i];
-					$factions[$i] = $tmp;
-					$changed = true;
-				}
-				$l = $i;
-			}
-			unset($l);
-		} while($changed);
 	}
 
 	save_cache(19, $cache_key, $factions);
