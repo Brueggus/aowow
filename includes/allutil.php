@@ -28,11 +28,7 @@ function str_normalize($str)
 {
 	return str_replace("'", "\'", $str);
 }
-function point_delim(&$str, &$a, &$b)
-{
-	@list($a, $b) = explode('.', $str, 2);
-	return;
-}
+
 function d($d,$v)
 {
 	define($d,$v);
