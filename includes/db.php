@@ -31,9 +31,11 @@ function databaseErrorHandler($message, $info)
 	echo "</pre>";
 	exit();
 }
+
 // Для отладки разкомментировать строку ниже
 if($AoWoWconf['debug'])
 	$DB->setLogger('myLogger');
+
 function myLogger($db, $sql)
 {
 	global $smarty;

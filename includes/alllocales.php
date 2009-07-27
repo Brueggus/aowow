@@ -1,601 +1,594 @@
 <?php
-function localizedName($arr, $key = 'name')
-{
-	if(!$_SESSION['locale'])
-		return $arr[$key];
-
-	if(empty($arr[$key]))
-		return '';
-
-	$lkey = $key.'_loc';
-	if(empty($arr[$lkey]))
-	{
-		if(substr($arr[$key], 0, 1) == '[' && substr($arr[$key], -1, 1) == ']')
-			return $arr[$key];
-		else
-			return '['.$arr[$key].']';
-	}
-	else
-		return $arr[$lkey];
-}
 switch($_SESSION['locale'])
 {
 	// --- RUSSIAN LOCALE ---
 	case '8':
-		// quest
-		d('LOCALE_REQUIREMENTS', 'Требования');
-		// classes
-		d('LOCALE_WARRIOR',		'Воин');
-		d('LOCALE_PALADIN',		'Паладин');
-		d('LOCALE_HUNTER',		'Охотник');
-		d('LOCALE_ROGUE',		'Разбойник');
-		d('LOCALE_PRIEST',		'Жрец');
-		d('LOCALE_DEATH_KNIGHT','Рыцарь Смерти');
-		d('LOCALE_SHAMAN',		'Шаман');
-		d('LOCALE_MAGE',		'Маг');
-		d('LOCALE_WARLOCK',		'Чернокнижник');
-		d('LOCALE_DRUID',		'Друид');
-		// races
-		d('LOCALE_HUMAN',		'Человек');
-		d('LOCALE_ORC',			'Орк');
-		d('LOCALE_DWARF',		'Дворф');
-		d('LOCALE_NIGHT_ELF',	'Ночной Эльф');
-		d('LOCALE_UNDED',		'Нежить');
-		d('LOCALE_TAUREN',		'Таурен');
-		d('LOCALE_GNOME',		'Гном');
-		d('LOCALE_TROLL',		'Троль');
-		d('LOCALE_BLOOD_ELF',	'Эльф Крови');
-		d('LOCALE_DRAENEI',		'Дреней');
-		// side
-		d('LOCALE_BOTH_FACTIONS','Обе фракции');
-		d('LOCALE_HORDE',		'Орда');
-		d('LOCALE_ALLIANCE',	'Альянс');
-		// reputation
-		d('LOCALE_NEUTRAL',		'Равнодушие');
-		d('LOCALE_FRIENDLY',	'Дружелюбие');
-		d('LOCALE_HONORED',		'Уважение');
-		d('LOCALE_REVERED',		'Почтение');
-		d('LOCALE_EXALTED',		'Превознесение');
-		// resistances
-		d('LOCALE_FIRE_RESISTANCE',		'Сопротивляемость магии Огня');
-		d('LOCALE_FROST_RESISTANCE',	'Сопротивляемость магии Льда');
-		d('LOCALE_ARCANE_RESISTANCE',	'Сопротивляемость тайной магии');
-		d('LOCALE_SHADOW_RESISTANCE',	'Сопротивляемость темной магии');
-		d('LOCALE_NATURE_RESISTANCE',	'Сопротивляемость природной магии');
-		d('LOCALE_HOLY_RESISTANCE',		'RESISTANCE DOES NOT EXIST');
-		// binds
-		d('LOCALE_BIND_PICKUP',		'Становится персональным при нахождении');
-		d('LOCALE_BIND_EQUIP',		'Становится персональным при надевании');
-		d('LOCALE_BIND_USE',		'Становится персональным при использовании');
-		d('LOCALE_BIND_SOULBOUND',	'Soulbound');
-		d('LOCALE_BIND_QUEST_ITEM',	'Quest Item');
-		// bags
-		d('LOCALE_BAG',			'Сумка');
-		d('LOCALE_BAG_QUIVER',	'Колчан');
-		d('LOCALE_BAG_AMMO',	'Подсумок');
-		d('LOCALE_BAG_SOUL',	'Сумка душ');
-		d('LOCALE_BAG_LEATHER',	'Сумка кожевника');
-		d('LOCALE_BAG_HERB',	'Сумка травника');
-		d('LOCALE_BAG_ENCHANT',	'Сумка зачаровывателя');
-		d('LOCALE_BAG_ENGINEER','Сумка инженера');
-		d('LOCALE_BAG_GEM',		'Сумка ювелира');
-		d('LOCALE_BAG_MINING',	'Шахтерская сумка');
-		// equip slots
-		d('LOCALE_EQUIP_HEAD',			'Голова');
-		d('LOCALE_EQUIP_NECK',			'Шея');
-		d('LOCALE_EQUIP_SHOULDER',		'Плечи');
-		d('LOCALE_EQUIP_SHIRT',			'Рубашка');
-		d('LOCALE_EQUIP_CHEST',			'Грудь');
-		d('LOCALE_EQUIP_WAIST',			'Пояс');
-		d('LOCALE_EQUIP_LEGS',			'Ноги');
-		d('LOCALE_EQUIP_FEET',			'Ступни');
-		d('LOCALE_EQUIP_WRIST',			'Запястья');
-		d('LOCALE_EQUIP_HANDS',			'Кисть руки');
-		d('LOCALE_EQUIP_FINGER',		'Палец');
-		d('LOCALE_EQUIP_TRINKET',		'Аксессуар');
-		d('LOCALE_EQUIP_ONEHAND',		'Одноручный');
-		d('LOCALE_EQUIP_OFFHAND',		'Под левую руку');
-		d('LOCALE_EQUIP_RANGED',		'Для дальнего боя');
-		d('LOCALE_EQUIP_BACK',			'Спина');
-		d('LOCALE_EQUIP_TWOHAND',		'Двуручный');
-		d('LOCALE_EQUIP_UNK0',			''); // bag
-		d('LOCALE_EQUIP_TABARD',		'Гербовая накидка');
-		d('LOCALE_EQUIP_MAINHAND',		'Под правую руку');
-		d('LOCALE_EQUIP_CHEST2',		'Грудь');
-		d('LOCALE_EQUIP_OFFHAND2',		'Под левую руку');
-		d('LOCALE_EQUIP_HELDINOFFHAND',	'Держится в левой руке');
-		d('LOCALE_EQUIP_PROJECTILE',	'Снаряд');
-		d('LOCALE_EQUIP_THROWN',		'Метательное оружие');
-		d('LOCALE_EQUIP_RANGED2',		'Для дальнего боя');
-		d('LOCALE_EQUIP_UNK1',			''); // quiver
-		d('LOCALE_EQUIP_RELIC',			'Реликвия');
-		// armor type
-		d('LOCALE_ARMOR_CLOTH',			'Ткань');
-		d('LOCALE_ARMOR_LEATHER',		'Кожа');
-		d('LOCALE_ARMOR_MAIL',			'Кольчуга');
-		d('LOCALE_ARMOR_PLATE',			'Латы');
-		d('LOCALE_ARMOR_BUCKLER',		'');
-		d('LOCALE_ARMOR_SHIELD',		'Щит');
-		d('LOCALE_ARMOR_LIBRAM',		'Манускрипт');
-		d('LOCALE_ARMOR_IDOL',			'Идол');
-		d('LOCALE_ARMOR_TOTEM',			'Тотем');
-		// weapon type
-		d('LOCALE_WEAPON_AXE1H',		'Топор');
-		d('LOCALE_WEAPON_AXE2H',		'Топор');
-		d('LOCALE_WEAPON_BOW',			'Лук');
-		d('LOCALE_WEAPON_GUN',			'Огнестрельное');
-		d('LOCALE_WEAPON_MACE1H',		'Ударное');
-		d('LOCALE_WEAPON_MACE2H',		'Ударное');
-		d('LOCALE_WEAPON_POLEARM',		'Древковое');
-		d('LOCALE_WEAPON_SWORD1H',		'Меч');
-		d('LOCALE_WEAPON_SWORD2H',		'Меч');
-		d('LOCALE_WEAPON_OBSOLETE',		'');
-		d('LOCALE_WEAPON_STAFF',		'Посох');
-		d('LOCALE_WEAPON_EXOTIC',		'');
-		d('LOCALE_WEAPON_EXOTIC2',		'');
-		d('LOCALE_WEAPON_FIST',			'Кистевое');
-		d('LOCALE_WEAPON_MISC',			'');
-		d('LOCALE_WEAPON_DAGGER',		'Кинжал');
-		d('LOCALE_WEAPON_THROWN',		'Метательное');
-		d('LOCALE_WEAPON_SPEAR',		'');
-		d('LOCALE_WEAPON_CROSSBOW',		'Арбалет');
-		d('LOCALE_WEAPON_WAND',			'Жезл');
-		d('LOCALE_WEAPON_FISHINGPOLE',	'Удочка');
-		// projectile type
-		d('LOCALE_PROJECTILE_WAND',		'');
-		d('LOCALE_PROJECTILE_BOLT',		'');
-		d('LOCALE_PROJECTILE_ARROW',	'Стрелы');
-		d('LOCALE_PROJECTILE_BULLET',	'Пули');
-		d('LOCALE_PROJECTILE_THROWN',	'');
-		// damage
-		d('LOCALE_DAMAGE_PRE',			' Урон ');
-		d('LOCALE_DAMAGE_POST',			'');
-		d('LOCALE_DAMAGE_HOLY', 		'');
-		d('LOCALE_DAMAGE_FIRE', 		'от магии Огня');
-		d('LOCALE_DAMAGE_FROST', 		'от магии Льда');
-		d('LOCALE_DAMAGE_ARCANE', 		'от тайной магии');
-		d('LOCALE_DAMAGE_SHADOW', 		'от темной магии');
-		d('LOCALE_DAMAGE_NATURE', 		'');
-		// stats
-		d('LOCALE_STAT_STRENGTH',		' Сила');
-		d('LOCALE_STAT_STAMINA',		' Выносливость');
-		d('LOCALE_STAT_INTELLECT',		' Интеллект');
-		d('LOCALE_STAT_SPIRIT',			' Дух');
-		d('LOCALE_STAT_AGILITY',		' Ловкость');
-		// green bonuses
-		d('LOCALE_GBONUS_DEFENCE',				'Увеличение рейтинга защиты на %d ед.');
-		d('LOCALE_GBONUS_DODGE',				'Повышает уровень уворачивания на %d.');
-		d('LOCALE_GBONUS_PARRY',				'Повышает уровень парирования ударов на %d.');
-		d('LOCALE_GBONUS_SHIELDBLOCK',			'Повышает уровень отражения ударов на %d.');
-		d('LOCALE_GBONUS_SPELLHIT_RATING',		'Повышает уровень меткости при использовании заклинания на %d.');
-		d('LOCALE_GBONUS_MELEECRIT_RATING',		'bonusCritMeleeRating %d');		// eu armory uses this
-		d('LOCALE_GBONUS_RANGEDCRIT_RATING',	'bonusCritRangedRating %d');
-		d('LOCALE_GBONUS_SPELLCRIT_RATING',		'Повышает уровень вероятности критического удара при использовании заклинания на %d.');
-		d('LOCALE_GBONUS_SPELLHASTE_RATING',	'Повышает частоту ударов при использования заклинания на %d.');
-		d('LOCALE_GBONUS_HIT_RATING',			'Увеличение рейтинга меткости на %d ед.');
-		d('LOCALE_GBONUS_CRIT_RATING',			'Повышает уровень вероятности критического удара на %d.');
-		d('LOCALE_GBONUS_RESILIENCE_RATING',	'Повышает уровень стойкости на %d.');
-		d('LOCALE_GBONUS_HASTE_RATING',			'Повышает частоту ударов на %d.');
-		d('LOCALE_GBONUS_EXPERTISE_RATING',		'Повышает уровень мастерства на %d.');
-		d('LOCALE_GBONUS_RESTOREMANA',			'Восстанавливает %d маны за 5 сек.');
-		d('LOCALE_GBONUS_ATTACKPOWER',			'Повышает силу атаки на %d.');
-		d('LOCALE_GBONUS_ARMORPENETRATION',		'Повышает рейтинг пробивания брони на %d.');
-		d('LOCALE_GBONUS_SPELLPOWER',			'Повышает силу заклинаний на %d.');
-		d('LOCALE_GBONUS_UNKNOWN',				'<span class="q10">Неизвестный Бонус #%d</span>');
-		d('LOCALE_GBONUS_CHANCEONHIT',			'Вероятность попадания при ударе: ');
-		d('LOCALE_GBONUS_EQUIP',				'Если на персонаже: ');
-		d('LOCALE_GBONUS_USE',					'Использование: ');
-		// sockets
-		d('LOCALE_SOCKET_META',		'Мета-оправа');
-		d('LOCALE_SOCKET_RED',		'Красная оправа');
-		d('LOCALE_SOCKET_YELLOW',	'Желтая оправа');
-		d('LOCALE_SOCKET_BLUE',		'Синяя оправа');
+		mass_define(array(
+			// quest
+			'LOCALE_REQUIREMENTS'	=>	'Требования',
+			// classes
+			'LOCALE_WARRIOR'		=>	'Воин',
+			'LOCALE_PALADIN'		=>	'Паладин',
+			'LOCALE_HUNTER'			=>	'Охотник',
+			'LOCALE_ROGUE'			=>	'Разбойник',
+			'LOCALE_PRIEST'			=>	'Жрец',
+			'LOCALE_DEATH_KNIGHT'	=>	'Рыцарь Смерти',
+			'LOCALE_SHAMAN'			=>	'Шаман',
+			'LOCALE_MAGE'			=>	'Маг',
+			'LOCALE_WARLOCK'		=>	'Чернокнижник',
+			'LOCALE_DRUID'			=>	'Друид',
+			// races
+			'LOCALE_HUMAN'		=>	'Человек',
+			'LOCALE_ORC'		=>	'Орк',
+			'LOCALE_DWARF'		=>	'Дворф',
+			'LOCALE_NIGHT_ELF'	=>	'Ночной Эльф',
+			'LOCALE_UNDED'		=>	'Нежить',
+			'LOCALE_TAUREN'		=>	'Таурен',
+			'LOCALE_GNOME'		=>	'Гном',
+			'LOCALE_TROLL'		=>	'Троль',
+			'LOCALE_BLOOD_ELF'	=>	'Эльф Крови',
+			'LOCALE_DRAENEI'	=>	'Дреней',
+			// side
+			'LOCALE_BOTH_FACTIONS'	=>	'Обе фракции',
+			'LOCALE_HORDE'			=>	'Орда',
+			'LOCALE_ALLIANCE'		=>	'Альянс',
+			// reputation
+			'LOCALE_NEUTRAL'	=>	'Равнодушие',
+			'LOCALE_FRIENDLY'	=>	'Дружелюбие',
+			'LOCALE_HONORED'	=>	'Уважение',
+			'LOCALE_REVERED'	=>	'Почтение',
+			'LOCALE_EXALTED'	=>	'Превознесение',
+			// resistances
+			'LOCALE_FIRE_RESISTANCE'	=>	'Сопротивляемость магии Огня',
+			'LOCALE_FROST_RESISTANCE'	=>	'Сопротивляемость магии Льда',
+			'LOCALE_ARCANE_RESISTANCE'	=>	'Сопротивляемость тайной магии',
+			'LOCALE_SHADOW_RESISTANCE'	=>	'Сопротивляемость темной магии',
+			'LOCALE_NATURE_RESISTANCE'	=>	'Сопротивляемость природной магии',
+			'LOCALE_HOLY_RESISTANCE'	=>	'RESISTANCE DOES NOT EXIST',
+			// binds
+			'LOCALE_BIND_PICKUP'		=>	'Становится персональным при нахождении',
+			'LOCALE_BIND_EQUIP'			=>	'Становится персональным при надевании',
+			'LOCALE_BIND_USE'			=>	'Становится персональным при использовании',
+			'LOCALE_BIND_SOULBOUND'		=>	'Soulbound',
+			'LOCALE_BIND_QUEST_ITEM'	=>	'Quest Item',
+			// bags
+			'LOCALE_BAG'			=>	'Сумка',
+			'LOCALE_BAG_QUIVER'		=>	'Колчан',
+			'LOCALE_BAG_AMMO'		=>	'Подсумок',
+			'LOCALE_BAG_SOUL'		=>	'Сумка душ',
+			'LOCALE_BAG_LEATHER'	=>	'Сумка кожевника',
+			'LOCALE_BAG_HERB'		=>	'Сумка травника',
+			'LOCALE_BAG_ENCHANT'	=>	'Сумка зачаровывателя',
+			'LOCALE_BAG_ENGINEER'	=>	'Сумка инженера',
+			'LOCALE_BAG_GEM'		=>	'Сумка ювелира',
+			'LOCALE_BAG_MINING'		=>	'Шахтерская сумка',
+			// equip slots
+			'LOCALE_EQUIP_HEAD'				=>	'Голова',
+			'LOCALE_EQUIP_NECK'				=>	'Шея',
+			'LOCALE_EQUIP_SHOULDER'			=>	'Плечи',
+			'LOCALE_EQUIP_SHIRT'			=>	'Рубашка',
+			'LOCALE_EQUIP_CHEST'			=>	'Грудь',
+			'LOCALE_EQUIP_WAIST'			=>	'Пояс',
+			'LOCALE_EQUIP_LEGS'				=>	'Ноги',
+			'LOCALE_EQUIP_FEET'				=>	'Ступни',
+			'LOCALE_EQUIP_WRIST'			=>	'Запястья',
+			'LOCALE_EQUIP_HANDS'			=>	'Кисть руки',
+			'LOCALE_EQUIP_FINGER'			=>	'Палец',
+			'LOCALE_EQUIP_TRINKET'			=>	'Аксессуар',
+			'LOCALE_EQUIP_ONEHAND'			=>	'Одноручный',
+			'LOCALE_EQUIP_OFFHAND'			=>	'Под левую руку',
+			'LOCALE_EQUIP_RANGED'			=>	'Для дальнего боя',
+			'LOCALE_EQUIP_BACK'				=>	'Спина',
+			'LOCALE_EQUIP_TWOHAND'			=>	'Двуручный',
+			'LOCALE_EQUIP_UNK0'				=>	'',	// bag
+			'LOCALE_EQUIP_TABARD'			=>	'Гербовая накидка',
+			'LOCALE_EQUIP_MAINHAND'			=>	'Под правую руку',
+			'LOCALE_EQUIP_CHEST2'			=>	'Грудь',
+			'LOCALE_EQUIP_OFFHAND2'			=>	'Под левую руку',
+			'LOCALE_EQUIP_HELDINOFFHAND'	=>	'Держится в левой руке',
+			'LOCALE_EQUIP_PROJECTILE'		=>	'Снаряд',
+			'LOCALE_EQUIP_THROWN'			=>	'Метательное оружие',
+			'LOCALE_EQUIP_RANGED2'			=>	'Для дальнего боя',
+			'LOCALE_EQUIP_UNK1'				=>	'',	// quiver
+			'LOCALE_EQUIP_RELIC'			=>	'Реликвия',
+			// armor type
+			'LOCALE_ARMOR_CLOTH'	=>	'Ткань',
+			'LOCALE_ARMOR_LEATHER'	=>	'Кожа',
+			'LOCALE_ARMOR_MAIL'		=>	'Кольчуга',
+			'LOCALE_ARMOR_PLATE'	=>	'Латы',
+			'LOCALE_ARMOR_BUCKLER'	=>	'',
+			'LOCALE_ARMOR_SHIELD'	=>	'Щит',
+			'LOCALE_ARMOR_LIBRAM'	=>	'Манускрипт',
+			'LOCALE_ARMOR_IDOL'		=>	'Идол',
+			'LOCALE_ARMOR_TOTEM'	=>	'Тотем',
+			// weapon type
+			'LOCALE_WEAPON_AXE1H'		=>	'Топор',
+			'LOCALE_WEAPON_AXE2H'		=>	'Топор',
+			'LOCALE_WEAPON_BOW'			=>	'Лук',
+			'LOCALE_WEAPON_GUN'			=>	'Огнестрельное',
+			'LOCALE_WEAPON_MACE1H'		=>	'Ударное',
+			'LOCALE_WEAPON_MACE2H'		=>	'Ударное',
+			'LOCALE_WEAPON_POLEARM'		=>	'Древковое',
+			'LOCALE_WEAPON_SWORD1H'		=>	'Меч',
+			'LOCALE_WEAPON_SWORD2H'		=>	'Меч',
+			'LOCALE_WEAPON_OBSOLETE'	=>	'',
+			'LOCALE_WEAPON_STAFF'		=>	'Посох',
+			'LOCALE_WEAPON_EXOTIC'		=>	'',
+			'LOCALE_WEAPON_EXOTIC2'		=>	'',
+			'LOCALE_WEAPON_FIST'		=>	'Кистевое',
+			'LOCALE_WEAPON_MISC'		=>	'',
+			'LOCALE_WEAPON_DAGGER'		=>	'Кинжал',
+			'LOCALE_WEAPON_THROWN'		=>	'Метательное',
+			'LOCALE_WEAPON_SPEAR'		=>	'',
+			'LOCALE_WEAPON_CROSSBOW'	=>	'Арбалет',
+			'LOCALE_WEAPON_WAND'		=>	'Жезл',
+			'LOCALE_WEAPON_FISHINGPOLE'	=>	'Удочка',
+			// projectile type
+			'LOCALE_PROJECTILE_WAND'	=>	'',
+			'LOCALE_PROJECTILE_BOLT'	=>	'',
+			'LOCALE_PROJECTILE_ARROW'	=>	'Стрелы',
+			'LOCALE_PROJECTILE_BULLET'	=>	'Пули',
+			'LOCALE_PROJECTILE_THROWN'	=>	'',
+			// damage
+			'LOCALE_DAMAGE_PRE'		=>	' Урон ',
+			'LOCALE_DAMAGE_POST'	=>	'',
+			'LOCALE_DAMAGE_HOLY'	=>	'',
+			'LOCALE_DAMAGE_FIRE'	=>	'от магии Огня',
+			'LOCALE_DAMAGE_FROST'	=>	'от магии Льда',
+			'LOCALE_DAMAGE_ARCANE'	=>	'от тайной магии',
+			'LOCALE_DAMAGE_SHADOW'	=>	'от темной магии',
+			'LOCALE_DAMAGE_NATURE'	=>	'',
+			// stats
+			'LOCALE_STAT_STRENGTH'	=>	' Сила',
+			'LOCALE_STAT_STAMINA'	=>	' Выносливость',
+			'LOCALE_STAT_INTELLECT'	=>	' Интеллект',
+			'LOCALE_STAT_SPIRIT'	=>	' Дух',
+			'LOCALE_STAT_AGILITY'	=>	' Ловкость',
+			// green bonuses
+			'LOCALE_GBONUS_DEFENCE'				=>	'Увеличение рейтинга защиты на %d ед.',
+			'LOCALE_GBONUS_DODGE'				=>	'Повышает уровень уворачивания на %d.',
+			'LOCALE_GBONUS_PARRY'				=>	'Повышает уровень парирования ударов на %d.',
+			'LOCALE_GBONUS_SHIELDBLOCK'			=>	'Повышает уровень отражения ударов на %d.',
+			'LOCALE_GBONUS_SPELLHIT_RATING'		=>	'Повышает уровень меткости при использовании заклинания на %d.',
+			'LOCALE_GBONUS_MELEECRIT_RATING'	=>	'bonusCritMeleeRating %d',		// eu armory uses this
+			'LOCALE_GBONUS_RANGEDCRIT_RATING'	=>	'bonusCritRangedRating %d',
+			'LOCALE_GBONUS_SPELLCRIT_RATING'	=>	'Повышает уровень вероятности критического удара при использовании заклинания на %d.',
+			'LOCALE_GBONUS_SPELLHASTE_RATING'	=>	'Повышает частоту ударов при использования заклинания на %d.',
+			'LOCALE_GBONUS_HIT_RATING'			=>	'Увеличение рейтинга меткости на %d ед.',
+			'LOCALE_GBONUS_CRIT_RATING'			=>	'Повышает уровень вероятности критического удара на %d.',
+			'LOCALE_GBONUS_RESILIENCE_RATING'	=>	'Повышает уровень стойкости на %d.',
+			'LOCALE_GBONUS_HASTE_RATING'		=>	'Повышает частоту ударов на %d.',
+			'LOCALE_GBONUS_EXPERTISE_RATING'	=>	'Повышает уровень мастерства на %d.',
+			'LOCALE_GBONUS_RESTOREMANA'			=>	'Восстанавливает %d маны за 5 сек.',
+			'LOCALE_GBONUS_ATTACKPOWER'			=>	'Повышает силу атаки на %d.',
+			'LOCALE_GBONUS_ARMORPENETRATION'	=>	'Повышает рейтинг пробивания брони на %d.',
+			'LOCALE_GBONUS_SPELLPOWER'			=>	'Повышает силу заклинаний на %d.',
+			'LOCALE_GBONUS_UNKNOWN'				=>	'<span class="q10">Неизвестный Бонус #%d</span>',
+			'LOCALE_GBONUS_CHANCEONHIT'			=>	'Вероятность попадания при ударе: ',
+			'LOCALE_GBONUS_EQUIP'				=>	'Если на персонаже: ',
+			'LOCALE_GBONUS_USE'					=>	'Использование: ',
+			'LOCALE_COMBAT_RATING'				=>	'%s&nbsp;на&nbsp;yp.&nbsp;%d',
+			// sockets
+			'LOCALE_SOCKET_META'	=>	'Мета-оправа',
+			'LOCALE_SOCKET_RED'		=>	'Красная оправа',
+			'LOCALE_SOCKET_YELLOW'	=>	'Желтая оправа',
+			'LOCALE_SOCKET_BLUE'	=>	'Синяя оправа',
+			'LOCALE_SOCKET_BONUS'	=>	'При соответствии цвета',
 
-		// misc
-		d('LOCALE_SPEED',				'Скорость');
-		d('LOCALE_UNIQUE',				'Уникальный');
-		d('LOCALE_START_QUEST',			'Позволяет получить новое задание');
-		d('LOCALE_SLOT',				' Ячейка ');
-		d('LOCALE_DPS',					'Единиц урона в секунду');
-		d('LOCALE_DPS2',				'урон в секунду');
-		d('LOCALE_DPS_ADDS',			'Увеличивает');
-		d('LOCALE_ARMOR',				'Броня');
-		d('LOCALE_BLOCK',				'Способность отражать удары');
-		d('LOCALE_REQUIRES',			'Требует');
-		d('LOCALE_REQUIRES_LEVEL',		'Требует уровень');
-		d('LOCALE_DURABILITY',			'Прочность:');
-		d('LOCALE_CLASSES',				'Классы');
-		d('LOCALE_VALUE_DELIM',			' - ');
-		d('LOCALE_REAGENTS',			'Реагенты: ');
-		d('LOCALE_TOOLS',				'Инструменты: ');
-		d('LOCALE_HEROIC',				' (героич.)');
-		d('LOCALE_CRITERIA',			'Критерии');
-		d('LOCALE_GLYPH_OF',			'Символ ');
-
+			// misc
+			'LOCALE_SPEED'			=>	'Скорость',
+			'LOCALE_UNIQUE'			=>	'Уникальный',
+			'LOCALE_START_QUEST'	=>	'Позволяет получить новое задание',
+			'LOCALE_SLOT'			=>	' Ячейка ',
+			'LOCALE_DPS'			=>	'Единиц урона в секунду',
+			'LOCALE_DPS2'			=>	'урон в секунду',
+			'LOCALE_DPS_ADDS'		=>	'Увеличивает',
+			'LOCALE_ARMOR'			=>	'Броня',
+			'LOCALE_BLOCK'			=>	'Способность отражать удары',
+			'LOCALE_REQUIRES'		=>	'Требует',
+			'LOCALE_REQUIRES_LEVEL'	=>	'Требует уровень',
+			'LOCALE_DURABILITY'		=>	'Прочность:',
+			'LOCALE_CLASSES'		=>	'Классы',
+			'LOCALE_VALUE_DELIM'	=>	' - ',
+			'LOCALE_REAGENTS'		=>	'Реагенты: ',
+			'LOCALE_TOOLS'			=>	'Инструменты: ',
+			'LOCALE_HEROIC'			=>	' (героич.)',
+			'LOCALE_CRITERIA'		=>	'Критерии',
+			'LOCALE_GLYPH_OF'		=>	'Символ ',
+		));
 		break;
 
 	// --- FRENCH LOCALE ---
 	case '2':
-		// quest
-		d('LOCALE_REQUIREMENTS', 'Requirements');
-		// classes
-		d('LOCALE_WARRIOR',		'Guerrier');
-		d('LOCALE_PALADIN',		'Paladin');
-		d('LOCALE_HUNTER',		'Chasseur');
-		d('LOCALE_ROGUE',		'Voleur');
-		d('LOCALE_PRIEST',		'Prêtre');
-		d('LOCALE_DEATH_KNIGHT','Chevalier de la mort');
-		d('LOCALE_SHAMAN',		'Chaman');
-		d('LOCALE_MAGE',		'Mage');
-		d('LOCALE_WARLOCK',		'Démoniste');
-		d('LOCALE_DRUID',		'Druide');
-		// races
-		d('LOCALE_HUMAN',		'Humain');
-		d('LOCALE_ORC',			'Orc');
-		d('LOCALE_DWARF',		'Nain');
-		d('LOCALE_NIGHT_ELF',	'Elfe de la nuit');
-		d('LOCALE_UNDED',		'Mort-vivant');
-		d('LOCALE_TAUREN',		'Tauren');
-		d('LOCALE_GNOME',		'Gnome');
-		d('LOCALE_TROLL',		'Troll');
-		d('LOCALE_BLOOD_ELF',	'Elfe de sang');
-		d('LOCALE_DRAENEI',		'Draenei');
-		// side
-		d('LOCALE_BOTH_FACTIONS','Les deux');
-		d('LOCALE_HORDE',		'Horde');
-		d('LOCALE_ALLIANCE',	'Alliance');
-		// reputation
-		d('LOCALE_NEUTRAL',		'Neutre');
-		d('LOCALE_FRIENDLY',	'Amical');
-		d('LOCALE_HONORED',		'Honoré');
-		d('LOCALE_REVERED',		'Révére');
-		d('LOCALE_EXALTED',		'Exalté');
-		// resistances
-		d('LOCALE_FIRE_RESISTANCE',		'Résistance au feu');
-		d('LOCALE_FROST_RESISTANCE',	'Résistance au givre');
-		d('LOCALE_ARCANE_RESISTANCE',	'Résistance aux arcanes');
-		d('LOCALE_SHADOW_RESISTANCE',	'Résistance à l\'ombre');
-		d('LOCALE_NATURE_RESISTANCE',	'Résistance à la nature');
-		d('LOCALE_HOLY_RESISTANCE',		'RESISTANCE DOES NOT EXIST');
-		// binds
-		d('LOCALE_BIND_PICKUP',		'Lié quand ramassé');
-		d('LOCALE_BIND_EQUIP',		'Lié quand équipé');
-		d('LOCALE_BIND_USE',		'Lié quand utilisé');
-		d('LOCALE_BIND_SOULBOUND',	'Soulbound');
-		d('LOCALE_BIND_QUEST_ITEM',	'Objet de quête');
-		// bags
-		d('LOCALE_BAG',			'Sacs');
-		d('LOCALE_BAG_QUIVER',	'Carquois');
-		d('LOCALE_BAG_AMMO',	'Gibernes');
-		d('LOCALE_BAG_SOUL',	'Sacs d\'âmes');
-		d('LOCALE_BAG_LEATHER',	'Sacs de travailleur du cuir');
-		d('LOCALE_BAG_HERB',	'Sacs d\'herbes');
-		d('LOCALE_BAG_ENCHANT',	'Sacs d\'enchanteur');
-		d('LOCALE_BAG_ENGINEER','Sacs d\'ingénieurs');
-		d('LOCALE_BAG_GEM',		'Sacs de gemmes');
-		d('LOCALE_BAG_MINING',	'Sacs de mineurs');
-		// equip slots
-		d('LOCALE_EQUIP_HEAD',			'Tête');
-		d('LOCALE_EQUIP_NECK',			'Cou');
-		d('LOCALE_EQUIP_SHOULDER',		'Epaules');
-		d('LOCALE_EQUIP_SHIRT',			'Shirt');
-		d('LOCALE_EQUIP_CHEST',			'Torse');
-		d('LOCALE_EQUIP_WAIST',			'Taille');
-		d('LOCALE_EQUIP_LEGS',			'Jambes');
-		d('LOCALE_EQUIP_FEET',			'Pieds');
-		d('LOCALE_EQUIP_WRIST',			'Poignets');
-		d('LOCALE_EQUIP_HANDS',			'Mains');
-		d('LOCALE_EQUIP_FINGER',		'Doigt');
-		d('LOCALE_EQUIP_TRINKET',		'Bijou');
-		d('LOCALE_EQUIP_ONEHAND',		'A une main');
-		d('LOCALE_EQUIP_OFFHAND',		'Main gauche');
-		d('LOCALE_EQUIP_RANGED',		'A distance');
-		d('LOCALE_EQUIP_BACK',			'Back');
-		d('LOCALE_EQUIP_TWOHAND',		'A deux mains');
-		d('LOCALE_EQUIP_UNK0',			'');
-		d('LOCALE_EQUIP_TABARD',		'Tabard');
-		d('LOCALE_EQUIP_MAINHAND',		'Main droite');
-		d('LOCALE_EQUIP_CHEST2',		'Torse');
-		d('LOCALE_EQUIP_OFFHAND2',		'Main gauche');
-		d('LOCALE_EQUIP_HELDINOFFHAND',	'Tenu en main gauche');
-		d('LOCALE_EQUIP_PROJECTILE',	'Projectile');
-		d('LOCALE_EQUIP_THROWN',		'Armes de jet');
-		d('LOCALE_EQUIP_RANGED2',		'A distance');
-		d('LOCALE_EQUIP_UNK1',			'');
-		d('LOCALE_EQUIP_RELIC',			'Relique');
-		// armor type
-		d('LOCALE_ARMOR_CLOTH',			'Tissu');
-		d('LOCALE_ARMOR_LEATHER',		'Cuir');
-		d('LOCALE_ARMOR_MAIL',			'Maille');
-		d('LOCALE_ARMOR_PLATE',			'Plaque');
-		d('LOCALE_ARMOR_BUCKLER',		'');
-		d('LOCALE_ARMOR_SHIELD',		'Bouclier');
-		d('LOCALE_ARMOR_LIBRAM',		'Libram');
-		d('LOCALE_ARMOR_IDOL',			'Idole');
-		d('LOCALE_ARMOR_TOTEM',			'Totem');
-		// weapon type
-		d('LOCALE_WEAPON_AXE1H',		'Hache');
-		d('LOCALE_WEAPON_AXE2H',		'Hache');
-		d('LOCALE_WEAPON_BOW',			'Arc');
-		d('LOCALE_WEAPON_GUN',			'Fusil');
-		d('LOCALE_WEAPON_MACE1H',		'Masse');
-		d('LOCALE_WEAPON_MACE2H',		'Masse');
-		d('LOCALE_WEAPON_POLEARM',		'Arme d\'hast');
-		d('LOCALE_WEAPON_SWORD1H',		'Epée');
-		d('LOCALE_WEAPON_SWORD2H',		'Epée');
-		d('LOCALE_WEAPON_OBSOLETE',		'');
-		d('LOCALE_WEAPON_STAFF',		'Bâton');
-		d('LOCALE_WEAPON_EXOTIC',		'');
-		d('LOCALE_WEAPON_EXOTIC2',		'');
-		d('LOCALE_WEAPON_FIST',			'Mains nues');
-		d('LOCALE_WEAPON_MISC',			'Divers');
-		d('LOCALE_WEAPON_DAGGER',		'Dague');
-		d('LOCALE_WEAPON_THROWN',		'Armes de jet');
-		d('LOCALE_WEAPON_SPEAR',		'');
-		d('LOCALE_WEAPON_CROSSBOW',		'Arbalètes');
-		d('LOCALE_WEAPON_WAND',			'Baguette');
-		d('LOCALE_WEAPON_FISHINGPOLE',	'Canne à pêche');
-		// projectile type
-		d('LOCALE_PROJECTILE_WAND',		'');
-		d('LOCALE_PROJECTILE_BOLT',		'');
-		d('LOCALE_PROJECTILE_ARROW',	'Flèche');
-		d('LOCALE_PROJECTILE_BULLET',	'Balle');
-		d('LOCALE_PROJECTILE_THROWN',	'');
-		// damage
-		d('LOCALE_DAMAGE_PRE',			' ');
-		d('LOCALE_DAMAGE_POST',			' Dégâts');
-		d('LOCALE_DAMAGE_HOLY', 		'Sacré');
-		d('LOCALE_DAMAGE_FIRE', 		'Feu');
-		d('LOCALE_DAMAGE_FROST', 		'Givre');
-		d('LOCALE_DAMAGE_ARCANE', 		'Arcane');
-		d('LOCALE_DAMAGE_SHADOW', 		'Ombre');
-		d('LOCALE_DAMAGE_NATURE', 		'Nature');
-		// stats
-		d('LOCALE_STAT_STRENGTH',		' Force');
-		d('LOCALE_STAT_STAMINA',		' Endurance');
-		d('LOCALE_STAT_INTELLECT',		' Intelligence');
-		d('LOCALE_STAT_SPIRIT',			' Esprit');
-		d('LOCALE_STAT_AGILITY',		' Agilité');
-		// green bonuses
-		d('LOCALE_GBONUS_DEFENCE',				'Augmente votre score de défense de %d.');
-		d('LOCALE_GBONUS_DODGE',				'Augmente votre score d\'esquive de %d.');
-		d('LOCALE_GBONUS_PARRY',				'Augmente votre score de parade %d.');
-		d('LOCALE_GBONUS_SHIELDBLOCK',			'Augmente votre score de blocage de %d.');
-		d('LOCALE_GBONUS_SPELLHIT_RATING',		'Augmente votre score de toucher de sorts de %d.');
-		d('LOCALE_GBONUS_MELEECRIT_RATING',		'Augmente votre score de coup critique en mélée de %d.');
-		d('LOCALE_GBONUS_RANGEDCRIT_RATING',	'Augmente votre score de coup critique à distance de $d.');
-		d('LOCALE_GBONUS_SPELLCRIT_RATING',		'Augmente votre score de coup critique de sort de %d.');
-		d('LOCALE_GBONUS_SPELLHASTE_RATING',	'Augmente votre score de hate de sort de %d.');
-		d('LOCALE_GBONUS_HIT_RATING',			'Augmente votre score de toucher de %d.');
-		d('LOCALE_GBONUS_CRIT_RATING',			'Augmente votre score de coup critique de %d.');
-		d('LOCALE_GBONUS_RESILIENCE_RATING',	'Augmente votre score de résilience de %d.');
-		d('LOCALE_GBONUS_HASTE_RATING',			'Augmente votre score de hate de %d.');
-		d('LOCALE_GBONUS_EXPERTISE_RATING',		'Augmente votre score d\'expertise de %d.');
-		d('LOCALE_GBONUS_RESTOREMANA',			'Restore %d mana per 5 sec.');
-		d('LOCALE_GBONUS_ATTACKPOWER',			'Augmente la puissance d\'attaque de %d.');
-		d('LOCALE_GBONUS_ARMORPENETRATION',		'Augmente votre score de pénétration d\'armure de %d.');
-		d('LOCALE_GBONUS_SPELLPOWER',			'Augmente la puissance de sorts de %d.');
-		d('LOCALE_GBONUS_UNKNOWN',				'Bonus inconnu #%d');
-		d('LOCALE_GBONUS_CHANCEONHIT',			'Chance on hit: ');
-		d('LOCALE_GBONUS_EQUIP',				'Equip: ');
-		d('LOCALE_GBONUS_USE',					'Use: ');
-		// sockets
-		d('LOCALE_SOCKET_META',		'Meta Socket');
-		d('LOCALE_SOCKET_RED',		'Red Socket');
-		d('LOCALE_SOCKET_YELLOW',	'Yellow Socket');
-		d('LOCALE_SOCKET_BLUE',		'Blue Socket');
-		
-		// misc
-		d('LOCALE_SPEED',				'Vitesse');
-		d('LOCALE_UNIQUE',				'Unique');
-		d('LOCALE_START_QUEST',			'Cet objet démarre une quête');
-		d('LOCALE_SLOT',				' Slot ');
-		d('LOCALE_DPS',					'dégâts par seconde');
-		d('LOCALE_DPS2',				'dégâts par seconde');
-		d('LOCALE_DPS_ADDS',			'Adds');
-		d('LOCALE_ARMOR',				'Armure');
-		d('LOCALE_BLOCK',				'Block');
-		d('LOCALE_REQUIRES',			'Requiert');
-		d('LOCALE_REQUIRES_LEVEL',		'Niveau requis');
-		d('LOCALE_DURABILITY',			'Durabilité');
-		d('LOCALE_CLASSES',				'Classes');
-		d('LOCALE_VALUE_DELIM',			' to ');
-		d('LOCALE_REAGENTS',			'Composants: ');
-		d('LOCALE_TOOLS',				'Outils: ');
-		d('LOCALE_HEROIC',				' (Heroïque)');
-		d('LOCALE_CRITERIA',			'Critères');
-		d('LOCALE_GLYPH_OF',			'Glyph of ');
-		
+		mass_define(array(
+			// quest
+			'LOCALE_REQUIREMENTS'	=>	'Requirements',
+			// classes
+			'LOCALE_WARRIOR'		=>	'Guerrier',
+			'LOCALE_PALADIN'		=>	'Paladin',
+			'LOCALE_HUNTER'			=>	'Chasseur',
+			'LOCALE_ROGUE'			=>	'Voleur',
+			'LOCALE_PRIEST'			=>	'Prêtre',
+			'LOCALE_DEATH_KNIGHT'	=>	'Chevalier de la mort',
+			'LOCALE_SHAMAN'			=>	'Chaman',
+			'LOCALE_MAGE'			=>	'Mage',
+			'LOCALE_WARLOCK'		=>	'Démoniste',
+			'LOCALE_DRUID'			=>	'Druide',
+			// races
+			'LOCALE_HUMAN'			=>	'Humain',
+			'LOCALE_ORC'			=>	'Orc',
+			'LOCALE_DWARF'			=>	'Nain',
+			'LOCALE_NIGHT_ELF'		=>	'Elfe de la nuit',
+			'LOCALE_UNDED'			=>	'Mort-vivant',
+			'LOCALE_TAUREN'			=>	'Tauren',
+			'LOCALE_GNOME'			=>	'Gnome',
+			'LOCALE_TROLL'			=>	'Troll',
+			'LOCALE_BLOOD_ELF'		=>	'Elfe de sang',
+			'LOCALE_DRAENEI'		=>	'Draenei',
+			// side
+			'LOCALE_BOTH_FACTIONS'	=>	'Les deux',
+			'LOCALE_HORDE'			=>	'Horde',
+			'LOCALE_ALLIANCE'		=>	'Alliance',
+			// reputation
+			'LOCALE_NEUTRAL'	=>	'Neutre',
+			'LOCALE_FRIENDLY'	=>	'Amical',
+			'LOCALE_HONORED'	=>	'Honoré',
+			'LOCALE_REVERED'	=>	'Révére',
+			'LOCALE_EXALTED'	=>	'Exalté',
+			// resistances
+			'LOCALE_FIRE_RESISTANCE'	=>	'Résistance au feu',
+			'LOCALE_FROST_RESISTANCE'	=>	'Résistance au givre',
+			'LOCALE_ARCANE_RESISTANCE'	=>	'Résistance aux arcanes',
+			'LOCALE_SHADOW_RESISTANCE'	=>	'Résistance à l\'ombre',
+			'LOCALE_NATURE_RESISTANCE'	=>	'Résistance à la nature',
+			'LOCALE_HOLY_RESISTANCE'	=>	'RESISTANCE DOES NOT EXIST',
+			// binds
+			'LOCALE_BIND_PICKUP'		=>	'Lié quand ramassé',
+			'LOCALE_BIND_EQUIP'			=>	'Lié quand équipé',
+			'LOCALE_BIND_USE'			=>	'Lié quand utilisé',
+			'LOCALE_BIND_SOULBOUND'		=>	'Soulbound',
+			'LOCALE_BIND_QUEST_ITEM'	=>	'Objet de quête',
+			// bags
+			'LOCALE_BAG'			=>	'Sacs',
+			'LOCALE_BAG_QUIVER'		=>	'Carquois',
+			'LOCALE_BAG_AMMO'		=>	'Gibernes',
+			'LOCALE_BAG_SOUL'		=>	'Sacs d\'âmes',
+			'LOCALE_BAG_LEATHER'	=>	'Sacs de travailleur du cuir',
+			'LOCALE_BAG_HERB'		=>	'Sacs d\'herbes',
+			'LOCALE_BAG_ENCHANT'	=>	'Sacs d\'enchanteur',
+			'LOCALE_BAG_ENGINEER'	=>	'Sacs d\'ingénieurs',
+			'LOCALE_BAG_GEM'		=>	'Sacs de gemmes',
+			'LOCALE_BAG_MINING'		=>	'Sacs de mineurs',
+			// equip slots
+			'LOCALE_EQUIP_HEAD'				=>	'Tête',
+			'LOCALE_EQUIP_NECK'				=>	'Cou',
+			'LOCALE_EQUIP_SHOULDER'			=>	'Epaules',
+			'LOCALE_EQUIP_SHIRT'			=>	'Shirt',
+			'LOCALE_EQUIP_CHEST'			=>	'Torse',
+			'LOCALE_EQUIP_WAIST'			=>	'Taille',
+			'LOCALE_EQUIP_LEGS'				=>	'Jambes',
+			'LOCALE_EQUIP_FEET'				=>	'Pieds',
+			'LOCALE_EQUIP_WRIST'			=>	'Poignets',
+			'LOCALE_EQUIP_HANDS'			=>	'Mains',
+			'LOCALE_EQUIP_FINGER'			=>	'Doigt',
+			'LOCALE_EQUIP_TRINKET'			=>	'Bijou',
+			'LOCALE_EQUIP_ONEHAND'			=>	'A une main',
+			'LOCALE_EQUIP_OFFHAND'			=>	'Main gauche',
+			'LOCALE_EQUIP_RANGED'			=>	'A distance',
+			'LOCALE_EQUIP_BACK'				=>	'Back',
+			'LOCALE_EQUIP_TWOHAND'			=>	'A deux mains',
+			'LOCALE_EQUIP_UNK0'				=>	'',
+			'LOCALE_EQUIP_TABARD'			=>	'Tabard',
+			'LOCALE_EQUIP_MAINHAND'			=>	'Main droite',
+			'LOCALE_EQUIP_CHEST2'			=>	'Torse',
+			'LOCALE_EQUIP_OFFHAND2'			=>	'Main gauche',
+			'LOCALE_EQUIP_HELDINOFFHAND'	=>	'Tenu en main gauche',
+			'LOCALE_EQUIP_PROJECTILE'		=>	'Projectile',
+			'LOCALE_EQUIP_THROWN'			=>	'Armes de jet',
+			'LOCALE_EQUIP_RANGED2'			=>	'A distance',
+			'LOCALE_EQUIP_UNK1'				=>	'',
+			'LOCALE_EQUIP_RELIC'			=>	'Relique',
+			// armor type
+			'LOCALE_ARMOR_CLOTH'	=>	'Tissu',
+			'LOCALE_ARMOR_LEATHER'	=>	'Cuir',
+			'LOCALE_ARMOR_MAIL'		=>	'Maille',
+			'LOCALE_ARMOR_PLATE'	=>	'Plaque',
+			'LOCALE_ARMOR_BUCKLER'	=>	'',
+			'LOCALE_ARMOR_SHIELD'	=>	'Bouclier',
+			'LOCALE_ARMOR_LIBRAM'	=>	'Libram',
+			'LOCALE_ARMOR_IDOL'		=>	'Idole',
+			'LOCALE_ARMOR_TOTEM'	=>	'Totem',
+			// weapon type
+			'LOCALE_WEAPON_AXE1H'		=>	'Hache',
+			'LOCALE_WEAPON_AXE2H'		=>	'Hache',
+			'LOCALE_WEAPON_BOW'			=>	'Arc',
+			'LOCALE_WEAPON_GUN'			=>	'Fusil',
+			'LOCALE_WEAPON_MACE1H'		=>	'Masse',
+			'LOCALE_WEAPON_MACE2H'		=>	'Masse',
+			'LOCALE_WEAPON_POLEARM'		=>	'Arme d\'hast',
+			'LOCALE_WEAPON_SWORD1H'		=>	'Epée',
+			'LOCALE_WEAPON_SWORD2H'		=>	'Epée',
+			'LOCALE_WEAPON_OBSOLETE'	=>	'',
+			'LOCALE_WEAPON_STAFF'		=>	'Bâton',
+			'LOCALE_WEAPON_EXOTIC'		=>	'',
+			'LOCALE_WEAPON_EXOTIC2'		=>	'',
+			'LOCALE_WEAPON_FIST'		=>	'Mains nues',
+			'LOCALE_WEAPON_MISC'		=>	'Divers',
+			'LOCALE_WEAPON_DAGGER'		=>	'Dague',
+			'LOCALE_WEAPON_THROWN'		=>	'Armes de jet',
+			'LOCALE_WEAPON_SPEAR'		=>	'',
+			'LOCALE_WEAPON_CROSSBOW'	=>	'Arbalètes',
+			'LOCALE_WEAPON_WAND'		=>	'Baguette',
+			'LOCALE_WEAPON_FISHINGPOLE'	=>	'Canne à pêche',
+			// projectile type
+			'LOCALE_PROJECTILE_WAND'	=>	'',
+			'LOCALE_PROJECTILE_BOLT'	=>	'',
+			'LOCALE_PROJECTILE_ARROW'	=>	'Flèche',
+			'LOCALE_PROJECTILE_BULLET'	=>	'Balle',
+			'LOCALE_PROJECTILE_THROWN'	=>	'',
+			// damage
+			'LOCALE_DAMAGE_PRE'		=>	' ',
+			'LOCALE_DAMAGE_POST'	=>	' Dégâts',
+			'LOCALE_DAMAGE_HOLY'	=>	'Sacré',
+			'LOCALE_DAMAGE_FIRE'	=>	'Feu',
+			'LOCALE_DAMAGE_FROST'	=>	'Givre',
+			'LOCALE_DAMAGE_ARCANE'	=>	'Arcane',
+			'LOCALE_DAMAGE_SHADOW'	=>	'Ombre',
+			'LOCALE_DAMAGE_NATURE'	=>	'Nature',
+			// stats
+			'LOCALE_STAT_STRENGTH'	=>	' Force',
+			'LOCALE_STAT_STAMINA'	=>	' Endurance',
+			'LOCALE_STAT_INTELLECT'	=>	' Intelligence',
+			'LOCALE_STAT_SPIRIT'	=>	' Esprit',
+			'LOCALE_STAT_AGILITY'	=>	' Agilité',
+			// green bonuses
+			'LOCALE_GBONUS_DEFENCE'				=>	'Augmente votre score de défense de %d.',
+			'LOCALE_GBONUS_DODGE'				=>	'Augmente votre score d\'esquive de %d.',
+			'LOCALE_GBONUS_PARRY'				=>	'Augmente votre score de parade %d.',
+			'LOCALE_GBONUS_SHIELDBLOCK'			=>	'Augmente votre score de blocage de %d.',
+			'LOCALE_GBONUS_SPELLHIT_RATING'		=>	'Augmente votre score de toucher de sorts de %d.',
+			'LOCALE_GBONUS_MELEECRIT_RATING'	=>	'Augmente votre score de coup critique en mélée de %d.',
+			'LOCALE_GBONUS_RANGEDCRIT_RATING'	=>	'Augmente votre score de coup critique à distance de %d.',
+			'LOCALE_GBONUS_SPELLCRIT_RATING'	=>	'Augmente votre score de coup critique de sort de %d.',
+			'LOCALE_GBONUS_SPELLHASTE_RATING'	=>	'Augmente votre score de hate de sort de %d.',
+			'LOCALE_GBONUS_HIT_RATING'			=>	'Augmente votre score de toucher de %d.',
+			'LOCALE_GBONUS_CRIT_RATING'			=>	'Augmente votre score de coup critique de %d.',
+			'LOCALE_GBONUS_RESILIENCE_RATING'	=>	'Augmente votre score de résilience de %d.',
+			'LOCALE_GBONUS_HASTE_RATING'		=>	'Augmente votre score de hate de %d.',
+			'LOCALE_GBONUS_EXPERTISE_RATING'	=>	'Augmente votre score d\'expertise de %d.',
+			'LOCALE_GBONUS_RESTOREMANA'			=>	'Restore %d mana per 5 sec.',
+			'LOCALE_GBONUS_ATTACKPOWER'			=>	'Augmente la puissance d\'attaque de %d.',
+			'LOCALE_GBONUS_ARMORPENETRATION'	=>	'Augmente votre score de pénétration d\'armure de %d.',
+			'LOCALE_GBONUS_SPELLPOWER'			=>	'Augmente la puissance de sorts de %d.',
+			'LOCALE_GBONUS_UNKNOWN'				=>	'Bonus inconnu #%d',
+			'LOCALE_GBONUS_CHANCEONHIT'			=>	'Chance on hit: ',
+			'LOCALE_GBONUS_EQUIP'				=>	'Equip: ',
+			'LOCALE_GBONUS_USE'					=>	'Use: ',
+			'LOCALE_COMBAT_RATING'				=>	'%s&nbsp;au&nbsp;N%s',
+			// sockets
+			'LOCALE_SOCKET_META'	=>	'Méta-châsse',
+			'LOCALE_SOCKET_RED'		=>	'Châsse rouge',
+			'LOCALE_SOCKET_YELLOW'	=>	'Châsse jaune',
+			'LOCALE_SOCKET_BLUE'	=>	'Châsse bleue',
+			'LOCALE_SOCKET_BONUS'	=>	'Bonus de sertissage',
+			
+			// misc
+			'LOCALE_SPEED'			=>	'Vitesse',
+			'LOCALE_UNIQUE'			=>	'Unique',
+			'LOCALE_START_QUEST'	=>	'Cet objet démarre une quête',
+			'LOCALE_SLOT'			=>	' Slot ',
+			'LOCALE_DPS'			=>	'dégâts par seconde',
+			'LOCALE_DPS2'			=>	'dégâts par seconde',
+			'LOCALE_DPS_ADDS'		=>	'Adds',
+			'LOCALE_ARMOR'			=>	'Armure',
+			'LOCALE_BLOCK'			=>	'Block',
+			'LOCALE_REQUIRES'		=>	'Requiert',
+			'LOCALE_REQUIRES_LEVEL'	=>	'Niveau requis',
+			'LOCALE_DURABILITY'		=>	'Durabilité',
+			'LOCALE_CLASSES'		=>	'Classes',
+			'LOCALE_VALUE_DELIM'	=>	' to ',
+			'LOCALE_REAGENTS'		=>	'Composants: ',
+			'LOCALE_TOOLS'			=>	'Outils: ',
+			'LOCALE_HEROIC'			=>	' (Heroïque)',
+			'LOCALE_CRITERIA'		=>	'Critères',
+			'LOCALE_GLYPH_OF'		=>	'Glyph of ',
+		));
+		break;
 	// --- ENGLISH default LOCALE ---
 	default:
-		// quest
-		d('LOCALE_REQUIREMENTS', 'Requirements');
-		// classes
-		d('LOCALE_WARRIOR',		'Warrior');
-		d('LOCALE_PALADIN',		'Paladin');
-		d('LOCALE_HUNTER',		'Hunter');
-		d('LOCALE_ROGUE',		'Rogue');
-		d('LOCALE_PRIEST',		'Priest');
-		d('LOCALE_DEATH_KNIGHT','Death Knight');
-		d('LOCALE_SHAMAN',		'Shaman');
-		d('LOCALE_MAGE',		'Mage');
-		d('LOCALE_WARLOCK',		'Warlock');
-		d('LOCALE_DRUID',		'Druid');
-		// races
-		d('LOCALE_HUMAN',		'Human');
-		d('LOCALE_ORC',			'Orc');
-		d('LOCALE_DWARF',		'Dwarf');
-		d('LOCALE_NIGHT_ELF',	'Night Elf');
-		d('LOCALE_UNDED',		'Undead');
-		d('LOCALE_TAUREN',		'Tauren');
-		d('LOCALE_GNOME',		'Gnome');
-		d('LOCALE_TROLL',		'Troll');
-		d('LOCALE_BLOOD_ELF',	'Blood Elf');
-		d('LOCALE_DRAENEI',		'Draenei');
-		// side
-		d('LOCALE_BOTH_FACTIONS','Both');
-		d('LOCALE_HORDE',		'Horde');
-		d('LOCALE_ALLIANCE',	'Alliance');
-		// reputation
-		d('LOCALE_NEUTRAL',		'Neutral');
-		d('LOCALE_FRIENDLY',	'Friendly');
-		d('LOCALE_HONORED',		'Honored');
-		d('LOCALE_REVERED',		'Revered');
-		d('LOCALE_EXALTED',		'Exalted');
-		// resistances
-		d('LOCALE_FIRE_RESISTANCE',		'Fire Resistance');
-		d('LOCALE_FROST_RESISTANCE',	'Frost Resistance');
-		d('LOCALE_ARCANE_RESISTANCE',	'Arcane Resistance');
-		d('LOCALE_SHADOW_RESISTANCE',	'Shadow Resistance');
-		d('LOCALE_NATURE_RESISTANCE',	'Nature Resistance');
-		d('LOCALE_HOLY_RESISTANCE',		'RESISTANCE DOES NOT EXIST');
-		// binds
-		d('LOCALE_BIND_PICKUP',		'Binds when picked up');
-		d('LOCALE_BIND_EQUIP',		'Binds when equipped');
-		d('LOCALE_BIND_USE',		'Binds when used');
-		d('LOCALE_BIND_SOULBOUND',	'Soulbound');
-		d('LOCALE_BIND_QUEST_ITEM',	'Quest Item');
-		// bags
-		d('LOCALE_BAG',			'Bag');
-		d('LOCALE_BAG_QUIVER',	'Quiver');
-		d('LOCALE_BAG_AMMO',	'Ammo Pouch');
-		d('LOCALE_BAG_SOUL',	'Soul Bag');
-		d('LOCALE_BAG_LEATHER',	'Leatherworking Bag');
-		d('LOCALE_BAG_HERB',	'Herb Bag');
-		d('LOCALE_BAG_ENCHANT',	'Enchanting bag');
-		d('LOCALE_BAG_ENGINEER','Engineering Bag');
-		d('LOCALE_BAG_GEM',		'Gem Bag');
-		d('LOCALE_BAG_MINING',	'Mining Bag');
-		// equip slots
-		d('LOCALE_EQUIP_HEAD',			'Head');
-		d('LOCALE_EQUIP_NECK',			'Neck');
-		d('LOCALE_EQUIP_SHOULDER',		'Shoulder');
-		d('LOCALE_EQUIP_SHIRT',			'Shirt');
-		d('LOCALE_EQUIP_CHEST',			'Chest');
-		d('LOCALE_EQUIP_WAIST',			'Waist');
-		d('LOCALE_EQUIP_LEGS',			'Legs');
-		d('LOCALE_EQUIP_FEET',			'Feet');
-		d('LOCALE_EQUIP_WRIST',			'Wrist');
-		d('LOCALE_EQUIP_HANDS',			'Hands');
-		d('LOCALE_EQUIP_FINGER',		'Finger');
-		d('LOCALE_EQUIP_TRINKET',		'Trinket');
-		d('LOCALE_EQUIP_ONEHAND',		'One-hand');
-		d('LOCALE_EQUIP_OFFHAND',		'Off Hand');
-		d('LOCALE_EQUIP_RANGED',		'Ranged');
-		d('LOCALE_EQUIP_BACK',			'Back');
-		d('LOCALE_EQUIP_TWOHAND',		'Two-hand');
-		d('LOCALE_EQUIP_UNK0',			'');
-		d('LOCALE_EQUIP_TABARD',		'Tabard');
-		d('LOCALE_EQUIP_MAINHAND',		'Main Hand');
-		d('LOCALE_EQUIP_CHEST2',		'Chest');
-		d('LOCALE_EQUIP_OFFHAND2',		'Off Hand');
-		d('LOCALE_EQUIP_HELDINOFFHAND',	'Held In Off-Hand');
-		d('LOCALE_EQUIP_PROJECTILE',	'Projectile');
-		d('LOCALE_EQUIP_THROWN',		'Thrown');
-		d('LOCALE_EQUIP_RANGED2',		'Ranged');
-		d('LOCALE_EQUIP_UNK1',			'');
-		d('LOCALE_EQUIP_RELIC',			'Relic');
-		// armor type
-		d('LOCALE_ARMOR_CLOTH',			'Cloth');
-		d('LOCALE_ARMOR_LEATHER',		'Leather');
-		d('LOCALE_ARMOR_MAIL',			'Mail');
-		d('LOCALE_ARMOR_PLATE',			'Plate');
-		d('LOCALE_ARMOR_BUCKLER',		'');
-		d('LOCALE_ARMOR_SHIELD',		'Shield');
-		d('LOCALE_ARMOR_LIBRAM',		'Libram');
-		d('LOCALE_ARMOR_IDOL',			'Idol');
-		d('LOCALE_ARMOR_TOTEM',			'Totem');
-		// weapon type
-		d('LOCALE_WEAPON_AXE1H',		'Axe');
-		d('LOCALE_WEAPON_AXE2H',		'Axe');
-		d('LOCALE_WEAPON_BOW',			'Bow');
-		d('LOCALE_WEAPON_GUN',			'Gun');
-		d('LOCALE_WEAPON_MACE1H',		'Mace');
-		d('LOCALE_WEAPON_MACE2H',		'Mace');
-		d('LOCALE_WEAPON_POLEARM',		'Polearm');
-		d('LOCALE_WEAPON_SWORD1H',		'Sword');
-		d('LOCALE_WEAPON_SWORD2H',		'Sword');
-		d('LOCALE_WEAPON_OBSOLETE',		'');
-		d('LOCALE_WEAPON_STAFF',		'Staff');
-		d('LOCALE_WEAPON_EXOTIC',		'');
-		d('LOCALE_WEAPON_EXOTIC2',		'');
-		d('LOCALE_WEAPON_FIST',			'Fist Weapon');
-		d('LOCALE_WEAPON_MISC',			'Miscellaneous');
-		d('LOCALE_WEAPON_DAGGER',		'Dagger');
-		d('LOCALE_WEAPON_THROWN',		'Thrown');
-		d('LOCALE_WEAPON_SPEAR',		'');
-		d('LOCALE_WEAPON_CROSSBOW',		'Crossbow');
-		d('LOCALE_WEAPON_WAND',			'Wand');
-		d('LOCALE_WEAPON_FISHINGPOLE',	'Fishing Pole');
-		// projectile type
-		d('LOCALE_PROJECTILE_WAND',		'');
-		d('LOCALE_PROJECTILE_BOLT',		'');
-		d('LOCALE_PROJECTILE_ARROW',	'Arrow');
-		d('LOCALE_PROJECTILE_BULLET',	'Bullet');
-		d('LOCALE_PROJECTILE_THROWN',	'');
-		// damage
-		d('LOCALE_DAMAGE_PRE',			' ');
-		d('LOCALE_DAMAGE_POST',			' Damage');
-		d('LOCALE_DAMAGE_HOLY', 		'Holy');
-		d('LOCALE_DAMAGE_FIRE', 		'Fire');
-		d('LOCALE_DAMAGE_FROST', 		'Frost');
-		d('LOCALE_DAMAGE_ARCANE', 		'Arcane');
-		d('LOCALE_DAMAGE_SHADOW', 		'Shadow');
-		d('LOCALE_DAMAGE_NATURE', 		'Nature');
-		// stats
-		d('LOCALE_STAT_STRENGTH',		' Strength');
-		d('LOCALE_STAT_STAMINA',		' Stamina');
-		d('LOCALE_STAT_INTELLECT',		' Intellect');
-		d('LOCALE_STAT_SPIRIT',			' Spirit');
-		d('LOCALE_STAT_AGILITY',		' Agility');
-		// green bonuses
-		d('LOCALE_GBONUS_DEFENCE',				'Increases defense rating by %d.');
-		d('LOCALE_GBONUS_DODGE',				'Increases your dodge rating by %d.');
-		d('LOCALE_GBONUS_PARRY',				'Increases your parry rating by %d.');
-		d('LOCALE_GBONUS_SHIELDBLOCK',			'Increases your shield block rating by %d.');
-		d('LOCALE_GBONUS_SPELLHIT_RATING',		'Improves spell hit rating by %d.');
-		d('LOCALE_GBONUS_MELEECRIT_RATING',		'Improves melee critical strike rating by %d.');
-		d('LOCALE_GBONUS_RANGEDCRIT_RATING',	'Improves ranged critical strike rating by $d.');
-		d('LOCALE_GBONUS_SPELLCRIT_RATING',		'Improves spell critical strike rating by %d.');
-		d('LOCALE_GBONUS_SPELLHASTE_RATING',	'Improves spell haste rating by %d.');
-		d('LOCALE_GBONUS_HIT_RATING',			'Increases your hit rating by %d.');
-		d('LOCALE_GBONUS_CRIT_RATING',			'Increases your critical strike rating by %d.');
-		d('LOCALE_GBONUS_RESILIENCE_RATING',	'Improves your resilience rating by %d.');
-		d('LOCALE_GBONUS_HASTE_RATING',			'Improves haste rating by %d.');
-		d('LOCALE_GBONUS_EXPERTISE_RATING',		'Increases your expertise rating by %d.');
-		d('LOCALE_GBONUS_RESTOREMANA',			'Restores %d mana per 5 sec.');
-		d('LOCALE_GBONUS_ATTACKPOWER',			'Increases attack power by %d.');
-		d('LOCALE_GBONUS_ARMORPENETRATION',		'Increases your armor penetration rating by %d.');
-		d('LOCALE_GBONUS_SPELLPOWER',			'Improves spell power by %d.');
-		d('LOCALE_GBONUS_UNKNOWN',				'Unknown Bonus #%d');
-		d('LOCALE_GBONUS_CHANCEONHIT',			'Chance on hit: ');
-		d('LOCALE_GBONUS_EQUIP',				'Equip: ');
-		d('LOCALE_GBONUS_USE',					'Use: ');
-		// sockets
-		d('LOCALE_SOCKET_META',		'Meta Socket');
-		d('LOCALE_SOCKET_RED',		'Red Socket');
-		d('LOCALE_SOCKET_YELLOW',	'Yellow Socket');
-		d('LOCALE_SOCKET_BLUE',		'Blue Socket');
-		
-		// misc
-		d('LOCALE_SPEED',				'Speed');
-		d('LOCALE_UNIQUE',				'Unique');
-		d('LOCALE_START_QUEST',			'This Item Begins a Quest');
-		d('LOCALE_SLOT',				' Slot ');
-		d('LOCALE_DPS',					'damage per second');
-		d('LOCALE_DPS2',				'damage per second');
-		d('LOCALE_DPS_ADDS',			'Adds');
-		d('LOCALE_ARMOR',				'Armor');
-		d('LOCALE_BLOCK',				'Block');
-		d('LOCALE_REQUIRES',			'Requires');
-		d('LOCALE_REQUIRES_LEVEL',		'Requires Level');
-		d('LOCALE_DURABILITY',			'Durability');
-		d('LOCALE_CLASSES',				'Classes');
-		d('LOCALE_VALUE_DELIM',			' to ');
-		d('LOCALE_REAGENTS',			'Reagents: ');
-		d('LOCALE_TOOLS',				'Tools: ');
-		d('LOCALE_HEROIC',				' (Heroic)');
-		d('LOCALE_CRITERIA',			'Criteria');
-		d('LOCALE_GLYPH_OF',			'Glyph of ');
+		mass_define(array(
+			// quest
+			'LOCALE_REQUIREMENTS'	=>	'Requirements',
+			// classes
+			'LOCALE_WARRIOR'		=>	'Warrior',
+			'LOCALE_PALADIN'		=>	'Paladin',
+			'LOCALE_HUNTER'			=>	'Hunter',
+			'LOCALE_ROGUE'			=>	'Rogue',
+			'LOCALE_PRIEST'			=>	'Priest',
+			'LOCALE_DEATH_KNIGHT'	=>	'Death Knight',
+			'LOCALE_SHAMAN'			=>	'Shaman',
+			'LOCALE_MAGE'			=>	'Mage',
+			'LOCALE_WARLOCK'		=>	'Warlock',
+			'LOCALE_DRUID'			=>	'Druid',
+			// races
+			'LOCALE_HUMAN'			=>	'Human',
+			'LOCALE_ORC'			=>	'Orc',
+			'LOCALE_DWARF'			=>	'Dwarf',
+			'LOCALE_NIGHT_ELF'		=>	'Night Elf',
+			'LOCALE_UNDED'			=>	'Undead',
+			'LOCALE_TAUREN'			=>	'Tauren',
+			'LOCALE_GNOME'			=>	'Gnome',
+			'LOCALE_TROLL'			=>	'Troll',
+			'LOCALE_BLOOD_ELF'		=>	'Blood Elf',
+			'LOCALE_DRAENEI'		=>	'Draenei',
+			// side
+			'LOCALE_BOTH_FACTIONS'	=>	'Both',
+			'LOCALE_HORDE'			=>	'Horde',
+			'LOCALE_ALLIANCE'		=>	'Alliance',
+			// reputation
+			'LOCALE_NEUTRAL'	=>	'Neutral',
+			'LOCALE_FRIENDLY'	=>	'Friendly',
+			'LOCALE_HONORED'	=>	'Honored',
+			'LOCALE_REVERED'	=>	'Revered',
+			'LOCALE_EXALTED'	=>	'Exalted',
+			// resistances
+			'LOCALE_FIRE_RESISTANCE'	=>	'Fire Resistance',
+			'LOCALE_FROST_RESISTANCE'	=>	'Frost Resistance',
+			'LOCALE_ARCANE_RESISTANCE'	=>	'Arcane Resistance',
+			'LOCALE_SHADOW_RESISTANCE'	=>	'Shadow Resistance',
+			'LOCALE_NATURE_RESISTANCE'	=>	'Nature Resistance',
+			'LOCALE_HOLY_RESISTANCE'	=>	'RESISTANCE DOES NOT EXIST',
+			// binds
+			'LOCALE_BIND_PICKUP'		=>	'Binds when picked up',
+			'LOCALE_BIND_EQUIP'			=>	'Binds when equipped',
+			'LOCALE_BIND_USE'			=>	'Binds when used',
+			'LOCALE_BIND_SOULBOUND'		=>	'Soulbound',
+			'LOCALE_BIND_QUEST_ITEM'	=>	'Quest Item',
+			// bags
+			'LOCALE_BAG'			=>	'Bag',
+			'LOCALE_BAG_QUIVER'		=>	'Quiver',
+			'LOCALE_BAG_AMMO'		=>	'Ammo Pouch',
+			'LOCALE_BAG_SOUL'		=>	'Soul Bag',
+			'LOCALE_BAG_LEATHER'	=>	'Leatherworking Bag',
+			'LOCALE_BAG_HERB'		=>	'Herb Bag',
+			'LOCALE_BAG_ENCHANT'	=>	'Enchanting bag',
+			'LOCALE_BAG_ENGINEER'	=>	'Engineering Bag',
+			'LOCALE_BAG_GEM'		=>	'Gem Bag',
+			'LOCALE_BAG_MINING'		=>	'Mining Bag',
+			// equip slots
+			'LOCALE_EQUIP_HEAD'				=>	'Head',
+			'LOCALE_EQUIP_NECK'				=>	'Neck',
+			'LOCALE_EQUIP_SHOULDER'			=>	'Shoulder',
+			'LOCALE_EQUIP_SHIRT'			=>	'Shirt',
+			'LOCALE_EQUIP_CHEST'			=>	'Chest',
+			'LOCALE_EQUIP_WAIST'			=>	'Waist',
+			'LOCALE_EQUIP_LEGS'				=>	'Legs',
+			'LOCALE_EQUIP_FEET'				=>	'Feet',
+			'LOCALE_EQUIP_WRIST'			=>	'Wrist',
+			'LOCALE_EQUIP_HANDS'			=>	'Hands',
+			'LOCALE_EQUIP_FINGER'			=>	'Finger',
+			'LOCALE_EQUIP_TRINKET'			=>	'Trinket',
+			'LOCALE_EQUIP_ONEHAND'			=>	'One-hand',
+			'LOCALE_EQUIP_OFFHAND'			=>	'Off Hand',
+			'LOCALE_EQUIP_RANGED'			=>	'Ranged',
+			'LOCALE_EQUIP_BACK'				=>	'Back',
+			'LOCALE_EQUIP_TWOHAND'			=>	'Two-hand',
+			'LOCALE_EQUIP_UNK0'				=>	'',
+			'LOCALE_EQUIP_TABARD'			=>	'Tabard',
+			'LOCALE_EQUIP_MAINHAND'			=>	'Main Hand',
+			'LOCALE_EQUIP_CHEST2'			=>	'Chest',
+			'LOCALE_EQUIP_OFFHAND2'			=>	'Off Hand',
+			'LOCALE_EQUIP_HELDINOFFHAND'	=>	'Held In Off-Hand',
+			'LOCALE_EQUIP_PROJECTILE'		=>	'Projectile',
+			'LOCALE_EQUIP_THROWN'			=>	'Thrown',
+			'LOCALE_EQUIP_RANGED2'			=>	'Ranged',
+			'LOCALE_EQUIP_UNK1'				=>	'',
+			'LOCALE_EQUIP_RELIC'			=>	'Relic',
+			// armor type
+			'LOCALE_ARMOR_CLOTH'	=>	'Cloth',
+			'LOCALE_ARMOR_LEATHER'	=>	'Leather',
+			'LOCALE_ARMOR_MAIL'		=>	'Mail',
+			'LOCALE_ARMOR_PLATE'	=>	'Plate',
+			'LOCALE_ARMOR_BUCKLER'	=>	'',
+			'LOCALE_ARMOR_SHIELD'	=>	'Shield',
+			'LOCALE_ARMOR_LIBRAM'	=>	'Libram',
+			'LOCALE_ARMOR_IDOL'		=>	'Idol',
+			'LOCALE_ARMOR_TOTEM'	=>	'Totem',
+			// weapon type
+			'LOCALE_WEAPON_AXE1H'		=>	'Axe',
+			'LOCALE_WEAPON_AXE2H'		=>	'Axe',
+			'LOCALE_WEAPON_BOW'			=>	'Bow',
+			'LOCALE_WEAPON_GUN'			=>	'Gun',
+			'LOCALE_WEAPON_MACE1H'		=>	'Mace',
+			'LOCALE_WEAPON_MACE2H'		=>	'Mace',
+			'LOCALE_WEAPON_POLEARM'		=>	'Polearm',
+			'LOCALE_WEAPON_SWORD1H'		=>	'Sword',
+			'LOCALE_WEAPON_SWORD2H'		=>	'Sword',
+			'LOCALE_WEAPON_OBSOLETE'	=>	'',
+			'LOCALE_WEAPON_STAFF'		=>	'Staff',
+			'LOCALE_WEAPON_EXOTIC'		=>	'',
+			'LOCALE_WEAPON_EXOTIC2'		=>	'',
+			'LOCALE_WEAPON_FIST'		=>	'Fist Weapon',
+			'LOCALE_WEAPON_MISC'		=>	'Miscellaneous',
+			'LOCALE_WEAPON_DAGGER'		=>	'Dagger',
+			'LOCALE_WEAPON_THROWN'		=>	'Thrown',
+			'LOCALE_WEAPON_SPEAR'		=>	'',
+			'LOCALE_WEAPON_CROSSBOW'	=>	'Crossbow',
+			'LOCALE_WEAPON_WAND'		=>	'Wand',
+			'LOCALE_WEAPON_FISHINGPOLE'	=>	'Fishing Pole',
+			// projectile type
+			'LOCALE_PROJECTILE_WAND'	=>	'',
+			'LOCALE_PROJECTILE_BOLT'	=>	'',
+			'LOCALE_PROJECTILE_ARROW'	=>	'Arrow',
+			'LOCALE_PROJECTILE_BULLET'	=>	'Bullet',
+			'LOCALE_PROJECTILE_THROWN'	=>	'',
+			// damage
+			'LOCALE_DAMAGE_PRE'		=>	' ',
+			'LOCALE_DAMAGE_POST'	=>	' Damage',
+			'LOCALE_DAMAGE_HOLY'	=>	'Holy',
+			'LOCALE_DAMAGE_FIRE'	=>	'Fire',
+			'LOCALE_DAMAGE_FROST'	=>	'Frost',
+			'LOCALE_DAMAGE_ARCANE'	=>	'Arcane',
+			'LOCALE_DAMAGE_SHADOW'	=>	'Shadow',
+			'LOCALE_DAMAGE_NATURE'	=>	'Nature',
+			// stats
+			'LOCALE_STAT_STRENGTH'	=>	' Strength',
+			'LOCALE_STAT_STAMINA'	=>	' Stamina',
+			'LOCALE_STAT_INTELLECT'	=>	' Intellect',
+			'LOCALE_STAT_SPIRIT'	=>	' Spirit',
+			'LOCALE_STAT_AGILITY'	=>	' Agility',
+			// green bonuses
+			'LOCALE_GBONUS_DEFENCE'				=>	'Increases defense rating by %d.',
+			'LOCALE_GBONUS_DODGE'				=>	'Increases your dodge rating by %d.',
+			'LOCALE_GBONUS_PARRY'				=>	'Increases your parry rating by %d.',
+			'LOCALE_GBONUS_SHIELDBLOCK'			=>	'Increases your shield block rating by %d.',
+			'LOCALE_GBONUS_SPELLHIT_RATING'		=>	'Improves spell hit rating by %d.',
+			'LOCALE_GBONUS_MELEECRIT_RATING'	=>	'Improves melee critical strike rating by %d.',
+			'LOCALE_GBONUS_RANGEDCRIT_RATING'	=>	'Improves ranged critical strike rating by %d.',
+			'LOCALE_GBONUS_SPELLCRIT_RATING'	=>	'Improves spell critical strike rating by %d.',
+			'LOCALE_GBONUS_SPELLHASTE_RATING'	=>	'Improves spell haste rating by %d.',
+			'LOCALE_GBONUS_HIT_RATING'			=>	'Increases your hit rating by %d.',
+			'LOCALE_GBONUS_CRIT_RATING'			=>	'Increases your critical strike rating by %d.',
+			'LOCALE_GBONUS_RESILIENCE_RATING'	=>	'Improves your resilience rating by %d.',
+			'LOCALE_GBONUS_HASTE_RATING'		=>	'Improves haste rating by %d.',
+			'LOCALE_GBONUS_EXPERTISE_RATING'	=>	'Increases your expertise rating by %d.',
+			'LOCALE_GBONUS_RESTOREMANA'			=>	'Restores %d mana per 5 sec.',
+			'LOCALE_GBONUS_ATTACKPOWER'			=>	'Increases attack power by %d.',
+			'LOCALE_GBONUS_ARMORPENETRATION'	=>	'Increases your armor penetration rating by %d.',
+			'LOCALE_GBONUS_SPELLPOWER'			=>	'Improves spell power by %d.',
+			'LOCALE_GBONUS_UNKNOWN'				=>	'Unknown Bonus #%d',
+			'LOCALE_GBONUS_CHANCEONHIT'			=>	'Chance on hit: ',
+			'LOCALE_GBONUS_EQUIP'				=>	'Equip: ',
+			'LOCALE_GBONUS_USE'					=>	'Use: ',
+			'LOCALE_COMBAT_RATING'				=>	'%s&nbsp;@&nbsp;L%d',
+			// sockets
+			'LOCALE_SOCKET_META'	=>	'Meta Socket',
+			'LOCALE_SOCKET_RED'		=>	'Red Socket',
+			'LOCALE_SOCKET_YELLOW'	=>	'Yellow Socket',
+			'LOCALE_SOCKET_BLUE'	=>	'Blue Socket',
+			'LOCALE_SOCKET_BONUS'	=>	'Socket Bonus',
+			
+			// misc
+			'LOCALE_SPEED'			=>	'Speed',
+			'LOCALE_UNIQUE'			=>	'Unique',
+			'LOCALE_START_QUEST'	=>	'This Item Begins a Quest',
+			'LOCALE_SLOT'			=>	' Slot ',
+			'LOCALE_DPS'			=>	'damage per second',
+			'LOCALE_DPS2'			=>	'damage per second',
+			'LOCALE_DPS_ADDS'		=>	'Adds',
+			'LOCALE_ARMOR'			=>	'Armor',
+			'LOCALE_BLOCK'			=>	'Block',
+			'LOCALE_REQUIRES'		=>	'Requires',
+			'LOCALE_REQUIRES_LEVEL'	=>	'Requires Level',
+			'LOCALE_DURABILITY'		=>	'Durability',
+			'LOCALE_CLASSES'		=>	'Classes',
+			'LOCALE_VALUE_DELIM'	=>	' to ',
+			'LOCALE_REAGENTS'		=>	'Reagents: ',
+			'LOCALE_TOOLS'			=>	'Tools: ',
+			'LOCALE_HEROIC'			=>	' (Heroic)',
+			'LOCALE_CRITERIA'		=>	'Criteria',
+			'LOCALE_GLYPH_OF'		=>	'Glyph of ',
+		));
+		break;
 }
 ?>

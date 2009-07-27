@@ -27,8 +27,11 @@ $smarty->assign('conf_file', $conf_file);
 
 // Параметры передаваемые скрипту
 $queryx = $_SERVER['QUERY_STRING'];
-@list($razdel, $podrazdel) = explode('=', $_SERVER['QUERY_STRING'], 2);
-$smarty->assign('query', $_SERVER['QUERY_STRING']);
+$smarty->assign('query', $queryx);
+// Отсекаем ненужные данные
+list($str, $trash) = explode('&', $queryx, 2);
+// Получаем раздел и подраздел (или значение)
+list($razdel, $podrazdel) = explode('=', $str, 2);
 
 // Параметры страницы
 global $page;
@@ -54,12 +57,6 @@ switch($razdel)
 		break;
 	case 'account':
 		include 'account.php';
-		break;
-	case 'admin':
-		if($_SESSION['roles'] == 2)
-			include 'admin.php';
-		else
-			include 'main.php';
 		break;
 	case 'achievements':
 		include 'achievements.php';

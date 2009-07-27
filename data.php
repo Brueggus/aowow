@@ -1,5 +1,6 @@
 <?php
 header('Content-type: application/x-javascript');
+require_once('configs/config.php');
 require_once('includes/allutil.php');
 
 switch($_GET['data'])

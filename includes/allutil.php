@@ -1,6 +1,7 @@
 <?php
-define('AOWOW_REVISION', 5);
+define('AOWOW_REVISION', 6);
 
+require_once('configs/config.php');
 error_reporting(2039);
 ini_set('serialize_precision', 4);
 session_start();
@@ -16,7 +17,7 @@ $locales = array(
 function checklocale()
 {
 	global $AoWoWconf, $locales;
-	if(!isset($_SESSION['locale']) || !in_array($_SESSION['locale'], array_keys($locales)))
+	if(!isset($_SESSION['locale']) || !isset($locales[$_SESSION['locale']]))
 		$_SESSION['locale'] = $AoWoWconf['locale'];
 }
 checklocale();
@@ -97,17 +98,23 @@ function reputations($value)
 {
 	switch ($value)
 	{
-		case 0: return LOCALE_NEUTRAL;
-		case 1: return LOCALE_NEUTRAL;
-		case 2999: return LOCALE_FRIENDLY;
-		case 3000: return LOCALE_FRIENDLY;
-		case 8999: return LOCALE_HONORED;
-		case 9000: return LOCALE_HONORED;
-		case 20999: return LOCALE_REVERED;
-		case 21000: return LOCALE_REVERED;
-		case 41999: return LOCALE_EXALTED;
-		case 42000: return LOCALE_EXALTED;
-		default: return $value;
+		case 0:
+		case 1:
+			return LOCALE_NEUTRAL;
+		case 2999:
+		case 3000:
+			return LOCALE_FRIENDLY;
+		case 8999:
+		case 9000:
+			return LOCALE_HONORED;
+		case 20999:
+		case 21000:
+			return LOCALE_REVERED;
+		case 41999:
+		case 42000:
+			return LOCALE_EXALTED;
+		default:
+			return $value;
 	}
 }
 
@@ -509,5 +516,24 @@ function redirect($url)
 	echo "</style>\n";
 	echo "</head></html>";
 	exit;
+}
+function localizedName($arr, $key = 'name')
+{
+	if(!$_SESSION['locale'])
+		return $arr[$key];
+
+	if(empty($arr[$key]))
+		return '';
+
+	$lkey = $key.'_loc';
+	if(empty($arr[$lkey]))
+	{
+		if(substr($arr[$key], 0, 1) == '[' && substr($arr[$key], -1, 1) == ']')
+			return $arr[$key];
+		else
+			return '['.$arr[$key].']';
+	}
+	else
+		return $arr[$lkey];
 }
 ?>

@@ -1,9 +1,8 @@
 <?php
 header('Content-type: application/x-javascript');
+require_once('configs/config.php');
 require_once('includes/allutil.php');
 
-// Настройки
-require_once('configs/config.php');
 // Для Ajax отключаем debug
 $AoWoWconf['debug'] = false;
 // Для Ajax ненужен реалм

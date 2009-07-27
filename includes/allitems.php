@@ -37,15 +37,83 @@ function inv_dmg($min, $max, $delay, $type)
 		return '+'.$min.' - '.$max.LOCALE_DAMAGE_PRE.$dmg_typez[$type].LOCALE_DAMAGE_POST.'<br />';
 }
 
-function green_bonus($str, $val)
+// This is from javascript
+function g_convertRatingToPercent($level, $type, $val)
 {
-	//TODO javascript rating calc
-	return LOCALE_GBONUS_EQUIP.str_replace('%d', $val, $str);
+	$arr = array(
+		12 => 1.5,
+		13 => 12,
+		14 => 15,
+		15 => 5,
+		16 => 10,
+		17 => 10,
+		18 => 8,
+		19 => 14,
+		20 => 14,
+		21 => 14,
+		22 => 10,
+		23 => 10,
+		24 => 0,
+		25 => 0,
+		26 => 0,
+		27 => 0,
+		28 => 10,
+		29 => 10,
+		30 => 10,
+		31 => 10,
+		32 => 14,
+		33 => 0,
+		34 => 0,
+		35 => 25,
+		36 => 10,
+		37 => 2.5,
+		44 => 3.756097412109376
+	);
+
+	if(in_array($type, array(14, 12, 15)) && $level < 34)
+		$level = 34;
+
+	if(!isset($arr[$type]))
+		return 0;
+
+	if($level > 70)
+		$c = 82 / 52 * pow(131 / 63, ($level - 70) / 10);
+	elseif($level > 60)
+		$c = 82 / (262 - 3 * $level);
+	elseif($level > 10)
+		$c = ($level - 8) / 52;
+	else
+		$c = 2 / 52;
+
+	return $val / $arr[$type] / $c;
+}
+function g_setRatingLevel($level, $type, $val)
+{
+	$result = round(g_convertRatingToPercent($level, $type, $val), 2);
+
+	if(!in_array($type, array(12, 37)))
+		$result .= '%';
+
+	return sprintf(LOCALE_COMBAT_RATING, $result, $level);
+}
+
+function green_bonus($str, $val, $type = 0, $level = 0)
+{
+	$js = '';
+	if($type)
+	{
+		$js .= '&nbsp;<small>(<a href="javascript:;" onmousedown="return false" onclick="g_setRatingLevel(this,'.$level.','.$type.','.$val.')">';
+		$js .= g_setRatingLevel($level, $type, $val);
+		$js .= '</a>)</small>';
+	}
+	return LOCALE_GBONUS_EQUIP.str_replace('%d', $val.$js, $str);
 }
 
 // Типы бонусов
-function b_type($type, $value)
+function b_type($type, $value, $level)
 {
+	// 1-80
+	$level = min(max($level, 1), 80);
 	global $green;
 	switch($type)
 	{
@@ -56,27 +124,27 @@ function b_type($type, $value)
 		case 6: return '+'.$value.LOCALE_STAT_SPIRIT.'<br />';				# 6 - Spirit
 		case 7: return '+'.$value.LOCALE_STAT_STAMINA.'<br />';				# 7 - Stamina
 		// зеленые статы
-		case 12: $green[]=green_bonus(LOCALE_GBONUS_DEFENCE, $value);				return;
-		case 13: $green[]=green_bonus(LOCALE_GBONUS_DODGE, $value);					return;
-		case 14: $green[]=green_bonus(LOCALE_GBONUS_PARRY, $value);					return;
-		case 15: $green[]=green_bonus(LOCALE_GBONUS_SHIELDBLOCK, $value);			return;
+		case 12: $green[] = green_bonus(LOCALE_GBONUS_DEFENCE, $value, $type, $level);				return;
+		case 13: $green[] = green_bonus(LOCALE_GBONUS_DODGE, $value, $type, $level);				return;
+		case 14: $green[] = green_bonus(LOCALE_GBONUS_PARRY, $value, $type, $level);				return;
+		case 15: $green[] = green_bonus(LOCALE_GBONUS_SHIELDBLOCK, $value, $type, $level);			return;
 
-		case 18: $green[]=green_bonus(LOCALE_GBONUS_SPELLHIT_RATING, $value);		return;
-		case 19: $green[]=green_bonus(LOCALE_GBONUS_MELEECRIT_RATING, $value);		return;
-		case 20: $green[]=green_bonus(LOCALE_GBONUS_RANGEDCRIT_RATING, $value);		return;
-		case 21: $green[]=green_bonus(LOCALE_GBONUS_SPELLCRIT_RATING, $value);		return;
+		case 18: $green[] = green_bonus(LOCALE_GBONUS_SPELLHIT_RATING, $value, $type, $level);		return;
+		case 19: $green[] = green_bonus(LOCALE_GBONUS_MELEECRIT_RATING, $value, $type, $level);		return;
+		case 20: $green[] = green_bonus(LOCALE_GBONUS_RANGEDCRIT_RATING, $value, $type, $level);	return;
+		case 21: $green[] = green_bonus(LOCALE_GBONUS_SPELLCRIT_RATING, $value, $type, $level);		return;
 
-		case 30: $green[]=green_bonus(LOCALE_GBONUS_SPELLHASTE_RATING, $value);		return;
-		case 31: $green[]=green_bonus(LOCALE_GBONUS_HIT_RATING, $value);			return;
-		case 32: $green[]=green_bonus(LOCALE_GBONUS_CRIT_RATING, $value);			return;
-		case 35: $green[]=green_bonus(LOCALE_GBONUS_RESILIENCE_RATING, $value);		return;
-		case 36: $green[]=green_bonus(LOCALE_GBONUS_HASTE_RATING, $value);			return;
-		case 37: $green[]=green_bonus(LOCALE_GBONUS_EXPERTISE_RATING, $value);		return;
-		case 38: $green[]=green_bonus(LOCALE_GBONUS_ATTACKPOWER, $value);			return;
-		case 43: $green[]=green_bonus(LOCALE_GBONUS_RESTOREMANA, $value);			return;
-		case 44: $green[]=green_bonus(LOCALE_GBONUS_ARMORPENETRATION, $value);		return;
-		case 45: $green[]=green_bonus(LOCALE_GBONUS_SPELLPOWER, $value);			return;
-		default: $green[]=green_bonus(LOCALE_GBONUS_UNKNOWN, $type);				return;
+		case 30: $green[] = green_bonus(LOCALE_GBONUS_SPELLHASTE_RATING, $value, $type, $level);	return;
+		case 31: $green[] = green_bonus(LOCALE_GBONUS_HIT_RATING, $value, $type, $level);			return;
+		case 32: $green[] = green_bonus(LOCALE_GBONUS_CRIT_RATING, $value, $type, $level);			return;
+		case 35: $green[] = green_bonus(LOCALE_GBONUS_RESILIENCE_RATING, $value, $type, $level);	return;
+		case 36: $green[] = green_bonus(LOCALE_GBONUS_HASTE_RATING, $value, $type, $level);			return;
+		case 37: $green[] = green_bonus(LOCALE_GBONUS_EXPERTISE_RATING, $value, $type, $level);		return;
+		case 38: $green[] = green_bonus(LOCALE_GBONUS_ATTACKPOWER, $value);							return;
+		case 43: $green[] = green_bonus(LOCALE_GBONUS_RESTOREMANA, $value);							return;
+		case 44: $green[] = green_bonus(LOCALE_GBONUS_ARMORPENETRATION, $value, $type, $level);		return;
+		case 45: $green[] = green_bonus(LOCALE_GBONUS_SPELLPOWER, $value);							return;
+		default: $green[] = green_bonus(LOCALE_GBONUS_UNKNOWN, $type);								return;
 	}
 }
 
@@ -259,9 +327,9 @@ function render_item_tooltip(&$Row)
 		$x .= '<br />'.$DB->selectCell('SELECT name_loc'.$_SESSION['locale'].' FROM ?_zones WHERE mapid=?d LIMIT 1', $Row['Map']);;
 
 	// Теперь в зависимости от типа предмета
-	if($Row['ContainerSlots']>1)
+	if($Row['ContainerSlots'] > 1)
 		$x .= '<br />'.$Row['ContainerSlots'].LOCALE_SLOT.$bag_typez[$Row['BagFamily']];
-	if(($Row['class']==4) or ($Row['class']==2) or ($Row['class']==6) or ($Row['class']==7))
+	if(in_array($Row['class'], array(4, 2, 6, 7)))
 	{
 		// Броня (4), Оружие(2), Патроны(6)
 		// Начало таблицы св-в брони
@@ -270,11 +338,11 @@ function render_item_tooltip(&$Row)
 		// Слот
 		$x .= '<td>'.$slot[$Row['InventoryType']].'</td>';
 		// Тип брони
-		if($Row['class']==4)
+		if($Row['class'] == 4)
 			$x .= '<th>'.$armor_type[$Row['subclass']].'</th>';
-		elseif($Row['class']==2)
+		elseif($Row['class'] == 2)
 			$x .= '<th>'.$weapon_type[$Row['subclass']].'</th>';
-		elseif($Row['class']==6)
+		elseif($Row['class'] == 6)
 			$x .= '<th>'.$projectile_type[$Row['subclass']].'</th>';
 		$x .= '</tr></table>';
 	} else {
@@ -307,12 +375,12 @@ function render_item_tooltip(&$Row)
 	if($Row['block'])
 		$x .= $Row['block'].' '.LOCALE_BLOCK.'<br />';
 	if($Row['GemProperties'])
-		$x .= $DB->selectCell('SELECT ?_itemenchantmet.text_loc'.$_SESSION['locale'].' from ?_itemenchantmet, ?_gemproperties WHERE (?_gemproperties.gempropertiesID=?d and ?_itemenchantmet.itemenchantmetID=?_gemproperties.itemenchantmetID)', $Row['GemProperties']).'<br />';
+		$x .= $DB->selectCell('SELECT ?_itemenchantmet.text_loc'.$_SESSION['locale'].' FROM ?_itemenchantmet, ?_gemproperties WHERE (?_gemproperties.gempropertiesID=?d and ?_itemenchantmet.itemenchantmetID=?_gemproperties.itemenchantmetID)', $Row['GemProperties']).'<br />';
 
 	// Различные бонусы
 	for($j=1;$j<=10;$j++)
 		if(($Row['stat_type'.$j]!=0) and ($Row['stat_value'.$j]!=0))
-			$x .= b_type($Row['stat_type'.$j], $Row['stat_value'.$j]);
+			$x .= b_type($Row['stat_type'.$j], $Row['stat_value'.$j], $Row['RequiredLevel']);
 
 	// Бонусы к сопротивлениям магий
 	foreach($resz as $j => $RowName)
@@ -333,7 +401,7 @@ function render_item_tooltip(&$Row)
 			$x .= socket_type($Row['socketColor_'.$j]).'<br />';
 
 	if($Row['socketBonus'])
-		$x .= '<span class="q0">Socket Bonus: '.socket_bonus($Row['socketBonus']).'</span><br />';
+		$x .= '<span class="q0">'.LOCALE_SOCKET_BONUS.': '.socket_bonus($Row['socketBonus']).'</span><br />';
 	// Состояние
 	if($Row['MaxDurability'])
 		$x .= LOCALE_DURABILITY.' '.$Row['MaxDurability'].' / '.$Row['MaxDurability'].'<br />';
@@ -401,6 +469,7 @@ function render_item_tooltip(&$Row)
 	$row = $DB->selectRow('SELECT ?# FROM ?_itemset WHERE (item1=?d or item2=?d or item3=?d or item4=?d or item5=?d or item6=?d or item7=?d or item8=?d or item9=?d or item10=?d) LIMIT 1', $itemset_col[1], $Row['entry'], $Row['entry'], $Row['entry'], $Row['entry'], $Row['entry'], $Row['entry'], $Row['entry'], $Row['entry'], $Row['entry'], $Row['entry']);
 	if($row)
 	{
+		//$x .= '<br />';
 		$num = 0; // Кол-во вещей в наборе
 		for($i=1;$i<=10;$i++)
 		{
@@ -411,7 +480,7 @@ function render_item_tooltip(&$Row)
 				$x_tmp .= '<span><a href="?item='.$row['item'.$i].'">'.$name.'</a></span><br />';
 			}
 		}
-		$x .= '<span class="q"><a href="?itemset='.$row['itemsetID'].'" class="q">'.$row['name_loc'.$_SESSION['locale']].'</a> (0/'.$num.')</span>';
+		$x .= '<br /><span class="q"><a href="?itemset='.$row['itemsetID'].'" class="q">'.$row['name_loc'.$_SESSION['locale']].'</a> (0/'.$num.')</span>';
 		// Если требуется скилл
 		if($row['skillID'])
 		{
@@ -422,7 +491,7 @@ function render_item_tooltip(&$Row)
 			$x .= '<br />';
 		}
 		// Перечисление всех составляющих набора
-		$x .= '<div class="q0 indent">'.$x_tmp.'</div>';
+		$x .= '<div class="q0 indent">'.$x_tmp.'</div><br />';
 		// Перечисление всех бонусов набора
 		$x .= '<span class="q0">';
 		$num = 0;
@@ -469,7 +538,6 @@ function iteminfo2(&$Row, $level=0)
 	$item['name'] = localizedName($Row);
 	// Тип вещи
 	$item['type'] = $Row['InventoryType'];
-	$item['icon'] = $Row['iconname'];
 	// Уровень вещи
 	$item['level'] = $Row['ItemLevel'];
 	// Качество вещи...
