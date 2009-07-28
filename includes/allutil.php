@@ -1,5 +1,5 @@
 <?php
-define('AOWOW_REVISION', 6);
+define('AOWOW_REVISION', 7);
 
 require_once('configs/config.php');
 error_reporting(2039);

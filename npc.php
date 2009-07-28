@@ -4,6 +4,7 @@ require_once('includes/allspells.php');
 require_once('includes/allquests.php');
 require_once('includes/allnpcs.php');
 require_once('includes/allcomments.php');
+require_once('includes/allachievements.php');
 
 // Настраиваем Smarty ;)
 $smarty->config_load($conf_file, 'npc');
@@ -350,6 +351,35 @@ if(!$npc = load_cache(1, $cache_key))
 	}
 	unset ($rows_qo);
 
+	// Цель критерии
+	$rows = $DB->select('
+			SELECT a.id, a.faction, a.name_loc?d AS name, a.description_loc?d AS description, a.category, a.points, s.iconname, z.areatableID
+			FROM ?_spellicons s, ?_achievementcriteria c, ?_achievement a
+			LEFT JOIN (?_zones z) ON a.map != -1 AND a.map = z.mapID
+			WHERE
+				a.icon = s.id
+				AND a.id = c.refAchievement
+				AND c.type IN (?a)
+				AND c.value1 = ?d
+			GROUP BY a.id
+			ORDER BY a.name_loc?d
+		',
+		$_SESSION['locale'],
+		$_SESSION['locale'],
+		array(ACHIEVEMENT_CRITERIA_TYPE_KILL_CREATURE),
+		$npc['entry'],
+		$_SESSION['locale']
+	);
+	if($rows)
+	{
+		$npc['criteria_of'] = array();
+		foreach($rows as $row)
+		{
+			allachievementsinfo2($row['id']);
+			$npc['criteria_of'][] = achievementinfo2($row);
+		}
+	}
+
 	// Положения созданий божих (для героик НПС не задана карта, юзаем из нормала):
 	if($normal_entry)
 		// мы - героик НПС, определяем позицию по нормалу
@@ -378,8 +408,9 @@ $smarty->assign('page', $page);
 $smarty->assign('comments', getcomments($page['type'], $page['typeid']));
 
 // Если хоть одна информация о вещи найдена - передаём массив с информацией о вещях шаблонизатору
-$smarty->assign('allitems',$allitems);
-$smarty->assign('allspells',$allspells);
+$smarty->assign('allitems', $allitems);
+$smarty->assign('allspells', $allspells);
+$smarty->assign('allachievements', $allachievements);
 
 $smarty->assign('npc', $npc);
 

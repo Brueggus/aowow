@@ -12,8 +12,9 @@
 				</script>
 
 				<script type="text/javascript">
-					{if isset($allitems)}{include file='bricks/allitems_table.tpl' data=$allitems}{/if}
-					{if isset($allspells)}{include file='bricks/allspells_table.tpl' data=$allspells}{/if}
+					{if isset($allitems)}{include			file='bricks/allitems_table.tpl'		data=$allitems			}{/if}
+					{if isset($allspells)}{include			file='bricks/allspells_table.tpl'		data=$allspells			}{/if}
+					{if isset($allachievements)}{include	file='bricks/allachievements_table.tpl'	data=$allachievements	}{/if}
 				</script>
 
 				<table class="infobox">
@@ -429,6 +430,7 @@
 			<div id="listview-generic" class="listview"></div>
 			<script type="text/javascript">
 				var tabsRelated = new Tabs({ldelim}parent: ge('tabs-generic'){rdelim});
+				{if isset($quest.criteria_of)}{include	file='bricks/achievement_table.tpl'	id='criteria-of'	tabsid='tabsRelated'	data=$quest.criteria_of	name='criteriaof'}{/if}
 				new Listview({ldelim}template: 'comment', id: 'comments', name: LANG.tab_comments, tabs: tabsRelated, parent: 'listview-generic', data: lv_comments{rdelim});
 				tabsRelated.flush();
 			</script>

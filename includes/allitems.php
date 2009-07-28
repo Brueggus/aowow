@@ -239,7 +239,7 @@ function getitemname($id)
 {
 	global $DB;
 	$z = $DB->selectRow('
-			SELECT name {, l.name_loc?d}
+			SELECT name {, l.name_loc?d AS name_loc}
 			FROM item_template i
 			{ LEFT JOIN (locales_item l) ON l.entry=i.entry AND ? }
 			WHERE

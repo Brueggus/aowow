@@ -65,8 +65,9 @@
 				<div id="tabs-generic"></div>
 				<div id="listview-generic" class="listview"></div>
 <script type="text/javascript">
-{if isset($allitems)}{include	file='bricks/allitems_table.tpl'	data=$allitems}{/if}
-{if isset($allspells)}{include	file='bricks/allspells_table.tpl'	data=$allspells}{/if}
+{if isset($allitems)}{include			file='bricks/allitems_table.tpl'		data=$allitems			}{/if}
+{if isset($allspells)}{include			file='bricks/allspells_table.tpl'		data=$allspells			}{/if}
+{if isset($allachievements)}{include	file='bricks/allachievements_table.tpl'	data=$allachievements	}{/if}
 var tabsRelated = new Tabs({ldelim}parent: ge('tabs-generic'){rdelim});
 {if isset($item.unlocks)}{include				file='bricks/object_table.tpl'			id='unlocks'				tabsid='tabsRelated' data=$item.unlocks				name='unlocks'			}{/if}
 {if isset($item.fishedin)}{include				file='bricks/zone_table.tpl'			id='fished-in'				tabsid='tabsRelated' data=$item.fishedin			name='fishedin'			}{/if}
@@ -89,8 +90,9 @@ var tabsRelated = new Tabs({ldelim}parent: ge('tabs-generic'){rdelim});
 {if isset($item.createdfrom)}{include			file='bricks/spell_table.tpl'			id='created-by'				tabsid='tabsRelated' data=$item.createdfrom			name='createdby'		}{/if}
 {if isset($item.disenchanting)}{include			file='bricks/item_table.tpl'			id='disenchanting'			tabsid='tabsRelated' data=$item.disenchanting		name='disenchanting'	}{/if}
 {if isset($item.disenchantedfrom)}{include		file='bricks/item_table.tpl'			id='disenchanting'			tabsid='tabsRelated' data=$item.disenchantedfrom	name='disenchantedfrom'	}{/if}
-{if isset($item.milling)}{include				file='bricks/item_table.tpl'			id='milling'				tabsid='tabsRelated' data=$item.milling				name='milling'		}{/if}
-{if isset($item.milledfrom)}{include			file='bricks/item_table.tpl'			id='milling'				tabsid='tabsRelated' data=$item.milledfrom			name='milledfrom'	}{/if}
+{if isset($item.milling)}{include				file='bricks/item_table.tpl'			id='milling'				tabsid='tabsRelated' data=$item.milling				name='milling'			}{/if}
+{if isset($item.milledfrom)}{include			file='bricks/item_table.tpl'			id='milling'				tabsid='tabsRelated' data=$item.milledfrom			name='milledfrom'		}{/if}
+{if isset($item.criteria_of)}{include 			file='bricks/achievement_table.tpl' 	id='criteria-of'			tabsid='tabsRelated' data=$item.criteria_of			name='criteriaof'		}{/if}
 new Listview({ldelim}template: 'comment', id: 'comments', name: LANG.tab_comments, tabs: tabsRelated, parent: 'listview-generic', data: lv_comments{rdelim});
 tabsRelated.flush();
 </script>

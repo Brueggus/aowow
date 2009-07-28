@@ -194,7 +194,7 @@ switch($_SESSION['locale'])
 			'LOCALE_TOOLS'			=>	'Инструменты: ',
 			'LOCALE_HEROIC'			=>	' (героич.)',
 			'LOCALE_CRITERIA'		=>	'Критерии',
-			'LOCALE_GLYPH_OF'		=>	'Символ ',
+			//'LOCALE_GLYPH_OF'		=>	'Символ ', // used by locale=0
 		));
 		break;
 
@@ -386,12 +386,12 @@ switch($_SESSION['locale'])
 			'LOCALE_REQUIRES_LEVEL'	=>	'Niveau requis',
 			'LOCALE_DURABILITY'		=>	'Durabilité',
 			'LOCALE_CLASSES'		=>	'Classes',
-			'LOCALE_VALUE_DELIM'	=>	' to ',
+			'LOCALE_VALUE_DELIM'	=>	' à ',
 			'LOCALE_REAGENTS'		=>	'Composants: ',
 			'LOCALE_TOOLS'			=>	'Outils: ',
 			'LOCALE_HEROIC'			=>	' (Heroïque)',
 			'LOCALE_CRITERIA'		=>	'Critères',
-			'LOCALE_GLYPH_OF'		=>	'Glyph of ',
+			//'LOCALE_GLYPH_OF'		=>	'Glyph of ', // used by locale=0
 		));
 		break;
 	// --- ENGLISH default LOCALE ---

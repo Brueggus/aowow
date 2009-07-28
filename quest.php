@@ -5,6 +5,7 @@ require_once('includes/allquests.php');
 require_once('includes/allobjects.php');
 require_once('includes/allnpcs.php');
 require_once('includes/allcomments.php');
+require_once('includes/allachievements.php');
 
 $smarty->config_load($conf_file, 'quest');
 
@@ -483,6 +484,35 @@ if(!$quest = load_cache(10, $cache_key))
 	}
 	unset($rows);
 
+	// Цель критерии
+	$rows = $DB->select('
+			SELECT a.id, a.faction, a.name_loc?d AS name, a.description_loc?d AS description, a.category, a.points, s.iconname, z.areatableID
+			FROM ?_spellicons s, ?_achievementcriteria c, ?_achievement a
+			LEFT JOIN (?_zones z) ON a.map != -1 AND a.map = z.mapID
+			WHERE
+				a.icon = s.id
+				AND a.id = c.refAchievement
+				AND c.type IN (?a)
+				AND c.value1 = ?d
+			GROUP BY a.id
+			ORDER BY a.name_loc?d
+		',
+		$_SESSION['locale'],
+		$_SESSION['locale'],
+		array(ACHIEVEMENT_CRITERIA_TYPE_COMPLETE_QUEST),
+		$quest['entry'],
+		$_SESSION['locale']
+	);
+	if($rows)
+	{
+		$quest['criteria_of'] = array();
+		foreach($rows as $row)
+		{
+			allachievementsinfo2($row['id']);
+			$quest['criteria_of'][] = achievementinfo2($row);
+		}
+	}
+
 	save_cache(10, $cache_key, $quest);
 }
 
@@ -504,8 +534,10 @@ $smarty->assign('comments', getcomments($page['type'], $page['typeid']));
 // Данные о квесте
 $smarty->assign('quest', $quest);
 // Если хоть одна информация о вещи найдена - передаём массив с информацией о вещях шаблонизатору
-$smarty->assign('allitems',$allitems);
-$smarty->assign('allspells',$allspells);
+$smarty->assign('allitems', $allitems);
+$smarty->assign('allspells', $allspells);
+$smarty->assign('allachievements', $allachievements);
+
 // Количество MySQL запросов
 $smarty->assign('mysql', $DB->getStatistics());
 // Загружаем страницу

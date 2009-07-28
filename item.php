@@ -7,6 +7,7 @@ require_once('includes/allitems.php');
 require_once('includes/allnpcs.php');
 require_once('includes/allobjects.php');
 require_once('includes/allcomments.php');
+require_once('includes/allachievements.php');
 
 // Загружаем файл перевода для smarty
 $smarty->config_load($conf_file, 'item');
@@ -582,6 +583,35 @@ if(!$item = load_cache(5, $cache_key))
 	}
 	unset($drops_mi);
 
+	// Цель критерии
+	$rows = $DB->select('
+			SELECT a.id, a.faction, a.name_loc?d AS name, a.description_loc?d AS description, a.category, a.points, s.iconname, z.areatableID
+			FROM ?_spellicons s, ?_achievementcriteria c, ?_achievement a
+			LEFT JOIN (?_zones z) ON a.map != -1 AND a.map = z.mapID
+			WHERE
+				a.icon = s.id
+				AND a.id = c.refAchievement
+				AND c.type IN (?a)
+				AND c.value1 = ?d
+			GROUP BY a.id
+			ORDER BY a.name_loc?d
+		',
+		$_SESSION['locale'],
+		$_SESSION['locale'],
+		array(ACHIEVEMENT_CRITERIA_TYPE_OWN_ITEM, ACHIEVEMENT_CRITERIA_TYPE_USE_ITEM, ACHIEVEMENT_CRITERIA_TYPE_LOOT_ITEM, ACHIEVEMENT_CRITERIA_TYPE_EQUIP_ITEM),
+		$item['entry'],
+		$_SESSION['locale']
+	);
+	if($rows)
+	{
+		$item['criteria_of'] = array();
+		foreach($rows as $row)
+		{
+			allachievementsinfo2($row['id']);
+			$item['criteria_of'][] = achievementinfo2($row);
+		}
+	}
+
 	save_cache(5, $cache_key, $item);
 }
 global $page;
@@ -603,6 +633,7 @@ $smarty->assign('comments', getcomments($page['type'], $page['typeid']));
 $smarty->assign('mysql', $DB->getStatistics());
 $smarty->assign('allitems', $allitems);
 $smarty->assign('allspells', $allspells);
+$smarty->assign('allachievements', $allachievements);
 $smarty->assign('item', $item);
 $smarty->display('item.tpl');
 ?>

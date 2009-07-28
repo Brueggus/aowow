@@ -192,8 +192,9 @@
 		<div id="tabs-generic"></div>
 		<div id="listview-generic" class="listview"></div>
 <script type="text/javascript">
-{if $allitems}{include file='bricks/allitems_table.tpl' data=$allitems}{/if}
-{if $allspells}{include file='bricks/allspells_table.tpl' data=$allspells}{/if}
+{if $allitems}{include 					file='bricks/allitems_table.tpl'		data=$allitems			}{/if}
+{if $allspells}{include 				file='bricks/allspells_table.tpl'		data=$allspells			}{/if}
+{if isset($allachievements)}{include	file='bricks/allachievements_table.tpl'	data=$allachievements	}{/if}
 var tabsRelated = new Tabs({ldelim}parent: ge('tabs-generic'){rdelim});
 {if isset($spell.taughtbynpc)}{include			file='bricks/creature_table.tpl'		id='taught-by-npc'		tabsid='tabsRelated' data=$spell.taughtbynpc		name='taughtby'		}{/if}
 {if isset($spell.taughtbyitem)}{include			file='bricks/item_table.tpl'			id='taught-by-item'		tabsid='tabsRelated' data=$spell.taughtbyitem		name='taughtby'		}{/if}
@@ -203,6 +204,7 @@ var tabsRelated = new Tabs({ldelim}parent: ge('tabs-generic'){rdelim});
 {if isset($spell.usedbyitem)}{include			file='bricks/item_table.tpl'			id='used-by-item'		tabsid='tabsRelated' data=$spell.usedbyitem			name='usedby'		}{/if}
 {if isset($spell.usedbyitemset)}{include		file='bricks/itemset_table.tpl'			id='itemsets'			tabsid='tabsRelated' data=$spell.usedbyitemset		name='usedby'		}{/if}
 {if isset($spell.seealso)}{include				file='bricks/spell_table.tpl'			id='see-also-ability'	tabsid='tabsRelated' data=$spell.seealso			name='seealso'		}{/if}
+{if isset($spell.criteria_of)}{include 			file='bricks/achievement_table.tpl' 	id='criteria-of'		tabsid='tabsRelated' data=$spell.criteria_of		name='criteriaof'	}{/if}
 new Listview({ldelim}template: 'comment', id: 'comments', name: LANG.tab_comments, tabs: tabsRelated, parent: 'listview-generic', data: lv_comments{rdelim});
 tabsRelated.flush();
 </script>

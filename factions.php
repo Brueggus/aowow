@@ -57,6 +57,7 @@ $page = array(
 	'tab' => 0,
 	'type' => 0,
 	'typeid' => 0,
+	// path will be 0,8,... when zones are implemented
 	'path' => path(0, 7, $c2, $c1)
 );
 $smarty->assign('page', $page);
