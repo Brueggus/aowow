@@ -15,7 +15,7 @@
 	<!--[if lte IE 6]><link href="templates/wowhead/css/Mapper_ie6.css?{$AOWOW_REVISION}" type="text/css" rel=stylesheet><![endif]-->
 {/if}
 {if $page.Talent}
-		<link rel="stylesheet" type="text/css" href="templates/wowhead/css/TalentCalc.css?{$AOWOW_REVISION}" />
+		<link rel="stylesheet" type="text/css" href="templates/wowhead/css/talentcalc.css?{$AOWOW_REVISION}" />
 		<link rel="stylesheet" type="text/css" href="templates/wowhead/css/talent.css?{$AOWOW_REVISION}" />
 		<!--[if lte IE 6]><link rel="stylesheet" type="text/css" href="templates/wowhead/css/TalentCalc_ie6.css?{$AOWOW_REVISION}" /><![endif]-->
 		<!--[if lte IE 7]><link rel="stylesheet" type="text/css" href="templates/wowhead/css/TalentCalc_ie67.css?{$AOWOW_REVISION}" /><![endif]-->

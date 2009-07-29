@@ -237,7 +237,7 @@ if(!$achievement = load_cache(22, $cache_key))
 				case ACHIEVEMENT_CRITERIA_TYPE_MONEY_FROM_QUEST_REWARD:
 				case ACHIEVEMENT_CRITERIA_TYPE_LOOT_MONEY:
 					$tmp['standard'] = true;
-					$tmp['extra_text'] = '<span class="moneygold">'.divideThousand($row['value2' ] / 10000).'</span>';
+					$tmp['extra_text'] = '<span class="moneygold">'.number_format($row['value2' ] / 10000).'</span>';
 					break;
 				// Добавляем ссылку на ГО
 				case ACHIEVEMENT_CRITERIA_TYPE_USE_GAMEOBJECT:

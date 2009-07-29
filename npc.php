@@ -61,7 +61,7 @@ if(!$npc = load_cache(1, $cache_key))
 		$toDiv = array('minhealth', 'maxmana', 'minmana', 'maxhealth', 'armor', 'mindmg', 'maxdmg');
 		// Разделяем на тысячи (ххххххххх => ххх,ххх,ххх)
 		foreach($toDiv as $e)
-			$npc[$e] = divideThousand($npc[$e]);
+			$npc[$e] = number_format($npc[$e]);
 
 		$npc['rank'] = $smarty->get_config_vars('rank'.$npc['rank']);
 		// faction_A = faction_H
