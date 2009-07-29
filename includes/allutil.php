@@ -162,19 +162,6 @@ function money2coins($money)
 
 	return $coins;
 }
-function divideThousand($val)
-{
-	$thousands = array();
-
-	do
-	{
-		$next_val = floor($val / 1000);
-		array_unshift($thousands, $next_val ? str_pad($val % 1000, 3, '0', STR_PAD_LEFT) : $val % 1000);
-		$val = $next_val;
-	} while($val);
-
-	return implode(',', $thousands);
-}
 // Классы, для которых предназначена вещь
 function classes($class)
 {
