@@ -26,10 +26,6 @@
 							{if $quest.MinLevel>0}<li><div>{#Requires_level#}: {$quest.MinLevel}</div></li>{/if}
 							{if $quest.typename}<li><div>{#Type#}: {$quest.typename}</div></li>{/if}
 							{if isset($quest.side)}<li><div>{#Side#}: <span class="{if ($quest.side.side==1)}alliance{elseif ($quest.side.side==2)}horde{else}both{/if}-icon">{$quest.side.name}</span></div></li>{/if}
-							{if isset($quest.start)}<li><div>{#Start#}: {section loop=$quest.start name=i}{if $quest.start[i].side}<span class="{$quest.start[i].side}-icon">{/if}<a href="?{$quest.start[i].type}={$quest.start[i].entry}"{if $quest.start[i].type == 'item'} class="icontiny q{$quest.start[i].quality}" style="background-image: url(images/icons/tiny/{$quest.start[i].iconname}.gif);"{/if}>{$quest.start[i].name}</a>{if $quest.start[i].side}</span>{/if}{if $smarty.section.i.last}{else}, <br><span style="visibility: hidden;">{#Start#}: </span>{/if}{/section}</div></li>{/if}
-							{if isset($quest.end)}<li><div>{#End#}: {section loop=$quest.end name=i}{if $quest.end[i].side}<span class="{$quest.start[i].side}-icon">{/if}<a href="?{$quest.end[i].type}={$quest.end[i].entry}">{$quest.end[i].name}</a>{if $quest.end[i].side}</span>{/if}{if $smarty.section.i.last}{else}, <br><span style="visibility: hidden;">{#End#}: </span>{/if}{/section}</div></li>{/if}
-							{if isset($quest.reqskill)}<li><div>{#Skill#}: {$quest.reqskill.name} ({$quest.reqskill.value})</div></li>{/if}
-							{if isset($quest.reqclass)}<li><div>{#Class#}: {$quest.reqclass}</div></li>{/if}
 							{strip}{if isset($quest.LimitTime)}
 								<li><div>
 									{#Timer#}:
@@ -38,6 +34,10 @@
 									{if isset($quest.LimitTime.s)} {$quest.LimitTime.s} {#sec#}{/if}
 								</div></li>
 							{/if}{/strip}
+							{if isset($quest.start)}<li><div>{#Start#}: {section loop=$quest.start name=i}{if $quest.start[i].side}<span class="{$quest.start[i].side}-icon">{/if}<a href="?{$quest.start[i].type}={$quest.start[i].entry}"{if $quest.start[i].type == 'item'} class="icontiny q{$quest.start[i].quality}" style="background-image: url(images/icons/tiny/{$quest.start[i].iconname}.gif);"{/if}>{$quest.start[i].name}</a>{if $quest.start[i].side}</span>{/if}{if $smarty.section.i.last}{else}, <br><span style="visibility: hidden;">{#Start#}: </span>{/if}{/section}</div></li>{/if}
+							{if isset($quest.end)}<li><div>{#End#}: {section loop=$quest.end name=i}{if $quest.end[i].side}<span class="{$quest.start[i].side}-icon">{/if}<a href="?{$quest.end[i].type}={$quest.end[i].entry}">{$quest.end[i].name}</a>{if $quest.end[i].side}</span>{/if}{if $smarty.section.i.last}{else}, <br><span style="visibility: hidden;">{#End#}: </span>{/if}{/section}</div></li>{/if}
+							{if isset($quest.reqskill)}<li><div>{#Skill#}: {$quest.reqskill.name} ({$quest.reqskill.value})</div></li>{/if}
+							{if isset($quest.reqclass)}<li><div>{#Class#}: {$quest.reqclass}</div></li>{/if}
 							{if isset($quest.Sharable)}<li><div>{#Sharable#}</div></li>{/if}
 							{if isset($quest.Daily)}<li><div>{#Daily#}</div></li>{elseif isset($quest.Repeatable)}<li><div>{#Repeatable#}</div></li>{/if}
 						</ul>
@@ -184,6 +184,16 @@
 					</td></tr>
 					{/if}
 {/strip}
+{* Дополнительная информация о квесте *}
+{if isset($quest.flagsdetails)}
+					<tr><td>
+						<div class="infobox-spacer"></div>
+						<span class="tip" id="infobox-details"
+							onmouseover="Tooltip.showAtCursor(event, '{foreach from=$quest.flagsdetails item=str}- {$str|escape:"html"}<br>{/foreach}', 0, 0, 0)"
+							onmousemove="Tooltip.cursorUpdate(event)"
+							onmouseout="Tooltip.hide()">{#Related#}</span>
+					</td></tr>
+{/if}
 				</table>
 				<script type="text/javascript">ss_appendSticky()</script>
 
@@ -209,21 +219,8 @@
 						{$quest.RequestItemsText}
 					{/if}
 
-					{if isset($quest.SrcSpell)}
-						{#The_following_spell_will_be_cast_on_you#}:
-						<table class="icontab">
-						<tr>
-						<th id="icontab-icon10"></th><td><a href="?spell={$quest.SrcSpell.entry}">{$quest.SrcSpell.name}</a></td>
-						<th></th><td></td>
-						</tr>
-						</table>
 
-						<script type="text/javascript">
-							ge('icontab-icon10').appendChild(g_spells.createIcon({$quest.SrcSpell.entry}, 1, 0));
-						</script>
-					{/if}
-
-{if isset($quest.itemreqs) or isset($quest.coreqs) or isset($quest.factionreq) or isset($quest.splayers) or isset($quest.moneyreq)}
+{if isset($quest.itemreqs) or isset($quest.coreqs) or isset($quest.factionreq) or isset($quest.splayers) or isset($quest.moneyreq) or !empty($quest.EndText) or isset($quest.PlayersSlain) and $quest.PlayersSlain}
 <table class="iconlist">
 {strip}
 	{* Перечень созданий, требуемых для квеста *}
@@ -235,6 +232,7 @@
 					<a href="?{$req.req_type}={$req.entry}">
 					{if !empty($quest.EndText)}
 						{$quest.EndText}
+					</a>
 					{else}
 						{if !empty($quest.ObjectiveText[$i])}
 							{$quest.ObjectiveText[$i]}
@@ -244,11 +242,18 @@
 					</a>
 						{if empty($quest.ObjectiveText[$i]) && $req.req_type == 'npc'} {#slain#}{/if}
 						{if $req.count>1} ({$req.count}){/if}
-						{if $req.spell}<span class='q0'> [<a href='?spell={$req.spell.entry}'>{$req.spell.name}</a>]</div>{/if}
 					{/if}
+					{if $req.spell}<span class='q0'> [<a href='?spell={$req.spell.entry}'>{$req.spell.name}</a>]</div>{/if}
 				</td>
 			</tr>
 		{/foreach}
+	{elseif !empty($quest.EndText)}
+			<tr>
+				<th><ul><li><var>&nbsp;</var></li></ul></th>
+				<td>
+					{$quest.EndText}
+				</td>
+			</tr>
 	{/if}
 {/strip}
 
@@ -291,6 +296,16 @@
 			</tr>
 	{/if}
 {/strip}
+{strip}
+	{if isset($quest.PlayersSlain) and $quest.PlayersSlain}
+			<tr>
+				<th><ul><li><var>&nbsp;</var></li></ul></th>
+				<td>
+					{$quest.PlayersSlain} {#Players_Slain#}
+				</td>
+			</tr>
+	{/if}
+{/strip}
 
 {if isset($quest.splayers)}<tr><th><ul><li><var>&nbsp;</var></li></ul></th><td>{#Suggested_Players#} [{$quest.splayers}]</td></tr>{/if}
 {if isset($quest.moneyreq)}
@@ -314,15 +329,40 @@
 {/if}
 {/if}
 
+{if isset($quest.SrcItem)}
+<div class="pad"></div>
+{#Provided_Item#}:
+<table class="iconlist">
+	<tr>
+		<th align="right" id="iconlist-icon-src"></th>
+		<td><span class="q1"><a href="?item={$quest.SrcItem.entry}">{$quest.SrcItem.name}</a></span></td>
+	</tr>
+</table>
+<script type="text/javascript">ge('iconlist-icon-src').appendChild(g_items.createIcon({$quest.SrcItem.entry}, 0, {$quest.SrcItem.count}));</script>
+{/if}
+
+{if isset($quest.SrcSpell) and $quest.SrcSpell}
+<div class="pad"></div>
+{#The_following_spell_will_be_cast_on_you#}:
+<table class="icontab">
+	<tr>
+		<th align="right" id="icontab-icon-spl"></th>
+		<td><span class="q1"><a href="?spell={$quest.SrcSpell.entry}">{$quest.SrcSpell.name}</a></span></td>
+	</tr>
+</table>
+<script type="text/javascript">ge('icontab-icon-spl').appendChild(g_spells.createIcon({$quest.SrcSpell.entry}, 0, 0));</script>
+{/if}
+
 {if $quest.Details}
 						<h3>{#Description#}</h3>
 						{$quest.Details}
 {/if}
 
-{if (isset($quest.itemchoices) or isset($quest.itemrewards) or isset($quest.moneycopper) or isset($quest.moneysilver) or isset($quest.moneygold) or isset($quest.spellreward))}
+{if (isset($quest.itemchoices) or isset($quest.itemrewards) or isset($quest.money) or isset($quest.spellreward)) or isset($quest.BonusTalents) and $quest.BonusTalents}
 					<h3>{#Rewards#}</h3>
 
 {if isset($quest.itemchoices)}
+						<div class="pad"></div>
 						{#You_will_be_able_to_choose_one_of_these_rewards#}:
 						<div class="pad"></div>
 						<table class="icontab">
@@ -347,6 +387,7 @@
 {/if}
 
 {if isset($quest.itemrewards)}
+						<div class="pad"></div>
 						{#You_will_receive#}:
 						<div class="pad"></div>
 						<table class="icontab">
@@ -371,10 +412,15 @@
 {/if}
 
 {if isset($quest.spellreward)}
+						<div class="pad"></div>
+{if $quest.spellreward.entry==$quest.spellreward.realentry}
 						{#The_following_spell_will_be_cast_on_you#}:
+{else}
+						{#You_will_learn#}:
+{/if}
 						<table class="icontab">{strip}
 						<tr>
-						<th id="icontab-icon20"></th><td><a href="?spell={$quest.spellreward.entry}">{$quest.spellreward.name}</a></td>
+						<th id="icontab-icon20"></th><td><a href="?spell={$quest.spellreward.realentry}">{$quest.spellreward.name}</a></td>
 						<th></th><td></td>
 						</tr>
 						</table>{/strip}
@@ -384,13 +430,18 @@
 						</script>
 {/if}
 
-{if isset($quest.moneycopper) or isset($quest.moneysilver) or isset($quest.moneygold)}
+{if isset($quest.money)}
+						<div class="pad"></div>
 						{strip}
 						{#You_will_also_receive#}:
-						{if isset($quest.moneygold)}<span class="moneygold">{$quest.moneygold}</span>{/if}
-						{if isset($quest.moneysilver)}<span class="moneysilver">{$quest.moneysilver}</span>{/if}
-						{if isset($quest.moneycopper)}<span class="moneycopper">{$quest.moneycopper}</span>{/if}
+						{if isset($quest.money.moneygold)} <span class="moneygold">{$quest.money.moneygold}</span>{/if}
+						{if isset($quest.money.moneysilver)} <span class="moneysilver">{$quest.money.moneysilver}</span>{/if}
+						{if isset($quest.money.moneycopper)} <span class="moneycopper">{$quest.money.moneycopper}</span>{/if}
 						{/strip}
+{/if}
+{if isset($quest.BonusTalents) and $quest.BonusTalents}
+						<div class="pad"></div>
+						<div>{#Bonus_Talents#}: {$quest.BonusTalents}</div>
 {/if}
 {/if}
 
@@ -404,12 +455,18 @@
 						{$quest.OfferRewardText}
 {/if}
 
-{if isset($quest.xp) or isset($quest.reprewards) or isset($quest.titlereward)}
+{if isset($quest.xp) and $quest.xp or isset($quest.reprewards) or isset($quest.titlereward) or isset($quest.mailrewards) or isset($quest.RewHonorableKills) and $quest.RewHonorableKills}
 					<h3>{#Gains#}</h3>
 					{#Upon_completion_of_this_quest_you_will_gain#}:
 					<ul>{strip}
-{if isset($quest.xp)}
-						<li><div>{$quest.xp} {#experience#} </div></li>
+{if isset($quest.xp) and $quest.xp}
+						<li><div>{$quest.xp} {#experience#}
+							{if isset($quest.moneymaxlevel)} (
+								{if isset($quest.moneymaxlevel.moneygold)}<span class="moneygold">{$quest.moneymaxlevel.moneygold}</span> {/if}
+								{if isset($quest.moneymaxlevel.moneysilver)}<span class="moneysilver">{$quest.moneymaxlevel.moneysilver}</span> {/if}
+								{if isset($quest.moneymaxlevel.moneycopper)}<span class="moneycopper">{$quest.moneymaxlevel.moneycopper}</span> {/if}
+							{#at_max_level#}){/if}
+						</div></li>
 {/if}
 {if isset($quest.reprewards)}
 {section name=j loop=$quest.reprewards}
@@ -418,6 +475,18 @@
 {/if}						
 {if isset($quest.titlereward)}
 						<li><div>{#the_title#} "{$quest.titlereward|replace:"%s":"&lt;name&gt;"}"</div></li>
+{/if}
+{if isset($quest.RewHonorableKills) and $quest.RewHonorableKills}
+						<li><div>{$quest.RewHonorableKills} {#Honorable_Kills#}</div></li>
+{/if}
+{if isset($quest.mailrewards)}
+						<li><div>{#Mail_delivery#}
+						{if isset($quest.maildelay)} {#in_time#}
+							{if isset($quest.maildelay.h)} {$quest.maildelay.h} {#hr#}{/if}
+							{if isset($quest.maildelay.m)} {$quest.maildelay.m} {#min#}{/if}
+							{if isset($quest.maildelay.s)} {$quest.maildelay.s} {#sec#}{/if}
+						{/if}
+						</div></li>
 {/if}
 					</ul>{/strip}
 {/if}
@@ -430,6 +499,7 @@
 			<div id="listview-generic" class="listview"></div>
 			<script type="text/javascript">
 				var tabsRelated = new Tabs({ldelim}parent: ge('tabs-generic'){rdelim});
+				{if isset($quest.mailrewards)}{include file='bricks/item_table.tpl' id='mail-rewards' tabsid='tabsRelated' data=$quest.mailrewards name='questrewards'}{/if}
 				{if isset($quest.criteria_of)}{include	file='bricks/achievement_table.tpl'	id='criteria-of'	tabsid='tabsRelated'	data=$quest.criteria_of	name='criteriaof'}{/if}
 				new Listview({ldelim}template: 'comment', id: 'comments', name: LANG.tab_comments, tabs: tabsRelated, parent: 'listview-generic', data: lv_comments{rdelim});
 				tabsRelated.flush();

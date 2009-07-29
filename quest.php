@@ -269,6 +269,18 @@ if(!$quest = load_cache(10, $cache_key))
 		unset($tmp);
 	}
 
+	// Итем, выдаваемый игроку в начале квеста
+	if($quest['SrcItemId'])
+	{
+		$quest['SrcItem'] = iteminfo($quest['SrcItemId']);
+		$quest['SrcItem']['count'] = $quest['SrcItemCount'];
+	}
+
+	// Дополнительная информация о квесте (флаги, повторяемость, скрипты)
+	$quest['flagsdetails'] = GetQuestFlagsDetails($quest);
+	if (!$quest['flagsdetails'])
+		unset($quest['flagsdetails']);
+
 	// Спелл, кастуемый на игрока в награду за выполнение
 	if($quest['RewSpellCast']>0 || $quest['RewSpell']>0)
 	{
@@ -286,7 +298,8 @@ if(!$quest = load_cache(10, $cache_key))
 		{
 			$quest['spellreward'] = array(
 				'name' => $tmp['spellname_loc'.$_SESSION['locale']],
-				'entry' => $tmp['spellID']);
+				'entry' => $tmp['spellID'],
+				'realentry' => $quest['RewSpellCast']>0 ? $quest['RewSpellCast'] : $quest['RewSpell']);
 			allspellsinfo2($tmp);
 		}
 		unset($tmp);
@@ -512,6 +525,15 @@ if(!$quest = load_cache(10, $cache_key))
 			$quest['criteria_of'][] = achievementinfo2($row);
 		}
 	}
+
+	// Награды и благодарности, присылаемые почтой
+	if ($quest['RewMailTemplateId'])
+	{
+		if(!($quest['mailrewards'] = loot('quest_mail_loot_template', $quest['entry'])))
+			unset ($quest['mailrewards']);
+	}
+	if ($quest['RewMailDelaySecs'])
+		$quest['maildelay'] = sec_to_time($quest['RewMailDelaySecs']);
 
 	save_cache(10, $cache_key, $quest);
 }
