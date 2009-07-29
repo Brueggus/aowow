@@ -163,232 +163,232 @@ if(!$npc = load_cache(1, $cache_key))
 		}
 		if(!$npc['ablities'])
 			unset($npc['ablities']);
-	}
 
-	// Обучает:
-	// Если это пет со способностью:
-	/* // Временно закомментировано
-	$row = $DB->selectRow('
-		SELECT Spell1, Spell2, Spell3, Spell4
-		FROM petcreateinfo_spell
-		WHERE
-			entry=?d
-		',
-		$npc['entry']
-	);
-	if($row)
-	{
-		$npc['teaches'] = array();
-		for($j=1;$j<=4;$j++)
-			if($row['Spell'.$j])
-				for($k=1;$k<=3;$k++)
-				{
-					$spellrow = $DB->selectRow('
-						SELECT ?#, spellID
-						FROM ?_spell, ?_spellicons
-						WHERE
-							spellID=(SELECT effect'.$k.'triggerspell FROM ?_spell WHERE spellID=?d AND (effect'.$k.'id IN (36,57)))
-							AND id=spellicon
-						LIMIT 1
-						',
-						$spell_cols[2],
-						$row['Spell'.$j]
-					);
-					if($spellrow)
+		// Обучает:
+		// Если это пет со способностью:
+		/* // Временно закомментировано
+		$row = $DB->selectRow('
+			SELECT Spell1, Spell2, Spell3, Spell4
+			FROM petcreateinfo_spell
+			WHERE
+				entry=?d
+			',
+			$npc['entry']
+		);
+		if($row)
+		{
+			$npc['teaches'] = array();
+			for($j=1;$j<=4;$j++)
+				if($row['Spell'.$j])
+					for($k=1;$k<=3;$k++)
 					{
+						$spellrow = $DB->selectRow('
+							SELECT ?#, spellID
+							FROM ?_spell, ?_spellicons
+							WHERE
+								spellID=(SELECT effect'.$k.'triggerspell FROM ?_spell WHERE spellID=?d AND (effect'.$k.'id IN (36,57)))
+								AND id=spellicon
+							LIMIT 1
+							',
+							$spell_cols[2],
+							$row['Spell'.$j]
+						);
+						if($spellrow)
+						{
+							$num = count($npc['teaches']);
+							$npc['teaches'][$num] = array();
+							$npc['teaches'][$num] = spellinfo2($spellrow);
+						}
+					}
+		}
+		unset ($row);*/
+
+		// Если это просто тренер
+		$teachspells = $DB->select('
+			SELECT ?#, spellID
+			FROM npc_trainer, ?_spell, ?_spellicons
+			WHERE
+				entry=?d
+				AND spellID=Spell
+				AND id=spellicon
+			',
+			$spell_cols[2],
+			$npc['entry']
+		);
+		if($teachspells)
+		{
+			if(!(IsSet($npc['teaches'])))
+				$npc['teaches'] = array();
+			foreach($teachspells as $teachspell)
+			{
 						$num = count($npc['teaches']);
 						$npc['teaches'][$num] = array();
-						$npc['teaches'][$num] = spellinfo2($spellrow);
-					}
-				}
-	}
-	unset ($row);*/
-
-	// Если это просто тренер
-	$teachspells = $DB->select('
-		SELECT ?#, spellID
-		FROM npc_trainer, ?_spell, ?_spellicons
-		WHERE
-			entry=?d
-			AND spellID=Spell
-			AND id=spellicon
-		',
-		$spell_cols[2],
-		$npc['entry']
-	);
-	if($teachspells)
-	{
-		if(!(IsSet($npc['teaches'])))
-			$npc['teaches'] = array();
-		foreach($teachspells as $teachspell)
-		{
-					$num = count($npc['teaches']);
-					$npc['teaches'][$num] = array();
-					$npc['teaches'][$num] = spellinfo2($teachspell);
-		}
-	}
-	unset ($teachspells);
-
-	// Продает:
-	$rows_s = $DB->select('
-		SELECT ?#, i.entry, i.maxcount, n.`maxcount` as `drop-maxcount`, n.ExtendedCost
-			{, l.name_loc?d AS `name_loc`}
-		FROM npc_vendor n, ?_icons, item_template i
-			{LEFT JOIN (locales_item l) ON l.entry=i.entry AND ?d}
-		WHERE
-			n.entry=?
-			AND i.entry=n.item
-			AND id=i.displayid
-		',
-		$item_cols[2],
-		($_SESSION['locale'])? $_SESSION['locale']: DBSIMPLE_SKIP,
-		($_SESSION['locale'])? 1: DBSIMPLE_SKIP,
-		$id
-	);
-	if($rows_s)
-	{
-		$npc['sells'] = array();
-		foreach($rows_s as $numRow=>$row)
-		{
-			$npc['sells'][$numRow] = array();
-			$npc['sells'][$numRow] = iteminfo2($row);
-			$npc['sells'][$numRow]['maxcount'] = $row['drop-maxcount'];
-			$npc['sells'][$numRow]['cost'] = array();
-			if($row['ExtendedCost'])
-			{
-				$extcost = $DB->selectRow('SELECT * FROM ?_item_extended_cost WHERE extendedcostID=?d LIMIT 1', $row['ExtendedCost']);
-				if($extcost['reqhonorpoints']>0)
-					$npc['sells'][$numRow]['cost']['honor'] = (($npc['A']==1)? 1: -1) * $extcost['reqhonorpoints'];
-				if($extcost['reqarenapoints']>0)
-					$npc['sells'][$numRow]['cost']['arena'] = $extcost['reqarenapoints'];
-				$npc['sells'][$numRow]['cost']['items'] = array();
-				for($j=1;$j<=5;$j++)
-					if(($extcost['reqitem'.$j]>0) and ($extcost['reqitemcount'.$j]>0))
-					{
-						allitemsinfo($extcost['reqitem'.$j], 0);
-						$npc['sells'][$numRow]['cost']['items'][] = array('item' => $extcost['reqitem'.$j], 'count' => $extcost['reqitemcount'.$j]);
-					}
+						$npc['teaches'][$num] = spellinfo2($teachspell);
 			}
-			if($row['BuyPrice']>0)
-				$npc['sells'][$numRow]['cost']['money'] = $row['BuyPrice'];
 		}
-		unset ($row);
-		unset ($numRow);
-		unset ($extcost);
-	}
-	unset ($rows_s);
+		unset ($teachspells);
 
-	// Дроп
-	if(!($npc['drop'] = loot('creature_loot_template', $lootid)))
-		unset ($npc['drop']);
-
-	// Кожа
-	if(!($npc['skinning'] = loot('skinning_loot_template', $lootid)))
-		unset ($npc['skinning']);
-
-	// Воруеццо
-	if(!($npc['pickpocketing'] = loot('pickpocketing_loot_template', $lootid)))
-		unset ($npc['pickpocketing']);
-
-	// Начиниают квесты...
-	$rows_qs = $DB->select('
-		SELECT ?#
-		FROM creature_questrelation c, quest_template q
-		WHERE
-			c.id=?
-			AND q.entry=c.quest
-		',
-		$quest_cols[2],
-		$id
-	);
-	if($rows_qs)
-	{
-		$npc['starts'] = array();
-		foreach($rows_qs as $numRow=>$row) {
-			$npc['starts'][] = GetQuestInfo($row, 0xFFFFFF);
-		}
-	}
-	unset ($rows_qs);
-
-	// Заканчивают квесты...
-	$rows_qe = $DB->select('
-		SELECT ?#
-		FROM creature_involvedrelation c, quest_template q
-		WHERE
-			c.id=?
-			AND q.entry=c.quest
-		',
-		$quest_cols[2],
-		$id
-	);
-	if($rows_qe)
-	{
-		$npc['ends'] = array();
-		foreach($rows_qe as $numRow=>$row) {
-			$npc['ends'][] = GetQuestInfo($row, 0xFFFFFF);
-		}
-	}
-	unset ($rows_qe);
-
-	// Необходимы для квеста..
-	$rows_qo = $DB->select('
-		SELECT ?#
-		FROM quest_template
-		WHERE
-			ReqCreatureOrGOId1=?
-			OR ReqCreatureOrGOId2=?
-			OR ReqCreatureOrGOId3=?
-			OR ReqCreatureOrGOId4=?
-		',
-		$quest_cols[2],
-		$id, $id, $id, $id
-	);
-	if($rows_qo)
-	{
-		$npc['objectiveof'] = array();
-		foreach($rows_qo as $numRow=>$row)
-			$npc['objectiveof'][] = GetQuestInfo($row, 0xFFFFFF);
-	}
-	unset ($rows_qo);
-
-	// Цель критерии
-	$rows = $DB->select('
-			SELECT a.id, a.faction, a.name_loc?d AS name, a.description_loc?d AS description, a.category, a.points, s.iconname, z.areatableID
-			FROM ?_spellicons s, ?_achievementcriteria c, ?_achievement a
-			LEFT JOIN (?_zones z) ON a.map != -1 AND a.map = z.mapID
+		// Продает:
+		$rows_s = $DB->select('
+			SELECT ?#, i.entry, i.maxcount, n.`maxcount` as `drop-maxcount`, n.ExtendedCost
+				{, l.name_loc?d AS `name_loc`}
+			FROM npc_vendor n, ?_icons, item_template i
+				{LEFT JOIN (locales_item l) ON l.entry=i.entry AND ?d}
 			WHERE
-				a.icon = s.id
-				AND a.id = c.refAchievement
-				AND c.type IN (?a)
-				AND c.value1 = ?d
-			GROUP BY a.id
-			ORDER BY a.name_loc?d
-		',
-		$_SESSION['locale'],
-		$_SESSION['locale'],
-		array(ACHIEVEMENT_CRITERIA_TYPE_KILL_CREATURE),
-		$npc['entry'],
-		$_SESSION['locale']
-	);
-	if($rows)
-	{
-		$npc['criteria_of'] = array();
-		foreach($rows as $row)
+				n.entry=?
+				AND i.entry=n.item
+				AND id=i.displayid
+			',
+			$item_cols[2],
+			($_SESSION['locale'])? $_SESSION['locale']: DBSIMPLE_SKIP,
+			($_SESSION['locale'])? 1: DBSIMPLE_SKIP,
+			$id
+		);
+		if($rows_s)
 		{
-			allachievementsinfo2($row['id']);
-			$npc['criteria_of'][] = achievementinfo2($row);
+			$npc['sells'] = array();
+			foreach($rows_s as $numRow=>$row)
+			{
+				$npc['sells'][$numRow] = array();
+				$npc['sells'][$numRow] = iteminfo2($row);
+				$npc['sells'][$numRow]['maxcount'] = $row['drop-maxcount'];
+				$npc['sells'][$numRow]['cost'] = array();
+				if($row['ExtendedCost'])
+				{
+					$extcost = $DB->selectRow('SELECT * FROM ?_item_extended_cost WHERE extendedcostID=?d LIMIT 1', $row['ExtendedCost']);
+					if($extcost['reqhonorpoints']>0)
+						$npc['sells'][$numRow]['cost']['honor'] = (($npc['A']==1)? 1: -1) * $extcost['reqhonorpoints'];
+					if($extcost['reqarenapoints']>0)
+						$npc['sells'][$numRow]['cost']['arena'] = $extcost['reqarenapoints'];
+					$npc['sells'][$numRow]['cost']['items'] = array();
+					for($j=1;$j<=5;$j++)
+						if(($extcost['reqitem'.$j]>0) and ($extcost['reqitemcount'.$j]>0))
+						{
+							allitemsinfo($extcost['reqitem'.$j], 0);
+							$npc['sells'][$numRow]['cost']['items'][] = array('item' => $extcost['reqitem'.$j], 'count' => $extcost['reqitemcount'.$j]);
+						}
+				}
+				if($row['BuyPrice']>0)
+					$npc['sells'][$numRow]['cost']['money'] = $row['BuyPrice'];
+			}
+			unset ($row);
+			unset ($numRow);
+			unset ($extcost);
 		}
+		unset ($rows_s);
+
+		// Дроп
+		if(!($npc['drop'] = loot('creature_loot_template', $lootid)))
+			unset ($npc['drop']);
+
+		// Кожа
+		if(!($npc['skinning'] = loot('skinning_loot_template', $lootid)))
+			unset ($npc['skinning']);
+
+		// Воруеццо
+		if(!($npc['pickpocketing'] = loot('pickpocketing_loot_template', $lootid)))
+			unset ($npc['pickpocketing']);
+
+		// Начиниают квесты...
+		$rows_qs = $DB->select('
+			SELECT ?#
+			FROM creature_questrelation c, quest_template q
+			WHERE
+				c.id=?
+				AND q.entry=c.quest
+			',
+			$quest_cols[2],
+			$id
+		);
+		if($rows_qs)
+		{
+			$npc['starts'] = array();
+			foreach($rows_qs as $numRow=>$row) {
+				$npc['starts'][] = GetQuestInfo($row, 0xFFFFFF);
+			}
+		}
+		unset ($rows_qs);
+
+		// Заканчивают квесты...
+		$rows_qe = $DB->select('
+			SELECT ?#
+			FROM creature_involvedrelation c, quest_template q
+			WHERE
+				c.id=?
+				AND q.entry=c.quest
+			',
+			$quest_cols[2],
+			$id
+		);
+		if($rows_qe)
+		{
+			$npc['ends'] = array();
+			foreach($rows_qe as $numRow=>$row) {
+				$npc['ends'][] = GetQuestInfo($row, 0xFFFFFF);
+			}
+		}
+		unset ($rows_qe);
+
+		// Необходимы для квеста..
+		$rows_qo = $DB->select('
+			SELECT ?#
+			FROM quest_template
+			WHERE
+				ReqCreatureOrGOId1=?
+				OR ReqCreatureOrGOId2=?
+				OR ReqCreatureOrGOId3=?
+				OR ReqCreatureOrGOId4=?
+			',
+			$quest_cols[2],
+			$id, $id, $id, $id
+		);
+		if($rows_qo)
+		{
+			$npc['objectiveof'] = array();
+			foreach($rows_qo as $numRow=>$row)
+				$npc['objectiveof'][] = GetQuestInfo($row, 0xFFFFFF);
+		}
+		unset ($rows_qo);
+
+		// Цель критерии
+		$rows = $DB->select('
+				SELECT a.id, a.faction, a.name_loc?d AS name, a.description_loc?d AS description, a.category, a.points, s.iconname, z.areatableID
+				FROM ?_spellicons s, ?_achievementcriteria c, ?_achievement a
+				LEFT JOIN (?_zones z) ON a.map != -1 AND a.map = z.mapID
+				WHERE
+					a.icon = s.id
+					AND a.id = c.refAchievement
+					AND c.type IN (?a)
+					AND c.value1 = ?d
+				GROUP BY a.id
+				ORDER BY a.name_loc?d
+			',
+			$_SESSION['locale'],
+			$_SESSION['locale'],
+			array(ACHIEVEMENT_CRITERIA_TYPE_KILL_CREATURE),
+			$npc['entry'],
+			$_SESSION['locale']
+		);
+		if($rows)
+		{
+			$npc['criteria_of'] = array();
+			foreach($rows as $row)
+			{
+				allachievementsinfo2($row['id']);
+				$npc['criteria_of'][] = achievementinfo2($row);
+			}
+		}
+
+		// Положения созданий божих (для героик НПС не задана карта, юзаем из нормала):
+		if($normal_entry)
+			// мы - героик НПС, определяем позицию по нормалу
+			$npc['position'] = position($normal_entry, 'creature', 2);
+		else
+			// мы - нормал НПС или НПС без сложности
+			$npc['position'] = position($npc['entry'], 'creature', 1);
+
+		save_cache(1, $cache_key, $npc);
 	}
-
-	// Положения созданий божих (для героик НПС не задана карта, юзаем из нормала):
-	if($normal_entry)
-		// мы - героик НПС, определяем позицию по нормалу
-		$npc['position'] = position($normal_entry, 'creature', 2);
-	else
-		// мы - нормал НПС или НПС без сложности
-		$npc['position'] = position($npc['entry'], 'creature', 1);
-
-	save_cache(1, $cache_key, $npc);
 }
 
 global $page;
