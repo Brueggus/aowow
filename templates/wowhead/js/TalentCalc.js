@@ -200,7 +200,7 @@ function TalentCalc() {
 		bd = rtrim(bd, L);
 		return bd
 	};
-	this.installAd = function () {
+	/*this.installAd = function () {
 		if (t.noAd) {
 			az()
 		}
@@ -208,7 +208,7 @@ function TalentCalc() {
 			Ads.fillSpot("medrect", ge("talentcalc-sidebar-ad"))
 		}
 		t.adFilled = 1
-	};
+	};*/
 	this.initialize = function (bd, bc) {
 		if (z) {
 			return
@@ -260,7 +260,7 @@ function TalentCalc() {
 			aN(t.whBuild)
 		} else {
 			if (t.classId > 0 && aY[t.classId]) {
-				if (t.blizzBuild) {
+				if (blizzBuild) {
 					Q(t.classId, t.blizzBuild)
 				} else {
 					q(t.classId)
@@ -743,9 +743,9 @@ function TalentCalc() {
 		ae(bc, bp);
 		aM = bp = ce("div");
 		ae(bc, bp);
-		if (!t.noAd) {
+		/*if (!t.noAd) {
 			az()
-		}
+		}*/
 		if (aB == a6) {
 			e = ce("div");
 			e.style.display = "none";
@@ -821,12 +821,12 @@ function TalentCalc() {
 		ae(bp, ao);
 		ae(z, bp)
 	}
-	function az() {
+	/*function az() {
 		var bc = ce("div");
 		bc.id = "talentcalc-sidebar-ad";
 		ae(aM, bc);
 		delete t.noAd
-	}
+	}*/
 	function aO(be, bi, bc) {
 		var bk = ce("table"),
 		bd = ce("tbody"),
