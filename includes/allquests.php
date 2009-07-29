@@ -19,10 +19,24 @@ $quest_class = array(
 	-2 => array(0)
 );
 
+$quest_type = array(
+	1  => LOCALE_QUEST_TYPE_GROUP,
+	21 => LOCALE_QUEST_TYPE_LIFE,
+	41 => LOCALE_QUEST_TYPE_PVP,
+	62 => LOCALE_QUEST_TYPE_RAID,
+	81 => LOCALE_QUEST_TYPE_DUNGEON,
+	82 => LOCALE_QUEST_TYPE_WORLD_EVENT,
+	83 => LOCALE_QUEST_TYPE_LEGENDARY,
+	84 => LOCALE_QUEST_TYPE_ESCORT,
+	85 => LOCALE_QUEST_TYPE_HEROIC,
+	88 => LOCALE_QUEST_TYPE_RAID10,
+	89 => LOCALE_QUEST_TYPE_RAID25
+);
+
 // Флаги квестов
 define('QUEST_FLAGS_NONE',				0);
 define('QUEST_FLAGS_STAY_ALIVE',		1);
-define('QUEST_FLAGS_EVENT ',			2);
+define('QUEST_FLAGS_PARTY_ACCEPT',		2);
 define('QUEST_FLAGS_EXPLORATION',		4);
 define('QUEST_FLAGS_SHARABLE',			8);
 define('QUEST_FLAGS_NONE2',				16);
@@ -31,9 +45,10 @@ define('QUEST_FLAGS_RAID',				64);
 define('QUEST_FLAGS_TBC',				128);
 define('QUEST_FLAGS_UNK2',				256);
 define('QUEST_FLAGS_HIDDEN_REWARDS',	512);
-define('QUEST_FLAGS_UNK4',				1024);
+define('QUEST_FLAGS_AUTO_REWARDED',	1024);
 define('QUEST_FLAGS_TBC_RACES',			2048);
 define('QUEST_FLAGS_DAILY',				4096);
+define('QUEST_FLAGS_UNK5',				8192);
 
 define('QUEST_SPECIALFLAGS_NONE',		0);
 define('QUEST_SPECIALFLAGS_REPEATABLE',	1);
@@ -92,6 +107,61 @@ function QuestReplaceStr($STR)
 		}
 	}
 	return $STR;
+}
+
+// Информация, возвращаемая этой функцией, очень помогает
+// оценить доступность и выполнимость квестов.
+function GetQuestFlagsDetails($data)
+{
+	$result = array();
+	// Неявно используемые в квесте итемы
+	$srcitems = array();
+	for ($i=1; $i<=4; $i++)
+		if (isset($data['ReqSourceId'.$i]) && isset($data['ReqSourceCount'.$i]) && $data['ReqSourceId'.$i])
+			if ($data['ReqSourceCount'.$i] == 1)
+				$srcitems[] = $data['ReqSourceId'.$i];
+			else
+				$srcitems[] = $data['ReqSourceId'.$i] . "x" . $data['ReqSourceCount'.$i];
+
+	// Разные квестовые флаги, и клиентские и серверные
+	if ($data['QuestFlags'])
+	{
+		if ($data['QuestFlags'] & QUEST_FLAGS_STAY_ALIVE)     $result[] = LOCALE_QUEST_FLAGS_STAY_ALIVE;
+		if ($data['QuestFlags'] & QUEST_FLAGS_PARTY_ACCEPT)   $result[] = LOCALE_QUEST_FLAGS_PARTY_ACCEPT;
+		if ($data['QuestFlags'] & QUEST_FLAGS_EXPLORATION)    $result[] = LOCALE_QUEST_FLAGS_EXPLORATION;
+		if ($data['QuestFlags'] & QUEST_FLAGS_SHARABLE)       $result[] = LOCALE_QUEST_FLAGS_SHARABLE;
+		if ($data['QuestFlags'] & QUEST_FLAGS_EPIC)           $result[] = LOCALE_QUEST_FLAGS_EPIC;
+		if ($data['QuestFlags'] & QUEST_FLAGS_RAID)           $result[] = LOCALE_QUEST_FLAGS_RAID;
+		if ($data['QuestFlags'] & QUEST_FLAGS_TBC)            $result[] = LOCALE_QUEST_FLAGS_TBC;
+		//if ($data['QuestFlags'] & QUEST_FLAGS_UNK2)           $result[] = LOCALE_QUEST_FLAGS_UNK2;
+		if ($data['QuestFlags'] & QUEST_FLAGS_HIDDEN_REWARDS) $result[] = LOCALE_QUEST_FLAGS_HIDDEN_REWARDS;
+		if ($data['QuestFlags'] & QUEST_FLAGS_AUTO_REWARDED)  $result[] = LOCALE_QUEST_FLAGS_AUTO_REWARDED;
+		if ($data['QuestFlags'] & QUEST_FLAGS_TBC_RACES)      $result[] = LOCALE_QUEST_FLAGS_TBC_RACES;
+		if ($data['QuestFlags'] & QUEST_FLAGS_DAILY)          $result[] = LOCALE_QUEST_FLAGS_DAILY;
+		if ($data['QuestFlags'] & QUEST_FLAGS_UNK5)           $result[] = LOCALE_QUEST_FLAGS_UNK5;
+	}
+
+	// Неявно используемые доп. элементы (интересно, кто назвал эту константу "..._UNK2"?)
+	if (($data['QuestFlags'] & QUEST_FLAGS_UNK2) || $srcitems)
+	{
+		$tmp = LOCALE_QUEST_FLAGS_UNK2;
+		if ($srcitems) $tmp = $tmp . " (" . implode(", ", $srcitems) . ")";
+		$result[] = $tmp;
+	}
+
+	// Специальные серверные флаги - повторяемость и завершение скриптом
+	if ($data['SpecialFlags'])
+	{
+		if ($data['SpecialFlags'] & QUEST_SPECIALFLAGS_REPEATABLE) $result[] = LOCALE_QUEST_SPECIALFLAGS_REPEATABLE;
+		if ($data['SpecialFlags'] & QUEST_SPECIALFLAGS_SCRIPTED)   $result[] = LOCALE_QUEST_SPECIALFLAGS_SCRIPTED;
+	}
+
+	// Наличие стартовых и финишных скриптов
+	if ($data['PointX'] || $data['PointY']) $result[] = LOCALE_QUEST_HAS_POI;
+	if ($data['StartScript'])               $result[] = LOCALE_QUEST_HAS_START_SCRIPT;
+	if ($data['CompleteScript'])            $result[] = LOCALE_QUEST_HAS_COMPLETE_SCRIPT;
+
+	return $result;
 }
 
 function GetQuestXpOrMoney($data)
@@ -380,8 +450,9 @@ function GetQuestInfo(&$data, $dataflag = QUEST_DATAFLAG_MINIMUM)
 			$data['Daily'] = true;
 		// Тип квеста
 		$data['type'] = $data['Type'];
-		if($data['type'] == 1)
-			$data['typename'] = 'Group';
+		global $quest_type;
+		if(isset($quest_type[$data['type']]))
+			$data['typename'] = $quest_type[$data['type']];
 		else
 			$data['typename'] = $data['type'];
 		// Путь к этому разделу (главная категория)
@@ -400,7 +471,9 @@ function GetQuestInfo(&$data, $dataflag = QUEST_DATAFLAG_MINIMUM)
 			$data['splayers'] = $data['SuggestedPlayers'];
 		// Лимит времени
 		if($data['LimitTime']>0)
-			$data['LimitTime'] = sec_to_time($row['LimitTime']);
+			$data['LimitTime'] = sec_to_time($data['LimitTime']);
+		else
+			unset($data['LimitTime']);
 		if($data['QuestFlags'] & QUEST_FLAGS_SHARABLE)
 			$data['Sharable'] = true;
 		if($data['SpecialFlags'] & QUEST_SPECIALFLAGS_REPEATABLE)
@@ -432,10 +505,12 @@ function GetQuestInfo(&$data, $dataflag = QUEST_DATAFLAG_MINIMUM)
 			if(($data['RewRepFaction'.$j] != 0) && ($data['RewRepValue'.$j] != 0))
 				$data['reprewards'][] = array_merge(factioninfo($data['RewRepFaction'.$j]), array('value' => $data['RewRepValue'.$j]));
 		// Вознаграждение деньгами
-		if($data['money']>0)
-			$data['money'] = money2coins($data['money']);
-		elseif($data['money']<0)
-			$data['moneyreq'] = money2coins(-$data['money']);
+		if($data['RewOrReqMoney']>0)
+			$data['money'] = money2coins($data['RewOrReqMoney']);
+		elseif($data['RewOrReqMoney']<0)
+			$data['moneyreq'] = money2coins(-$data['RewOrReqMoney']);
+		if ($data['RewMoneyMaxLevel'])
+			$data['moneymaxlevel'] = money2coins($data['RewMoneyMaxLevel']);
 	}
 
 	// Последовательность квестов, требования, цепочки
