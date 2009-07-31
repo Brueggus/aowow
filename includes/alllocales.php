@@ -301,11 +301,11 @@ switch($_SESSION['locale'])
 			'LOCALE_NATURE_RESISTANCE'				=> 'Naturwiderstand',
 			'LOCALE_HOLY_RESISTANCE'				=> 'RESISTANCE DOES NOT EXIST',
 			// binds
-			'LOCALE_BIND_PICKUP'					=> 'Beim Aufheben gebunden',
-			'LOCALE_BIND_EQUIP'						=> 'Beim Anlegen gebunden',
-			'LOCALE_BIND_USE'						=> 'Bei Benutzung gebunden',
+			'LOCALE_BIND_PICKUP'					=> 'Wird beim Aufheben gebunden',
+			'LOCALE_BIND_EQUIP'						=> 'Wird beim Anlegen gebunden',
+			'LOCALE_BIND_USE'						=> 'Wird bei Benutzung gebunden',
 			'LOCALE_BIND_SOULBOUND'					=> 'Seelengebunden',
-			'LOCALE_BIND_QUEST_ITEM'				=> 'Questitem',
+			'LOCALE_BIND_QUEST_ITEM'				=> 'Questgegenstand',
 			// bags
 			'LOCALE_BAG'							=> 'Tasche',
 			'LOCALE_BAG_QUIVER'						=> 'Köcher',
