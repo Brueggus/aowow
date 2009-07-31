@@ -566,7 +566,7 @@ if(!$item = load_cache(5, $cache_key))
 					FROM ?_icons, item_template c
 					{ LEFT JOIN (locales_item l) ON l.entry=c.entry AND ? }
 					WHERE
-						entry=?d
+						c.entry=?d
 						AND id=displayid
 				',
 				$item_cols[2],
