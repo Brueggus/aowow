@@ -837,13 +837,14 @@ function g_initHeaderMenus() {
 			d = d.substr(0, j)
 		}
 		//c.menu = [[0, "Deutsch", (g_locale.id != 3 ? d.replace(g, "de") : null)], [0, "English", (g_locale.id != 0 ? d.replace(g, "www") : null)], [0, "Espa" + String.fromCharCode(241) + "ol", (g_locale.id != 6 ? d.replace(g, "es") : null)], [0, "Fran" + String.fromCharCode(231) + "ais", (g_locale.id != 2 ? d.replace(g, "fr") : null)], [0, String.fromCharCode(1056, 1091, 1089, 1089, 1082, 1080, 1081), (g_locale.id != 7 ? d.replace(g, "ru") : null)]];
-		c.menu = [[0, "English", (g_locale.id != 0 ? "?locale=0" : null)], [0, "Fran" + String.fromCharCode(231) + "ais", (g_locale.id != 2 ? "?locale=2" : null)], [0, String.fromCharCode(1056, 1091, 1089, 1089, 1082, 1080, 1081), (g_locale.id != 8 ? "?locale=8" : null)]];
+		c.menu = [[0, "Deutsch", (g_locale.id != 3 ? "?locale=3" : null)], [0, "English", (g_locale.id != 0 ? "?locale=0" : null)], [0, "Fran" + String.fromCharCode(231) + "ais", (g_locale.id != 2 ? "?locale=2" : null)], [0, String.fromCharCode(1056, 1091, 1089, 1089, 1082, 1080, 1081), (g_locale.id != 8 ? "?locale=8" : null)]];
 		c.menu.rightAligned = 1;
 		if (g_locale.id != 25) {
 			c.menu[{
-				0 : 0,
-				2 : 1,
-				8 : 2
+				3 : 0,
+				0 : 1,
+				2 : 2,
+				8 : 3
 			} [g_locale.id]].checked = 1
 		}
 		c.onmouseover = Menu.show;
@@ -3113,7 +3114,7 @@ Listview.prototype = {
 			this.updateFilters()
 		}
 		this.updateNav();
-		// Сортируем при загрузке, дабы снизить нагрузку с сервера
+		// РЎРѕСЂС‚РёСЂСѓРµРј РїСЂРё Р·Р°РіСЂСѓР·РєРµ, РґР°Р±С‹ СЃРЅРёР·РёС‚СЊ РЅР°РіСЂСѓР·РєСѓ СЃ СЃРµСЂРІРµСЂР°
 		this.applySort();
 		this.refreshRows();
 		if (this.onAfterCreate != null) {
