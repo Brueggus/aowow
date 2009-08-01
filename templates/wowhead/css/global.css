@@ -2573,7 +2573,7 @@ margin:0 6px;
 text-decoration:underline;
 }
 
-#wrapper.nosidebar #main,#wrapper.nosidebar #main-contents.main-contents {
+#wrapper.nosidebar #wrapper.nosidebar #main-contents.main-contents {
 min-height:0;
 }
 
