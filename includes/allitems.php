@@ -480,7 +480,7 @@ function render_item_tooltip(&$Row)
 				$x_tmp .= '<span><a href="?item='.$row['item'.$i].'">'.$name.'</a></span><br />';
 			}
 		}
-		$x .= '<br /><span class="q"><a href="?itemset='.$row['itemsetID'].'" class="q">'.$row['name_loc'.$_SESSION['locale']].'</a> (0/'.$num.')</span>';
+		$x .= '<br /><span class="q"><a href="?itemset='.$row['itemsetID'].'" class="q">'.$row['name_loc'.$_SESSION['locale']].'</a> (0/'.$num.')</span><br />';
 		// Если требуется скилл
 		if($row['skillID'])
 		{
