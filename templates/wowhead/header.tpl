@@ -19,11 +19,9 @@
 		<div id="toptabs">
 			<div id="toptabs-inner">
 				<div id="toptabs-right">
-					<div id="toplinks" class="toplinks">
-						{if $user}<a href="?user={$user.name}">{$user.name}</a>|<a href="?account=signout">{#Sign_out#}</a>{else}<a href="?account=signin">{#Sign_in#}</a>{/if}
-						|<a href="javascript:;" id="toptabs-menu-language">{#Language#} <small>&#9660;</small></a>
-						<script type="text/javascript">g_initHeaderMenus()</script>
-					</div>
+					{if $user}<a href="?user={$user.name}">{$user.name}</a>|<a href="?account=signout">{#Sign_out#}</a>{else}<a href="?account=signin">{#Sign_in#}</a>{/if}
+					|<a href="javascript:;" id="toptabs-menu-language">{#Language#} <small>&#9660;</small></a>
+					<script type="text/javascript">g_initHeaderMenus()</script>
 				</div>
 				<div id="ptewhjkst46"></div>
 				<div class="clear"></div>
