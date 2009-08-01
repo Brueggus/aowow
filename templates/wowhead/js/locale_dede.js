@@ -6,16 +6,16 @@
  2. Comment unused menu paths
  3. Changed armor categories path (&filter=sl=	->	.)
 */
-var mn_items = [[2, "Waffen", , [[, "Einhändig"], [15, "Dolche"], [0, "Einhandäxte"], [7, "Einhandschwerter"], [4, "Einhandstreitkolben"], [13, "Faustwaffen"], [, "Zweihändig"], [6, "Stängenwaffen"], [10, "Stäbe"], [1, "Zweihandäxte"], [8, "Zweihandschwerter"], [5, "Zweihandstreitkolben"], [, "Distanz"], [18, "Armbrüste"], [2, "Bögen"], [3, "Schusswaffen"], [16, "Wurfwaffen"], [19, "Zauberstäbe"], [, "Andere"], [20, "Angelruten"], [14, "Verschiedenes"]]], [4, "Rüstung", , [[, "Nach Art"], [1, "Stoff", , [[5, "Brust", "?items=4.1.5"], [8, "Fu?e", "?items=4.1.8"], [10, "Hände", "?items=4.1.10"], [1, "Kopf", "?items=4.1.1"], [7, "Beine", "?items=4.1.7"], [3, "Schultern", "?items=4.1.3"], [6, "Taille", "?items=4.1.6"], [9, "Handgelenke", "?items=4.1.9"]]], [2, "Leder", , [[5, "Brust", "?items=4.2.5"], [8, "Fu?e", "?items=4.2.8"], [10, "Hände", "?items=4.2.10"], [1, "Kopf", "?items=4.2.1"], [7, "Beine", "?items=4.2.7"], [3, "Schultern", "?items=4.2.3"], [6, "Taille", "?items=4.2.6"], [9, "Handgelenke", "?items=4.2.9"]]], [3, "Schwere Rüstung", , [[5, "Brust", "?items=4.3.5"], [8, "Fu?e", "?items=4.3.8"], [10, "Hände", "?items=4.3.10"], [1, "Kopf", "?items=4.3.1"], [7, "Beine", "?items=4.3.7"], [3, "Schultern", "?items=4.3.3"], [6, "Taille", "?items=4.3.6"], [9, "Handgelenke", "?items=4.3.9"]]], [4, "Platte", , [[5, "Brust", "?items=4.4.5"], [8, "Fu?e", "?items=4.4.8"], [10, "Hände", "?items=4.4.10"], [1, "Kopf", "?items=4.4.1"], [7, "Beine", "?items=4.4.7"], [3, "Schultern", "?items=4.4.3"], [6, "Taille", "?items=4.4.6"], [9, "Handgelenke", "?items=4.4.9"]]], [, "Andere"], [ - 8, "Hemden"],/* [ - 5, "Nebenhandgegenstände"],*/ [6, "Schilde"], /*[ - 6, "Umhänge"], [ - 7, "Wappenröcke"],*/ [0, "Verschiedenes"],/* [, "Geschmeide"], [ - 3, "Amulette"], [ - 2, "Ringe"], [ - 4, "Schmuckstücke"],*/ [, "Relikte"], [7, "Buchbände"], [8, "Götzen"], [9, "Totems"], [10, "Siegel"]]], [1, "Behälter", , [[0, "Taschen"], [6, "Bergbautaschen"], [5, "Edelsteintaschen"], [2, "Kräutertaschen"], [4, "Ingenieurstaschen"], [7, "Lederertaschen"], [8, "Schreibertaschen"], [1, "Seelentaschen"], [3, "Verzauberertaschen"]]], [0, "Verbrauchbar", , [[5, "Essen & Trinken"], [2, "Elixiere", , [[1, "Kampf"], [2, "Wächter"]]], [3, "Fläschchen"], [6, "Gegenstandsverzauberungen (Dauerhafte)"],/* [ - 3, "Gegenstandsverzauberungen (Temporäre)"],*/ [4, "Schriftrollen"], [1, "Tränke"], [7, "Verbände"], [0, "Verbrauchbar"], [8, "Andere"]]], [16, "Glyphen", , [[11, "Druide"/*, , [[1, "Erhebliche", "?items=16.11&filter=cr=132;crs=1;crv=0"], [2, "Geringe", "?items=16.11&filter=cr=132;crs=2;crv=0"]]*/], [9, "Hexenmeister"/*, , [[1, "Erhebliche", "?items=16.9&filter=cr=132;crs=1;crv=0"], [2, "Geringe", "?items=16.9&filter=cr=132;crs=2;crv=0"]]*/], [3, "Jäger"/*, , [[1, "Erhebliche", "?items=16.3&filter=cr=132;crs=1;crv=0"], [2, "Geringe", "?items=16.3&filter=cr=132;crs=2;crv=0"]]*/], [1, "Krieger"/*, , [[1, "Erhebliche", "?items=16.1&filter=cr=132;crs=1;crv=0"], [2, "Geringe", "?items=16.1&filter=cr=132;crs=2;crv=0"]]*/], [8, "Magier"/*, , [[1, "Erhebliche", "?items=16.8&filter=cr=132;crs=1;crv=0"], [2, "Geringe", "?items=16.8&filter=cr=132;crs=2;crv=0"]]*/], [2, "Paladin"/*, , [[1, "Erhebliche", "?items=16.2&filter=cr=132;crs=1;crv=0"], [2, "Geringe", "?items=16.2&filter=cr=132;crs=2;crv=0"]]*/], [5, "Priester"/*, , [[1, "Erhebliche", "?items=16.5&filter=cr=132;crs=1;crv=0"], [2, "Geringe", "?items=16.5&filter=cr=132;crs=2;crv=0"]]*/], [7, "Schamane"/*, , [[1, "Erhebliche", "?items=16.7&filter=cr=132;crs=1;crv=0"], [2, "Geringe", "?items=16.7&filter=cr=132;crs=2;crv=0"]]*/], [4, "Schurke"/*, , [[1, "Erhebliche", "?items=16.4&filter=cr=132;crs=1;crv=0"], [2, "Geringe", "?items=16.4&filter=cr=132;crs=2;crv=0"]]*/], [6, "Todesritter"/*, , [[1, "Erhebliche", "?items=16.6&filter=cr=132;crs=1;crv=0"], [2, "Geringe", "?items=16.6&filter=cr=132;crs=2;crv=0"]]*/]]], [7, "Handwerkswaren", , [[10, "Elementar"], [8, "Fleisch"], [3, "Geräte"], [4, "Juwelenschleifen"], [9, "Kräuter"], [6, "Leder"], [13, "Materialien"], [7, "Metall & Stein"], [14, "Rüstungsverzauberungen"], [2, "Sprengstoff"], [5, "Stoff"], [1, "Teile"], [12, "Verzauberkunst"], [15, "Waffenverzauberungen"], [11, "Andere"]]], [6, "Projektile", , [[3, "Kugeln"], [2, "Pfeile"]]], [11, "Köcher", , [[2, "Köcher"], [3, "Munitionsbeutel"]]], [9, "Rezepte", , [[0, "Bücher"], [6, "Alchimie"], [9, "Angeln"], [7, "Erste Hilfe"], [3, "Ingenieurskunst"], [10, "Juwelenschleifen"], [5, "Kochkunst"], [1, "Lederverarbeitung"], [2, "Schneiderei"], [4, "Schmiedekunst"], [8, "Verzauberkunst"]]], [3, "Edelsteine", , [[0, "Rot "], [1, "Blau"], [2, "Gelb"], [3, "Violett"], [4, "Grün"], [5, "Orange"], [6, "Meta"], [7, "Einfach"], [8, "Prismatisch"]]], [15, "Verschiedenes", , [[3, "Festtag"], [0, "Plunder"], [1, "Reagenzien"], [ - 2, "Rüstungsmarken"], [5, "Reittiere"], [ - 7, "Flugtiere"], [ - 6, "Wächter"], [2, "Haustiere"], [4, "Andere"]]], [10, "Währung"], [12, "Quest"], [13, "Schlüssel"]];
+var mn_items = [[2, "Waffen", , [[, "Einhändig"], [15, "Dolche"], [0, "Einhandäxte"], [7, "Einhandschwerter"], [4, "Einhandstreitkolben"], [13, "Faustwaffen"], [, "Zweihändig"], [6, "Stangenwaffen"], [10, "Stäbe"], [1, "Zweihandäxte"], [8, "Zweihandschwerter"], [5, "Zweihandstreitkolben"], [, "Distanz"], [18, "Armbrüste"], [2, "Bögen"], [3, "Schusswaffen"], [16, "Wurfwaffen"], [19, "Zauberstäbe"], [, "Andere"], [20, "Angelruten"], [14, "Verschiedenes"]]], [4, "Rüstung", , [[, "Nach Art"], [1, "Stoff", , [[5, "Brust", "?items=4.1.5"], [8, "Füße", "?items=4.1.8"], [10, "Hände", "?items=4.1.10"], [1, "Kopf", "?items=4.1.1"], [7, "Beine", "?items=4.1.7"], [3, "Schultern", "?items=4.1.3"], [6, "Taille", "?items=4.1.6"], [9, "Handgelenke", "?items=4.1.9"]]], [2, "Leder", , [[5, "Brust", "?items=4.2.5"], [8, "Füße", "?items=4.2.8"], [10, "Hände", "?items=4.2.10"], [1, "Kopf", "?items=4.2.1"], [7, "Beine", "?items=4.2.7"], [3, "Schultern", "?items=4.2.3"], [6, "Taille", "?items=4.2.6"], [9, "Handgelenke", "?items=4.2.9"]]], [3, "Schwere Rüstung", , [[5, "Brust", "?items=4.3.5"], [8, "Füße", "?items=4.3.8"], [10, "Hände", "?items=4.3.10"], [1, "Kopf", "?items=4.3.1"], [7, "Beine", "?items=4.3.7"], [3, "Schultern", "?items=4.3.3"], [6, "Taille", "?items=4.3.6"], [9, "Handgelenke", "?items=4.3.9"]]], [4, "Platte", , [[5, "Brust", "?items=4.4.5"], [8, "Füße", "?items=4.4.8"], [10, "Hände", "?items=4.4.10"], [1, "Kopf", "?items=4.4.1"], [7, "Beine", "?items=4.4.7"], [3, "Schultern", "?items=4.4.3"], [6, "Taille", "?items=4.4.6"], [9, "Handgelenke", "?items=4.4.9"]]], [, "Andere"], [ - 8, "Hemden"],/* [ - 5, "Nebenhandgegenstände"],*/ [6, "Schilde"], /*[ - 6, "Umhänge"], [ - 7, "Wappenröcke"],*/ [0, "Verschiedenes"],/* [, "Geschmeide"], [ - 3, "Amulette"], [ - 2, "Ringe"], [ - 4, "Schmuckstücke"],*/ [, "Relikte"], [7, "Buchbände"], [8, "Götzen"], [9, "Totems"], [10, "Siegel"]]], [1, "Behälter", , [[0, "Taschen"], [6, "Bergbautaschen"], [5, "Edelsteintaschen"], [2, "Kräutertaschen"], [4, "Ingenieurstaschen"], [7, "Lederertaschen"], [8, "Schreibertaschen"], [1, "Seelentaschen"], [3, "Verzauberertaschen"]]], [0, "Verbrauchbar", , [[5, "Essen & Trinken"], [2, "Elixiere", , [[1, "Kampf"], [2, "Wächter"]]], [3, "Fläschchen"], [6, "Gegenstandsverzauberungen (Dauerhafte)"],/* [ - 3, "Gegenstandsverzauberungen (Temporäre)"],*/ [4, "Schriftrollen"], [1, "Tränke"], [7, "Verbände"], [0, "Verbrauchbar"], [8, "Andere"]]], [16, "Glyphen", , [[11, "Druide"/*, , [[1, "Erhebliche", "?items=16.11&filter=cr=132;crs=1;crv=0"], [2, "Geringe", "?items=16.11&filter=cr=132;crs=2;crv=0"]]*/], [9, "Hexenmeister"/*, , [[1, "Erhebliche", "?items=16.9&filter=cr=132;crs=1;crv=0"], [2, "Geringe", "?items=16.9&filter=cr=132;crs=2;crv=0"]]*/], [3, "Jäger"/*, , [[1, "Erhebliche", "?items=16.3&filter=cr=132;crs=1;crv=0"], [2, "Geringe", "?items=16.3&filter=cr=132;crs=2;crv=0"]]*/], [1, "Krieger"/*, , [[1, "Erhebliche", "?items=16.1&filter=cr=132;crs=1;crv=0"], [2, "Geringe", "?items=16.1&filter=cr=132;crs=2;crv=0"]]*/], [8, "Magier"/*, , [[1, "Erhebliche", "?items=16.8&filter=cr=132;crs=1;crv=0"], [2, "Geringe", "?items=16.8&filter=cr=132;crs=2;crv=0"]]*/], [2, "Paladin"/*, , [[1, "Erhebliche", "?items=16.2&filter=cr=132;crs=1;crv=0"], [2, "Geringe", "?items=16.2&filter=cr=132;crs=2;crv=0"]]*/], [5, "Priester"/*, , [[1, "Erhebliche", "?items=16.5&filter=cr=132;crs=1;crv=0"], [2, "Geringe", "?items=16.5&filter=cr=132;crs=2;crv=0"]]*/], [7, "Schamane"/*, , [[1, "Erhebliche", "?items=16.7&filter=cr=132;crs=1;crv=0"], [2, "Geringe", "?items=16.7&filter=cr=132;crs=2;crv=0"]]*/], [4, "Schurke"/*, , [[1, "Erhebliche", "?items=16.4&filter=cr=132;crs=1;crv=0"], [2, "Geringe", "?items=16.4&filter=cr=132;crs=2;crv=0"]]*/], [6, "Todesritter"/*, , [[1, "Erhebliche", "?items=16.6&filter=cr=132;crs=1;crv=0"], [2, "Geringe", "?items=16.6&filter=cr=132;crs=2;crv=0"]]*/]]], [7, "Handwerkswaren", , [[10, "Elementar"], [8, "Fleisch"], [3, "Geräte"], [4, "Juwelenschleifen"], [9, "Kräuter"], [6, "Leder"], [13, "Materialien"], [7, "Metall & Stein"], [14, "Rüstungsverzauberungen"], [2, "Sprengstoff"], [5, "Stoff"], [1, "Teile"], [12, "Verzauberkunst"], [15, "Waffenverzauberungen"], [11, "Andere"]]], [6, "Projektile", , [[3, "Kugeln"], [2, "Pfeile"]]], [11, "Köcher", , [[2, "Köcher"], [3, "Munitionsbeutel"]]], [9, "Rezepte", , [[0, "Bücher"], [6, "Alchimie"], [9, "Angeln"], [7, "Erste Hilfe"], [3, "Ingenieurskunst"], [10, "Juwelenschleifen"], [5, "Kochkunst"], [1, "Lederverarbeitung"], [2, "Schneiderei"], [4, "Schmiedekunst"], [8, "Verzauberkunst"]]], [3, "Edelsteine", , [[0, "Rot "], [1, "Blau"], [2, "Gelb"], [3, "Violett"], [4, "Grün"], [5, "Orange"], [6, "Meta"], [7, "Einfach"], [8, "Prismatisch"]]], [15, "Verschiedenes", , [[3, "Festtag"], [0, "Plunder"], [1, "Reagenzien"], [ - 2, "Rüstungsmarken"], [5, "Reittiere"], [ - 7, "Flugtiere"], [ - 6, "Wächter"], [2, "Haustiere"], [4, "Andere"]]], [10, "Währung"], [12, "Quest"], [13, "Schlüssel"]];
 var mn_itemSets = [[11, "Druide"], [9, "Hexenmeister"], [3, "Jäger"], [1, "Krieger"], [8, "Magier"], [2, "Paladin"], [5, "Priester"], [7, "Schamane"], [4, "Schurke"], [6, "Todesritter"]];
 var mn_npcs = [[3, "Dämonen"], [2, "Drachkin"], [4, "Elementare"], [7, "Humanoide"], [9, "Mechanisch"], [5, "Riesen"], [8, "Tiere"], [6, "Untote"], [1, "Wildtiere"], [10, "Nicht kategorisiert"]];
-var mn_objects = [[9, "Bücher"], [3, "Behälter"], [ - 4, "Erzadern"], [ - 3, "Kräuter"], [ - 2, "Quest"], [ - 5, "Schlie?kisten"]];
-var mn_quests = [[0, "Ostliche Konigreiche", , [[36, "Alteracgebirge"], [45, "Arathihochland"], [46, "Brennende Steppe"], [279, "Dalaran"], [10, "Dämmerwald"], [25, "Der Schwarzfels"], [1, "Dun Morogh"], [1537, "Eisenschmiede"], [41, "Gebirgspass der Totenwinde"], [3433, "Geisterlande"], [47, "Hinterland"], [3430, "Immersangwald"], [4080, "Insel von Quel'Danas"], [38, "Loch Modan"], [3, "Odland"], [139, "Ostliche Pestlander"], [44, "Rotkammgebirge"], [33, "Schlingendorntal"], [51, "Sengende Schlucht"], [3487, "Silbermond"], [130, "Silberwald"], [1519, "Sturmwind"], [8, "Sümpfe des Elends"], [11, "Sumpfland"], [2257, "Tiefenbahn"], [85, "Tirisfal"], [1497, "Unterstadt"], [4, "Verwüstete Lande"], [267, "Vorgebirge des Hügellands"], [12, "Wald von Elwynn"], [40, "Westfall"], [28, "Westliche Pestländer"]]], [1, "Kalimdor", , [[16, "Azshara"], [3524, "Azurmythosinsel"], [3525, "Blutmythosinsel"], [17, "Brachland"], [1657, "Darnassus"], [405, "Desolace"], [3557, "Die Exodar"], [1638, "Donnerfels"], [148, "Dunkelküste"], [14, "Durotar"], [15, "Düstermarschen"], [331, "Eschental"], [357, "Feralas"], [1216, "Holzschlundfeste"], [490, "Krater von Un'Goro"], [493, "Mondlichtung"], [215, "Mulgore"], [1637, "Orgrimmar"], [1377, "Silithus"], [406, "Steinkrallengebirge"], [440, "Tanaris"], [400, "Tausend Nadeln"], [141, "Teldrassil"], [361, "Teufelswald"], [618, "Winterquell"]]], [8, "Scherbenwelt", , [[3483, "Höllenfeuerhalbinsel"], [3518, "Nagrand"], [3523, "Nethersturm"], [3520, "Schattenmondtal"], [3522, "Schergrat"], [3703, "Shattrath"], [3679, "Skettis"], [3519, "Wälder von Terokkar"], [3521, "Zangarmarschen"]]], [10, "Nordend", , [[3537, "Boreanische Tundra"], [4395, "Dalaran"], [67, "Die Sturmgipfel"], [65, "Drachenöde"], [495, "Der heulende Fjord"], [210, "Eiskrone"], [394, "Grizzlyhügel"], [4024, "Kaltarra"], [3711, "Sholazarbecken"], [4197, "Tausendwintersee"], [66, "Zul'Drak"]]], [2, "Dungeons", , [[4494, "Ahn'kahet: Das Alte Königreich"], [3790, "Auchenaikrypta"], [3477, "Azjol-Nerub"], [209, "Burg Schattenfang"], [206, "Burg Utgarde"], [4100, "Das Ausmerzen von Stratholme"], [4228, "Das Oculus"], [796, "Das Scharlachrote Kloster"], [717, "Das Verlies"], [3713, "Der Blutkessel"], [3905, "Der Echsenkessel"], [2437, "Der Flammenschlund"], [4120, "Der Nexus"], [2366, "Der schwarze Morast"], [3716, "Der Tiefensumpf"], [3846, "Die Arkatraz"], [3847, "Die Botanika"], [3715, "Die Dampfkammer"], [4272, "Die Hallen der Blitze"], [4264, "Die Hallen des Steins"], [718, "Die Höhlen des Wehklagens"], [3849, "Die Mechanar"], [3717, "Die Sklavenunterkünfte"], [1581, "Die Todesminen"], [4415, "Die Violette Festung"], [3714, "Die zerschmetterten Hallen"], [2557, "Düsterbruch"], [4196, "Feste Drak'Tharon"], [3845, "Festung der Stürme"], [133, "Gnomeregan"], [4375, "Gundrak"], [1941, "Höhlen der Zeit"], [3562, "Höllenfeuerbollwerk"], [722, "Hügel der Klingenhauer"], [491, "Kral der Klingenhauer"], [3792, "Managruft"], [2100, "Maraudon"], [3789, "Schattenlabyrinth"], [2057, "Scholomance"], [1583, "Schwarzfelsspitze"], [1584, "Schwarzfelstiefen"], [3791, "Sethekkhallen"], [2017, "Stratholme"], [4095, "Terrasse der Magister"], [719, "Tiefschwarze Grotte"], [1196, "Turm Utgarde"], [1337, "Uldaman"], [1417, "Versunkener Tempel"], [2367, "Vorgebirge des Alten Hügellands"], [978, "Zul'Farrak"]]], [3, "Schlachtzüge", , [[3842, "Das Auge"], [4500, "Das Auge der Ewigkeit"], [3840, "Der Schwarze Tempel"], [2717, "Geschmolzener Kern"], [3606, "Hyjalgipfel"], [2562, "Karazhan"], [3836, "Magtheridons Hort"], [3456, "Naxxramas"], [2159, "Onyxias Hort"], [2677, "Pechschwingenhort"], [3429, "Ruinen von Ahn'Qiraj"], [3428, "Tempel von Ahn'Qiraj"], [4273, "Ulduar"], [3805, "Zul'Aman"], [19, "Zul'Gurub"]]], [4, "Klassen", , [[ - 263, "Druide"], [ - 61, "Hexenmeister"], [ - 261, "Jäger"], [ - 81, "Krieger"], [ - 161, "Magier"], [ - 141, "Paladin"], [ - 262, "Priester"], [ - 82, "Schamane"], [ - 162, "Schurke"], [ - 372, "Todesritter"]]], [5, "Berufe", , [[ - 181, "Alchimie"], [ - 101, "Angeln"], [ - 324, "Erste Hilfe"], [ - 201, "Ingenieurskunst"], [ - 371, "Inschriftenkunde"], [ - 373, "Juwelenschleifen"], [ - 304, "Kochkunst"], [ - 24, "Kräuterkunde"], [ - 182, "Lederverarbeitung"], [ - 121, "Schmiedekunst"], [ - 264, "Schneiderei"]]], [6, "Schlachtfelder", , [[ - 25, "Alle"], [2597, "Alteractal"], [3358, "Arathibecken"], [3820, "Auge des Sturms"], [3277, "Kriegshymnenschlucht"], [4384, "Strand der Uralten"]]], [9, "Saisonbedingt", , [[ - 370, "Braufest"], [ - 364, "Dunkelmond-Jahrmarkt"], [ - 1005, "Erntedankfest"], [ - 1004, "Herzklopfen"], [ - 1002, "Kinderwoche"], [ - 366, "Mondfest"], [ - 374, "Nobelgarten"], [ - 1006, "Neujahr"], [ - 1003, "Schlotternacht"], [ - 369, "Sonnenwendfest"], [ - 1001, "Winterhauchfest"]]], [7, "Verschiedenes", , [[ - 241, "Argentumturnier"], [ - 1, "Episch"], [ - 368, "Invasion der Gei?el"], [ - 365, "Krieg von Ahn'Qiraj"], [ - 344, "Legendär"], [ - 367, "Ruf"]]], [ - 2, "Nicht kategorisiert"]];
+var mn_objects = [[9, "Bücher"], [3, "Behälter"], [ - 4, "Erzadern"], [ - 3, "Kräuter"], [ - 2, "Quest"], [ - 5, "Schließkisten"]];
+var mn_quests = [[0, "Östliche Königreiche", , [[36, "Alteracgebirge"], [45, "Arathihochland"], [46, "Brennende Steppe"], [279, "Dalaran"], [10, "Dämmerwald"], [25, "Der Schwarzfels"], [1, "Dun Morogh"], [1537, "Eisenschmiede"], [41, "Gebirgspass der Totenwinde"], [3433, "Geisterlande"], [47, "Hinterland"], [3430, "Immersangwald"], [4080, "Insel von Quel'Danas"], [38, "Loch Modan"], [3, "Ödland"], [139, "Östliche Pestländer"], [44, "Rotkammgebirge"], [33, "Schlingendorntal"], [51, "Sengende Schlucht"], [3487, "Silbermond"], [130, "Silberwald"], [1519, "Sturmwind"], [8, "Sümpfe des Elends"], [11, "Sumpfland"], [2257, "Tiefenbahn"], [85, "Tirisfal"], [1497, "Unterstadt"], [4, "Verwüstete Lande"], [267, "Vorgebirge des Hügellands"], [12, "Wald von Elwynn"], [40, "Westfall"], [28, "Westliche Pestländer"]]], [1, "Kalimdor", , [[16, "Azshara"], [3524, "Azurmythosinsel"], [3525, "Blutmythosinsel"], [17, "Brachland"], [1657, "Darnassus"], [405, "Desolace"], [3557, "Die Exodar"], [1638, "Donnerfels"], [148, "Dunkelküste"], [14, "Durotar"], [15, "Düstermarschen"], [331, "Eschental"], [357, "Feralas"], [1216, "Holzschlundfeste"], [490, "Krater von Un'Goro"], [493, "Mondlichtung"], [215, "Mulgore"], [1637, "Orgrimmar"], [1377, "Silithus"], [406, "Steinkrallengebirge"], [440, "Tanaris"], [400, "Tausend Nadeln"], [141, "Teldrassil"], [361, "Teufelswald"], [618, "Winterquell"]]], [8, "Scherbenwelt", , [[3483, "Höllenfeuerhalbinsel"], [3518, "Nagrand"], [3523, "Nethersturm"], [3520, "Schattenmondtal"], [3522, "Schergrat"], [3703, "Shattrath"], [3679, "Skettis"], [3519, "Wälder von Terokkar"], [3521, "Zangarmarschen"]]], [10, "Nordend", , [[3537, "Boreanische Tundra"], [4395, "Dalaran"], [67, "Die Sturmgipfel"], [65, "Drachenöde"], [495, "Der heulende Fjord"], [210, "Eiskrone"], [394, "Grizzlyhügel"], [4024, "Kaltarra"], [3711, "Sholazarbecken"], [4197, "Tausendwintersee"], [66, "Zul'Drak"]]], [2, "Dungeons", , [[4494, "Ahn'kahet: Das Alte Königreich"], [3790, "Auchenaikrypta"], [3477, "Azjol - Nerub"], [209, "Burg Schattenfang"], [206, "Burg Utgarde"], [4100, "Das Ausmerzen von Stratholme"], [4228, "Das Oculus"], [796, "Das Scharlachrote Kloster"], [717, "Das Verlies"], [3713, "Der Blutkessel"], [3905, "Der Echsenkessel"], [2437, "Der Flammenschlund"], [4120, "Der Nexus"], [2366, "Der schwarze Morast"], [3716, "Der Tiefensumpf"], [3846, "Die Arkatraz"], [3847, "Die Botanika"], [3715, "Die Dampfkammer"], [4272, "Die Hallen der Blitze"], [4264, "Die Hallen des Steins"], [718, "Die Höhlen des Wehklagens"], [3849, "Die Mechanar"], [3717, "Die Sklavenunterkünfte"], [1581, "Die Todesminen"], [4415, "Die Violette Festung"], [3714, "Die zerschmetterten Hallen"], [2557, "Düsterbruch"], [4196, "Feste Drak'Tharon"], [3845, "Festung der Stürme"], [133, "Gnomeregan"], [4375, "Gundrak"], [1941, "Höhlen der Zeit"], [3562, "Höllenfeuerbollwerk"], [722, "Hügel der Klingenhauer"], [491, "Kral der Klingenhauer"], [3792, "Managruft"], [2100, "Maraudon"], [3789, "Schattenlabyrinth"], [2057, "Scholomance"], [1583, "Schwarzfelsspitze"], [1584, "Schwarzfelstiefen"], [3791, "Sethekkhallen"], [2017, "Stratholme"], [4095, "Terrasse der Magister"], [719, "Tiefschwarze Grotte"], [1196, "Turm Utgarde"], [1337, "Uldaman"], [1417, "Versunkener Tempel"], [2367, "Vorgebirge des Alten Hügellands"], [978, "Zul'Farrak"]]], [3, "Schlachtzüge", , [[3842, "Das Auge"], [4500, "Das Auge der Ewigkeit"], [3840, "Der Schwarze Tempel"], [2717, "Geschmolzener Kern"], [3606, "Hyjalgipfel"], [2562, "Karazhan"], [3836, "Magtheridons Hort"], [3456, "Naxxramas"], [2159, "Onyxias Hort"], [2677, "Pechschwingenhort"], [3429, "Ruinen von Ahn'Qiraj"], [3428, "Tempel von Ahn'Qiraj"], [4273, "Ulduar"], [3805, "Zul'Aman"], [19, "Zul'Gurub"]]], [4, "Klassen", , [[ - 263, "Druide"], [ - 61, "Hexenmeister"], [ - 261, "Jäger"], [ - 81, "Krieger"], [ - 161, "Magier"], [ - 141, "Paladin"], [ - 262, "Priester"], [ - 82, "Schamane"], [ - 162, "Schurke"], [ - 372, "Todesritter"]]], [5, "Berufe", , [[ - 181, "Alchimie"], [ - 101, "Angeln"], [ - 324, "Erste Hilfe"], [ - 201, "Ingenieurskunst"], [ - 371, "Inschriftenkunde"], [ - 373, "Juwelenschleifen"], [ - 304, "Kochkunst"], [ - 24, "Kräuterkunde"], [ - 182, "Lederverarbeitung"], [ - 121, "Schmiedekunst"], [ - 264, "Schneiderei"]]], [6, "Schlachtfelder", , [[ - 25, "Alle"], [2597, "Alteractal"], [3358, "Arathibecken"], [3820, "Auge des Sturms"], [3277, "Kriegshymnenschlucht"], [4384, "Strand der Uralten"]]], [9, "Saisonbedingt", , [[ - 370, "Braufest"], [ - 364, "Dunkelmond - Jahrmarkt"], [ - 1005, "Erntedankfest"], [ - 1004, "Herzklopfen"], [ - 1002, "Kinderwoche"], [ - 366, "Mondfest"], [ - 374, "Nobelgarten"], [ - 1006, "Neujahr"], [ - 1003, "Schlotternacht"], [ - 369, "Sonnenwendfest"], [ - 1001, "Winterhauchfest"]]], [7, "Verschiedenes", , [[ - 241, "Argentumturnier"], [ - 1, "Episch"], [ - 368, "Invasion der Geißel"], [ - 365, "Krieg von Ahn'Qiraj"], [ - 344, "Legendär"], [ - 367, "Ruf"]]], [ - 2, "Nicht kategorisiert"]];
 var mn_spells = [[7, "Klassenfertigkeiten", , [[11, "Druide", , [[574, "Gleichgewicht"], [134, "Wilder Kampf"], [573, "Wiederherstellung"]]], [9, "Hexenmeister", , [[355, "Gebrechen"], [354, "Dämonologie"], [593, "Zerstörung"]]], [3, "Jäger", , [[50, "Tierherrschaft"], [163, "Treffsicherheit"], [51, "Uberleben"]]], [1, "Krieger", , [[26, "Waffen"], [256, "Furor"], [257, "Schutz"]]], [8, "Magier", , [[237, "Arkan"], [8, "Feuer"], [6, "Frost"]]], [2, "Paladin", , [[594, "Heilig"], [267, "Schutz"], [184, "Vergeltung"]]], [5, "Priester", , [[613, "Disziplin"], [56, "Heilig"], [78, "Schattenmagie"]]], [7, "Schamane", , [[375, "Elementarkampf"], [373, "Verstärkung"], [374, "Wiederherstellung"]]], [4, "Schurke", , [[253, "Meucheln"], [38, "Kampf"], [633, "Schlossknacken"], [39, "Täuschung"]]], [6, "Todesritter", , [[770, "Blut"], [771, "Frost"], [772, "Unheilig"], [776, "Runen schmieden"]]]]], [ - 2, "Talente", , [[11, "Druide", , [[574, "Gleichgewicht"], [134, "Wilder Kampf"], [573, "Wiederherstellung"]]], [9, "Hexenmeister", , [[355, "Gebrechen"], [354, "Dämonologie"], [593, "Zerstörung"]]], [3, "Jäger", , [[50, "Tierherrschaft"], [163, "Treffsicherheit"], [51, "Uberleben"]]], [1, "Krieger", , [[26, "Waffen"], [256, "Furor"], [257, "Schutz"]]], [8, "Magier", , [[237, "Arkan"], [8, "Feuer"], [6, "Frost"]]], [2, "Paladin", , [[594, "Heilig"], [267, "Schutz"], [184, "Vergeltung"]]], [5, "Priester", , [[613, "Disziplin"], [56, "Heilig"], [78, "Schattenmagie"]]], [7, "Schamane", , [[375, "Elementarkampf"], [373, "Verstärkung"], [374, "Wiederherstellung"]]], [4, "Schurke", , [[253, "Meucheln"], [38, "Kampf"], [39, "Täuschung"]]], [6, "Todesritter", , [[770, "Blut"], [771, "Frost"], [772, "Unheilig"]]]]], [ - 3, "Begleiterfertigkeiten", , [[, "Jäger"], [270, "Allgemein"], [213, "Aasvogel"], [210, "Bär"], [763, "Drachenfalke"], [211, "Eber"], [653, "Fledermaus"], [788, "Geisterbestie"], [215, "Gorilla"], [654, "Hyäne"], [209, "Katze"], [787, "Kernhund"], [214, "Krabbe"], [212, "Krokilisk"], [775, "Motte"], [764, "Netherrochen"], [217, "Raptor"], [655, "Raubvogel"], [786, "Rhinozeros"], [251, "Schildkröte"], [780, "Schimäre"], [768, "Schlange"], [783, "Silithid"], [236, "Skorpid"], [766, "Sphärenjäger"], [203, "Spinne"], [765, "Sporensegler"], [781, "Teufelssaurier"], [767, "Verheerer"], [218, "Weitschreiter"], [785, "Wespe"], [656, "Windnatter"], [208, "Wolf"], [784, "Wurm"], [, "Hexenmeister"], [204, "Leerwandler"], [205, "Sukkubus"], [189, "Teufelsjäger"], [761, "Teufelswache"], [188, "Wichtel"], [, "Todesritter"], [782, "Ghul"]]], [ - 7, "Begleitertalente"], [11, "Berufe", , [[171, "Alchimie"], [186, "Bergbau"], [202, "Ingenieurskunst", , [[20219, "Gnomeningenieurskunst"], [20222, "Gobliningenieurskunst"]]], [773, "Inschriftenkunde"], [755, "Juwelenschleifen"], [182, "Kräuterkunde"], [393, "Kürschnerei"], [165, "Lederverarbeitung", , [[10656, "Drachenlederverarbeitung"], [10658, "Elementarlederverarbeitung"], [10660, "Stämmeslederverarbeitung"]]], [164, "Schmiedekunst", , [[9788, "Rüstungsschmied"], [9787, "Waffenschmied"], [17041, "Axtschmiedemeister"], [17040, "Hammerschmiedemeister"], [17039, "Schwertschmiedemeister"]]], [197, "Schneiderei", , [[26798, "Mondstoffschneiderei"], [26801, "Schattenstoffschneiderei"], [26797, "Zauberstoffschneiderei"]]], [333, "Verzauberkunst"]]], [9, "Nebenberufe", , [[356, "Angeln"], [129, "Erste Hilfe"], [185, "Kochkunst"], [762, "Reiten"]]], [ - 6, "Haustiere"], [ - 5, "Reittiere"], [8, "Rüstungssachverstand"], [10, "Sprachen"], [ - 4, "Völkerfertigkeiten"], [6, "Waffenfertigkeiten"], [0, "Nicht kategorisiert"]];
-var mn_zones = [[0, "Ostliche Konigreiche"], [1, "Kalimdor"], [8, "Scherbenwelt"], [10, "Nordend"], [2, "Dungeons"], [3, "Schlachtzüge"], [6, "Schlachtfelder"], [9, "Arenen"]];
+var mn_zones = [[0, "Östliche Königreiche"], [1, "Kalimdor"], [8, "Scherbenwelt"], [10, "Nordend"], [2, "Dungeons"], [3, "Schlachtzüge"], [6, "Schlachtfelder"], [9, "Arenen"]];
 var mn_factions = [[1118, "Classic", , [[469, "Allianz"], [169, "Dampfdruckkartell"], [67, "Horde"], [891, "Streitkräfte der Allianz"], [892, "Streitkräfte der Horde"]]], [980, "The Burning Crusade", , [[936, "Shattrath"]]], [1097, "Wrath of the Lich King", , [[1052, "Expedition der Horde"], [1117, "Sholazarbecken"], [1037, "Vorposten der Allianz"]]], [0, "Sonstige"]];
 var mn_pets = [[2, "Gerissenheit"], [1, "Hartnäckigkeit"], [0, "Wildheit"]];
-var mn_achievements = [[92, "Allgemein"], [96, "Quests", , [[14861, "Classic"], [14862, "The Burning Crusade"], [14863, "Wrath of the Lich King"]]], [97, "Erkundung", , [[14777, "Ostliche Konigreiche"], [14778, "Kalimdor"], [14779, "Scherbenwelt"], [14780, "Nordend"]]], [95, "Spieler gegen Spieler", , [[165, "Arena"], [14801, "Alteractal"], [14802, "Arathibecken"], [14803, "Auge des Sturms"], [14804, "Kriegshymnenschlucht"], [14881, "Strand der Uralten"], [14901, "Tausendwinter"]]], [168, "Dungeon & Schlachtzug", , [[14808, "Classic"], [14805, "The Burning Crusade"], [14806, "Nordend - Dungeon"], [14921, "Nordend - Heroisch"], [14922, "Nordend - Schlachtzug"], [14923, "Nordend - Heroischer Schlachtzug"], [14961, "Geheimnisse v. Ulduar - Schlachtzug"], [14962, "Geheimnisse v. Ulduar - Heroischer Schlachtzug"]]], [169, "Berufe", , [[170, "Kochkunst"], [171, "Angeln"], [172, "Erste Hilfe"]]], [201, "Ruf", , [[14864, "Classic"], [14865, "The Burning Crusade"], [14866, "Wrath of the Lich King"]]], [155, "Weltereignisse", , [[160, "Mondfest"], [187, "Liebe liegt in der Luft"], [159, "Nobelgarten"], [163, "Kinderwoche"], [161, "Sonnenwende"], [162, "Braufest"], [158, "Schlotternächte"], [156, "Winterhauch"], [14941, "Argentumturnier"]]], [81, "Heldentaten"]];
+var mn_achievements = [[92, "Allgemein"], [96, "Quests", , [[14861, "Classic"], [14862, "The Burning Crusade"], [14863, "Wrath of the Lich King"]]], [97, "Erkundung", , [[14777, "Östliche Königreiche"], [14778, "Kalimdor"], [14779, "Scherbenwelt"], [14780, "Nordend"]]], [95, "Spieler gegen Spieler", , [[165, "Arena"], [14801, "Alteractal"], [14802, "Arathibecken"], [14803, "Auge des Sturms"], [14804, "Kriegshymnenschlucht"], [14881, "Strand der Uralten"], [14901, "Tausendwinter"]]], [168, "Dungeon & Schlachtzug", , [[14808, "Classic"], [14805, "The Burning Crusade"], [14806, "Nordend  -  Dungeon"], [14921, "Nordend  -  Heroisch"], [14922, "Nordend  -  Schlachtzug"], [14923, "Nordend  -  Heroischer Schlachtzug"], [14961, "Geheimnisse v. Ulduar  -  Schlachtzug"], [14962, "Geheimnisse v. Ulduar  -  Heroischer Schlachtzug"]]], [169, "Berufe", , [[170, "Kochkunst"], [171, "Angeln"], [172, "Erste Hilfe"]]], [201, "Ruf", , [[14864, "Classic"], [14865, "The Burning Crusade"], [14866, "Wrath of the Lich King"]]], [155, "Weltereignisse", , [[160, "Mondfest"], [187, "Liebe liegt in der Luft"], [159, "Nobelgarten"], [163, "Kinderwoche"], [161, "Sonnenwende"], [162, "Braufest"], [158, "Schlotternächte"], [156, "Winterhauch"], [14941, "Argentumturnier"]]], [81, "Heldentaten"]];
 var mn_talentCalc = [[11, "Druide", "?talent#0"], [9, "Hexenmeister", "?talent#I"], [3, "Jäger", "?talent#c"], [1, "Krieger", "?talent#L"], [8, "Magier", "?talent#o"], [2, "Paladin", "?talent#s"], [5, "Priester", "?talent#b"], [7, "Schamane", "?talent#h"], [4, "Schurke", "?talent#f"], [6, "Todesritter", "?talent#j"]];
 var mn_petCalc = [[, "Gerissenheit"], [30, "Drachenfalke", "?petcalc#c0"], [24, "Fledermaus", "?petcalc#MR"], [34, "Netherrochen", "?petcalc#cR"], [26, "Raubvogel", "?petcalc#Mb"], [38, "Schimäre", "?petcalc#cw"], [35, "Schlange", "?petcalc#ca"], [41, "Silithid", "?petcalc#mM"], [3, "Spinne", "?petcalc#0o"], [33, "Sporensegler", "?petcalc#co"], [31, "Verheerer", "?petcalc#cM"], [27, "Windnatter", "?petcalc#Mr"], [, "Hartnäckigkeit"], [4, "Bär", "?petcalc#0R"], [5, "Eber", "?petcalc#0a"], [9, "Gorilla", "?petcalc#0h"], [8, "Krabbe", "?petcalc#0w"], [6, "Krokilisk", "?petcalc#0b"], [43, "Rhinozeros", "?petcalc#mo"], [21, "Schildkröte", "?petcalc#MM"], [20, "Skorpid", "?petcalc#M0"], [32, "Sphärenjäger", "?petcalc#cm"], [42, "Wurm", "?petcalc#mm"], [, "Wildheit"], [7, "Aasvogel", "?petcalc#0r"], [46, "Geisterbestie", "?petcalc#mb"], [25, "Hyäne", "?petcalc#Ma"], [2, "Katze", "?petcalc#0m"], [45, "Kernhund", "?petcalc#ma"], [37, "Motte", "?petcalc#cr"], [11, "Raptor", "?petcalc#zM"], [39, "Teufelssaurier", "?petcalc#ch"], [12, "Weitschreiter", "?petcalc#zm"], [44, "Wespe", "?petcalc#mR"], [1, "Wolf", "?petcalc#0M"]];
 var mn_database = [[, "Durchsuchen"], [0, "Gegenstände", "?items", mn_items], [2, "Sets", "?itemsets", mn_itemSets], [4, "NPCs", "?npcs", mn_npcs], [5, "Objekte", "?objects", mn_objects], [3, "Quests", "?quests", mn_quests], [1, "Zauber", "?spells", mn_spells],/* [6, "Gebiete", "?zones", mn_zones],*/ [7, "Fraktionen", "?factions", mn_factions],/* [8, "Begleiter", "?pets", mn_pets],*/ [9, "Erfolge", "?achievements", mn_achievements], [, "Hilfsmittel"],/* [29, "Neueste Artikel", "?latest=articles"], [28, "Neueste Ergänzungen", "?latest=additions"],*/ [30, "Neueste Kommentare", "?latest=comments"]/*, [31, "Neueste Screenshots", "?latest=screenshots"], [99, "Zufällige Seite", "?random"]*/];
@@ -73,7 +73,7 @@ var g_item_slots = {
 	5 : "Brust",
 	6 : "Taille",
 	7 : "Beine",
-	8 : "Fu?e",
+	8 : "Füße",
 	9 : "Handgelenke",
 	10 : "Hände",
 	11 : "Finger",
@@ -129,10 +129,10 @@ var g_item_subclasses = {
 		3 : "Schusswaffe",
 		4 : "Einhandstreitkolben",
 		5 : "Zweihandstreitkolben",
-		6 : "Stängenwaffe",
+		6 : "Stangenwaffe",
 		7 : "Einhandschwert",
 		8 : "Zweihandschwert",
-		10 : "Stäb",
+		10 : "Stab",
 		13 : "Faustwaffe",
 		14 : "Versch. (Waffen)",
 		15 : "Dolch",
@@ -355,7 +355,7 @@ var g_pet_foods = {
 var g_object_types = {
 	9 : "Buch",
 	3 : "Behälter",
-	"-5": "Schlie?kiste",
+	"-5": "Schließkiste",
 	"-3": "Kraut",
 	"-4": "Erzvorkommen",
 	"-2": "Quest"
@@ -439,7 +439,7 @@ var g_sources = {
 	7 : "Entdeckung",
 	8 : "Einlösen",
 	9 : "Talent",
-	10 : "Stärtausrüstung",
+	10 : "Startausrüstung",
 	11 : "Ereignis",
 	12 : "Erfolg"
 };
@@ -465,11 +465,11 @@ var g_spell_skills = {
 	39 : "Täuschung",
 	40 : "Gifte",
 	43 : "Schwerter",
-	44 : "Axte",
+	44 : "Äxte",
 	45 : "Bögen",
 	46 : "Schusswaffen",
 	50 : "Tierherrschaft",
-	51 : "Uberleben",
+	51 : "Überleben",
 	54 : "Streitkolben",
 	55 : "Zweihandschwerter",
 	56 : "Heilig",
@@ -493,7 +493,7 @@ var g_spell_skills = {
 	139 : "Dämonisch",
 	140 : "Titanisch",
 	141 : "Alte Sprache",
-	142 : "Uberlebenskunst",
+	142 : "Überlebenskunst",
 	148 : "Pferdreiten",
 	149 : "Wolfreiten",
 	150 : "Tigerreiten",
@@ -535,7 +535,7 @@ var g_spell_skills = {
 	220 : "Untote",
 	226 : "Armbrüste",
 	228 : "Zauberstäbe",
-	229 : "Stängenwaffen",
+	229 : "Stangenwaffen",
 	236 : "Skorpid",
 	237 : "Arkan",
 	251 : "Schildkröte",
@@ -613,7 +613,7 @@ var g_spell_skills = {
 };
 var g_zones = {
 	1 : "Dun Morogh",
-	3 : "Odland",
+	3 : "Ödland",
 	4 : "Verwüstete Lande",
 	8 : "Sümpfe des Elends",
 	9 : "Nordhaintal",
@@ -799,7 +799,7 @@ var g_zones = {
 	4742 : "Hrothgar's Landing"
 };
 var g_zone_categories = {
-	0 : "Ostliche Konigreiche",
+	0 : "Östliche Königreiche",
 	1 : "Kalimdor",
 	8 : "Scherbenwelt",
 	10 : "Nordend",
@@ -861,7 +861,7 @@ var g_achievement_categories = {
 	172 : "Erste Hilfe",
 	187 : "Liebe liegt in der Luft",
 	201 : "Ruf",
-	14777 : "Ostliche Konigreiche",
+	14777 : "Östliche Königreiche",
 	14778 : "Kalimdor",
 	14779 : "Scherbenwelt",
 	14780 : "Nordend",
@@ -998,7 +998,7 @@ var LANG = {
 	slot: "Platz",
 	slots: "Plätze",
 	speed: "Tempo",
-	stack: "Stäpel",
+	stack: "Stapel",
 	standing: "Ruf",
 	stock: "Lagermenge",
 	subject: "Betreff",
@@ -1046,7 +1046,7 @@ var LANG = {
 	lvnpc_horde: "H",
 	lvquest_daily: "Täglich $1",
 	lvquest_pickone: "Eines von:",
-	lvquest_alsoget: "Au?erdem:",
+	lvquest_alsoget: "Außerdem:",
 	lvquest_xp: "$1 EP",
 	lvzone_xman: "$1-Mann",
 	lvzone_xvx: "$1v$2",
@@ -1172,14 +1172,14 @@ var LANG = {
 	prompt_colfilter3: 'e.g. ">100", "32-34" oder "!<=10"',
 	prompt_details: "Bitte gebt genauere Informationen ein:",
 	prompt_gotopage: "Bitte gebt die Nummer der Seite ein, zu der Ihr springen wollt ($1 - $2):",
-	tooltip_dailyquest: "Ihr konnt bis zu 25 tagliche<br />Quests pro Tag abschlie?en.",
+	tooltip_dailyquest: "Ihr konnt bis zu 25 tagliche<br />Quests pro Tag abschließen.",
 	tooltip_extendedquestsearch: "Aktiviert diese Option, um zusätzlich<br />Questziele und -beschreibung zu durchsuchen.",
 	tooltip_extendedspellsearch: "Aktiviert diese Option, um zusätzlich<br />Beschreibung und Stärkungszauber zu durchsuchen.",
 	tooltip_extendedachievementsearch: "Aktiviert diese Option, um zusätzlich<br />Beschreibung zu durchsuchen.",
 	tooltip_sellsfor: "Verkaufspreis $1",
 	tooltip_zonelink: "Ein Klick auf diesen Link<br />bringt Euch zur Gebietsseite.",
 	tooltip_combatrating: "$1&nbsp;auf&nbsp;Stufe&nbsp;$2",
-	tooltip_armorbonus: "Verfugt uber zusatzliche $1 Rüstung gegenuber<br />der fur diese Rüstungsart ublichen Spanne.",
+	tooltip_armorbonus: "Verfügt über zusätzliche $1 Rüstung gegenüber<br />der für diese Rüstungsart üblichen Spanne.",
 	tooltip_reqlevel: "Benötigte Stufe",
 	tooltip_repgain: "Rufzuwachs",
 	tooltip_trainingpoints: "Trainingspunkte",
@@ -1192,7 +1192,7 @@ var LANG = {
 	tooltip_normal: "Normal",
 	tooltip_sticky: "Bevorzugt",
 	tooltip_pending: "Noch nicht kontrolliert",
-	tooltip_totaldatauploads: "Gesamtgro?e aller hochgeladenen Daten",
+	tooltip_totaldatauploads: "Gesamtgröße aller hochgeladenen Daten",
 	tooltip_totalratings: "Summe der Bewertungen aller Kommentare",
 	tooltip_avgmoneycontained: "Durchschnittlich enthaltene Geldmenge",
 	tooltip_avgmoneydropped: "Durchschnittlich gedroppte Geldmenge",
@@ -1284,15 +1284,15 @@ var LANG = {
 	tab_sells: "Verkauft",
 	tab_soldby: "Verkauft von",
 	tab_summonedby: "Beschwört von",
-	tab_starts: "Stärtet Quests",
-	tab_startsquest: "Stärts quest",
+	tab_starts: "Startet Quests",
+	tab_startsquest: "Starts quest",
 	tab_tameable: "Zähmbare",
 	tab_taughtby: "Gelehrt von",
 	tab_teaches: "Lehrt",
 	tab_toolfor: "Werkzeug für",
 	tab_topics: "Themen",
 	tab_triggeredby: "Ausgelöst durch",
-	tab_unlocks: "Offnet",
+	tab_unlocks: "Öffnet",
 	tab_usedby: "Verwendet von",
 	tab_addyourcomment: "Euren Kommentar abgeben",
 	tab_submitascreenshot: "Einen Screenshot einsenden",
@@ -1374,7 +1374,7 @@ var LANG = {
 		retrib: "Vergeltung (DPS)",
 		shadow: "Schatten (DPS)",
 		subtle: "Täuschung",
-		surv: "Uberleben",
+		surv: "Überleben",
 		unholydps: "Unheilig (DPS)"
 	},
 	traits: {
